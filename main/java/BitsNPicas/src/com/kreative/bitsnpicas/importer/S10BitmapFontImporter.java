@@ -49,33 +49,39 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 			}
 			BitmapFontGlyph g = new BitmapFontGlyph(glyph, 0, 8, 7);
 			for (BitmapFont font : fonts) font.putCharacter(0xF000+i, g);
-			if (MAP_SANS[i] != null) {
-				for (int ch : MAP_SANS[i]) {
+			int[] chs = getMap(MAP_SANS_LO, MAP_SANS_HI, i);
+			if (chs != null) {
+				for (int ch : chs) {
 					fonts[0].putCharacter(ch, g);
 				}
 			}
-			if (MAP_SERIF[i] != null) {
-				for (int ch : MAP_SERIF[i]) {
+			chs = getMap(MAP_SERIF_LO, MAP_SERIF_HI, i);
+			if (chs != null) {
+				for (int ch : chs) {
 					fonts[1].putCharacter(ch, g);
 				}
 			}
-			if (MAP_SOLID[i] != null) {
-				for (int ch : MAP_SOLID[i]) {
+			chs = getMap(MAP_SOLID_LO, MAP_SOLID_HI, i);
+			if (chs != null) {
+				for (int ch : chs) {
 					fonts[2].putCharacter(ch, g);
 				}
 			}
-			if (MAP_SLANTED[i] != null) {
-				for (int ch : MAP_SLANTED[i]) {
+			chs = getMap(MAP_SLANTED_LO, MAP_SLANTED_HI, i);
+			if (chs != null) {
+				for (int ch : chs) {
 					fonts[3].putCharacter(ch, g);
 				}
 			}
-			if (MAP_SMALL[i] != null) {
-				for (int ch : MAP_SMALL[i]) {
+			chs = getMap(MAP_SMALL_LO, MAP_SMALL_HI, i);
+			if (chs != null) {
+				for (int ch : chs) {
 					fonts[4].putCharacter(ch, g);
 				}
 			}
-			if (MAP_SCRIPT[i] != null) {
-				for (int ch : MAP_SCRIPT[i]) {
+			chs = getMap(MAP_SCRIPT_LO, MAP_SCRIPT_HI, i);
+			if (chs != null) {
+				for (int ch : chs) {
 					fonts[5].putCharacter(ch, g);
 				}
 			}
@@ -98,7 +104,12 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		return nd;
 	}
 	
-	private static final int[][] MAP_SANS = new int[][] {
+	private static int[] getMap(int[][] lo, int[][] hi, int i) {
+		if (i < 512) return lo[i];
+		else return hi[i - 512];
+	}
+	
+	private static final int[][] MAP_SANS_LO = new int[][] {
 		new int[]{9216},
 		new int[]{9217},
 		new int[]{9218},
@@ -611,6 +622,9 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{9827},
 		new int[]{9794},
 		new int[]{9792},
+	};
+	
+	private static final int[][] MAP_SANS_HI = new int[][] {
 		new int[]{189,8529},
 		new int[]{8531},
 		new int[]{8532},
@@ -1125,7 +1139,7 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{8993},
 	};
 	
-	private static final int[][] MAP_SERIF = new int[][] {
+	private static final int[][] MAP_SERIF_LO = new int[][] {
 		new int[]{9216},
 		new int[]{9217},
 		new int[]{9218},
@@ -1638,6 +1652,9 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{9827},
 		new int[]{9794},
 		new int[]{9792},
+	};
+	
+	private static final int[][] MAP_SERIF_HI = new int[][] {
 		new int[]{189,8529},
 		new int[]{8531},
 		new int[]{8532},
@@ -2152,7 +2169,7 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{8993},
 	};
 	
-	private static final int[][] MAP_SOLID = new int[][] {
+	private static final int[][] MAP_SOLID_LO = new int[][] {
 		new int[]{9216},
 		new int[]{9217},
 		new int[]{9218},
@@ -2665,6 +2682,9 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{9827},
 		new int[]{9794},
 		new int[]{9792},
+	};
+	
+	private static final int[][] MAP_SOLID_HI = new int[][] {
 		new int[]{189,8529},
 		new int[]{8531},
 		new int[]{8532},
@@ -3179,7 +3199,7 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{8993},
 	};
 	
-	private static final int[][] MAP_SLANTED = new int[][] {
+	private static final int[][] MAP_SLANTED_LO = new int[][] {
 		new int[]{9216},
 		new int[]{9217},
 		new int[]{9218},
@@ -3692,6 +3712,9 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{9827},
 		new int[]{9794},
 		new int[]{9792},
+	};
+	
+	private static final int[][] MAP_SLANTED_HI = new int[][] {
 		new int[]{189,8529},
 		new int[]{8531},
 		new int[]{8532},
@@ -4206,7 +4229,7 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{8993},
 	};
 	
-	private static final int[][] MAP_SMALL = new int[][] {
+	private static final int[][] MAP_SMALL_LO = new int[][] {
 		new int[]{9216},
 		new int[]{9217},
 		new int[]{9218},
@@ -4719,6 +4742,9 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{9827},
 		new int[]{9794},
 		new int[]{9792},
+	};
+	
+	private static final int[][] MAP_SMALL_HI = new int[][] {
 		new int[]{189,8529},
 		new int[]{8531},
 		new int[]{8532},
@@ -5233,7 +5259,7 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{8993},
 	};
 	
-	private static final int[][] MAP_SCRIPT = new int[][] {
+	private static final int[][] MAP_SCRIPT_LO = new int[][] {
 		new int[]{9216},
 		new int[]{9217},
 		new int[]{9218},
@@ -5746,6 +5772,9 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 		new int[]{9827},
 		new int[]{9794},
 		new int[]{9792},
+	};
+	
+	private static final int[][] MAP_SCRIPT_HI = new int[][] {
 		new int[]{189,8529},
 		new int[]{8531},
 		new int[]{8532},

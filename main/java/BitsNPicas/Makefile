@@ -17,11 +17,11 @@ eclipseclean:
 
 bin:
 	mkdir -p bin
-	javac -target 1.5 -sourcepath src $(SRCFILES) -d bin
+	javac -target 1.5 -classpath dep/KSFL.jar -sourcepath src $(SRCFILES) -d bin
 
 doc:
 	mkdir -p doc
-	javadoc -sourcepath src $(PACKAGES) -d doc
+	javadoc -classpath dep/KSFL.jar -sourcepath src $(PACKAGES) -d doc
 
 osxclean:
 	export COPYFILE_DISABLE=true
