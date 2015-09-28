@@ -1,0 +1,1815 @@
+SplineFontDB: 3.0
+FontName: LisaWritePaper24PRaw
+FullName: LisaWrite Paper 24P Raw
+FamilyName: LisaWrite Paper 24P Raw
+Weight: Medium
+Copyright: 
+Version: 001.000
+FONDName: LisaWrite Paper
+ItalicAngle: 0
+UnderlinePosition: -100
+UnderlineWidth: 50
+Ascent: 800
+Descent: 200
+LayerCount: 2
+Layer: 0 0 "Back" 
+Layer: 1 0 "Fore" 
+NeedsXUIDChange: 1
+XUID: [1021 662 1655008605 10484582]
+OS2Version: 0
+OS2_WeightWidthSlopeOnly: 0
+OS2_UseTypoMetrics: 1
+CreationTime: 1176539529
+ModificationTime: 1177109839
+OS2TypoAscent: 0
+OS2TypoAOffset: 1
+OS2TypoDescent: 0
+OS2TypoDOffset: 1
+OS2TypoLinegap: 0
+OS2WinAscent: 0
+OS2WinAOffset: 1
+OS2WinDescent: 0
+OS2WinDOffset: 1
+HheadAscent: 0
+HheadAOffset: 1
+HheadDescent: 0
+HheadDOffset: 1
+OS2Vendor: 'PfEd'
+DEI: 91125
+Encoding: UnicodeBmp
+UnicodeInterp: none
+NameList: Adobe Glyph List
+DisplaySize: 24
+AntiAlias: 1
+FitToEm: 1
+WinInfo: 0 30 13
+OnlyBitmaps: 1
+BeginChars: 65536 194
+
+StartChar: uni0008
+Encoding: 8 8 0
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni0009
+Encoding: 9 9 1
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni000C
+Encoding: 12 12 2
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni000D
+Encoding: 13 13 3
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni001C
+Encoding: 28 28 4
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni001D
+Encoding: 29 29 5
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni001E
+Encoding: 30 30 6
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni001F
+Encoding: 31 31 7
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: space
+Encoding: 32 32 8
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: exclam
+Encoding: 33 33 9
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: quotedbl
+Encoding: 34 34 10
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: numbersign
+Encoding: 35 35 11
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: dollar
+Encoding: 36 36 12
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: percent
+Encoding: 37 37 13
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ampersand
+Encoding: 38 38 14
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: quotesingle
+Encoding: 39 39 15
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: parenleft
+Encoding: 40 40 16
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: parenright
+Encoding: 41 41 17
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: asterisk
+Encoding: 42 42 18
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: plus
+Encoding: 43 43 19
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: comma
+Encoding: 44 44 20
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: hyphen
+Encoding: 45 45 21
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: period
+Encoding: 46 46 22
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: slash
+Encoding: 47 47 23
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: zero
+Encoding: 48 48 24
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: one
+Encoding: 49 49 25
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: two
+Encoding: 50 50 26
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: three
+Encoding: 51 51 27
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: four
+Encoding: 52 52 28
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: five
+Encoding: 53 53 29
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: six
+Encoding: 54 54 30
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: seven
+Encoding: 55 55 31
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: eight
+Encoding: 56 56 32
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: nine
+Encoding: 57 57 33
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: colon
+Encoding: 58 58 34
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: semicolon
+Encoding: 59 59 35
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: less
+Encoding: 60 60 36
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: equal
+Encoding: 61 61 37
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: greater
+Encoding: 62 62 38
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: question
+Encoding: 63 63 39
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: at
+Encoding: 64 64 40
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: A
+Encoding: 65 65 41
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: B
+Encoding: 66 66 42
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: C
+Encoding: 67 67 43
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: D
+Encoding: 68 68 44
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: E
+Encoding: 69 69 45
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: F
+Encoding: 70 70 46
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: G
+Encoding: 71 71 47
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: H
+Encoding: 72 72 48
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: I
+Encoding: 73 73 49
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: J
+Encoding: 74 74 50
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: K
+Encoding: 75 75 51
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: L
+Encoding: 76 76 52
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: M
+Encoding: 77 77 53
+Width: 1076
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: N
+Encoding: 78 78 54
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: O
+Encoding: 79 79 55
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: P
+Encoding: 80 80 56
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Q
+Encoding: 81 81 57
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: R
+Encoding: 82 82 58
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: S
+Encoding: 83 83 59
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: T
+Encoding: 84 84 60
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: U
+Encoding: 85 85 61
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: V
+Encoding: 86 86 62
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: W
+Encoding: 87 87 63
+Width: 1153
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: X
+Encoding: 88 88 64
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Y
+Encoding: 89 89 65
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Z
+Encoding: 90 90 66
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: bracketleft
+Encoding: 91 91 67
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: backslash
+Encoding: 92 92 68
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: bracketright
+Encoding: 93 93 69
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: asciicircum
+Encoding: 94 94 70
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: underscore
+Encoding: 95 95 71
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: grave
+Encoding: 96 96 72
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: a
+Encoding: 97 97 73
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: b
+Encoding: 98 98 74
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: c
+Encoding: 99 99 75
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: d
+Encoding: 100 100 76
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: e
+Encoding: 101 101 77
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: f
+Encoding: 102 102 78
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: g
+Encoding: 103 103 79
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: h
+Encoding: 104 104 80
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: i
+Encoding: 105 105 81
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: j
+Encoding: 106 106 82
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: k
+Encoding: 107 107 83
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: l
+Encoding: 108 108 84
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: m
+Encoding: 109 109 85
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: n
+Encoding: 110 110 86
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: o
+Encoding: 111 111 87
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: p
+Encoding: 112 112 88
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: q
+Encoding: 113 113 89
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: r
+Encoding: 114 114 90
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: s
+Encoding: 115 115 91
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: t
+Encoding: 116 116 92
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: u
+Encoding: 117 117 93
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: v
+Encoding: 118 118 94
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: w
+Encoding: 119 119 95
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: x
+Encoding: 120 120 96
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: y
+Encoding: 121 121 97
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: z
+Encoding: 122 122 98
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: braceleft
+Encoding: 123 123 99
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: bar
+Encoding: 124 124 100
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: braceright
+Encoding: 125 125 101
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: asciitilde
+Encoding: 126 126 102
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Adieresis
+Encoding: 196 196 103
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Aring
+Encoding: 197 197 104
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Ccedilla
+Encoding: 199 199 105
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Eacute
+Encoding: 201 201 106
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Ntilde
+Encoding: 209 209 107
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Odieresis
+Encoding: 214 214 108
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Udieresis
+Encoding: 220 220 109
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: aacute
+Encoding: 225 225 110
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: agrave
+Encoding: 224 224 111
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: acircumflex
+Encoding: 226 226 112
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: adieresis
+Encoding: 228 228 113
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: atilde
+Encoding: 227 227 114
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: aring
+Encoding: 229 229 115
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ccedilla
+Encoding: 231 231 116
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: eacute
+Encoding: 233 233 117
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: egrave
+Encoding: 232 232 118
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ecircumflex
+Encoding: 234 234 119
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: edieresis
+Encoding: 235 235 120
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: iacute
+Encoding: 237 237 121
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: igrave
+Encoding: 236 236 122
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: icircumflex
+Encoding: 238 238 123
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: idieresis
+Encoding: 239 239 124
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ntilde
+Encoding: 241 241 125
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: oacute
+Encoding: 243 243 126
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ograve
+Encoding: 242 242 127
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ocircumflex
+Encoding: 244 244 128
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: odieresis
+Encoding: 246 246 129
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: otilde
+Encoding: 245 245 130
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uacute
+Encoding: 250 250 131
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ugrave
+Encoding: 249 249 132
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ucircumflex
+Encoding: 251 251 133
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: udieresis
+Encoding: 252 252 134
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: dagger
+Encoding: 8224 8224 135
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: degree
+Encoding: 176 176 136
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: cent
+Encoding: 162 162 137
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: sterling
+Encoding: 163 163 138
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: section
+Encoding: 167 167 139
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: bullet
+Encoding: 8226 8226 140
+Width: 461
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: paragraph
+Encoding: 182 182 141
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: germandbls
+Encoding: 223 223 142
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: registered
+Encoding: 174 174 143
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: copyright
+Encoding: 169 169 144
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: trademark
+Encoding: 8482 8482 145
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: acute
+Encoding: 180 180 146
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: dieresis
+Encoding: 168 168 147
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: notequal
+Encoding: 8800 8800 148
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: AE
+Encoding: 198 198 149
+Width: 1153
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Oslash
+Encoding: 216 216 150
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: infinity
+Encoding: 8734 8734 151
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: plusminus
+Encoding: 177 177 152
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: lessequal
+Encoding: 8804 8804 153
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: greaterequal
+Encoding: 8805 8805 154
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: yen
+Encoding: 165 165 155
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni00B5
+Encoding: 181 181 156
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: partialdiff
+Encoding: 8706 8706 157
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: summation
+Encoding: 8721 8721 158
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: product
+Encoding: 8719 8719 159
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: pi
+Encoding: 960 960 160
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: integral
+Encoding: 8747 8747 161
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ordfeminine
+Encoding: 170 170 162
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ordmasculine
+Encoding: 186 186 163
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni2126
+Encoding: 8486 8486 164
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ae
+Encoding: 230 230 165
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: oslash
+Encoding: 248 248 166
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: questiondown
+Encoding: 191 191 167
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: exclamdown
+Encoding: 161 161 168
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: logicalnot
+Encoding: 172 172 169
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: radical
+Encoding: 8730 8730 170
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: florin
+Encoding: 402 402 171
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: approxequal
+Encoding: 8776 8776 172
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni2206
+Encoding: 8710 8710 173
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: guillemotleft
+Encoding: 171 171 174
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: guillemotright
+Encoding: 187 187 175
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ellipsis
+Encoding: 8230 8230 176
+Width: 846
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni00A0
+Encoding: 160 160 177
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Agrave
+Encoding: 192 192 178
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Atilde
+Encoding: 195 195 179
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: Otilde
+Encoding: 213 213 180
+Width: 923
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: OE
+Encoding: 338 338 181
+Width: 1307
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: oe
+Encoding: 339 339 182
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: endash
+Encoding: 8211 8211 183
+Width: 538
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: emdash
+Encoding: 8212 8212 184
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: quotedblleft
+Encoding: 8220 8220 185
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: quotedblright
+Encoding: 8221 8221 186
+Width: 615
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: quoteleft
+Encoding: 8216 8216 187
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: quoteright
+Encoding: 8217 8217 188
+Width: 384
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: divide
+Encoding: 247 247 189
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: lozenge
+Encoding: 9674 9674 190
+Width: 692
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: ydieresis
+Encoding: 255 255 191
+Width: 769
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: brokenbar
+Encoding: 166 166 192
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uni00AD
+Encoding: 173 173 193
+Width: 1000
+Flags: W
+LayerCount: 2
+EndChar
+EndChars
+BitmapFont: 24 220 20 4 1 
+Resolution: 72
+BDFChar: 0 8 17 2 14 0 16
+^];.M^];.M_>qRUc2c]$s7kFNc2bia_>q@O^];.M^]4?7
+BDFChar: 1 9 17 2 14 0 16
+!#P\Q!#P\Q!Z2"V".02Cs7c]K".00-!Z1nS!#P\Q!#P\9
+BDFChar: 2 12 24 3 19 0 16
+s8RVb!J%rdJA;29^]Au$!J%rdJA;29^]Au$!J%rdJA;29^k%$P_1;.?J-YQD&,6,)
+BDFChar: 3 13 24 4 18 0 16
+&+BQ-!!WE-!!WE-!!WE-#R2+M3!OU9s6t752ujcq#QOi)
+BDFChar: 4 28 17 2 13 4 12
+#QP\A2un1's6t752ujcq#QOi)
+BDFChar: 5 29 17 3 14 4 12
+!<<.N!Pe`os6p'I!Pe_d!<<*"
+BDFChar: 6 30 17 4 12 3 12
+#QPhE4og'4s*t@T#QP,1#QP,1
+BDFChar: 7 31 17 4 12 3 12
+#QP,1#QP,1#QXmTIfMY4)up6E
+BDFChar: 8 32 13 5 5 -4 -4
+z
+BDFChar: 9 33 11 4 6 0 16
+i8EPOi8EPOi8EPO5QCfBhuE`W
+BDFChar: 10 34 12 2 9 13 16
+kND"p
+BDFChar: 11 35 24 1 22 1 16
+!+7J\?n_Sr?i[uM+926>JA;6fJ-,h&"p4i0!rr`6!<<)W(^pB]$ihsu!&,5i
+BDFChar: 12 36 17 3 14 0 16
+"oni-++Rs2`\>D?FoWQ`#Cm$:"u'XC`\;"4++OOq"onW'
+BDFChar: 13 37 24 2 21 0 16
+*WQ1KJAAt:JAB&&^r?@_MuXn9!!"\Q!+5d,^]4CjJ--Wr"u%_>0JF=t0JF>O!!e#S
+BDFChar: 14 38 23 2 21 0 16
+#Cldk?iVl7!&-),3%t=P?iU[e!!`K()i*p&^qemdJDbDIi&Ukr)uspf&3)Tk#Jn1U
+BDFChar: 15 39 7 2 4 13 16
+i8ENY
+BDFChar: 16 40 11 2 9 -3 18
+#8f.&@,Tu$i8EPOi8EPOi*]qH(^C$@
+BDFChar: 17 41 11 1 8 -3 18
+i"uk,"pYA<#6tJ=#6tJ=#6kA@(uPAo
+BDFChar: 18 42 17 3 13 8 14
+0n:2C%KQOe%KIFJ0n96(
+BDFChar: 19 43 24 3 20 2 14
+!5JR7^]4AM!!'e7!5JR7^]=E7^];.M!5JR7^]4AM!!'e7!5JR7
+BDFChar: 20 44 7 2 4 -3 1
+i8A!.J,fQL
+BDFChar: 21 45 24 3 20 8 8
+s8Tk7
+BDFChar: 22 46 7 2 4 0 1
+i8=S8
+BDFChar: 23 47 11 1 8 0 16
+!<E6'"9\u9#S7Oi+@&2BJ,fQL
+BDFChar: 24 48 17 1 14 0 16
+#CmY!0JHlO?l7fAi#LYpi#LYpi#LYp?l38g0JF>O#CldS
+BDFChar: 25 49 17 2 14 0 16
+!<<3%%flV0#64u/#64u/#64u/#64u/#64u/#64u/s7cQo
+BDFChar: 26 50 16 2 13 0 16
+%fe<!5[_BHn8N>c!+5fB!It@S$igh=+:pdLJ2%#ms6p!g
+BDFChar: 27 51 17 2 14 0 16
+%tH?A5VV[eE&[hW!&+C\#Cle^!&+C4E&d>H5VOm"%tFW[
+BDFChar: 28 52 17 2 15 0 16
+!$D8L!8mn9!oO4>#iH9P+Q,NCJDgJ*!8mk8!8mk8#Q+Q%
+BDFChar: 29 53 17 2 14 0 16
+J+.CWDuahWDuahWGCXpG?n_R?!&ss<E&d>H^bB/(++O=k
+BDFChar: 30 54 17 2 14 0 16
+%tH?A@.<+4huM[8kCDc(n1`c[i&KXSi&KXS?na9B%tFW[
+BDFChar: 31 55 17 2 14 0 16
+s7lW`^`\.mJA;/8!It3$!rrE'#64u/"oo,5%KHt=%KHJ/
+BDFChar: 32 56 17 2 14 0 16
+%fe<!?spc(^bF\SGecND%tHIo@.:rk^_jj(?na9B%tFW[
+BDFChar: 33 57 17 2 14 0 16
+%tH?A?ngLui&KXSi&KXS@!FB8%laPK!&uqtGVCgZ%tFW[
+BDFChar: 34 58 7 2 4 0 10
+i8=S8z!8uc8
+BDFChar: 35 59 7 2 4 -3 10
+i8=S8z!8udC5_&h7
+BDFChar: 36 60 17 4 11 2 14
+!sT/N0OV\(0Gk3&!rr<$
+BDFChar: 37 61 24 3 20 7 10
+s8Tk7z!<<)7
+BDFChar: 38 62 17 5 12 2 14
+^gJi5$jHe<$lC[+^]4?7
+BDFChar: 39 63 17 2 14 0 16
+&&9l<5WJ6mE&[hW!&+C\!5JVc!<<0$!WW3#!!!6(#64`(
+BDFChar: 40 64 24 3 20 2 14
+&,ZD]!ru^0JACrq_\g2/(r4-.^r@5,_\n!?mJpVp!&+BQ&)[Ef
+BDFChar: 41 65 22 0 21 0 16
+!&+BQ2uiq\!!$7(!/pmXNW9(a!!*<)!WrE("+UXVJ-5ng"9?4C!8n+_?l/l_rrN#t
+BDFChar: 42 66 22 1 19 0 16
+s82j:!rs;AJ/eU**!*hp!Iu-l!$D1?*!(R0!5KQSi#DaT*!"n:!8ngs^`3B*s8Duu
+BDFChar: 43 67 20 2 17 0 16
+"6'_13!O='E!"qthuM[8huM[8huM[8DujnY3!'Ks"7Q9j
+BDFChar: 44 68 24 2 21 0 16
+s7cR6#65_E^`3@4*!"n:!,rnXE#\js)uspt!,rnXE#\js*!"n:!8ngt^`3RZs7cQo
+BDFChar: 45 69 21 1 18 0 16
+s8TkS!PfZT^`3>>)ur5D&-*[]!$!Zm+7K7M0E<((!#uOM)ur5D!'hM(^`3Bjs8Tk7
+BDFChar: 46 70 20 1 17 0 16
+s8RTh"+V?lJ/eQ>)utL/&-*[]!$!Zm+7K7M0E<((!#uOM)uosY!!!u=!#tt=s1eU7
+BDFChar: 47 71 24 2 22 0 16
+"8IBT#Cnc7J8bL=DubFH!!(pW!8mhWhuEc85PX.=JD^N[E!(W0"+W?5J.)m;"7Ug@
+BDFChar: 48 72 25 1 22 0 16
+s+gLl!8ngsi#DaT*!"n:!8ngsi#DaT+917=!8ngsi#DaT*!"n:!8ngsi#DaTs+gLP
+BDFChar: 49 73 12 1 9 0 16
+s*u'h)uprY)uprY)uprY)uprY)uprY)uprY)uprYs*t(L
+BDFChar: 50 74 17 1 15 0 16
+"9&:>!,qpW!,qpW!,qpW!,qpW!,qpW!,umrn6fY>*rl9@
+BDFChar: 51 75 25 1 23 0 16
+s+C(d!'hM(J/eRi*!-*["99DI!#uOM*&mp<>Q>b(!$):E*Wpp4!PfZTi#D`9s+C:N
+BDFChar: 52 76 20 1 17 0 16
+s1eUS!!!u=!#tt=)uosY!!!u=!#tt=)uosY!!!u=!#tt=)utL/!.Z$iJ/eZAs8RTL
+BDFChar: 53 77 30 1 28 0 16
+rr<T!%fd+?$\0#n$\0#n$,@ng$,@ng#iJ2Q#iJ2Q#]N96#]PP!#WRS>#WW+i#TX-M#Ta3N#S%(>
+#Rgq<s+Gmk
+BDFChar: 54 78 26 1 24 0 16
+quQg-!"]Y@&.=""$,@)Xi"-05&-t6,#TOB]%M/mN&-rB"#Q`9X!:U6oE!QFts*tX\
+BDFChar: 55 79 23 2 20 0 16
+"8Dj)"opUbJ8bP)Dumc4!8uc8i8=UnhuM]n!8uc8i8=UnDuman!PgYsJ.)V^"8Dir
+BDFChar: 56 80 21 1 18 0 16
+s82j:#65_GJ/eU**!*hp!PfZU^`3H,*!ZHcqu@]:!#tt=)uosY!!!u=!#tt=s1eU7
+BDFChar: 57 81 23 2 20 -3 16
+"8Dj)"opUbJ8bP)Dumc4!8uc8i8=UnhuM]n!8uc8i8NVPF"tIN)8J9PJ.E\$!W2ot*$>4k5QD%>
+
+BDFChar: 58 82 23 2 21 0 16
+s7cR6%KIIR!#u)k*!:^2"+V?r!#uIK+8>gU"ooVF!#u)k*!:^2"+V?nJ/eZQs+0).
+BDFChar: 59 83 17 2 14 0 16
+&!/Ja5VR^"^_#u8HiP5g#J^B0!-j#2J-`pri"28`LO]@)
+BDFChar: 60 84 20 1 17 0 16
+s8RW._goS>J:YLdJ\Zd:^]4DN!!0k8!Pe[9^]4DN!!0k8!Pe[9^]4DN!!0k8+8c*=
+BDFChar: 61 85 25 1 23 0 16
+s2"[E!$DaO+:\Ao%KIU]!$DaO+:\Ao%KIU]!$DaO+:\Ao%KIU]!$DIG5Q_%;!<)ru
+BDFChar: 62 86 21 0 20 0 16
+s+g@h!5KQSJ.;R0%KQP>!<<?+!!`Q*",$XVKE)%/!!1.@!RLfHci=(8!!$C,!+5d,
+BDFChar: 63 87 33 1 31 0 16
+s,Z.<*!:^F*!:^6%KX@1%KX@1#6NgK#6Nh6!sE"^",(WD",(Xo!JiH1!Q[8$!RNk-!72Va!:V$0
+!+638!+638
+BDFChar: 64 88 23 0 22 0 16
+s24aU!+69:5R.:>"+^FQ_>jSs!!%6D!&srY>Q=ba!!*<)!X!rU!Pes@i"uI`rs/N'
+BDFChar: 65 89 22 0 20 0 16
+s+g@h!5K'EJ.;S[#6=f,JcGn+!!1"<!9aC_Du]lW!!$s<!,qo<Du]lW!!$s<#QFc(
+BDFChar: 66 90 18 2 15 0 16
+s8:dp^c6j`J8bMH!Peef"+UUV%KIIK*!A5(E"(YEs82is
+BDFChar: 67 91 11 2 8 -3 17
+rnu_mi8EPOi8EPOi8EPOi8EPOrVuou
+BDFChar: 68 92 11 1 8 0 16
+J:KmM+<V4,&-rOE"9JW*!<<*"
+BDFChar: 69 93 11 2 8 -3 17
+rXKDJ%LrsY%LrsY%LrsY%LrsYrVuou
+BDFChar: 70 94 17 4 11 16 19
+(d)EJ
+BDFChar: 71 95 24 0 23 -4 -4
+s8W*!
+BDFChar: 72 96 17 5 9 17 19
+i%PE:
+BDFChar: 73 97 19 2 17 0 11
+&&9l<GW7ZB!;HdY3&kk:i&KXSE7l<C
+BDFChar: 74 98 20 1 17 0 16
+qu?^:!!!u=!#tt=)uosYp])<=!$24B*!:^2"+V?nJ/eZA*!:^2"+VEp!#Yt@&GQ5*
+BDFChar: 75 99 16 2 13 0 11
+%tH?A@.<+4huM[8huM[8huI-r0H^nA
+BDFChar: 76 100 20 2 18 0 16
+!;lfs)uosY!!!u=!#ttLS,b6J!+7nhi#DaT*!"n:!8ngsi#DaT)usA/!&.XX&"e@P
+BDFChar: 77 101 17 2 14 0 11
+%tH?A?ngLui&Lc3huM[8huI-r0H^nA
+BDFChar: 78 102 15 1 13 0 16
+!Pemn%X8J&%KHt=s54@e%KHt=%KHt=%KHt=%KHt=s53kW
+BDFChar: 79 103 17 1 15 -4 13
+!#tti#J_010GnaKE#^PK(bc31(]Z5i+7O4hi""ZTE#]DH
+BDFChar: 80 104 21 1 19 0 16
+qu?^:!!!u=!#tt=)uosYp])<E!$2@F*!ZH`#65_K!#u4D*!ZH`#65_K!#u4Ds+fM4
+BDFChar: 81 105 11 1 9 0 16
+)uprYz!!)os)uprY)uprY)uprY)uprY)uprYs*t(L
+BDFChar: 82 106 11 1 8 -4 16
+#6t5/!'^\n#6tJ=#6tJ=#A<3h2uipY
+BDFChar: 83 107 20 1 18 0 16
+qu?^:!!!u=!#tt=)uosY5Ca^V!#u7E*"W)i+93Bh!$(J.*B4$?)uprg!#u4Ds+A)e
+BDFChar: 84 108 11 1 9 0 16
+qu@]:)uprY)uprY)uprY)uprY)uprY)uprY)uprYs*t(L
+BDFChar: 85 109 30 1 28 0 11
+r:iGU*=bGe*X@83*!ZM[*!ZM[*!ZM[*!ZM[*!ZM[*!ZM[*!ZM[*!ZM[s+fS&
+BDFChar: 86 110 21 1 19 0 11
+r:g74%KIOT!#u4D*!ZH`#65_K!#u4D*!ZH`#65_K!<7i4
+BDFChar: 87 111 19 2 16 0 11
+&)],Y?jts'i""ZTi""ZTi!s-'0Gk>Y
+BDFChar: 88 112 20 1 17 -4 11
+r:g74"oo\H!#u)k*!:^2"+V?nJ/eZA*!:^4!rs>G!$(b6)uosY!!!u=!<7QL
+BDFChar: 89 113 19 2 17 -4 11
+%gXkV@!LThi&KXSi&KXSi&G+h0XqWQ!&ss<!&t#Z
+BDFChar: 90 114 16 1 14 0 11
+r88S4*]tE%)uprY)uprY)uprY*!$"h
+BDFChar: 91 115 13 2 11 0 11
+*e7aN_1:HoGQ8cb#CqB@JAAt9iIIL"
+BDFChar: 92 116 13 1 11 0 14
+"98i1*!$#S)uprY)uprY)uprY)uprY*$>YT#CldS
+BDFChar: 93 117 21 1 19 0 11
+r'(0$#65_K!#u4D*!ZH`#65_K!#u4D*!ZH`%fd"S!!DEB
+BDFChar: 94 118 20 1 18 0 11
+rsumb!WX2C!"K,3%L<%>#QP)@!!<c4"/#VpTE##.!!'e7
+BDFChar: 95 119 29 1 27 0 11
+r]cJ%*"E&N*"E#M%L3%8%M&[B#7H1b#8;mn!tg=h"/4'A!MId>!PmUn!5MtB
+BDFChar: 96 120 19 1 16 0 11
+r]`@J*"WT&#=&BA!Pecp"E4W+&01Ut
+BDFChar: 97 121 20 0 19 -4 11
+s,ZXh!ItX\!"K&1#6Fl1"98OW!!A#W!QY6Aci=(8!!(pW3+)`25QEKg!"T&0
+BDFChar: 98 122 15 1 12 0 11
+J+-ib5i=rD"+UUV%KIIK3"U$?i%Y3#
+BDFChar: 99 123 11 1 8 -3 18
+#7MRl*#oq<(bjl%(`XM8*#oq<$jQb4
+BDFChar: 100 124 7 3 3 -1 18
+J:N0#J:N0#J:N0#J:N0#J:N0#
+BDFChar: 101 125 11 2 9 -3 18
+i%R,M3&ilW(^pWX(cXK73&ilW0]2p2
+BDFChar: 102 126 17 3 12 18 19
+GX.%7
+BDFChar: 103 196 22 0 21 0 19
+!JURTL&_2R!!"\Q!&srY=9&>+!!%rX!0.$["onZ/!!36&!X!rXs*t4Q^]XYQ#QWcg!+6WDE;ot:
+
+BDFChar: 104 197 22 0 21 0 19
+!&+BQ8,rW\!!"\Q!&srY=9&>+!!%rX!0.$["onZ/!!36&!X!rXs*t4Q^]XYQ#QWcg!+6WDE;ot:
+
+BDFChar: 105 199 20 2 17 -4 16
+"6'_13!O='E!"qthuM[8huM[8huM[8DujnY3!'Ks"7Q;@!T3qh"5j.Z
+BDFChar: 106 201 21 1 18 0 19
+!#P\90E;)<zs8RTh"+V?lJ/eQ>*"[W?&-*\(!$C\1*&%@4&-*[]!#tu()ur5D!5KQT_#OGM
+
+BDFChar: 107 209 26 1 23 0 19
+!T="[*WQ0?!;HZq$ihC[!$DdP+:E]B$,@Yhi#i;E+:'qL#TOrm%Nl#^+:&(B#Q`ih!8n+_@/ka"
+
+BDFChar: 108 214 23 2 20 0 19
+$jH\?"onW'!!Dur$jH\k"+Y=k^i0=ihuM]n!8uc8i8=UnhuM]n!8uc8i,A_4Duma6"+Uda!!Dur
+
+BDFChar: 109 220 25 1 23 0 19
+!J%rdJA;-b!<9t9%KIU]!$DaO+:\Ao%KIU]!$DaO+:\Ao%KIU]!$DaO+:\Ao%KIUV!'gR8J,k'!
+
+BDFChar: 110 225 19 2 17 0 16
+!8mm.!WW3#!!!PF0Q;7r3&gp5#<4\&E&cc8i&G]/*tA8N
+BDFChar: 111 224 19 2 17 0 16
+)up0C!<<*"!!!PF0Q;7r3&gp5#<4\&E&cc8i&G]/*tA8N
+BDFChar: 112 226 19 2 17 0 17
+!<<4P#/CXTz&&9l<GW7ZB!;HdY3&kk:i&KXSE7l<C
+BDFChar: 113 228 19 2 17 0 15
+(gn1gz&&9l<GW7ZB!;HdY3&kk:i&KXSE7l<C
+BDFChar: 114 227 19 2 17 0 15
+*Y9LQz&&9l<GW7ZB!;HdY3&kk:i&KXSE7l<C
+BDFChar: 115 229 19 2 17 0 17
+"+UM>"@*'>z&&9l<GW7ZB!;HdY3&kk:i&KXSE7l<C
+BDFChar: 116 231 16 2 13 -4 11
+%tH?A@.<+4huM[8huM[8huI-r0H^nA!WWIU!'h'F
+BDFChar: 117 233 17 2 14 0 16
+!8mm.!WW3#!!!O[0OS9Bi&KXSs7kLPhuM[8?k>"7&&8/F
+BDFChar: 118 232 17 2 14 0 16
+2uj?e!WW3#!!!O[0OS9Bi&KXSs7kLPhuM[8?k>"7&&8/F
+BDFChar: 119 234 17 2 14 0 17
+!WWH*%=f;2z%tH?A?ngLui&Lc3huM[8huI-r0H^nA
+BDFChar: 120 235 17 2 14 0 15
+0OQSBz%tH?A?ngLui&Lc3huM[8huI-r0H^nA
+BDFChar: 121 237 11 1 9 0 16
+"+URU#QOi)!!)os)uprY)uprY)uprY)uprY)uprYs*t(L
+BDFChar: 122 236 11 1 9 0 16
+huGG2#QOi)!!)os)uprY)uprY)uprY)uprY)uprYs*t(L
+BDFChar: 123 238 11 1 9 0 17
+(]ZYuAcT^Kzqu@]:)uprY)uprY)uprY)uprY*!$"h
+BDFChar: 124 239 11 1 9 0 15
+_Z7RSzqu@]:)uprY)uprY)uprY)uprY*!$"h
+BDFChar: 125 241 21 1 19 0 15
+"2Y$@49,?]zr:g74%KIOT!#u4D*!ZH`#65_K!#u4D*!ZH`#65_K!<7i4
+BDFChar: 126 243 19 2 16 0 16
+!,qqR!<<*"!!!Pf0Gn1+i""ZTi""ZTi""ZT?jn_+&)[Ef
+BDFChar: 127 242 19 2 16 0 16
+%KHS2!.Y%L!!!Pf0Gn1+i""ZTi""ZTi""ZT?jn_+&)[Ef
+BDFChar: 128 244 19 2 16 0 17
+!It9f#%.inz&)],Y?jts'i""ZTi""ZTi!s-'0Gk>Y
+BDFChar: 129 246 19 2 16 0 15
+(bcd\z&)],Y?jts'i""ZTi""ZTi!s-'0Gk>Y
+BDFChar: 130 245 19 2 16 0 16
+%gWa9z!!!Pf0Gn1+i""ZTi""ZTi""ZT?jn_+&)[Ef
+BDFChar: 131 250 21 1 19 0 16
+!&srY?iU1Wz!!!#s56)Z.!#u4D*!ZH`#65_K!#u4D*!ZH`#65_S!"KeF"6\SB
+BDFChar: 132 249 21 1 19 0 16
+#64`)J,fR7z!!!#s56)Z.!#u4D*!ZH`#65_K!#u4D*!ZH`#65_S!"KeF"6\SB
+BDFChar: 133 251 21 1 19 0 17
+!'gMahuEe^!!=&<z!!)p]!#u4D*!ZH`#65_K!#u4D*!ZH`#65_K!#uLL%Mo*IkMQ=?
+BDFChar: 134 252 21 1 19 0 15
+"q1J9$ig8-zr'(0$#65_K!#u4D*!ZH`#65_K!#u4D*!ZH`%fd(U!!DEB
+BDFChar: 135 8224 17 2 13 -1 16
+"oni-"osAh`\@G^`\<,Y"oni-"oni-"oni-"oni-"oni-
+BDFChar: 136 176 11 2 8 12 16
+I)a1GHiO-H
+BDFChar: 137 162 17 2 13 1 16
+!WW9%!WWbH1*C%FiaCaGiW.s<@Lt:;&&85H!WW9%
+BDFChar: 138 163 17 2 15 0 16
+#J_010R,9j2ul&@*WZ60#Clol!T3t9!+:%Zk.or/5'R&-
+BDFChar: 139 167 17 3 13 0 16
+*ro]a^gQ*9GQ8cbB7Rh6^gM+h4MVI-"2J=&^gLQc*rl9@
+BDFChar: 140 8226 11 2 8 7 11
+I/a-EHiO-H
+BDFChar: 141 182 17 1 15 0 16
++$O0g__At^__At^__>RS+#!dN"#'g2"#'g2"#'g2"#']T
+BDFChar: 142 223 20 1 17 0 16
+!Up'n$ig\?!#u1C*!QB_$ih8$!$&cS*:NqJHiP-.!#u5o*<C[2!.Z)@J/uN-rB(&[
+BDFChar: 143 174 24 3 19 2 14
+&,6,Y"or$5!6=&K`\E"`0n@='JAs<o`\E"`0n<X6!&+TW&,6,)
+BDFChar: 144 169 24 3 20 2 14
+&,ZD]!ru^0JACZi_[+&t!5QSS^r?Ai_[+&nnA&E4J1q'*&,ZD-
+BDFChar: 145 8482 17 2 14 13 16
+q?S;_,,c\V
+BDFChar: 146 180 17 6 10 17 19
+3+.7:
+BDFChar: 147 168 17 5 12 18 19
+_nuHS
+BDFChar: 148 8800 24 3 20 4 13
+!!E9%#QOi9!<<)7!'gMaJ,oWL^]FK9"98E-z
+BDFChar: 149 198 31 1 28 0 16
+!.Y%,!"$I!!"m"S!"m!h!$T-#!("F$!("F$!.i#f!.k.M!WU%;!Wg+;!Wg+;"9H:L#Q_^P#Q_^p
+(]hEkrX]%u
+BDFChar: 150 216 23 2 20 0 16
+"8EuI#!b-MJ8bP)E!!i5"Q82Di8>1)i#pt95iCRNi8F[oEWNst!PgYsJ/ean,PV6=
+BDFChar: 151 8734 24 1 22 5 12
+*Wt>/NYm:O"FrH7J8bXAkQG>6(`re:
+BDFChar: 152 177 24 3 20 0 13
+!5JR7^]4AM!!'e7!5JU7s1eWM!!'e7!5JR7^]4AMz!!!"Ks*t(L
+BDFChar: 153 8804 17 2 13 0 13
+!rrN*$ih+E0E>J\0E;pi$igJ3!rr<$!!*&g
+BDFChar: 154 8805 17 2 13 0 13
+(]XsE"on`*!It0c!It7P"oo&3(]XO9!!*&g
+BDFChar: 155 165 24 1 21 0 16
+s+g@h!5K'EJ.;S[#6=f,JcJ#jhuUar!9aDIs53lr!!$s<!,qo<Du]lW!!$s<#QFc(
+BDFChar: 156 181 19 2 17 -4 11
+i&KXSi&KXSi&KXSi&KXSi&KXSn6,4?huM[8^]8lb
+BDFChar: 157 8706 18 2 15 0 16
+&&9kQGSiC[!#ttY&"G=Y?p*?ei#LYpi#LYp?l1RO&&8/F
+BDFChar: 158 8721 24 2 21 -3 18
+s8RUg!'iLD+<1@]%KHJ6!!!+O!!0k8!8mhWDu]kt!!",A!'gMaJ,fTM!!3-#"98E-!!!Q1&0Lrq
+J,d=as*t(L
+BDFChar: 159 8719 23 1 21 0 16
+s8Vj("+Uj`J.;[3%Kh4k"+Uj`J.;[3%Kh4k"+Uj`J.;[3%Kh4k"+Uj`J.;[3Iuj(!
+BDFChar: 160 960 24 3 20 0 12
+!!#96s+#\(!!Wi3%NGHY)upHg!"KtK%NGHY)upBa!!j,9&0LrQ
+BDFChar: 161 8747 17 2 14 -3 18
+!,qsp!uM7C#64u/#64u/#64u/#64u/#64u/#64u/#64u/#6;aDMu[es
+BDFChar: 162 170 19 2 17 0 16
+&&9l<GW7ZB!;HdY3&kk:i&KXSE7l<Czzs8Duu
+BDFChar: 163 186 19 2 16 0 16
+&)],Y?jts'i""ZTi""ZTi!s-'0Gk>YzzJ,B9H
+BDFChar: 164 8486 23 2 20 0 16
+!Up(!%KJHjJ8bP)Dumc4!8uc8i8=UnDuman!PgYsJ/A@g$jH\7"98K/!'q/]59GCU
+BDFChar: 165 230 26 2 23 0 11
+%thYOCbU)n(cXJp!;IN=5PuK\!,smti&C_pGQ`!0#Tj0<
+BDFChar: 166 248 19 2 16 0 11
+&)],Y?nC52i/Zb+iXY#ZkRMP?0Gk>i
+BDFChar: 167 191 17 2 14 0 16
+#64u/z!WW9%"98i1(]Z5i?i]*bi,IV!?k>#"%tFW[
+BDFChar: 168 161 11 4 6 0 16
+i8=S85iCSYi8EPOi8EPOhuE`W
+BDFChar: 169 172 24 3 20 6 8
+s8Tk7!5JR7^]4?7
+BDFChar: 170 8730 24 1 21 -3 17
+!!)co!5JR8J,fV#!!<3$!rr<*!!!3'!"8i-$ig8E!!!i9!&+BY0E<)#!$kqP7_f"U^]4Ie!!.TM
+!<<*"
+BDFChar: 171 402 18 2 15 -3 16
+!&sts!K7,2"+UK("+WW2"+UK("+UK("+UK("+UK("+\8hL&cGu
+BDFChar: 172 8776 24 3 20 6 11
+*rnQ6_17&"!$;2+@)7AD4obQ_
+BDFChar: 173 8710 24 3 19 0 16
+!.Y%M^]4DN!!;'Y!al!2Du^"p!!kOa#T*OQ)upNY!$DaO+9hg2#67!k!.Y0%s8RTL
+BDFChar: 174 171 17 2 14 2 10
+$lBg80OS;(_15q/0OP_O$lAsE
+BDFChar: 175 187 17 2 14 2 10
+_15q/0OP_O$lBg80OS;(_12Lc
+BDFChar: 176 8230 24 2 22 0 1
+i,C[6E&[gt
+BDFChar: 177 160 13 15 15 -4 -4
+z
+BDFChar: 178 192 22 0 21 0 19
+!+5d,&-)\1!!"\Q!&srY=9&>+!!%rX!0.$["onZ/!!36&!X!rXs*t4Q^]XYQ#QWcg!+6WDE;ot:
+
+BDFChar: 179 195 22 0 21 0 19
+!T="[*WQ0?!!"\Q!&srY=9&>+!!%rX!0.$["onZ/!!36&!X!rXs*t4Q^]XYQ#QWcg!+6WDE;ot:
+
+BDFChar: 180 213 23 2 20 0 19
+"2Y$@49,?]!!Dur$jH\k"+Y=k^i0=ihuM]n!8uc8i8=UnhuM]n!8uc8i,A_4Duma6"+Uda!!Dur
+
+BDFChar: 181 338 33 2 30 0 16
+"98Dr$j5EI3!%qSDuef%Duef%huM^9huM^9huMd;huNcWhuMd;huM^9huM^9Duef%Duef%3!%qS
+$j5EI"98Dr
+BDFChar: 182 339 28 2 25 0 11
+&&I`h2@Nt5#2gI+i#E![+917=!8ngsi#D`)*!.fP":r?D
+BDFChar: 183 8211 11 1 9 10 10
+s*t(L
+BDFChar: 184 8212 24 0 23 10 10
+s8W*!
+BDFChar: 185 8220 14 2 10 12 16
++Fl`X_Z8_I@=S=X
+BDFChar: 186 8221 14 3 11 13 17
+_Z8_I@=UWDJcGcN
+BDFChar: 187 8216 7 2 4 12 16
++@*a#?iU0,
+BDFChar: 188 8217 7 2 4 13 17
+^u/TcJ,fQL
+BDFChar: 189 247 24 3 19 3 13
+!Pe[9^]4?7z!!!$!s*t(Lz!!!!"^]4DNz
+BDFChar: 190 9674 24 4 18 1 15
+!<<4P#/CXT(bdW\?jsgT?jn_+(bcA+#/C=k!<<*"
+BDFChar: 191 255 20 0 19 -4 15
+!sS`-"onW'zs,ZXh!ItX\!"K&1#6Fl1"98OW!!A#W!QY6Aci=(8!!(pW3+)`25QEKg!"T&0
+
+BDFChar: 192 166 7 3 3 -1 18
+J:N0#J:N0#J,fS"J:N0#J:N0#
+BDFChar: 193 173 24 3 20 8 8
+s8Tk7
+EndBitmapFont
+EndSplineFont

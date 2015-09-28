@@ -1,0 +1,2058 @@
+SplineFontDB: 1.0
+FontName: LisaCalcPaperRaw
+FullName: LisaCalc Paper Raw
+FamilyName: LisaCalc Paper Raw
+Weight: Medium
+Copyright: 
+Version: 001.000
+FONDName: LisaCalc Paper
+ItalicAngle: 0
+UnderlinePosition: -100
+UnderlineWidth: 50
+Ascent: 800
+Descent: 200
+NeedsXUIDChange: 1
+XUID: [1021 662 1655008605 2730144]
+OS2Version: 0
+OS2_WeightWidthSlopeOnly: 0
+OS2_UseTypoMetrics: 1
+CreationTime: 1176547883
+ModificationTime: 1177108688
+OS2TypoAscent: 0
+OS2TypoAOffset: 1
+OS2TypoDescent: 0
+OS2TypoDOffset: 1
+OS2TypoLinegap: 0
+OS2WinAscent: 0
+OS2WinAOffset: 1
+OS2WinDescent: 0
+OS2WinDOffset: 1
+HheadAscent: 0
+HheadAOffset: 1
+HheadDescent: 0
+HheadDOffset: 1
+OS2Vendor: 'PfEd'
+ScriptLang: 1
+ 1 latn 1 dflt 
+Encoding: ISO8859-1
+UnicodeInterp: none
+NameList: Adobe Glyph List
+DisplaySize: -36
+AntiAlias: 1
+FitToEm: 1
+WinInfo: 0 32 8
+OnlyBitmaps: 1
+BeginChars: 256 224
+StartChar: one
+Encoding: 49 49 0
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: two
+Encoding: 50 50 1
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: three
+Encoding: 51 51 2
+Width: 2333
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: four
+Encoding: 52 52 3
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: five
+Encoding: 53 53 4
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: six
+Encoding: 54 54 5
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: seven
+Encoding: 55 55 6
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: eight
+Encoding: 56 56 7
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: nine
+Encoding: 57 57 8
+Width: 2380
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: colon
+Encoding: 58 58 9
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: semicolon
+Encoding: 59 59 10
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: less
+Encoding: 60 60 11
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: equal
+Encoding: 61 61 12
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: greater
+Encoding: 62 62 13
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: question
+Encoding: 63 63 14
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: at
+Encoding: 64 64 15
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: A
+Encoding: 65 65 16
+Width: 2380
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: B
+Encoding: 66 66 17
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: C
+Encoding: 67 67 18
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: D
+Encoding: 68 68 19
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: E
+Encoding: 69 69 20
+Width: 2380
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: F
+Encoding: 70 70 21
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: G
+Encoding: 71 71 22
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: H
+Encoding: 72 72 23
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: I
+Encoding: 73 73 24
+Width: 2380
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: J
+Encoding: 74 74 25
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: K
+Encoding: 75 75 26
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: L
+Encoding: 76 76 27
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: M
+Encoding: 77 77 28
+Width: 2380
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: N
+Encoding: 78 78 29
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: O
+Encoding: 79 79 30
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: P
+Encoding: 80 80 31
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Q
+Encoding: 81 81 32
+Width: 2380
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: R
+Encoding: 82 82 33
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: S
+Encoding: 83 83 34
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: T
+Encoding: 84 84 35
+Width: 2047
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: U
+Encoding: 85 85 36
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: V
+Encoding: 86 86 37
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: W
+Encoding: 87 87 38
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: X
+Encoding: 88 88 39
+Width: 1571
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Y
+Encoding: 89 89 40
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Z
+Encoding: 90 90 41
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: bracketleft
+Encoding: 91 91 42
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: backslash
+Encoding: 92 92 43
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: bracketright
+Encoding: 93 93 44
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: asciicircum
+Encoding: 94 94 45
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: underscore
+Encoding: 95 95 46
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: grave
+Encoding: 96 96 47
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: a
+Encoding: 97 97 48
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: b
+Encoding: 98 98 49
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: c
+Encoding: 99 99 50
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: d
+Encoding: 100 100 51
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: e
+Encoding: 101 101 52
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: f
+Encoding: 102 102 53
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: g
+Encoding: 103 103 54
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: h
+Encoding: 104 104 55
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: i
+Encoding: 105 105 56
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: j
+Encoding: 106 106 57
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: k
+Encoding: 107 107 58
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: l
+Encoding: 108 108 59
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: m
+Encoding: 109 109 60
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: n
+Encoding: 110 110 61
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: o
+Encoding: 111 111 62
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: p
+Encoding: 112 112 63
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: q
+Encoding: 113 113 64
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: r
+Encoding: 114 114 65
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: s
+Encoding: 115 115 66
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: t
+Encoding: 116 116 67
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: u
+Encoding: 117 117 68
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: v
+Encoding: 118 118 69
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: w
+Encoding: 119 119 70
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: x
+Encoding: 120 120 71
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: y
+Encoding: 121 121 72
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: z
+Encoding: 122 122 73
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: braceleft
+Encoding: 123 123 74
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: bar
+Encoding: 124 124 75
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: braceright
+Encoding: 125 125 76
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: asciitilde
+Encoding: 126 126 77
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni007F
+Encoding: 127 127 78
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0080
+Encoding: 128 128 79
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0081
+Encoding: 129 129 80
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0082
+Encoding: 130 130 81
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0083
+Encoding: 131 131 82
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0084
+Encoding: 132 132 83
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0085
+Encoding: 133 133 84
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0086
+Encoding: 134 134 85
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0087
+Encoding: 135 135 86
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0088
+Encoding: 136 136 87
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0089
+Encoding: 137 137 88
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni008A
+Encoding: 138 138 89
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni008B
+Encoding: 139 139 90
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni008C
+Encoding: 140 140 91
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni008D
+Encoding: 141 141 92
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni008E
+Encoding: 142 142 93
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni008F
+Encoding: 143 143 94
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0090
+Encoding: 144 144 95
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0091
+Encoding: 145 145 96
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0092
+Encoding: 146 146 97
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0093
+Encoding: 147 147 98
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0094
+Encoding: 148 148 99
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0095
+Encoding: 149 149 100
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0096
+Encoding: 150 150 101
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0097
+Encoding: 151 151 102
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0098
+Encoding: 152 152 103
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni0099
+Encoding: 153 153 104
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni009A
+Encoding: 154 154 105
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni009B
+Encoding: 155 155 106
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni009C
+Encoding: 156 156 107
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni009D
+Encoding: 157 157 108
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni009E
+Encoding: 158 158 109
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni009F
+Encoding: 159 159 110
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni00A0
+Encoding: 160 160 111
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: exclamdown
+Encoding: 161 161 112
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: cent
+Encoding: 162 162 113
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: sterling
+Encoding: 163 163 114
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: currency
+Encoding: 164 164 115
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: yen
+Encoding: 165 165 116
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: brokenbar
+Encoding: 166 166 117
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: section
+Encoding: 167 167 118
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: dieresis
+Encoding: 168 168 119
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: copyright
+Encoding: 169 169 120
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ordfeminine
+Encoding: 170 170 121
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: guillemotleft
+Encoding: 171 171 122
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: logicalnot
+Encoding: 172 172 123
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni00AD
+Encoding: 173 173 124
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: registered
+Encoding: 174 174 125
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: macron
+Encoding: 175 175 126
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: degree
+Encoding: 176 176 127
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: plusminus
+Encoding: 177 177 128
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni00B2
+Encoding: 178 178 129
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni00B3
+Encoding: 179 179 130
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: acute
+Encoding: 180 180 131
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uni00B5
+Encoding: 181 181 132
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: paragraph
+Encoding: 182 182 133
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: periodcentered
+Encoding: 183 183 134
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: cedilla
+Encoding: 184 184 135
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: uni00B9
+Encoding: 185 185 136
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ordmasculine
+Encoding: 186 186 137
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: guillemotright
+Encoding: 187 187 138
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: onequarter
+Encoding: 188 188 139
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+Ligature: 0 0 'frac' one slash four
+Ligature: 0 0 'frac' one fraction four
+EndChar
+StartChar: onehalf
+Encoding: 189 189 140
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+Ligature: 0 0 'frac' one slash two
+Ligature: 0 0 'frac' one fraction two
+EndChar
+StartChar: threequarters
+Encoding: 190 190 141
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+Ligature: 0 0 'frac' three slash four
+Ligature: 0 0 'frac' three fraction four
+EndChar
+StartChar: questiondown
+Encoding: 191 191 142
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Agrave
+Encoding: 192 192 143
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Aacute
+Encoding: 193 193 144
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Acircumflex
+Encoding: 194 194 145
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Atilde
+Encoding: 195 195 146
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Adieresis
+Encoding: 196 196 147
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Aring
+Encoding: 197 197 148
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: AE
+Encoding: 198 198 149
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Ccedilla
+Encoding: 199 199 150
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Egrave
+Encoding: 200 200 151
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Eacute
+Encoding: 201 201 152
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Ecircumflex
+Encoding: 202 202 153
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Edieresis
+Encoding: 203 203 154
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Igrave
+Encoding: 204 204 155
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Iacute
+Encoding: 205 205 156
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Icircumflex
+Encoding: 206 206 157
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Idieresis
+Encoding: 207 207 158
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: Eth
+Encoding: 208 208 159
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Ntilde
+Encoding: 209 209 160
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Ograve
+Encoding: 210 210 161
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Oacute
+Encoding: 211 211 162
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Ocircumflex
+Encoding: 212 212 163
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Otilde
+Encoding: 213 213 164
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Odieresis
+Encoding: 214 214 165
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: multiply
+Encoding: 215 215 166
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Oslash
+Encoding: 216 216 167
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Ugrave
+Encoding: 217 217 168
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Uacute
+Encoding: 218 218 169
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: Ucircumflex
+Encoding: 219 219 170
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Udieresis
+Encoding: 220 220 171
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: Yacute
+Encoding: 221 221 172
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: Thorn
+Encoding: 222 222 173
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: germandbls
+Encoding: 223 223 174
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: agrave
+Encoding: 224 224 175
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: aacute
+Encoding: 225 225 176
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: acircumflex
+Encoding: 226 226 177
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: atilde
+Encoding: 227 227 178
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: adieresis
+Encoding: 228 228 179
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: aring
+Encoding: 229 229 180
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ae
+Encoding: 230 230 181
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ccedilla
+Encoding: 231 231 182
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: egrave
+Encoding: 232 232 183
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: eacute
+Encoding: 233 233 184
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ecircumflex
+Encoding: 234 234 185
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: edieresis
+Encoding: 235 235 186
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: igrave
+Encoding: 236 236 187
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: iacute
+Encoding: 237 237 188
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: icircumflex
+Encoding: 238 238 189
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: idieresis
+Encoding: 239 239 190
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: eth
+Encoding: 240 240 191
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ntilde
+Encoding: 241 241 192
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ograve
+Encoding: 242 242 193
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: oacute
+Encoding: 243 243 194
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ocircumflex
+Encoding: 244 244 195
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: otilde
+Encoding: 245 245 196
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: odieresis
+Encoding: 246 246 197
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: divide
+Encoding: 247 247 198
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: oslash
+Encoding: 248 248 199
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ugrave
+Encoding: 249 249 200
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: uacute
+Encoding: 250 250 201
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ucircumflex
+Encoding: 251 251 202
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: udieresis
+Encoding: 252 252 203
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: yacute
+Encoding: 253 253 204
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: thorn
+Encoding: 254 254 205
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ydieresis
+Encoding: 255 255 206
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: space
+Encoding: 32 32 207
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: exclam
+Encoding: 33 33 208
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: quotedbl
+Encoding: 34 34 209
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: numbersign
+Encoding: 35 35 210
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: dollar
+Encoding: 36 36 211
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: percent
+Encoding: 37 37 212
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: ampersand
+Encoding: 38 38 213
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: quotesingle
+Encoding: 39 39 214
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: parenleft
+Encoding: 40 40 215
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: parenright
+Encoding: 41 41 216
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: asterisk
+Encoding: 42 42 217
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: plus
+Encoding: 43 43 218
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: comma
+Encoding: 44 44 219
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: hyphen
+Encoding: 45 45 220
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: period
+Encoding: 46 46 221
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+StartChar: slash
+Encoding: 47 47 222
+Width: 1000
+Flags: HW
+TeX: 0 0 0 0
+EndChar
+StartChar: zero
+Encoding: 48 48 223
+Width: 1000
+Flags: W
+TeX: 0 0 0 0
+EndChar
+EndChars
+BitmapFont: 21 225 0 21 1 
+Resolution: 72
+BDFChar: 0 49 43 0 42 -21 -2
+J3EtL;o!n`!5T9jJ3EtL&g2])!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 1 50 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSc'>T+u!5Yr`
+BDFChar: 2 51 49 23 34 -21 -17
+Lu?qtW;qbdLu875
+BDFChar: 3 52 33 8 19 -21 -17
+L]H'-WUP]DL]@DT
+BDFChar: 4 53 33 8 19 -21 -17
+L]H'mWUP^/L]@DT
+BDFChar: 5 54 33 8 18 -21 -17
+L]H*NW5,@IM')cu
+BDFChar: 6 55 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J-Z.j!!%NT!5JR7J-Z.j!!%NT!5JR7J,fSb!!%O5!5JR7
+J0G!/!!%Nn!5JR7J0G!/!!%O5!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 7 56 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%Nh!5JR7J0G!/!!%O5!5JR7J0G!/!!%Nn!5JR7
+J,fSb!!%Nl!5JR7J04j-!!%Nl!5JR7J04j-!!%O5!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 8 57 50 1 42 -21 -6
+!!!Q0p](9o0E;:W:]N`\!J'r1J,fSb:k4')!5SC1J33hI;F#a@!5J`1J.)Fn#nVUq!5K3QJ.)Fn
++V9/g!5LjmJ,fSb!'idL!Pe[80E;?.!!!Q0rr<$!"989!
+BDFChar: 9 58 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ33hIJ.)FnJ.)FnJ.)FnJ.)FnJ3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 10 59 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ-5S^O5L#RJ-5S^J,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 11 60 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJHP\_O5L#RJHP\_JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 12 61 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbKKoOQJqNj6JH,\cJqNj6KKoOQJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 13 62 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJ-5S^O5L#RJ-5S^JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 14 63 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.;RpJ0"^+J2RDCJ7\esJ:@R7J-H"hJ-H"hJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 15 64 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:@R7J-,eeJ-H"hJ.)FnJ/A:%J/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 16 65 50 17 42 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,g_-SFBe!U4AuRT]%$/U4OT)SFdf:J-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 17 66 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJH(/8J,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 18 67 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ-Z.jJ-Z.jJ-Z.jJH(/8J-Z.jJ-Z.jJ-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 19 68 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3a1NJ0G!/J.r"!J-Z.jJ.r"!J0G!/J3a1NJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 20 69 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#8KJ7+3F5QQCC;6W:f!+6sH5R%3r;%Pu$!+:Wp5R[X#
+!!#7m!+6oL5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 21 70 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3EtKJ7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 22 71 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3O%LJ-H"hJ.)FnJ/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 23 72 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J/A:%!!%Nd!5T4sJ,fScYQ07SJAG1BJ,fSc&-.4t!5T4s
+J/A:%!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 24 73 50 1 42 -21 -6
+!!!Q0p](R"0E;:W2ul2D!ItFUJ,fSb#QTAb!5LbuJ0"^+!!%O-!5SVbJ7\es!!%P!!5KcYJ-H"h
+'EEXf!5Jj?J,fSb'ECAu!PflZ0E;?.!!!Q0rr<$!"989!
+BDFChar: 25 74 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:7L6J7&AmJ:7L6J-,eeJ-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 26 75 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ/A:%J1pu=J:7L6J7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 27 76 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%T.^q^35K/%nl#QTK5!5K:6J`ZsJ,(P1P!6.;)J/R:^Jq/A-0Z+#Y
+J7C:M!!%Pci4o<m5QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 28 77 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#7g!+:Wp5TTo5:nU&X!+6p75R%3r:d@8M!+:UJ5R%3r
+!!#8+J7'K"5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 29 78 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ-,eeJ-H"hJ.)FnJ/A:%J1pu=J3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 30 79 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ-,eeJ0"^+J-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 31 80 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J04j-!!%O/!5JR7J04j-!!%O5!5JR7J,fSb!!%Nn!5JR7
+J2.,?!!%O!!5JR7J0k93!!%Nn!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 32 81 50 0 49 -21 -6
+!!!9(s8Tk7!#P\9z+92BA!!!!az&-+rq!"ZjV+@#o,(dS'c5QCd$5S/H2!!!j$&HG&r!#Rs&
+IR!l5(dJ3(5QCd$5QCdL!!!PF!!",Az!#P\9z#QOi(^]4?8s8W,7
+BDFChar: 33 82 33 0 25 -21 -6
+s8Vio!!!3'!!!%M!!!#7!!!#7J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb!!!#7!!!&8!!!7Ss8W*!
+s8Vus
+BDFChar: 34 83 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ.)FnJ.)FnJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 35 84 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%O5!5JR7J04j-!!%O3!5JR7J04j-!!%O5!5JR7
+J,fSb!!%O3!5JR7J0G!/!!%O3!5JR7J0Y-1!!%Nn!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 36 85 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 37 86 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ-H"hJ.)FnJ/A:%5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 38 87 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ/A:%J/A:%J,fSbJcC89J,fSbJ/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 39 88 33 1 23 -19 -7
++91h[s8;osrr<#ts8W)us8N&urr<#ts8W)us8N&urdXtG+91g1
+BDFChar: 40 89 43 0 42 -21 -2
+J3EtL;o!n`!5T9jJ3EtL&g2])!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 41 90 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSc'>T+u!5Yr`
+BDFChar: 42 91 49 23 34 -21 -17
+Lu?qtW;qbdLu875
+BDFChar: 43 92 33 8 19 -21 -17
+L]H'-WUP]DL]@DT
+BDFChar: 44 93 33 8 19 -21 -17
+L]H'mWUP^/L]@DT
+BDFChar: 45 94 33 8 18 -21 -17
+L]H*NW5,@IM')cu
+BDFChar: 46 95 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J-Z.j!!%NT!5JR7J-Z.j!!%NT!5JR7J,fSb!!%O5!5JR7
+J0G!/!!%Nn!5JR7J0G!/!!%O5!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 47 96 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%Nh!5JR7J0G!/!!%O5!5JR7J0G!/!!%Nn!5JR7
+J,fSb!!%Nl!5JR7J04j-!!%Nl!5JR7J04j-!!%O5!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 48 97 50 1 42 -21 -6
+!!!Q0p](9o0E;:W:]N`\!J'r1J,fSb:k4')!5SC1J33hI;F#a@!5J`1J.)Fn#nVUq!5K3QJ.)Fn
++V9/g!5LjmJ,fSb!'idL!Pe[80E;?.!!!Q0rr<$!"989!
+BDFChar: 49 98 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ33hIJ.)FnJ.)FnJ.)FnJ.)FnJ3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 50 99 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ-5S^O5L#RJ-5S^J,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 51 100 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJHP\_O5L#RJHP\_JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 52 101 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbKKoOQJqNj6JH,\cJqNj6KKoOQJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 53 102 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJ-5S^O5L#RJ-5S^JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 54 103 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.;RpJ0"^+J2RDCJ7\esJ:@R7J-H"hJ-H"hJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 55 104 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:@R7J-,eeJ-H"hJ.)FnJ/A:%J/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 56 105 50 17 42 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,g_-SFBe!U4AuRT]%$/U4OT)SFdf:J-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 57 106 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJH(/8J,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 58 107 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ-Z.jJ-Z.jJ-Z.jJH(/8J-Z.jJ-Z.jJ-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 59 108 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3a1NJ0G!/J.r"!J-Z.jJ.r"!J0G!/J3a1NJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 60 109 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#8KJ7+3F5QQCC;6W:f!+6sH5R%3r;%Pu$!+:Wp5R[X#
+!!#7m!+6oL5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 61 110 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3EtKJ7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 62 111 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3O%LJ-H"hJ.)FnJ/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 63 112 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J/A:%!!%Nd!5T4sJ,fScYQ07SJAG1BJ,fSc&-.4t!5T4s
+J/A:%!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 64 113 50 1 42 -21 -6
+!!!Q0p](R"0E;:W2ul2D!ItFUJ,fSb#QTAb!5LbuJ0"^+!!%O-!5SVbJ7\es!!%P!!5KcYJ-H"h
+'EEXf!5Jj?J,fSb'ECAu!PflZ0E;?.!!!Q0rr<$!"989!
+BDFChar: 65 114 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:7L6J7&AmJ:7L6J-,eeJ-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 66 115 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ/A:%J1pu=J:7L6J7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 67 116 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%T.^q^35K/%nl#QTK5!5K:6J`ZsJ,(P1P!6.;)J/R:^Jq/A-0Z+#Y
+J7C:M!!%Pci4o<m5QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 68 117 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#7g!+:Wp5TTo5:nU&X!+6p75R%3r:d@8M!+:UJ5R%3r
+!!#8+J7'K"5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 69 118 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ-,eeJ-H"hJ.)FnJ/A:%J1pu=J3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 70 119 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ-,eeJ0"^+J-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 71 120 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J04j-!!%O/!5JR7J04j-!!%O5!5JR7J,fSb!!%Nn!5JR7
+J2.,?!!%O!!5JR7J0k93!!%Nn!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 72 121 50 0 49 -21 -6
+!!!9(s8Tk7!#P\9z+92BA!!!!az&-+rq!"ZjV+@#o,(dS'c5QCd$5S/H2!!!j$&HG&r!#Rs&
+IR!l5(dJ3(5QCd$5QCdL!!!PF!!",Az!#P\9z#QOi(^]4?8s8W,7
+BDFChar: 73 122 33 0 25 -21 -6
+s8Vio!!!3'!!!%M!!!#7!!!#7J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb!!!#7!!!&8!!!7Ss8W*!
+s8Vus
+BDFChar: 74 123 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ.)FnJ.)FnJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 75 124 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%O5!5JR7J04j-!!%O3!5JR7J04j-!!%O5!5JR7
+J,fSb!!%O3!5JR7J0G!/!!%O3!5JR7J0Y-1!!%Nn!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 76 125 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 77 126 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ-H"hJ.)FnJ/A:%5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 78 127 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ/A:%J/A:%J,fSbJcC89J,fSbJ/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 79 128 33 1 23 -19 -7
++91h[s8;osrr<#ts8W)us8N&urr<#ts8W)us8N&urdXtG+91g1
+BDFChar: 80 129 43 0 42 -21 -2
+J3EtL;o!n`!5T9jJ3EtL&g2])!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 81 130 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSc'>T+u!5Yr`
+BDFChar: 82 131 49 23 34 -21 -17
+Lu?qtW;qbdLu875
+BDFChar: 83 132 33 8 19 -21 -17
+L]H'-WUP]DL]@DT
+BDFChar: 84 133 33 8 19 -21 -17
+L]H'mWUP^/L]@DT
+BDFChar: 85 134 33 8 18 -21 -17
+L]H*NW5,@IM')cu
+BDFChar: 86 135 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J-Z.j!!%NT!5JR7J-Z.j!!%NT!5JR7J,fSb!!%O5!5JR7
+J0G!/!!%Nn!5JR7J0G!/!!%O5!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 87 136 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%Nh!5JR7J0G!/!!%O5!5JR7J0G!/!!%Nn!5JR7
+J,fSb!!%Nl!5JR7J04j-!!%Nl!5JR7J04j-!!%O5!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 88 137 50 1 42 -21 -6
+!!!Q0p](9o0E;:W:]N`\!J'r1J,fSb:k4')!5SC1J33hI;F#a@!5J`1J.)Fn#nVUq!5K3QJ.)Fn
++V9/g!5LjmJ,fSb!'idL!Pe[80E;?.!!!Q0rr<$!"989!
+BDFChar: 89 138 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ33hIJ.)FnJ.)FnJ.)FnJ.)FnJ3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 90 139 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ-5S^O5L#RJ-5S^J,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 91 140 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJHP\_O5L#RJHP\_JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 92 141 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbKKoOQJqNj6JH,\cJqNj6KKoOQJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 93 142 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJ-5S^O5L#RJ-5S^JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 94 143 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.;RpJ0"^+J2RDCJ7\esJ:@R7J-H"hJ-H"hJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 95 144 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:@R7J-,eeJ-H"hJ.)FnJ/A:%J/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 96 145 50 17 42 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,g_-SFBe!U4AuRT]%$/U4OT)SFdf:J-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 97 146 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJH(/8J,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 98 147 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ-Z.jJ-Z.jJ-Z.jJH(/8J-Z.jJ-Z.jJ-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 99 148 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3a1NJ0G!/J.r"!J-Z.jJ.r"!J0G!/J3a1NJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 100 149 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#8KJ7+3F5QQCC;6W:f!+6sH5R%3r;%Pu$!+:Wp5R[X#
+!!#7m!+6oL5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 101 150 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3EtKJ7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 102 151 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3O%LJ-H"hJ.)FnJ/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 103 152 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J/A:%!!%Nd!5T4sJ,fScYQ07SJAG1BJ,fSc&-.4t!5T4s
+J/A:%!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 104 153 50 1 42 -21 -6
+!!!Q0p](R"0E;:W2ul2D!ItFUJ,fSb#QTAb!5LbuJ0"^+!!%O-!5SVbJ7\es!!%P!!5KcYJ-H"h
+'EEXf!5Jj?J,fSb'ECAu!PflZ0E;?.!!!Q0rr<$!"989!
+BDFChar: 105 154 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:7L6J7&AmJ:7L6J-,eeJ-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 106 155 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ/A:%J1pu=J:7L6J7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 107 156 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%T.^q^35K/%nl#QTK5!5K:6J`ZsJ,(P1P!6.;)J/R:^Jq/A-0Z+#Y
+J7C:M!!%Pci4o<m5QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 108 157 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#7g!+:Wp5TTo5:nU&X!+6p75R%3r:d@8M!+:UJ5R%3r
+!!#8+J7'K"5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 109 158 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ-,eeJ-H"hJ.)FnJ/A:%J1pu=J3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 110 159 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ-,eeJ0"^+J-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 111 160 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J04j-!!%O/!5JR7J04j-!!%O5!5JR7J,fSb!!%Nn!5JR7
+J2.,?!!%O!!5JR7J0k93!!%Nn!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 112 161 50 0 49 -21 -6
+!!!9(s8Tk7!#P\9z+92BA!!!!az&-+rq!"ZjV+@#o,(dS'c5QCd$5S/H2!!!j$&HG&r!#Rs&
+IR!l5(dJ3(5QCd$5QCdL!!!PF!!",Az!#P\9z#QOi(^]4?8s8W,7
+BDFChar: 113 162 33 0 25 -21 -6
+s8Vio!!!3'!!!%M!!!#7!!!#7J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb!!!#7!!!&8!!!7Ss8W*!
+s8Vus
+BDFChar: 114 163 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ.)FnJ.)FnJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 115 164 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%O5!5JR7J04j-!!%O3!5JR7J04j-!!%O5!5JR7
+J,fSb!!%O3!5JR7J0G!/!!%O3!5JR7J0Y-1!!%Nn!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 116 165 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 117 166 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ-H"hJ.)FnJ/A:%5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 118 167 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ/A:%J/A:%J,fSbJcC89J,fSbJ/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 119 168 33 1 23 -19 -7
++91h[s8;osrr<#ts8W)us8N&urr<#ts8W)us8N&urdXtG+91g1
+BDFChar: 120 169 43 0 42 -21 -2
+J3EtL;o!n`!5T9jJ3EtL&g2])!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 121 170 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSc'>T+u!5Yr`
+BDFChar: 122 171 49 23 34 -21 -17
+Lu?qtW;qbdLu875
+BDFChar: 123 172 33 8 19 -21 -17
+L]H'-WUP]DL]@DT
+BDFChar: 124 173 33 8 19 -21 -17
+L]H'mWUP^/L]@DT
+BDFChar: 125 174 33 8 18 -21 -17
+L]H*NW5,@IM')cu
+BDFChar: 126 175 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J-Z.j!!%NT!5JR7J-Z.j!!%NT!5JR7J,fSb!!%O5!5JR7
+J0G!/!!%Nn!5JR7J0G!/!!%O5!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 127 176 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%Nh!5JR7J0G!/!!%O5!5JR7J0G!/!!%Nn!5JR7
+J,fSb!!%Nl!5JR7J04j-!!%Nl!5JR7J04j-!!%O5!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 128 177 50 1 42 -21 -6
+!!!Q0p](9o0E;:W:]N`\!J'r1J,fSb:k4')!5SC1J33hI;F#a@!5J`1J.)Fn#nVUq!5K3QJ.)Fn
++V9/g!5LjmJ,fSb!'idL!Pe[80E;?.!!!Q0rr<$!"989!
+BDFChar: 129 178 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ33hIJ.)FnJ.)FnJ.)FnJ.)FnJ3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 130 179 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ-5S^O5L#RJ-5S^J,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 131 180 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJHP\_O5L#RJHP\_JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 132 181 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbKKoOQJqNj6JH,\cJqNj6KKoOQJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 133 182 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJ-5S^O5L#RJ-5S^JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 134 183 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.;RpJ0"^+J2RDCJ7\esJ:@R7J-H"hJ-H"hJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 135 184 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:@R7J-,eeJ-H"hJ.)FnJ/A:%J/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 136 185 50 17 42 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,g_-SFBe!U4AuRT]%$/U4OT)SFdf:J-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 137 186 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJH(/8J,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 138 187 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ-Z.jJ-Z.jJ-Z.jJH(/8J-Z.jJ-Z.jJ-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 139 188 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3a1NJ0G!/J.r"!J-Z.jJ.r"!J0G!/J3a1NJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 140 189 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#8KJ7+3F5QQCC;6W:f!+6sH5R%3r;%Pu$!+:Wp5R[X#
+!!#7m!+6oL5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 141 190 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3EtKJ7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 142 191 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3O%LJ-H"hJ.)FnJ/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 143 192 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J/A:%!!%Nd!5T4sJ,fScYQ07SJAG1BJ,fSc&-.4t!5T4s
+J/A:%!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 144 193 50 1 42 -21 -6
+!!!Q0p](R"0E;:W2ul2D!ItFUJ,fSb#QTAb!5LbuJ0"^+!!%O-!5SVbJ7\es!!%P!!5KcYJ-H"h
+'EEXf!5Jj?J,fSb'ECAu!PflZ0E;?.!!!Q0rr<$!"989!
+BDFChar: 145 194 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:7L6J7&AmJ:7L6J-,eeJ-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 146 195 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ/A:%J1pu=J:7L6J7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 147 196 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%T.^q^35K/%nl#QTK5!5K:6J`ZsJ,(P1P!6.;)J/R:^Jq/A-0Z+#Y
+J7C:M!!%Pci4o<m5QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 148 197 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#7g!+:Wp5TTo5:nU&X!+6p75R%3r:d@8M!+:UJ5R%3r
+!!#8+J7'K"5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 149 198 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ-,eeJ-H"hJ.)FnJ/A:%J1pu=J3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 150 199 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ-,eeJ0"^+J-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 151 200 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J04j-!!%O/!5JR7J04j-!!%O5!5JR7J,fSb!!%Nn!5JR7
+J2.,?!!%O!!5JR7J0k93!!%Nn!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 152 201 50 0 49 -21 -6
+!!!9(s8Tk7!#P\9z+92BA!!!!az&-+rq!"ZjV+@#o,(dS'c5QCd$5S/H2!!!j$&HG&r!#Rs&
+IR!l5(dJ3(5QCd$5QCdL!!!PF!!",Az!#P\9z#QOi(^]4?8s8W,7
+BDFChar: 153 202 33 0 25 -21 -6
+s8Vio!!!3'!!!%M!!!#7!!!#7J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb!!!#7!!!&8!!!7Ss8W*!
+s8Vus
+BDFChar: 154 203 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ.)FnJ.)FnJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 155 204 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%O5!5JR7J04j-!!%O3!5JR7J04j-!!%O5!5JR7
+J,fSb!!%O3!5JR7J0G!/!!%O3!5JR7J0Y-1!!%Nn!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 156 205 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 157 206 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ-H"hJ.)FnJ/A:%5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 158 207 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ/A:%J/A:%J,fSbJcC89J,fSbJ/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 159 208 33 1 23 -19 -7
++91h[s8;osrr<#ts8W)us8N&urr<#ts8W)us8N&urdXtG+91g1
+BDFChar: 160 209 43 0 42 -21 -2
+J3EtL;o!n`!5T9jJ3EtL&g2])!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 161 210 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSc'>T+u!5Yr`
+BDFChar: 162 211 49 23 34 -21 -17
+Lu?qtW;qbdLu875
+BDFChar: 163 212 33 8 19 -21 -17
+L]H'-WUP]DL]@DT
+BDFChar: 164 213 33 8 19 -21 -17
+L]H'mWUP^/L]@DT
+BDFChar: 165 214 33 8 18 -21 -17
+L]H*NW5,@IM')cu
+BDFChar: 166 215 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J-Z.j!!%NT!5JR7J-Z.j!!%NT!5JR7J,fSb!!%O5!5JR7
+J0G!/!!%Nn!5JR7J0G!/!!%O5!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 167 216 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%Nh!5JR7J0G!/!!%O5!5JR7J0G!/!!%Nn!5JR7
+J,fSb!!%Nl!5JR7J04j-!!%Nl!5JR7J04j-!!%O5!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 168 217 50 1 42 -21 -6
+!!!Q0p](9o0E;:W:]N`\!J'r1J,fSb:k4')!5SC1J33hI;F#a@!5J`1J.)Fn#nVUq!5K3QJ.)Fn
++V9/g!5LjmJ,fSb!'idL!Pe[80E;?.!!!Q0rr<$!"989!
+BDFChar: 169 218 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ33hIJ.)FnJ.)FnJ.)FnJ.)FnJ3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 170 219 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ-5S^O5L#RJ-5S^J,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 171 220 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJHP\_O5L#RJHP\_JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 172 221 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbKKoOQJqNj6JH,\cJqNj6KKoOQJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 173 222 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJH,\cJ-5S^O5L#RJ-5S^JH,\cJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 174 223 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.;RpJ0"^+J2RDCJ7\esJ:@R7J-H"hJ-H"hJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 175 224 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:@R7J-,eeJ-H"hJ.)FnJ/A:%J/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 176 225 50 17 42 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,g_-SFBe!U4AuRT]%$/U4OT)SFdf:J-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 177 226 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJH(/8J,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 178 227 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ-Z.jJ-Z.jJ-Z.jJH(/8J-Z.jJ-Z.jJ-Z.jJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 179 228 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3a1NJ0G!/J.r"!J-Z.jJ.r"!J0G!/J3a1NJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 180 229 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#8KJ7+3F5QQCC;6W:f!+6sH5R%3r;%Pu$!+:Wp5R[X#
+!!#7m!+6oL5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 181 230 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3EtKJ7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 182 231 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ7ASpJ3O%LJ-H"hJ.)FnJ/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 183 232 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J/A:%!!%Nd!5T4sJ,fScYQ07SJAG1BJ,fSc&-.4t!5T4s
+J/A:%!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 184 233 50 1 42 -21 -6
+!!!Q0p](R"0E;:W2ul2D!ItFUJ,fSb#QTAb!5LbuJ0"^+!!%O-!5SVbJ7\es!!%P!!5KcYJ-H"h
+'EEXf!5Jj?J,fSb'ECAu!PflZ0E;?.!!!Q0rr<$!"989!
+BDFChar: 185 234 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:7L6J7&AmJ:7L6J-,eeJ-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 186 235 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ/A:%J1pu=J:7L6J7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 187 236 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%T.^q^35K/%nl#QTK5!5K:6J`ZsJ,(P1P!6.;)J/R:^Jq/A-0Z+#Y
+J7C:M!!%Pci4o<m5QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 188 237 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#7g!+:Wp5TTo5:nU&X!+6p75R%3r:d@8M!+:UJ5R%3r
+!!#8+J7'K"5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 189 238 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ-,eeJ-H"hJ.)FnJ/A:%J1pu=J3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 190 239 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ-,eeJ0"^+J-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 191 240 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J04j-!!%O/!5JR7J04j-!!%O5!5JR7J,fSb!!%Nn!5JR7
+J2.,?!!%O!!5JR7J0k93!!%Nn!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 192 241 50 0 49 -21 -6
+!!!9(s8Tk7!#P\9z+92BA!!!!az&-+rq!"ZjV+@#o,(dS'c5QCd$5S/H2!!!j$&HG&r!#Rs&
+IR!l5(dJ3(5QCd$5QCdL!!!PF!!",Az!#P\9z#QOi(^]4?8s8W,7
+BDFChar: 193 242 33 0 25 -21 -6
+s8Vio!!!3'!!!%M!!!#7!!!#7J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb!!!#7!!!&8!!!7Ss8W*!
+s8Vus
+BDFChar: 194 243 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ.)FnJ.)FnJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 195 244 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%O5!5JR7J04j-!!%O3!5JR7J04j-!!%O5!5JR7
+J,fSb!!%O3!5JR7J0G!/!!%O3!5JR7J0Y-1!!%Nn!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 196 245 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 197 246 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ-H"hJ.)FnJ/A:%5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 198 247 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ/A:%J/A:%J,fSbJcC89J,fSbJ/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 199 248 33 1 23 -19 -7
++91h[s8;osrr<#ts8W)us8N&urr<#ts8W)us8N&urdXtG+91g1
+BDFChar: 200 249 43 0 42 -21 -2
+J3EtL;o!n`!5T9jJ3EtL&g2])!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 201 250 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7
+J,fSb!!%NL!5JR7J,fSb!!%NL!5JR7J,fSc'>T+u!5Yr`
+BDFChar: 202 251 49 23 34 -21 -17
+Lu?qtW;qbdLu875
+BDFChar: 203 252 33 8 19 -21 -17
+L]H'-WUP]DL]@DT
+BDFChar: 204 253 33 8 19 -21 -17
+L]H'mWUP^/L]@DT
+BDFChar: 205 254 33 8 18 -21 -17
+L]H*NW5,@IM')cu
+BDFChar: 206 255 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J-Z.j!!%NT!5JR7J-Z.j!!%NT!5JR7J,fSb!!%O5!5JR7
+J0G!/!!%Nn!5JR7J0G!/!!%O5!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 207 32 33 23 23 -19 -19
+z
+BDFChar: 208 33 50 1 42 -21 -6
+!!!Q0p](R"0E;:W2ul2D!ItFUJ,fSb#QTAb!5LbuJ0"^+!!%O-!5SVbJ7\es!!%P!!5KcYJ-H"h
+'EEXf!5Jj?J,fSb'ECAu!PflZ0E;?.!!!Q0rr<$!"989!
+BDFChar: 209 34 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ:7L6J7&AmJ:7L6J-,eeJ-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 210 35 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ.)FnJ/A:%J1pu=J:7L6J7ASpJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 211 36 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%T.^q^35K/%nl#QTK5!5K:6J`ZsJ,(P1P!6.;)J/R:^Jq/A-0Z+#Y
+J7C:M!!%Pci4o<m5QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+BDFChar: 212 37 50 0 42 -21 -6
+5JRO(qu@j)(]XX<+Q+@B!5JS"5QCdl!!#7g!+:Wp5TTo5:nU&X!+6p75R%3r:d@8M!+:UJ5R%3r
+!!#8+J7'K"5QCdlE'PNG!8ntb(]XZR5JRO(s*t(L!WW-!
+BDFChar: 213 38 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ-,eeJ-H"hJ.)FnJ/A:%J1pu=J3O%LJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 214 39 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ3EtKJ7ASpJ-,eeJ0"^+J-,eeJ7ASpJ3EtKJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 215 40 43 0 42 -21 -6
+&-)D)!!"\Q"onW'5QCh8!!%O5!5JR7J04j-!!%O/!5JR7J04j-!!%O5!5JR7J,fSb!!%Nn!5JR7
+J2.,?!!%O!!5JR7J0k93!!%Nn!5JR7J,fSc'>T,^!5Yr`
+BDFChar: 216 41 50 0 49 -21 -6
+!!!9(s8Tk7!#P\9z+92BA!!!!az&-+rq!"ZjV+@#o,(dS'c5QCd$5S/H2!!!j$&HG&r!#Rs&
+IR!l5(dJ3(5QCd$5QCdL!!!PF!!",Az!#P\9z#QOi(^]4?8s8W,7
+BDFChar: 217 42 33 0 25 -21 -6
+s8Vio!!!3'!!!%M!!!#7!!!#7J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb!!!#7!!!&8!!!7Ss8W*!
+s8Vus
+BDFChar: 218 43 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ.)FnJ.)FnJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 219 44 43 0 42 -21 -2
+J-Z.k;o!nh!5T9jJ-Z.k&g2]1!5JR7J,fSb!!%O5!5JR7J04j-!!%O3!5JR7J04j-!!%O5!5JR7
+J,fSb!!%O3!5JR7J0G!/!!%O3!5JR7J0Y-1!!%Nn!5JR75QCi#!!"\Q#CldS&-)Y0!!!-$qu?]s
+
+BDFChar: 220 45 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 221 46 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ,fSbJ-H"hJ.)FnJ/A:%5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 222 47 33 0 25 -21 -6
+&-)D)0E;:W5QCh8J,fSbJ/A:%J/A:%J,fSbJcC89J,fSbJ/A:%J/A:%J,fSb5QCi#0E;?.&-)Y0
+"989!
+BDFChar: 223 48 33 1 23 -19 -7
++91h[s8;osrr<#ts8W)us8N&urr<#ts8W)us8N&urdXtG+91g1
+EndBitmapFont
+EndSplineFont
