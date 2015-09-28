@@ -1,6 +1,7 @@
+package com.kreative.bitsnpicas.main;
+
 import java.io.*;
 import java.util.regex.Pattern;
-
 import com.kreative.bitsnpicas.*;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
@@ -9,7 +10,7 @@ import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 
-public class makettf {
+public class MakeTTF {
 	private static int xsize = 100, ysize = 100;
 	private static String search = null, replace = null;
 	private static boolean embolden = false;

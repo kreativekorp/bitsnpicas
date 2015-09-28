@@ -1,14 +1,15 @@
-import java.io.*;
+package com.kreative.bitsnpicas.main;
 
+import java.io.*;
 import com.kreative.bitsnpicas.*;
-import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.RawBitmapFontExporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 
-public class makesbf {
+public class MakeRaw {
 	private static String search = null, replace = null;
 	private static boolean embolden = false;
 	
@@ -73,8 +74,8 @@ public class makesbf {
 				myFont.setName(Font.NAME_STYLE, "Bold");
 			}
 			myFont.autoFillNames();
-			File out = makefile(myFont.getName(nameType), ".sbf");
-			new SBFBitmapFontExporter().exportFontToFile(myFont, out);
+			File out = makefile(myFont.getName(nameType), ".ft");
+			new RawBitmapFontExporter().exportFontToFile(myFont, out);
 		}
 	}
 	

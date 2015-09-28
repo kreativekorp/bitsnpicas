@@ -1,3 +1,5 @@
+package com.kreative.bitsnpicas.main;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -10,7 +12,6 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.kreative.bitsnpicas.truetype.CmapSubtable;
 import com.kreative.bitsnpicas.truetype.CmapTable;
 import com.kreative.bitsnpicas.truetype.GlyfTable;
@@ -23,7 +24,7 @@ import com.kreative.bitsnpicas.truetype.SbixSubtable;
 import com.kreative.bitsnpicas.truetype.SbixTable;
 import com.kreative.bitsnpicas.truetype.TrueTypeFile;
 
-public class sbixinject {
+public class InjectSbix {
 	public static void main(String[] args) {
 		for (String arg : args) {
 			File file = new File(arg);

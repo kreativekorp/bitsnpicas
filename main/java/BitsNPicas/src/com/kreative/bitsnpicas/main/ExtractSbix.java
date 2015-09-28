@@ -1,13 +1,14 @@
+package com.kreative.bitsnpicas.main;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
 import com.kreative.bitsnpicas.truetype.SbixEntry;
 import com.kreative.bitsnpicas.truetype.SbixSubtable;
 import com.kreative.bitsnpicas.truetype.SbixTable;
 import com.kreative.bitsnpicas.truetype.TrueTypeFile;
 
-public class sbixextract {
+public class ExtractSbix {
 	public static void main(String[] args) {
 		for (String arg : args) {
 			File file = new File(arg);

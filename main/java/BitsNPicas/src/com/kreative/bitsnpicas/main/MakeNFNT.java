@@ -1,5 +1,6 @@
-import java.io.*;
+package com.kreative.bitsnpicas.main;
 
+import java.io.*;
 import com.kreative.bitsnpicas.*;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
@@ -8,7 +9,7 @@ import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 
-public class makenfnt {
+public class MakeNFNT {
 	private static int id = 0;
 	private static int size = 0;
 	private static boolean snapSize = false;

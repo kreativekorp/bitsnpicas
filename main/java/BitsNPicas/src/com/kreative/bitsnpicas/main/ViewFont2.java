@@ -1,3 +1,5 @@
+package com.kreative.bitsnpicas.main;
+
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
@@ -8,23 +10,26 @@ import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 
-public class view extends JFrame {
+public class ViewFont2 extends JFrame {
 	private static final long serialVersionUID = 1;
 	
 	public static void main(String[] args) {
 		for (String arg : args) {
 			try {
-				if (arg.toLowerCase().endsWith(".sfd")) {
-					open(new SFDBitmapFontImporter(), arg);
+				if (arg.endsWith(".sfd")) {
+					File n = new File(arg);
+					File m = new File(arg.substring(0,arg.length()-4)+"Mask.sfd");
+					if (m.exists()) new ViewFont2(new SFDBitmapFontImporter().importFont(n)[0], new SFDBitmapFontImporter().importFont(m)[0]);
+					else ViewFont.open(new SFDBitmapFontImporter(), n);
 				}
 				else if (arg.toLowerCase().endsWith(".s10")) {
-					open(new S10BitmapFontImporter(), arg);
+					ViewFont.open(new S10BitmapFontImporter(), arg);
 				}
 				else if (arg.toLowerCase().endsWith(".png")) {
-					open(new SRFontBitmapFontImporter(), arg);
+					ViewFont.open(new SRFontBitmapFontImporter(), arg);
 				}
 				else if (arg.toLowerCase().endsWith(".dsf")) {
-					open(new DSFBitmapFontImporter(), arg);
+					ViewFont.open(new DSFBitmapFontImporter(), arg);
 				}
 				else {
 					System.err.println("Unknown type: "+arg);
@@ -35,25 +40,19 @@ public class view extends JFrame {
 		}
 	}
 	
-	public static void open(BitmapFontImporter im, String arg) throws IOException {
-		open(im, new File(arg));
-	}
-	
-	public static void open(BitmapFontImporter im, File f) throws IOException {
-		open(im.importFont(f));
-	}
-	
-	public static void open(BitmapFont[] fonts) {
-		for (BitmapFont font : fonts) new view(font);
-	}
+	private static final Color BACKGROUND = new Color(0xFFCC66FF);
+	private static final Color INSIDE = new Color(0xFFFFFFFF);
+	private static final Color OUTSIDE = new Color(0xFF660066);
 	
 	private BitmapFont myFont;
+	private BitmapFont myMaskFont;
 	private JComponent alphaPanel;
 	private JTextArea textArea;
 	private JComponent textPanel;
 
-	public view(BitmapFont bm) {
+	public ViewFont2(BitmapFont bm, BitmapFont bmmask) {
 		myFont = bm;
+		myMaskFont = bmmask;
 		if (bm.getName(BitmapFont.NAME_FAMILY_AND_STYLE) != null) {
 			setTitle(bm.getName(BitmapFont.NAME_FAMILY_AND_STYLE));
 		}
@@ -69,10 +68,14 @@ public class view extends JFrame {
 				int y = i.top;
 				int w = getWidth()-i.left-i.right;
 				int h = getHeight()-i.top-i.bottom;
-				g.setColor(Color.white);
+				g.setColor(BACKGROUND);
 				g.fillRect(x, y, w, h);
+				if (myMaskFont != null) {
+					g.setColor(INSIDE);
+					myMaskFont.drawAlphabet(g, x, y+myMaskFont.getLineAscent(), w);
+				}
 				if (myFont != null) {
-					g.setColor(Color.black);
+					g.setColor(OUTSIDE);
 					myFont.drawAlphabet(g, x, y+myFont.getLineAscent(), w);
 				}
 			}
@@ -99,10 +102,14 @@ public class view extends JFrame {
 				int y = i.top;
 				int w = getWidth()-i.left-i.right;
 				int h = getHeight()-i.top-i.bottom;
-				g.setColor(Color.white);
+				g.setColor(BACKGROUND);
 				g.fillRect(x, y, w, h);
+				if (myMaskFont != null && textArea != null) {
+					g.setColor(INSIDE);
+					myMaskFont.draw(g, textArea.getText(), x, y+myMaskFont.getLineAscent(), w);
+				}
 				if (myFont != null && textArea != null) {
-					g.setColor(Color.black);
+					g.setColor(OUTSIDE);
 					myFont.draw(g, textArea.getText(), x, y+myFont.getLineAscent(), w);
 				}
 			}

@@ -1,5 +1,6 @@
-import java.io.*;
+package com.kreative.bitsnpicas.main;
 
+import java.io.*;
 import com.kreative.bitsnpicas.*;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
@@ -8,7 +9,7 @@ import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 
-public class makerfont {
+public class MakeRFont {
 	private static String search = null, replace = null;
 	private static boolean embolden = false;
 	

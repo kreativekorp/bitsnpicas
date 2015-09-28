@@ -1,4 +1,4 @@
-SRCFILES = src/*.java src/com/kreative/*/*.java src/com/kreative/*/*/*.java
+SRCFILES = src/com/kreative/*/*.java src/com/kreative/*/*/*.java
 PACKAGES = com.kreative.bitsnpicas com.kreative.bitsnpicas.exporter com.kreative.bitsnpicas.importer com.kreative.bitsnpicas.transformer com.kreative.bitsnpicas.truetype
 
 all: clean bin doc osxclean BitsNPicas.jar BitsNPicas-src.tgz
