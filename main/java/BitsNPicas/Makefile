@@ -17,7 +17,7 @@ eclipseclean:
 
 bin:
 	mkdir -p bin
-	javac -target 1.5 -classpath dep/KSFL.jar -sourcepath src $(SRCFILES) -d bin
+	javac -classpath dep/KSFL.jar -sourcepath src $(SRCFILES) -d bin
 
 doc:
 	mkdir -p doc
