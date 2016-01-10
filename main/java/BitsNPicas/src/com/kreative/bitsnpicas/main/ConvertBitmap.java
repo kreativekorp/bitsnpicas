@@ -295,6 +295,14 @@ public class ConvertBitmap {
 		if (lname.endsWith(".sfd")) {
 			ret.fonts = new SFDBitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_POSTSCRIPT;
+		} else if (lname.endsWith(".suit")) {
+			file = new File(file, "..namedfork");
+			file = new File(file, "rsrc");
+			ret.fonts = new NFNTBitmapFontImporter().importFont(file);
+			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
+		} else if (lname.endsWith(".dfont")) {
+			ret.fonts = new NFNTBitmapFontImporter().importFont(file);
+			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
 		} else if (lname.endsWith(".png")) {
 			ret.fonts = new SRFontBitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
