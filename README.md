@@ -3,6 +3,7 @@ Bits'N'Picas is a conversion tool for bitmap fonts.
 
 Bits'N'Picas can import:
   *  SFD (FontForge)
+  *  NFNT (Mac OS Classic Font Suitcase)
   *  PNG (SFont or RFont, Kreative Software's extension of SFont)
   *  DSF (DOSStart! by Daniel L. Nice)
 
