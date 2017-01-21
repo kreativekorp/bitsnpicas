@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SbixTable extends ListBasedTable<SbixSubtable> {
-	public static final int VERSION_DEFAULT = 0x00010001;
+	public static final int VERSION_DEFAULT = 1;
+	public static final int FLAGS_DEFAULT = 0x0001;
+	public static final int FLAGS_DRAW_OUTLINES = 0x0002;
 	
 	public int version = VERSION_DEFAULT;
+	public int flags = FLAGS_DEFAULT;
 	
 	@Override
 	public String tableName() {
@@ -24,7 +27,8 @@ public class SbixTable extends ListBasedTable<SbixSubtable> {
 	@Override
 	protected void compile(DataOutputStream out, TrueTypeTable[] dependencies) throws IOException {
 		int numGlyphs = ((MaxpTable)dependencies[0]).numGlyphs;
-		out.writeInt(version);
+		out.writeShort(version);
+		out.writeShort(flags);
 		out.writeInt(this.size());
 		List<byte[]> subtableData = new ArrayList<byte[]>();
 		int currentLocation = 8 + this.size() * 4;
@@ -42,7 +46,8 @@ public class SbixTable extends ListBasedTable<SbixSubtable> {
 	@Override
 	protected void decompile(DataInputStream in, int length, TrueTypeTable[] dependencies) throws IOException {
 		int numGlyphs = ((MaxpTable)dependencies[0]).numGlyphs;
-		version = in.readInt();
+		version = in.readUnsignedShort();
+		flags = in.readUnsignedShort();
 		int numTables = in.readInt();
 		int[] tableOffset = new int[numTables + 1];
 		for (int i = 0; i < numTables; i++) {

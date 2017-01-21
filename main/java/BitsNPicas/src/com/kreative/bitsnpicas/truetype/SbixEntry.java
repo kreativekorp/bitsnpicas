@@ -7,10 +7,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class SbixEntry {
-	public static final int VERSION_DEFAULT = 0;
+	public static final int IMAGE_TYPE_JPEG = 0x6A706720;
+	public static final int IMAGE_TYPE_PDF = 0x70646620;
 	public static final int IMAGE_TYPE_PNG = 0x706E6720;
+	public static final int IMAGE_TYPE_TIFF = 0x74696666;
+	public static final int IMAGE_TYPE_DUPE = 0x64757065;
+	public static final int IMAGE_TYPE_MASK = 0x6D61736B;
 	
-	public int version = VERSION_DEFAULT;
+	public int offsetX = 0;
+	public int offsetY = 0;
 	public int imageType = 0;
 	public byte[] imageData = new byte[0];
 	
@@ -33,7 +38,8 @@ public class SbixEntry {
 	
 	private void compile(DataOutputStream out) throws IOException {
 		if (imageData != null && imageData.length > 0) {
-			out.writeInt(version);
+			out.writeShort(offsetX);
+			out.writeShort(offsetY);
 			out.writeInt(imageType);
 			out.write(imageData);
 		}
@@ -52,11 +58,13 @@ public class SbixEntry {
 	
 	private void decompile(DataInputStream in, int length) throws IOException {
 		if (length == 0) {
-			version = VERSION_DEFAULT;
+			offsetX = 0;
+			offsetY = 0;
 			imageType = 0;
 			imageData = new byte[0];
 		} else {
-			version = in.readInt();
+			offsetX = in.readShort();
+			offsetY = in.readShort();
 			imageType = in.readInt();
 			imageData = new byte[length - 8];
 			in.readFully(imageData);

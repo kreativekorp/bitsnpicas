@@ -27,12 +27,14 @@ public class ExtractSbix {
 					File outputRoot = new File(file.getParent(), file.getName() + ".sbix.d");
 					if (!outputRoot.exists()) outputRoot.mkdir();
 					for (SbixSubtable subtable : sbix) {
-						File outputSubdir = new File(outputRoot, Integer.toString(subtable.height));
+						File outputSubdir = new File(outputRoot, Integer.toString(subtable.ppem));
 						if (!outputSubdir.exists()) outputSubdir.mkdir();
 						for (int i = 0; i < subtable.size(); i++) {
 							SbixEntry entry = subtable.get(i);
 							if (entry.imageData != null && entry.imageData.length > 0) {
-								File outputFile = new File(outputSubdir, "glyph_" + Integer.toString(i) + ".png");
+								String name = "glyph_" + Integer.toString(i);
+								String extension = "." + entry.getImageTypeString().trim();
+								File outputFile = new File(outputSubdir, name + extension);
 								FileOutputStream out = new FileOutputStream(outputFile);
 								out.write(entry.imageData);
 								out.flush();

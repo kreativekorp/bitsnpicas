@@ -11,6 +11,10 @@ public interface PlatformConstants {
 	public static final int PLATFORM_SPECIFIC_ID_UNICODE_1_1 = 1;
 	public static final int PLATFORM_SPECIFIC_ID_UNICODE_ISO_10646 = 2;
 	public static final int PLATFORM_SPECIFIC_ID_UNICODE_2_0 = 3;
+	public static final int PLATFORM_SPECIFIC_ID_UNICODE_2_0_NON_BMP = 4;
+	public static final int PLATFORM_SPECIFIC_ID_UNICODE_VARIATION_SEQUENCES = 5;
+	public static final int PLATFORM_SPECIFIC_ID_UNICODE_FULL = 6;
+	public static final int PLATFORM_SPECIFIC_ID_UNICODE_FONTFORGE = 10;
 	
 	public static final int PLATFORM_SPECIFIC_ID_MACINTOSH_ROMAN = 0;
 	public static final int PLATFORM_SPECIFIC_ID_MACINTOSH_JAPANESE = 1;
@@ -46,7 +50,12 @@ public interface PlatformConstants {
 	public static final int PLATFORM_SPECIFIC_ID_MACINTOSH_SINDHI = 31;
 	public static final int PLATFORM_SPECIFIC_ID_MACINTOSH_UNINTERPRETED = 32;
 	
+	public static final int PLATFORM_SPECIFIC_ID_WINDOWS_SYMBOL = 0;
 	public static final int PLATFORM_SPECIFIC_ID_WINDOWS_UNICODE_16 = 1;
+	public static final int PLATFORM_SPECIFIC_ID_WINDOWS_SHIFT_JIS = 2;
+	public static final int PLATFORM_SPECIFIC_ID_WINDOWS_PRC = 3;
+	public static final int PLATFORM_SPECIFIC_ID_WINDOWS_BIG5 = 4;
+	public static final int PLATFORM_SPECIFIC_ID_WINDOWS_JOHAB = 5;
 	public static final int PLATFORM_SPECIFIC_ID_WINDOWS_UNICODE_32 = 10;
 	
 	public static final int LANGUAGE_ID_MACINTOSH_ENGLISH = 0;

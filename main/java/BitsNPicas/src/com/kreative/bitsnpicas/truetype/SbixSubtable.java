@@ -13,11 +13,11 @@ public class SbixSubtable extends ArrayList<SbixEntry> {
 	
 	public static final int DPI_DEFAULT = 72;
 	
-	public int height = 0;
+	public int ppem = 0;
 	public int dpi = DPI_DEFAULT;
 	
 	private void compile(DataOutputStream out, int numGlyphs) throws IOException {
-		out.writeShort(height);
+		out.writeShort(ppem);
 		out.writeShort(dpi);
 		List<byte[]> imageData = new ArrayList<byte[]>();
 		int currentLocation = 4 + (this.size() + 1) * 4;
@@ -49,7 +49,7 @@ public class SbixSubtable extends ArrayList<SbixEntry> {
 	}
 	
 	private void decompile(DataInputStream in, int length, int numGlyphs) throws IOException {
-		height = in.readUnsignedShort();
+		ppem = in.readUnsignedShort();
 		dpi = in.readUnsignedShort();
 		int[] imageOffset = new int[numGlyphs + 1];
 		for (int i = 0; i <= numGlyphs; i++) {

@@ -15,6 +15,7 @@ import java.util.Map;
 import com.kreative.bitsnpicas.truetype.CmapSubtable;
 import com.kreative.bitsnpicas.truetype.CmapTable;
 import com.kreative.bitsnpicas.truetype.GlyfTable;
+import com.kreative.bitsnpicas.truetype.HeadTable;
 import com.kreative.bitsnpicas.truetype.LocaTable;
 import com.kreative.bitsnpicas.truetype.MaxpTable;
 import com.kreative.bitsnpicas.truetype.PostTable;
@@ -44,6 +45,7 @@ public class InjectSbix {
 					CmapSubtable cmapsub = (cmap == null) ? null : cmap.getBestSubtable();
 					PostTable post = (PostTable)ttf.getByTableName("post");
 					MaxpTable maxp = (MaxpTable)ttf.getByTableName("maxp");
+					HeadTable head = (HeadTable)ttf.getByTableName("head");
 					GlyfTable glyf = (GlyfTable)ttf.getByTableName("glyf");
 					LocaTable loca = (LocaTable)ttf.getByTableName("loca");
 					SbixTable sbix = (SbixTable)ttf.getByTableName("sbix");
@@ -55,9 +57,9 @@ public class InjectSbix {
 					}
 					for (File inputSubdir : inputRoot.listFiles()) {
 						try {
-							int height = Integer.parseInt(inputSubdir.getName());
+							int ppem = Integer.parseInt(inputSubdir.getName());
 							SbixSubtable subtable = new SbixSubtable();
-							subtable.height = height;
+							subtable.ppem = ppem;
 							sbix.add(subtable);
 							Map<Integer,SbixEntry> entries = new HashMap<Integer,SbixEntry>();
 							for (File inputFile : inputSubdir.listFiles()) {
@@ -81,12 +83,14 @@ public class InjectSbix {
 							}
 							for (int i = 0; i < maxp.numGlyphs; i++) {
 								if (entries.containsKey(i)) {
-									subtable.add(entries.get(i));
+									SbixEntry e = entries.get(i);
 									if (glyf != null) {
-										byte[] g = glyf.get(i);
-										g = rewriteGlyf(g);
-										glyf.set(i, g);
+										GlyfInfo g = rewriteGlyf(glyf.get(i));
+										e.offsetX = g.xMin * ppem / head.unitsPerEm;
+										e.offsetY = g.yMin * ppem / head.unitsPerEm;
+										glyf.set(i, g.data);
 									}
+									subtable.add(e);
 								} else {
 									subtable.add(new SbixEntry());
 								}
@@ -118,33 +122,40 @@ public class InjectSbix {
 		}
 	}
 	
-	private static byte[] rewriteGlyf(byte[] data) {
+	private static class GlyfInfo {
+		public int xMin, yMin, xMax, yMax;
+		public byte[] data;
+	}
+	
+	private static GlyfInfo rewriteGlyf(byte[] data) {
+		GlyfInfo info = new GlyfInfo();
 		try {
 			ByteArrayInputStream in = new ByteArrayInputStream(data);
 			DataInputStream din = new DataInputStream(in);
 			din.readShort();
-			int xMin = din.readShort();
-			int yMin = din.readShort();
-			int xMax = din.readShort();
-			int yMax = din.readShort();
+			info.xMin = din.readShort();
+			info.yMin = din.readShort();
+			info.xMax = din.readShort();
+			info.yMax = din.readShort();
 			din.close();
 			in.close();
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			DataOutputStream dout = new DataOutputStream(out);
 			dout.writeShort(0);
-			dout.writeShort(xMin);
-			dout.writeShort(yMin);
-			dout.writeShort(xMax);
-			dout.writeShort(yMax);
+			dout.writeShort(info.xMin);
+			dout.writeShort(info.yMin);
+			dout.writeShort(info.xMax);
+			dout.writeShort(info.yMax);
 			dout.writeShort(0);
 			dout.flush();
 			out.flush();
 			dout.close();
 			out.close();
-			return out.toByteArray();
+			info.data = out.toByteArray();
 		} catch (IOException ioe) {
-			return data;
+			info.data = data;
 		}
+		return info;
 	}
 	
 	private static int getGlyphIndex(String s, CmapSubtable cmap, PostTable post) {

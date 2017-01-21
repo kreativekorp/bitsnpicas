@@ -49,6 +49,9 @@ public class CmapTable extends TrueTypeTable {
 	
 	public CmapSubtable getBestSubtable() {
 		CmapSubtable s;
+		if ((s = getSubtable(PlatformConstants.PLATFORM_ID_UNICODE, PlatformConstants.PLATFORM_SPECIFIC_ID_UNICODE_FONTFORGE)) != null) return s;
+		if ((s = getSubtable(PlatformConstants.PLATFORM_ID_UNICODE, PlatformConstants.PLATFORM_SPECIFIC_ID_UNICODE_FULL)) != null) return s;
+		if ((s = getSubtable(PlatformConstants.PLATFORM_ID_UNICODE, PlatformConstants.PLATFORM_SPECIFIC_ID_UNICODE_2_0_NON_BMP)) != null) return s;
 		if ((s = getSubtable(PlatformConstants.PLATFORM_ID_UNICODE, PlatformConstants.PLATFORM_SPECIFIC_ID_UNICODE_2_0)) != null) return s;
 		if ((s = getSubtable(PlatformConstants.PLATFORM_ID_UNICODE, PlatformConstants.PLATFORM_SPECIFIC_ID_UNICODE_1_1)) != null) return s;
 		if ((s = getSubtable(PlatformConstants.PLATFORM_ID_UNICODE, PlatformConstants.PLATFORM_SPECIFIC_ID_UNICODE_DEFAULT)) != null) return s;
