@@ -12,36 +12,22 @@ import java.io.PrintWriter;
 public class ImageToSvg {
 	public static void main(String[] args) {
 		boolean parsingOptions = true;
-		int[] viewBox = new int[]{ 0, 700, 800, 800 };
-		int[] imageRect = new int[]{ 0, 0, 800, 800 };
+		int[] imageRect = new int[]{ 0, -700, 800, 800 };
 		int argi = 0;
 		while (argi < args.length) {
 			String arg = args[argi++];
 			if (parsingOptions && arg.startsWith("-")) {
 				if (arg.equals("--")) {
 					parsingOptions = false;
-				} else if (arg.equals("-vx") && argi < args.length) {
-					viewBox[0] = parseInt(args[argi++]);
-				} else if (arg.equals("-vy") && argi < args.length) {
-					viewBox[1] = parseInt(args[argi++]);
-				} else if (arg.equals("-vw") && argi < args.length) {
-					viewBox[2] = parseInt(args[argi++]);
-				} else if (arg.equals("-vh") && argi < args.length) {
-					viewBox[3] = parseInt(args[argi++]);
-				} else if (arg.equals("-vb") && (argi+4) <= args.length) {
-					viewBox[0] = parseInt(args[argi++]);
-					viewBox[1] = parseInt(args[argi++]);
-					viewBox[2] = parseInt(args[argi++]);
-					viewBox[3] = parseInt(args[argi++]);
-				} else if (arg.equals("-ix") && argi < args.length) {
+				} else if (arg.equals("-x") && argi < args.length) {
 					imageRect[0] = parseInt(args[argi++]);
-				} else if (arg.equals("-iy") && argi < args.length) {
+				} else if (arg.equals("-y") && argi < args.length) {
 					imageRect[1] = parseInt(args[argi++]);
-				} else if (arg.equals("-iw") && argi < args.length) {
+				} else if (arg.equals("-w") && argi < args.length) {
 					imageRect[2] = parseInt(args[argi++]);
-				} else if (arg.equals("-ih") && argi < args.length) {
+				} else if (arg.equals("-h") && argi < args.length) {
 					imageRect[3] = parseInt(args[argi++]);
-				} else if (arg.equals("-ir") && (argi+4) <= args.length) {
+				} else if (arg.equals("-r") && (argi+4) <= args.length) {
 					imageRect[0] = parseInt(args[argi++]);
 					imageRect[1] = parseInt(args[argi++]);
 					imageRect[2] = parseInt(args[argi++]);
@@ -65,7 +51,7 @@ public class ImageToSvg {
 				String baseName = fileName.substring(0, o);
 				String outputFileName = baseName + ".svg";
 				File outputFile = new File(parentFile, outputFileName);
-				writeSVG(outputFile, dataURI, viewBox, imageRect);
+				writeSVG(outputFile, dataURI, imageRect);
 			}
 		}
 	}
@@ -76,17 +62,12 @@ public class ImageToSvg {
 		System.out.println("  java -jar BitsNPicas.jar imagetosvg <options> <files>");
 		System.out.println();
 		System.out.println("Options:");
-		System.out.println("  -vx <number>          Set X origin of viewBox.");
-		System.out.println("  -vy <number>          Set Y origin of viewBox.");
-		System.out.println("  -vw <number>          Set width of viewBox.");
-		System.out.println("  -vh <number>          Set height of viewBox.");
-		System.out.println("  -vb <x> <y> <w> <h>   Set viewBox.");
-		System.out.println("  -ix <number>          Set X origin of image rect.");
-		System.out.println("  -iy <number>          Set Y origin of image rect.");
-		System.out.println("  -iw <number>          Set width of image rect.");
-		System.out.println("  -ih <number>          Set height of image rect.");
-		System.out.println("  -ir <x> <y> <w> <h>   Set image rect.");
-		System.out.println("  --                    Treat remaining args as file names.");
+		System.out.println("  -x <number>         Set X origin of image.");
+		System.out.println("  -y <number>         Set Y origin of image.");
+		System.out.println("  -w <number>         Set width of image.");
+		System.out.println("  -h <number>         Set height of image.");
+		System.out.println("  -r <x> <y> <w> <h>  Set image position and size.");
+		System.out.println("  --                  Treat remaining args as file names.");
 		System.out.println();
 	}
 	
@@ -106,15 +87,14 @@ public class ImageToSvg {
 		}
 	}
 	
-	private static void writeSVG(File outputFile, String dataURI, int[] vb, int[] rect) {
+	private static void writeSVG(File outputFile, String dataURI, int[] rect) {
 		try {
 			FileOutputStream fos = new FileOutputStream(outputFile);
 			OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
 			PrintWriter pw = new PrintWriter(osw, true);
-			pw.print("<svg id=\"glyph{{{0}}}\" version=\"1.1\"");
+			pw.print("<svg id=\"glyph{{{0}}}\"");
 			pw.print(" xmlns=\"http://www.w3.org/2000/svg\"");
-			pw.print(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
-			pw.print(" viewBox=\""+vb[0]+" "+vb[1]+" "+vb[2]+" "+vb[3]+"\">");
+			pw.print(" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
 			pw.print("<image x=\""+rect[0]+"\" y=\""+rect[1]+"\"");
 			pw.print(" width=\""+rect[2]+"\" height=\""+rect[3]+"\"");
 			pw.print(" xlink:href=\""+dataURI+"\"/>");
