@@ -109,7 +109,8 @@ public class InjectSbix {
 						loca.add(currentLocation);
 					}
 					data = ttf.compile();
-					File outputFile = new File(file.getParent(), file.getName() + ".sbix.ttf");
+					String ext = (ttf.getByTableName("CFF ") != null) ? ".otf" : ".ttf";
+					File outputFile = new File(file.getParent(), file.getName() + ".sbix" + ext);
 					FileOutputStream out = new FileOutputStream(outputFile);
 					out.write(data);
 					out.flush();
