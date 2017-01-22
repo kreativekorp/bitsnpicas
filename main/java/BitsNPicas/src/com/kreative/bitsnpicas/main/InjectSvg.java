@@ -92,7 +92,7 @@ public class InjectSvg {
 	}
 	
 	private static final Pattern ELEMENT_ID_GLYPH_NUMBER_PATTERN =
-		Pattern.compile("\b(id=\"glyph)\\{\\{\\{([0-9]+)\\}\\}\\}(\")");
+		Pattern.compile("\\b(id=\"glyph)\\{\\{\\{([0-9]+)\\}\\}\\}(\")");
 	
 	private static byte[] rewriteEntryData(byte[] data, int[] glyphIndex) {
 		try {

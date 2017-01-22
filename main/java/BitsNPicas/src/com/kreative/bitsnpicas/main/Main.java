@@ -24,6 +24,8 @@ public class Main {
 				ExtractSvg.main(args);
 			} else if (arg0.equals("injectsvg")) {
 				InjectSvg.main(args);
+			} else if (arg0.equals("imagetosvg")) {
+				ImageToSvg.main(args);
 			} else {
 				printHelp();
 			}
@@ -39,6 +41,7 @@ public class Main {
 		System.out.println("  java -jar BitsNPicas.jar injectsbix <files>");
 		System.out.println("  java -jar BitsNPicas.jar extractsvg <files>");
 		System.out.println("  java -jar BitsNPicas.jar injectsvg <files>");
+		System.out.println("  java -jar BitsNPicas.jar imagetosvg <options> <files>");
 		System.out.println();
 	}
 }
