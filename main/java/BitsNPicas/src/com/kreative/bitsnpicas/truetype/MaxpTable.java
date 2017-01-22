@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class MaxpTable extends TrueTypeTable {
 	public static final int VERSION_DEFAULT = 0x00010000;
+	public static final int VERSION_CFF     = 0x00005000;
 	
 	public int version = VERSION_DEFAULT;
 	
@@ -64,6 +65,7 @@ public class MaxpTable extends TrueTypeTable {
 	protected void compile(DataOutputStream out, TrueTypeTable[] dependencies) throws IOException {
 		out.writeInt(version);
 		out.writeShort(numGlyphs);
+		if (version < VERSION_DEFAULT) return;
 		out.writeShort(maxPoints);
 		out.writeShort(maxContours);
 		out.writeShort(maxComponentPoints);
@@ -83,6 +85,7 @@ public class MaxpTable extends TrueTypeTable {
 	protected void decompile(DataInputStream in, int length, TrueTypeTable[] dependencies) throws IOException {
 		version = in.readInt();
 		numGlyphs = in.readUnsignedShort();
+		if (version < VERSION_DEFAULT) return;
 		maxPoints = in.readUnsignedShort();
 		maxContours = in.readUnsignedShort();
 		maxComponentPoints = in.readUnsignedShort();

@@ -26,6 +26,7 @@ public class TrueTypeFile extends ArrayList<TrueTypeTable> {
 	private static final TrueTypeTable createTable(int tableId) {
 		switch (tableId) {
 			case 0x4F532F32: return new Os2Table();
+			case 0x53564720: return new SvgTable();
 			case 0x636D6170: return new CmapTable();
 			case 0x676C7966: return new GlyfTable();
 			case 0x68656164: return new HeadTable();
