@@ -5,10 +5,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import com.kreative.bitsnpicas.*;
-import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.*;
 
 public class ViewFont2 extends JFrame {
 	private static final long serialVersionUID = 1;
@@ -16,28 +13,66 @@ public class ViewFont2 extends JFrame {
 	public static void main(String[] args) {
 		for (String arg : args) {
 			try {
-				if (arg.endsWith(".sfd")) {
-					File n = new File(arg);
-					File m = new File(arg.substring(0,arg.length()-4)+"Mask.sfd");
-					if (m.exists()) new ViewFont2(new SFDBitmapFontImporter().importFont(n)[0], new SFDBitmapFontImporter().importFont(m)[0]);
-					else ViewFont.open(new SFDBitmapFontImporter(), n);
-				}
-				else if (arg.toLowerCase().endsWith(".s10")) {
-					ViewFont.open(new S10BitmapFontImporter(), arg);
-				}
-				else if (arg.toLowerCase().endsWith(".png")) {
-					ViewFont.open(new SRFontBitmapFontImporter(), arg);
-				}
-				else if (arg.toLowerCase().endsWith(".dsf")) {
-					ViewFont.open(new DSFBitmapFontImporter(), arg);
-				}
-				else {
-					System.err.println("Unknown type: "+arg);
+				File file = new File(arg);
+				String lname = file.getName().toLowerCase();
+				if (lname.endsWith(".kbits")) {
+					KBnPBitmapFontImporter imp = new KBnPBitmapFontImporter();
+					File mfile = sibling(file, 6, "Mask.kbits");
+					if (!mfile.exists()) ViewFont.open(imp, file);
+					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+				} else if (lname.endsWith(".sfd")) {
+					SFDBitmapFontImporter imp = new SFDBitmapFontImporter();
+					File mfile = sibling(file, 4, "Mask.sfd");
+					if (!mfile.exists()) ViewFont.open(imp, file);
+					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+				} else if (lname.endsWith(".suit")) {
+					NFNTBitmapFontImporter imp = new NFNTBitmapFontImporter();
+					File mfile = sibling(file, 5, "Mask.suit");
+					if (!mfile.exists()) {
+						file = new File(file, "..namedfork");
+						file = new File(file, "rsrc");
+						ViewFont.open(new NFNTBitmapFontImporter(), file);
+					} else {
+						file = new File(file, "..namedfork");
+						file = new File(file, "rsrc");
+						mfile = new File(mfile, "..namedfork");
+						mfile = new File(mfile, "rsrc");
+						new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+					}
+				} else if (lname.endsWith(".dfont")) {
+					NFNTBitmapFontImporter imp = new NFNTBitmapFontImporter();
+					File mfile = sibling(file, 6, "Mask.dfont");
+					if (!mfile.exists()) ViewFont.open(imp, file);
+					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+				} else if (lname.endsWith(".png")) {
+					SRFontBitmapFontImporter imp = new SRFontBitmapFontImporter();
+					File mfile = sibling(file, 4, "Mask.png");
+					if (!mfile.exists()) ViewFont.open(imp, file);
+					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+				} else if (lname.endsWith(".dsf")) {
+					DSFBitmapFontImporter imp = new DSFBitmapFontImporter();
+					File mfile = sibling(file, 4, "Mask.dsf");
+					if (!mfile.exists()) ViewFont.open(imp, file);
+					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+				} else if (lname.endsWith(".s10")) {
+					S10BitmapFontImporter imp = new S10BitmapFontImporter();
+					File mfile = sibling(file, 4, "Mask.s10");
+					if (!mfile.exists()) ViewFont.open(imp, file);
+					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+				} else {
+					System.err.println("Unknown type: " + arg);
 				}
 			} catch (IOException e) {
-				System.err.println("Could not load "+arg);
+				System.err.println("Could not load " + arg);
 			}
 		}
+	}
+	
+	private static File sibling(File file, int extLength, String suffix) {
+		File parent = file.getParentFile();
+		String name = file.getName();
+		name = name.substring(0, name.length() - extLength);
+		return new File(parent, name + suffix);
 	}
 	
 	private static final Color BACKGROUND = new Color(0xFFCC66FF);

@@ -111,7 +111,7 @@ public class ConvertBitmap {
 		System.out.println("  -b            Transform the font using faux bold.");
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
 		System.out.println("  -f <format>   Set the output format. One of:");
-		System.out.println("                    ttf (the default), bdf, nfnt,");
+		System.out.println("                    kbnp, ttf (the default), bdf, nfnt,");
 		System.out.println("                    png, sfont, rfont, vga, raw, sbf");
 		System.out.println("  -w <number>   Pixel width in em units (for ttf). Default: 100.");
 		System.out.println("  -h <number>   Pixel height in em units (for ttf). Default: 100.");
@@ -292,7 +292,10 @@ public class ConvertBitmap {
 	private static ImportFontResult importFont(File file) throws IOException {
 		ImportFontResult ret = new ImportFontResult();
 		String lname = file.getName().toLowerCase();
-		if (lname.endsWith(".sfd")) {
+		if (lname.endsWith(".kbits")) {
+			ret.fonts = new KBnPBitmapFontImporter().importFont(file);
+			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
+		} else if (lname.endsWith(".sfd")) {
 			ret.fonts = new SFDBitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_POSTSCRIPT;
 		} else if (lname.endsWith(".suit")) {
@@ -330,7 +333,11 @@ public class ConvertBitmap {
 	
 	private static boolean exportFont(BitmapFont font, String name, Options o) throws IOException {
 		String format = o.format.toLowerCase();
-		if (format.equals("ttf")) {
+		if (format.equals("kbnp")) {
+			File out = getOutputFile(o.dest, name, ".kbits");
+			new KBnPBitmapFontExporter().exportFontToFile(font, out);
+			return true;
+		} else if (format.equals("ttf")) {
 			File out = getOutputFile(o.dest, name, ".ttf");
 			new TTFBitmapFontExporter(o.xSize, o.ySize).exportFontToFile(font, out);
 			return true;
