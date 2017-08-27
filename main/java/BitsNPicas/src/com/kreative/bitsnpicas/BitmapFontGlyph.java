@@ -12,21 +12,38 @@ public class BitmapFontGlyph extends FontGlyph {
 		glyph = new byte[0][0];
 		x = 0; y = 0; advance = 0;
 	}
-
+	
 	public BitmapFontGlyph(byte[][] glyph) {
 		this.glyph = glyph;
 		x = 0; y = glyph.length; advance = (glyph.length < 1) ? 0 : (glyph[0].length);
 	}
-
+	
 	public BitmapFontGlyph(byte[][] glyph, int offset, int width, int ascent) {
 		this.glyph = glyph;
 		x = offset; y = ascent; advance = width;
 	}
-
+	
 	public byte[][] getGlyph() {
 		return glyph;
 	}
-
+	
+	public void setGlyph(byte[][] glyph) {
+		this.glyph = glyph;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public void setXY(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public int getGlyphWidth() {
 		return (glyph.length < 1) ? 0 : (glyph[0].length);
 	}
@@ -34,7 +51,7 @@ public class BitmapFontGlyph extends FontGlyph {
 	public double getGlyphWidth2D() {
 		return (glyph.length < 1) ? 0 : (glyph[0].length);
 	}
-
+	
 	public int getGlyphHeight() {
 		return glyph.length;
 	}
@@ -42,7 +59,7 @@ public class BitmapFontGlyph extends FontGlyph {
 	public double getGlyphHeight2D() {
 		return glyph.length;
 	}
-
+	
 	public int getGlyphOffset() {
 		return x;
 	}
@@ -50,7 +67,7 @@ public class BitmapFontGlyph extends FontGlyph {
 	public double getGlyphOffset2D() {
 		return x;
 	}
-
+	
 	public int getGlyphAscent() {
 		return y;
 	}
@@ -58,7 +75,7 @@ public class BitmapFontGlyph extends FontGlyph {
 	public double getGlyphAscent2D() {
 		return y;
 	}
-
+	
 	public int getGlyphDescent() {
 		return glyph.length-y;
 	}
@@ -66,7 +83,7 @@ public class BitmapFontGlyph extends FontGlyph {
 	public double getGlyphDescent2D() {
 		return glyph.length-y;
 	}
-
+	
 	public int getCharacterWidth() {
 		return advance;
 	}
@@ -74,15 +91,22 @@ public class BitmapFontGlyph extends FontGlyph {
 	public double getCharacterWidth2D() {
 		return advance;
 	}
-
-	public int draw(Graphics g, int bx, int by) {
+	
+	public void setCharacterWidth(int v) {
+		advance = v;
+	}
+	
+	public void setCharacterWidth2D(double v) {
+		advance = (int)Math.ceil(v);
+	}
+	
+	public double paint(Graphics g, double x, double y, double scale) {
 		Color c = g.getColor();
 		int rgb = c.getRGB() & 0xFFFFFF;
 		int a = c.getAlpha();
-
 		int w = ((glyph.length < 1) ? 0 : (glyph[0].length));
 		int h = glyph.length;
-		int[] glyphPixels = new int[w*h];
+		int[] glyphPixels = new int[w * h];
 		for (int k = 0, j = 0; j < h; j++) {
 			for (int i = 0; i < w; k++, i++) {
 				glyphPixels[k] = ((a * (glyph[j][i] & 0xFF) / 0xFF) << 24) | rgb;
@@ -90,10 +114,14 @@ public class BitmapFontGlyph extends FontGlyph {
 		}
 		ImageProducer glyphProducer = new MemoryImageSource(w, h, glyphPixels, 0, w);
 		Image glyphImage = Toolkit.getDefaultToolkit().createImage(glyphProducer);
-		g.drawImage(glyphImage, bx+x, by-y+1, null);
-		return advance;
+		int dx = (int)Math.round(x + this.x * scale);
+		int dy = (int)Math.round(y - this.y * scale);
+		int dw = (int)Math.round(w * scale);
+		int dh = (int)Math.round(h * scale);
+		g.drawImage(glyphImage, dx, dy, dx + dw, dy + dh, 0, 0, w, h, null);
+		return advance * scale;
 	}
-
+	
 	public PathGraph convertToPathGraph(int size) {
 		PathGraph pg = new PathGraph();
 		int w = ((glyph.length < 1) ? 0 : (glyph[0].length));
@@ -105,7 +133,7 @@ public class BitmapFontGlyph extends FontGlyph {
 		}
 		return pg;
 	}
-
+	
 	public PathGraph convertToPathGraph(int xsize, int ysize) {
 		PathGraph pg = new PathGraph();
 		int w = ((glyph.length < 1) ? 0 : (glyph[0].length));

@@ -12,7 +12,9 @@ public class Main {
 			List<String> arga = Arrays.asList(args);
 			arga = arga.subList(1, arga.size());
 			args = arga.toArray(new String[arga.size()]);
-			if (arg0.equals("convertbitmap")) {
+			if (arg0.equals("edit")) {
+				com.kreative.bitsnpicas.edit.Main.main(args);
+			} else if (arg0.equals("convertbitmap")) {
 				ConvertBitmap.main(args);
 			} else if (arg0.equals("viewbitmap")) {
 				ViewFont2.main(args);
@@ -35,6 +37,7 @@ public class Main {
 	private static void printHelp() {
 		System.out.println();
 		System.out.println("Usage:");
+		System.out.println("  java -jar BitsNPicas.jar edit <files>");
 		System.out.println("  java -jar BitsNPicas.jar convertbitmap <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar viewbitmap <files>");
 		System.out.println("  java -jar BitsNPicas.jar extractsbix <files>");

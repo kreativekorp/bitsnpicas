@@ -60,6 +60,20 @@ public abstract class Font<T extends FontGlyph> {
 	public abstract double getXHeight2D();
 	public abstract double getLineGap2D();
 	
+	public abstract void setEmAscent(int v);
+	public abstract void setEmDescent(int v);
+	public abstract void setLineAscent(int v);
+	public abstract void setLineDescent(int v);
+	public abstract void setXHeight(int v);
+	public abstract void setLineGap(int v);
+	
+	public abstract void setEmAscent2D(double v);
+	public abstract void setEmDescent2D(double v);
+	public abstract void setLineAscent2D(double v);
+	public abstract void setLineDescent2D(double v);
+	public abstract void setXHeight2D(double v);
+	public abstract void setLineGap2D(double v);
+	
 	public boolean containsCharacter(int ch) {
 		return characters.containsKey(ch);
 	}
@@ -253,5 +267,39 @@ public abstract class Font<T extends FontGlyph> {
 			if (glyph != null)
 				characters.put(ch, glyph);
 		}
+	}
+	
+	public String toString() {
+		if (names.containsKey(NAME_FAMILY_AND_STYLE)) {
+			return names.get(NAME_FAMILY_AND_STYLE);
+		}
+		if (names.containsKey(NAME_FAMILY)) {
+			if (names.containsKey(NAME_STYLE)) {
+				return names.get(NAME_FAMILY) + " " + names.get(NAME_STYLE);
+			} else {
+				return names.get(NAME_FAMILY);
+			}
+		}
+		if (names.containsKey(NAME_WINDOWS_FAMILY)) {
+			if (names.containsKey(NAME_WINDOWS_STYLE)) {
+				return names.get(NAME_WINDOWS_FAMILY) + " " + names.get(NAME_WINDOWS_STYLE);
+			} else {
+				return names.get(NAME_WINDOWS_FAMILY);
+			}
+		}
+		if (names.containsKey(NAME_MACOS_FAMILY_AND_STYLE)) {
+			return names.get(NAME_MACOS_FAMILY_AND_STYLE);
+		}
+		if (names.containsKey(NAME_WWS_FAMILY)) {
+			if (names.containsKey(NAME_WWS_STYLE)) {
+				return names.get(NAME_WWS_FAMILY) + " " + names.get(NAME_WWS_STYLE);
+			} else {
+				return names.get(NAME_WWS_FAMILY);
+			}
+		}
+		if (names.containsKey(NAME_POSTSCRIPT)) {
+			return names.get(NAME_POSTSCRIPT);
+		}
+		return "Untitled";
 	}
 }

@@ -1,0 +1,322 @@
+#=======================================================================
+#   File name:  INUIT.TXT
+#
+#   Contents:   Map (external version) from Mac OS Inuit
+#               character set to Unicode 3.0 and later
+#
+#   Contacts:   charsets@apple.com, everson@evertype.com
+#
+#   Changes:
+#
+#       c01  2005-Apr-01    First posted version. Matches internal xml
+#                           <c1.1> and Text Encoding Converter 2.0.
+#
+# Standard header:
+# ----------------
+#
+#   Apple, the Apple logo, and Macintosh are trademarks of Apple
+#   Computer, Inc., registered in the United States and other countries.
+#   Unicode is a trademark of Unicode Inc. For the sake of brevity,
+#   throughout this document, "Macintosh" can be used to refer to
+#   Macintosh computers and "Unicode" can be used to refer to the
+#   Unicode standard.
+#
+#   Apple Computer, Inc. ("Apple") makes no warranty or representation,
+#   either express or implied, with respect to this document and the
+#   included data, its quality, accuracy, or fitness for a particular
+#   purpose. In no event will Apple be liable for direct, indirect,
+#   special, incidental, or consequential damages resulting from any
+#   defect or inaccuracy in this document or the included data.
+#
+#   These mapping tables and character lists are subject to change.
+#   The latest tables should be available from the following:
+#
+#   <http://www.unicode.org/Public/MAPPINGS/VENDORS/APPLE/>
+#
+#   For general information about Mac OS encodings and these mapping
+#   tables, see the file "README.TXT".
+#
+# Format:
+# -------
+#
+#   Three tab-separated columns;
+#   '#' begins a comment which continues to the end of the line.
+#     Column #1 is the Mac OS Inuit code (in hex as 0xNN)
+#     Column #2 is the corresponding Unicode (in hex as 0xNNNN)
+#     Column #3 is a comment containing the Unicode name
+#
+#   The entries are in Mac OS Inuit code order.
+#
+#   Control character mappings are not shown in this table, following
+#   the conventions of the standard UTC mapping tables. However, the
+#   Mac OS Inuit character set uses the standard control characters
+#   at 0x00-0x1F and 0x7F.
+#
+# Notes on Mac OS Inuit (partly from Michael Everson):
+# ----------------------------------------------------
+#
+#   This is a legacy Mac OS encoding; in the Mac OS X Carbon and Cocoa
+#   environments, it is only supported via transcoding to and from
+#   Unicode.
+#
+#   This character set was developed by Michael Everson of Everson
+#   Typography (everson@evertype.com) and was used for the Inuktitut
+#   localizations of Mac OS, as well as for the Inuktitut utilities
+#	package from Everson Typography. Note that while Apple authorized
+#   the Inuktitut localization mentioned above, it was not shipped with
+#   Apple hardware, and was not otherwise supported by Apple. Fonts
+#   conforming to the Mac OS Inuit character set are available from
+#   Everson Typography (http://www.evertype.com/software/apple/).
+#   Information about the use of this character set is available at 
+#   http://www.evertype.com/standards/iu/.
+#
+#   The Mac OS Inuit character set shares the script code smEthiopic
+#   (28) with the Ethiopic encoding. To determine if the Inuktitut
+#   encoding is being used, you must also check if the system region
+#   code is 78, verNunavut.
+#
+#   The Mac OS Inuit character set includes the full syllabic letter
+#   repertoire required for Inuktitut; it is a subset of the Unified
+#   Canadian Aboriginal Syllabics set encoded in Unicode. The encoding
+#   is InuitSCII, designed by Doug Hitch for the Government of the 
+#   Northwest Territories.
+#
+#   The Mac OS Inuit character set also includes a number of characters
+#   that were needed for the classic Mac OS user interface and
+#   localization (e.g. ellipsis, bullet, copyright sign). All of the
+#   characters in Mac OS Inuit that are also in the Mac OS Roman
+#   encoding are at the same code point in both; this improves
+#   application compatibility.
+#
+# Unicode mapping issues and notes:
+# ---------------------------------
+#
+# Details of mapping changes in each version:
+# -------------------------------------------
+#
+##################
+
+0x20	0x0020	# SPACE
+0x21	0x0021	# EXCLAMATION MARK
+0x22	0x0022	# QUOTATION MARK
+0x23	0x0023	# NUMBER SIGN
+0x24	0x0024	# DOLLAR SIGN
+0x25	0x0025	# PERCENT SIGN
+0x26	0x0026	# AMPERSAND
+0x27	0x0027	# APOSTROPHE
+0x28	0x0028	# LEFT PARENTHESIS
+0x29	0x0029	# RIGHT PARENTHESIS
+0x2A	0x002A	# ASTERISK
+0x2B	0x002B	# PLUS SIGN
+0x2C	0x002C	# COMMA
+0x2D	0x002D	# HYPHEN-MINUS
+0x2E	0x002E	# FULL STOP
+0x2F	0x002F	# SOLIDUS
+0x30	0x0030	# DIGIT ZERO
+0x31	0x0031	# DIGIT ONE
+0x32	0x0032	# DIGIT TWO
+0x33	0x0033	# DIGIT THREE
+0x34	0x0034	# DIGIT FOUR
+0x35	0x0035	# DIGIT FIVE
+0x36	0x0036	# DIGIT SIX
+0x37	0x0037	# DIGIT SEVEN
+0x38	0x0038	# DIGIT EIGHT
+0x39	0x0039	# DIGIT NINE
+0x3A	0x003A	# COLON
+0x3B	0x003B	# SEMICOLON
+0x3C	0x003C	# LESS-THAN SIGN
+0x3D	0x003D	# EQUALS SIGN
+0x3E	0x003E	# GREATER-THAN SIGN
+0x3F	0x003F	# QUESTION MARK
+0x40	0x0040	# COMMERCIAL AT
+0x41	0x0041	# LATIN CAPITAL LETTER A
+0x42	0x0042	# LATIN CAPITAL LETTER B
+0x43	0x0043	# LATIN CAPITAL LETTER C
+0x44	0x0044	# LATIN CAPITAL LETTER D
+0x45	0x0045	# LATIN CAPITAL LETTER E
+0x46	0x0046	# LATIN CAPITAL LETTER F
+0x47	0x0047	# LATIN CAPITAL LETTER G
+0x48	0x0048	# LATIN CAPITAL LETTER H
+0x49	0x0049	# LATIN CAPITAL LETTER I
+0x4A	0x004A	# LATIN CAPITAL LETTER J
+0x4B	0x004B	# LATIN CAPITAL LETTER K
+0x4C	0x004C	# LATIN CAPITAL LETTER L
+0x4D	0x004D	# LATIN CAPITAL LETTER M
+0x4E	0x004E	# LATIN CAPITAL LETTER N
+0x4F	0x004F	# LATIN CAPITAL LETTER O
+0x50	0x0050	# LATIN CAPITAL LETTER P
+0x51	0x0051	# LATIN CAPITAL LETTER Q
+0x52	0x0052	# LATIN CAPITAL LETTER R
+0x53	0x0053	# LATIN CAPITAL LETTER S
+0x54	0x0054	# LATIN CAPITAL LETTER T
+0x55	0x0055	# LATIN CAPITAL LETTER U
+0x56	0x0056	# LATIN CAPITAL LETTER V
+0x57	0x0057	# LATIN CAPITAL LETTER W
+0x58	0x0058	# LATIN CAPITAL LETTER X
+0x59	0x0059	# LATIN CAPITAL LETTER Y
+0x5A	0x005A	# LATIN CAPITAL LETTER Z
+0x5B	0x005B	# LEFT SQUARE BRACKET
+0x5C	0x005C	# REVERSE SOLIDUS
+0x5D	0x005D	# RIGHT SQUARE BRACKET
+0x5E	0x005E	# CIRCUMFLEX ACCENT
+0x5F	0x005F	# LOW LINE
+0x60	0x0060	# GRAVE ACCENT
+0x61	0x0061	# LATIN SMALL LETTER A
+0x62	0x0062	# LATIN SMALL LETTER B
+0x63	0x0063	# LATIN SMALL LETTER C
+0x64	0x0064	# LATIN SMALL LETTER D
+0x65	0x0065	# LATIN SMALL LETTER E
+0x66	0x0066	# LATIN SMALL LETTER F
+0x67	0x0067	# LATIN SMALL LETTER G
+0x68	0x0068	# LATIN SMALL LETTER H
+0x69	0x0069	# LATIN SMALL LETTER I
+0x6A	0x006A	# LATIN SMALL LETTER J
+0x6B	0x006B	# LATIN SMALL LETTER K
+0x6C	0x006C	# LATIN SMALL LETTER L
+0x6D	0x006D	# LATIN SMALL LETTER M
+0x6E	0x006E	# LATIN SMALL LETTER N
+0x6F	0x006F	# LATIN SMALL LETTER O
+0x70	0x0070	# LATIN SMALL LETTER P
+0x71	0x0071	# LATIN SMALL LETTER Q
+0x72	0x0072	# LATIN SMALL LETTER R
+0x73	0x0073	# LATIN SMALL LETTER S
+0x74	0x0074	# LATIN SMALL LETTER T
+0x75	0x0075	# LATIN SMALL LETTER U
+0x76	0x0076	# LATIN SMALL LETTER V
+0x77	0x0077	# LATIN SMALL LETTER W
+0x78	0x0078	# LATIN SMALL LETTER X
+0x79	0x0079	# LATIN SMALL LETTER Y
+0x7A	0x007A	# LATIN SMALL LETTER Z
+0x7B	0x007B	# LEFT CURLY BRACKET
+0x7C	0x007C	# VERTICAL LINE
+0x7D	0x007D	# RIGHT CURLY BRACKET
+0x7E	0x007E	# TILDE
+#
+0x80	0x1403	# CANADIAN SYLLABICS I
+0x81	0x1404	# CANADIAN SYLLABICS II
+0x82	0x1405	# CANADIAN SYLLABICS O
+0x83	0x1406	# CANADIAN SYLLABICS OO
+0x84	0x140A	# CANADIAN SYLLABICS A
+0x85	0x140B	# CANADIAN SYLLABICS AA
+0x86	0x1431	# CANADIAN SYLLABICS PI
+0x87	0x1432	# CANADIAN SYLLABICS PII
+0x88	0x1433	# CANADIAN SYLLABICS PO
+0x89	0x1434	# CANADIAN SYLLABICS POO
+0x8A	0x1438	# CANADIAN SYLLABICS PA
+0x8B	0x1439	# CANADIAN SYLLABICS PAA
+0x8C	0x1449	# CANADIAN SYLLABICS P
+0x8D	0x144E	# CANADIAN SYLLABICS TI
+0x8E	0x144F	# CANADIAN SYLLABICS TII
+0x8F	0x1450	# CANADIAN SYLLABICS TO
+0x90	0x1451	# CANADIAN SYLLABICS TOO
+0x91	0x1455	# CANADIAN SYLLABICS TA
+0x92	0x1456	# CANADIAN SYLLABICS TAA
+0x93	0x1466	# CANADIAN SYLLABICS T
+0x94	0x146D	# CANADIAN SYLLABICS KI
+0x95	0x146E	# CANADIAN SYLLABICS KII
+0x96	0x146F	# CANADIAN SYLLABICS KO
+0x97	0x1470	# CANADIAN SYLLABICS KOO
+0x98	0x1472	# CANADIAN SYLLABICS KA
+0x99	0x1473	# CANADIAN SYLLABICS KAA
+0x9A	0x1483	# CANADIAN SYLLABICS K
+0x9B	0x148B	# CANADIAN SYLLABICS CI
+0x9C	0x148C	# CANADIAN SYLLABICS CII
+0x9D	0x148D	# CANADIAN SYLLABICS CO
+0x9E	0x148E	# CANADIAN SYLLABICS COO
+0x9F	0x1490	# CANADIAN SYLLABICS CA
+0xA0	0x1491	# CANADIAN SYLLABICS CAA
+0xA1	0x00B0	# DEGREE SIGN
+0xA2	0x14A1	# CANADIAN SYLLABICS C
+0xA3	0x14A5	# CANADIAN SYLLABICS MI
+0xA4	0x14A6	# CANADIAN SYLLABICS MII
+0xA5	0x2022	# BULLET
+0xA6	0x00B6	# PILCROW SIGN
+0xA7	0x14A7	# CANADIAN SYLLABICS MO
+0xA8	0x00AE	# REGISTERED SIGN
+0xA9	0x00A9	# COPYRIGHT SIGN
+0xAA	0x2122	# TRADE MARK SIGN
+0xAB	0x14A8	# CANADIAN SYLLABICS MOO
+0xAC	0x14AA	# CANADIAN SYLLABICS MA
+0xAD	0x14AB	# CANADIAN SYLLABICS MAA
+0xAE	0x14BB	# CANADIAN SYLLABICS M
+0xAF	0x14C2	# CANADIAN SYLLABICS NI
+0xB0	0x14C3	# CANADIAN SYLLABICS NII
+0xB1	0x14C4	# CANADIAN SYLLABICS NO
+0xB2	0x14C5	# CANADIAN SYLLABICS NOO
+0xB3	0x14C7	# CANADIAN SYLLABICS NA
+0xB4	0x14C8	# CANADIAN SYLLABICS NAA
+0xB5	0x14D0	# CANADIAN SYLLABICS N
+0xB6	0x14EF	# CANADIAN SYLLABICS SI
+0xB7	0x14F0	# CANADIAN SYLLABICS SII
+0xB8	0x14F1	# CANADIAN SYLLABICS SO
+0xB9	0x14F2	# CANADIAN SYLLABICS SOO
+0xBA	0x14F4	# CANADIAN SYLLABICS SA
+0xBB	0x14F5	# CANADIAN SYLLABICS SAA
+0xBC	0x1505	# CANADIAN SYLLABICS S
+0xBD	0x14D5	# CANADIAN SYLLABICS LI
+0xBE	0x14D6	# CANADIAN SYLLABICS LII
+0xBF	0x14D7	# CANADIAN SYLLABICS LO
+0xC0	0x14D8	# CANADIAN SYLLABICS LOO
+0xC1	0x14DA	# CANADIAN SYLLABICS LA
+0xC2	0x14DB	# CANADIAN SYLLABICS LAA
+0xC3	0x14EA	# CANADIAN SYLLABICS L
+0xC4	0x1528	# CANADIAN SYLLABICS YI
+0xC5	0x1529	# CANADIAN SYLLABICS YII
+0xC6	0x152A	# CANADIAN SYLLABICS YO
+0xC7	0x152B	# CANADIAN SYLLABICS YOO
+0xC8	0x152D	# CANADIAN SYLLABICS YA
+0xC9	0x2026	# HORIZONTAL ELLIPSIS
+0xCA	0x00A0	# NO-BREAK SPACE
+0xCB	0x152E	# CANADIAN SYLLABICS YAA
+0xCC	0x153E	# CANADIAN SYLLABICS Y
+0xCD	0x1555	# CANADIAN SYLLABICS FI
+0xCE	0x1556	# CANADIAN SYLLABICS FII
+0xCF	0x1557	# CANADIAN SYLLABICS FO
+0xD0	0x2013	# EN DASH
+0xD1	0x2014	# EM DASH
+0xD2	0x201C	# LEFT DOUBLE QUOTATION MARK
+0xD3	0x201D	# RIGHT DOUBLE QUOTATION MARK
+0xD4	0x2018	# LEFT SINGLE QUOTATION MARK
+0xD5	0x2019	# RIGHT SINGLE QUOTATION MARK
+0xD6	0x1558	# CANADIAN SYLLABICS FOO
+0xD7	0x1559	# CANADIAN SYLLABICS FA
+0xD8	0x155A	# CANADIAN SYLLABICS FAA
+0xD9	0x155D	# CANADIAN SYLLABICS F
+0xDA	0x1546	# CANADIAN SYLLABICS RI
+0xDB	0x1547	# CANADIAN SYLLABICS RII
+0xDC	0x1548	# CANADIAN SYLLABICS RO
+0xDD	0x1549	# CANADIAN SYLLABICS ROO
+0xDE	0x154B	# CANADIAN SYLLABICS RA
+0xDF	0x154C	# CANADIAN SYLLABICS RAA
+0xE0	0x1550	# CANADIAN SYLLABICS R
+0xE1	0x157F	# CANADIAN SYLLABICS QI
+0xE2	0x1580	# CANADIAN SYLLABICS QII
+0xE3	0x1581	# CANADIAN SYLLABICS QO
+0xE4	0x1582	# CANADIAN SYLLABICS QOO
+0xE5	0x1583	# CANADIAN SYLLABICS QA
+0xE6	0x1584	# CANADIAN SYLLABICS QAA
+0xE7	0x1585	# CANADIAN SYLLABICS Q
+0xE8	0x158F	# CANADIAN SYLLABICS NGI
+0xE9	0x1590	# CANADIAN SYLLABICS NGII
+0xEA	0x1591	# CANADIAN SYLLABICS NGO
+0xEB	0x1592	# CANADIAN SYLLABICS NGOO
+0xEC	0x1593	# CANADIAN SYLLABICS NGA
+0xED	0x1594	# CANADIAN SYLLABICS NGAA
+0xEE	0x1595	# CANADIAN SYLLABICS NG
+0xEF	0x1671	# CANADIAN SYLLABICS NNGI
+0xF0	0x1672	# CANADIAN SYLLABICS NNGII
+0xF1	0x1673	# CANADIAN SYLLABICS NNGO
+0xF2	0x1674	# CANADIAN SYLLABICS NNGOO
+0xF3	0x1675	# CANADIAN SYLLABICS NNGA
+0xF4	0x1676	# CANADIAN SYLLABICS NNGAA
+0xF5	0x1596	# CANADIAN SYLLABICS NNG
+0xF6	0x15A0	# CANADIAN SYLLABICS LHI
+0xF7	0x15A1	# CANADIAN SYLLABICS LHII
+0xF8	0x15A2	# CANADIAN SYLLABICS LHO
+0xF9	0x15A3	# CANADIAN SYLLABICS LHOO
+0xFA	0x15A4	# CANADIAN SYLLABICS LHA
+0xFB	0x15A5	# CANADIAN SYLLABICS LHAA
+0xFC	0x15A6	# CANADIAN SYLLABICS LH
+0xFD	0x157C	# CANADIAN SYLLABICS NUNAVUT H
+0xFE	0x0141	# LATIN CAPITAL LETTER L WITH STROKE
+0xFF	0x0142	# LATIN SMALL LETTER L WITH STROKE

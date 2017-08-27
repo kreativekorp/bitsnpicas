@@ -1,5 +1,7 @@
 package com.kreative.bitsnpicas;
 
+import java.awt.Graphics;
+
 public abstract class FontGlyph {
 	/*
 	 * |            glyph            |
@@ -30,4 +32,9 @@ public abstract class FontGlyph {
 	public abstract double getGlyphAscent2D();
 	public abstract double getGlyphDescent2D();
 	public abstract double getCharacterWidth2D();
+	
+	public abstract void setCharacterWidth(int v);
+	public abstract void setCharacterWidth2D(double v);
+	
+	public abstract double paint(Graphics g, double x, double y, double scale);
 }

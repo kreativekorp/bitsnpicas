@@ -1,5 +1,9 @@
 package com.kreative.bitsnpicas;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,7 +74,7 @@ public class VectorFontGlyph extends FontGlyph {
 			return left;
 		}
 	}
-
+	
 	public int getGlyphWidth() {
 		if (contours.isEmpty()) {
 			return 0;
@@ -104,7 +108,7 @@ public class VectorFontGlyph extends FontGlyph {
 			return right-left;
 		}
 	}
-
+	
 	public int getGlyphHeight() {
 		if (contours.isEmpty()) {
 			return 0;
@@ -121,7 +125,7 @@ public class VectorFontGlyph extends FontGlyph {
 			return bottom-top;
 		}
 	}
-
+	
 	public double getGlyphHeight2D() {
 		if (contours.isEmpty()) {
 			return 0;
@@ -138,7 +142,7 @@ public class VectorFontGlyph extends FontGlyph {
 			return bottom-top;
 		}
 	}
-
+	
 	public int getGlyphAscent() {
 		if (contours.isEmpty()) {
 			return 0;
@@ -152,7 +156,7 @@ public class VectorFontGlyph extends FontGlyph {
 			return -top;
 		}
 	}
-
+	
 	public double getGlyphAscent2D() {
 		if (contours.isEmpty()) {
 			return 0;
@@ -166,7 +170,7 @@ public class VectorFontGlyph extends FontGlyph {
 			return -top;
 		}
 	}
-
+	
 	public int getGlyphDescent() {
 		if (contours.isEmpty()) {
 			return 0;
@@ -180,7 +184,7 @@ public class VectorFontGlyph extends FontGlyph {
 			return bottom;
 		}
 	}
-
+	
 	public double getGlyphDescent2D() {
 		if (contours.isEmpty()) {
 			return 0;
@@ -194,12 +198,31 @@ public class VectorFontGlyph extends FontGlyph {
 			return bottom;
 		}
 	}
-
+	
 	public int getCharacterWidth() {
 		return (int)Math.ceil(advance);
 	}
 	
 	public double getCharacterWidth2D() {
 		return advance;
+	}
+	
+	public void setCharacterWidth(int v) {
+		advance = v;
+	}
+	
+	public void setCharacterWidth2D(double v) {
+		advance = v;
+	}
+	
+	public double paint(Graphics g, double x, double y, double scale) {
+		AffineTransform tx = AffineTransform.getTranslateInstance(x, y);
+		AffineTransform sx = AffineTransform.getScaleInstance(scale, scale);
+		for (GeneralPath path : contours) {
+			Shape ss = sx.createTransformedShape(path);
+			Shape ts = tx.createTransformedShape(ss);
+			((Graphics2D)g).draw(ts);
+		}
+		return advance * scale;
 	}
 }

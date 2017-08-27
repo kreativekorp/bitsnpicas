@@ -1,0 +1,82 @@
+# Blocks-UCSUR.txt
+# Date: 2017-06-25, 17:33:00 PDT
+#
+# Under-ConScript Unicode Registry Character Database
+# Copyright (c) 2009-2017 Kreative Korporation
+# For documentation, see http://www.kreativekorp.com/ucsur/
+#
+# Note:   The casing of block names is not normative.
+#         For example, "Basic Latin" and "BASIC LATIN" are equivalent.
+#
+# Format:
+# Start Code..End Code; Block Name
+
+# ================================================
+
+# Note:   When comparing block names, casing, whitespace, hyphens,
+#         and underbars are ignored.
+#         For example, "Latin Extended-A" and "latin extended a" are equivalent.
+#
+#  All code points not explicitly listed for Block
+#  have the value No_Block.
+
+# Property:	Block
+#
+# @missing: E000..F8FF; No_Block
+# @missing: F0000..10FFFF; No_Block
+
+E000..E07F; Tengwar
+E080..E0FF; Cirth
+E100..E14F; Engsvanyali
+E150..E1AF; Kinya
+E1B0..E1CF; Ilianore
+E1D0..E1FF; Syai
+E200..E26F; Verdurian
+E270..E28F; Aui
+E290..E2BF; Amman-Iar
+E2C0..E2CF; Streich
+E2D0..E2FF; Xaini
+E300..E33F; Mizarian
+E340..E35F; Zirinka
+E360..E37F; Sarkai
+E380..E3AF; Thelwik
+E3B0..E3FF; Olaetyan
+E400..E42F; Niskloz
+E430..E44F; Kazat Akkorou
+E450..E46F; Kazvarad
+E470..E48F; Zarkhand
+E490..E4BF; Rozhxh
+E4C0..E4EF; Serivelna
+E4F0..E4FF; Kelwathi
+E500..E51F; Saklor
+E520..E54F; Rynnan
+E550..E57F; Alzetjan
+E580..E59F; Telarasso
+E5A0..E5BF; Ssuraki
+E5C0..E5DF; Gargoyle
+E5E0..E5FF; Ophidian
+E600..E62F; Ferengi
+E630..E64F; Seussian Latin Extensions
+E650..E67F; Sylabica
+E680..E6CF; Ewellic
+E6D0..E6EF; Amlin
+E740..E76F; Unifon
+E770..E77F; Solresol
+E780..E7FF; Visible Speech
+E800..E82F; Monofon
+E830..E88F; Dni
+E890..E8DF; Aurebesh
+E8E0..E8FF; Tonal
+E900..E97F; Glaitha-A
+E980..E9DF; Glaitha-B
+EA00..EA9F; Lhenazi
+EAA0..EAFF; Wanya
+ED00..ED3F; Deini
+ED40..ED7F; Niji
+EF80..F89F; Private Use Area
+F8A0..F8CF; Aiha
+F8D0..F8FF; Klingon
+F0000..F0E6F; Kinya Syllables
+F0E70..F16AF; Pikto
+
+# EOF
