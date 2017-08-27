@@ -45,7 +45,7 @@ public class EncodingList extends AbstractList<EncodingTable> {
 			for (int i = 0; i < 256; i++) {
 				codePoints[i] = (i < 32 || (i >= 127 && i < 160)) ? i : -1;
 			}
-			Scanner scan = new Scanner(EncodingList.class.getResourceAsStream(fileName + ".txt"));
+			Scanner scan = new Scanner(EncodingList.class.getResourceAsStream(fileName.replaceAll("\\s+", "_") + ".txt"));
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine().trim();
 				if (line.length() > 0 && line.charAt(0) != '#') {
