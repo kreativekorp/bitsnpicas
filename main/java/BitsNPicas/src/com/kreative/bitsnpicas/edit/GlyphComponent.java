@@ -182,7 +182,7 @@ public class GlyphComponent extends JComponent {
 		this.listeners.remove(l);
 	}
 	
-	private void metricsChanged() {
+	public void metricsChanged() {
 		for (GlyphComponentListener l : listeners) {
 			l.metricsChanged(glyph, font);
 		}

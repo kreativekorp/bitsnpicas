@@ -19,5 +19,6 @@ public class BitmapEditFrame extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		panel.glyphComponent.requestFocusInWindow();
 	}
 }
