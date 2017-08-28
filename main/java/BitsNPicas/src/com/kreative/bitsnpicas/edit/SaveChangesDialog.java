@@ -43,8 +43,8 @@ public class SaveChangesDialog extends JDialog {
 	}
 	
 	private void make(String name) {
-		label = new JLabel("Save changes to “" + name + "” before closing?");
-		dontSaveButton = new JButton("Don’t Save");
+		label = new JLabel("Save changes to \u201C" + name + "\u201D before closing?");
+		dontSaveButton = new JButton("Don\u2019t Save");
 		cancelButton = new JButton("Cancel");
 		saveButton = new JButton("Save");
 		
