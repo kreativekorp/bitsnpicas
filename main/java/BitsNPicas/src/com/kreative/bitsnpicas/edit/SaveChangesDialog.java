@@ -62,6 +62,7 @@ public class SaveChangesDialog extends JDialog {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
 		setContentPane(mainPanel);
+		SwingUtils.setDontSaveButton(getRootPane(), dontSaveButton);
 		SwingUtils.setCancelButton(getRootPane(), cancelButton);
 		SwingUtils.setDefaultButton(getRootPane(), saveButton);
 		setResizable(false);

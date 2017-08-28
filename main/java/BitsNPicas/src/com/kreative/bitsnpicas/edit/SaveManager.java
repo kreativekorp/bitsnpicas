@@ -37,7 +37,8 @@ public class SaveManager extends WindowAdapter {
 	
 	public void windowClosing(WindowEvent e) {
 		Window w = e.getWindow();
-		switch (new SaveChangesDialog(w, font.toString()).showDialog()) {
+		if (file == null && font.isEmpty()) w.dispose();
+		else switch (new SaveChangesDialog(w, font.toString()).showDialog()) {
 			case SAVE: if (save()) w.dispose(); break;
 			case DONT_SAVE: w.dispose(); break;
 			case CANCEL: break;

@@ -74,6 +74,10 @@ public abstract class Font<T extends FontGlyph> {
 	public abstract void setXHeight2D(double v);
 	public abstract void setLineGap2D(double v);
 	
+	public boolean isEmpty() {
+		return characters.isEmpty();
+	}
+	
 	public boolean containsCharacter(int ch) {
 		return characters.containsKey(ch);
 	}
