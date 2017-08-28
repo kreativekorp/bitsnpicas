@@ -111,7 +111,7 @@ public class ConvertBitmap {
 		System.out.println("  -b            Transform the font using faux bold.");
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
 		System.out.println("  -f <format>   Set the output format. One of:");
-		System.out.println("                    kbnp, ttf (the default), bdf, nfnt,");
+		System.out.println("                    kbits, kbnp, ttf (the default), bdf, nfnt,");
 		System.out.println("                    png, sfont, rfont, vga, raw, sbf");
 		System.out.println("  -w <number>   Pixel width in em units (for ttf). Default: 100.");
 		System.out.println("  -h <number>   Pixel height in em units (for ttf). Default: 100.");
@@ -333,7 +333,7 @@ public class ConvertBitmap {
 	
 	private static boolean exportFont(BitmapFont font, String name, Options o) throws IOException {
 		String format = o.format.toLowerCase();
-		if (format.equals("kbnp")) {
+		if (format.equals("kbits") || format.equals("kbnp")) {
 			File out = getOutputFile(o.dest, name, ".kbits");
 			new KBnPBitmapFontExporter().exportFontToFile(font, out);
 			return true;
