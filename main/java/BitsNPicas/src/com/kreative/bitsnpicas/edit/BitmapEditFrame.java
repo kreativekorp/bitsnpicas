@@ -12,7 +12,7 @@ public class BitmapEditFrame extends JFrame {
 	
 	public BitmapEditFrame(BitmapFont font, BitmapFontGlyph glyph, int codePoint, GlyphList gl, SaveManager sm) {
 		this.panel = new BitmapEditPanel(font, glyph, gl);
-		this.mb = new BitmapEditMenuBar(this, sm, font, panel.toolHandler, panel.glyphComponent);
+		this.mb = new BitmapEditMenuBar(this, sm, font, panel.toolHandler, panel.glyphComponent, glyph, codePoint);
 		setTitle(GlyphEditFrame.getTitle(font, codePoint));
 		setJMenuBar(mb);
 		setContentPane(panel);

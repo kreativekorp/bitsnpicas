@@ -18,6 +18,7 @@ public class BitmapToolList extends JList {
 		super(BitmapTool.values());
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setSelectedIndex(0);
+		this.setFocusable(false);
 		this.setCellRenderer(new ListCellRenderer() {
 			public Component getListCellRendererComponent(JList list, Object value, int index, boolean sel, boolean focus) {
 				BitmapTool tool = (BitmapTool)value;
