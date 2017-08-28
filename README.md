@@ -2,6 +2,20 @@
 
 Bits'N'Picas is a set of tools for creating and converting bitmap and emoji fonts.
 
+## Creating and Editing Bitmap Fonts with a GUI
+
+Launch the Bits'N'Picas JAR without any arguments or with the `edit` command to open the bitmap font editor GUI.
+
+`java -jar BitsNPicas.jar`
+
+`java -jar BitsNPicas.jar edit`
+
+`java -jar BitsNPicas.jar edit myfont.sfd`
+
+On Mac OS X you can also launch or drop a font file onto the Bits'N'Picas application.
+
+![](https://github.com/kreativekorp/bitsnpicas/blob/master/wiki/screenshot.png?raw=true)
+
 ## Converting Bitmap Fonts
 
 Example:
@@ -11,6 +25,7 @@ Example:
 This will convert the bitmap strikes in the FontForge file `myfont.sfd` to outlines in a new TrueType font file `myfont.ttf`. If, for example, the bitmap strikes are 16 pixels in height, the generated outlines will perfectly match the pixel grid at a 16-point font size.
 
 The input format is determined by the file extension of the input file. Supported input formats include:
+  *  `.kbits` - Bits'N'Picas native save format
   *  `.sfd` - FontForge
   *  `.suit` - Mac OS Classic font suitcase (in the resource fork)
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
@@ -18,6 +33,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.dsf` - DOSStart! by Daniel L. Nice
 
 The output format is determined by the `-f` option. Supported output formats include:
+  *  `kbits` or `kbnp` - Bits'N'Picas native save format
   *  `ttf` - TrueType
   *  `bdf` - X11 Bitmap Distribution Format
   *  `nfnt` - Mac OS Classic font suitcase (see also the `-D` and `-R` options below)
