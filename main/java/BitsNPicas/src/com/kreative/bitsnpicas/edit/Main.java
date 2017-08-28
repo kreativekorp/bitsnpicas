@@ -38,6 +38,10 @@ public class Main {
 				openFonts(new File(arg));
 			}
 		}
+		if (CommonMenuItems.IS_MAC_OS) {
+			try { Class.forName("com.kreative.bitsnpicas.edit.mac.MyApplicationListener").newInstance(); }
+			catch (Exception e) { e.printStackTrace(); }
+		}
 	}
 	
 	public static JFrame newBitmapFont() {
