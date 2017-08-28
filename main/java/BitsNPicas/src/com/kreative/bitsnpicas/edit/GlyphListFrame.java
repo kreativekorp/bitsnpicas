@@ -21,6 +21,7 @@ public class GlyphListFrame extends JFrame {
 		setContentPane(panel);
 		pack();
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(sm);
 	}
 }

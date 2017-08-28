@@ -1,10 +1,13 @@
 package com.kreative.bitsnpicas.edit;
 
+import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontExporter;
 
-public class SaveManager {
+public class SaveManager extends WindowAdapter {
 	private File file;
 	private FontExporter<?> format;
 	private Font<?> font;
@@ -30,5 +33,14 @@ public class SaveManager {
 		file = newFile;
 		format = newFormat;
 		return Main.saveFont(file, format, font);
+	}
+	
+	public void windowClosing(WindowEvent e) {
+		Window w = e.getWindow();
+		switch (new SaveChangesDialog(w, font.toString()).showDialog()) {
+			case SAVE: if (save()) w.dispose(); break;
+			case DONT_SAVE: w.dispose(); break;
+			case CANCEL: break;
+		}
 	}
 }
