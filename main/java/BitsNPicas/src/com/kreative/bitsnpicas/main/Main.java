@@ -6,7 +6,7 @@ import java.util.List;
 public class Main {
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			printHelp();
+			com.kreative.bitsnpicas.edit.Main.main(args);
 		} else {
 			String arg0 = args[0].toLowerCase();
 			List<String> arga = Arrays.asList(args);

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>BitsNPicas</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Kreative Bits'n'Picas © Kreative Software</string>
+	<key>CFBundleIconFile</key>
+	<string>kbnp-icon.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.kreative.bitsnpicas</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Bits'n'Picas</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>KBnP</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>Java</key>
+	<dict>
+		<key>ClassPath</key>
+		<string>$JAVAROOT/BitsNPicas.jar</string>
+		<key>JVMVersion</key>
+		<string>1.5+</string>
+		<key>MainClass</key>
+		<string>com.kreative.bitsnpicas.edit.Main</string>
+		<key>Properties</key>
+		<dict>
+			<key>apple.laf.useScreenMenuBar</key>
+			<string>true</string>
+		</dict>
+		<key>VMOptions</key>
+		<string>-Xmx1024M</string>
+		<key>WorkingDirectory</key>
+		<string>$APP_PACKAGE/..</string>
+	</dict>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>kbits</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Kreative Bits'n'Picas Bitmap Font</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>KBit</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>kpcas</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Kreative Bits'n'Picas Vector Font</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>KPca</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-vector</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+	</array>
+</dict>
+</plist>
