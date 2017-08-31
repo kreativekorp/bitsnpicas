@@ -9,7 +9,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.FontGlyph;
 
 public class GlyphListMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
@@ -55,10 +54,9 @@ public class GlyphListMenuBar extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int cp = gl.getSelectedCodePoint();
-					if (cp < 0) return;
-					FontGlyph glyph = font.getCharacter(cp);
-					Main.openGlyph(font, glyph, cp, gl, sm);
+					for (int cp : gl.getSelectedCodePoints()) {
+						Main.openGlyph(font, cp, gl, sm);
+					}
 				}
 			});
 		}
@@ -71,9 +69,9 @@ public class GlyphListMenuBar extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int cp = gl.getSelectedCodePoint();
-					if (cp < 0) return;
-					font.removeCharacter(cp);
+					for (int cp : gl.getSelectedCodePoints()) {
+						font.removeCharacter(cp);
+					}
 					gl.repaint();
 				}
 			});

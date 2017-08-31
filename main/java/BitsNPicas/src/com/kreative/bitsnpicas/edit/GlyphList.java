@@ -9,12 +9,15 @@ import java.awt.Rectangle;
 import java.awt.SystemColor;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.SortedSet;
 import javax.swing.JComponent;
 import javax.swing.Scrollable;
 import com.kreative.bitsnpicas.Font;
@@ -46,7 +49,7 @@ public class GlyphList extends JComponent implements Scrollable {
 	private int cellSize;
 	private int columnCount;
 	private List<Integer> codePoints;
-	private int selectedCodePoint;
+	private final GlyphListSelection selection;
 	private Dimension preferredSize;
 	private final List<GlyphListListener> listeners;
 	
@@ -56,7 +59,7 @@ public class GlyphList extends JComponent implements Scrollable {
 		this.cellSize = 36;
 		this.columnCount = 16;
 		this.codePoints = new Block(0, 255, "Latin-1");
-		this.selectedCodePoint = -1;
+		this.selection = new GlyphListSelection();
 		this.preferredSize = null;
 		this.listeners = new ArrayList<GlyphListListener>();
 		MyMouseListener ml = new MyMouseListener();
@@ -112,23 +115,54 @@ public class GlyphList extends JComponent implements Scrollable {
 	public void setCodePointList(List<Integer> codePoints) {
 		if (this.codePoints != codePoints) {
 			this.codePoints = codePoints;
-			this.selectedCodePoint = -1;
-			for (GlyphListListener l : listeners) l.codePointSelected(-1);
+			this.selection.clear();
+			for (GlyphListListener l : listeners) l.codePointsSelected(this, font);
 			this.revalidate();
 			this.repaint();
 		}
 	}
 	
-	public int getSelectedCodePoint() {
-		return this.selectedCodePoint;
+	public void clearSelection() {
+		selection.clear();
+		for (GlyphListListener l : listeners) l.codePointsSelected(this, font);
+		repaint();
 	}
 	
-	public void setSelectedCodePoint(int cp) {
-		if (this.selectedCodePoint != cp) {
-			this.selectedCodePoint = cp;
-			for (GlyphListListener l : listeners) l.codePointSelected(cp);
-			this.repaint();
+	public void selectAll() {
+		selection.clear();
+		selection.add(0, codePoints.size() - 1);
+		for (GlyphListListener l : listeners) l.codePointsSelected(this, font);
+		repaint();
+	}
+	
+	public SortedSet<Integer> getSelectedIndices() {
+		return selection.toSet();
+	}
+	
+	public void setSelectedIndices(Collection<Integer> c) {
+		selection.clear();
+		for (int i : c) if (i >= 0 && i < codePoints.size()) selection.add(i);
+		for (GlyphListListener l : listeners) l.codePointsSelected(this, font);
+		repaint();
+	}
+	
+	public List<Integer> getSelectedCodePoints() {
+		List<Integer> cps = new ArrayList<Integer>();
+		for (int i : selection.toSet()) {
+			int cp = codePoints.get(i);
+			if (cp >= 0) cps.add(cp);
 		}
+		return cps;
+	}
+	
+	public void setSelectedCodePoints(Collection<Integer> c) {
+		selection.clear();
+		for (int cp : c) {
+			int i = codePoints.indexOf(cp);
+			if (i >= 0) selection.add(i);
+		}
+		for (GlyphListListener l : listeners) l.codePointsSelected(this, font);
+		repaint();
 	}
 	
 	public Dimension getPreferredSize() {
@@ -156,6 +190,7 @@ public class GlyphList extends JComponent implements Scrollable {
 	}
 	
 	protected void paintComponent(Graphics g) {
+		SortedSet<Integer> sel = selection.toSet();
 		Rectangle vr = getVisibleRect();
 		Insets insets = getInsets();
 		int w = getWidth() - insets.left - insets.right - 1;
@@ -178,7 +213,7 @@ public class GlyphList extends JComponent implements Scrollable {
 				g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, cellSize + LABEL_HEIGHT - 1);
 				g.setColor(SystemColor.text);
 				g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, LABEL_HEIGHT - 1);
-				if (cp == selectedCodePoint) g.setColor(SystemColor.textHighlight);
+				if (sel.contains(i)) g.setColor(SystemColor.textHighlight);
 				g.fillRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
 				g.setColor(SystemColor.textText);
 				String cps = getCharacterLabel(cp);
@@ -196,7 +231,7 @@ public class GlyphList extends JComponent implements Scrollable {
 					g.setFont(sf);
 				}
 				if (font.containsCharacter(cp)) {
-					if (cp == selectedCodePoint) g.setColor(SystemColor.textHighlightText);
+					if (sel.contains(i)) g.setColor(SystemColor.textHighlightText);
 					FontGlyph glyph = font.getCharacter(cp);
 					double gx = Math.round((x1 + x2 - glyph.getCharacterWidth2D() * scale) / 2);
 					double gy = Math.round(y + LABEL_HEIGHT + 2 + ascent);
@@ -255,39 +290,57 @@ public class GlyphList extends JComponent implements Scrollable {
 		return h;
 	}
 	
+	private void startSelection(InputEvent e, int i) {
+		if (e.isShiftDown()) {
+			selection.extend(i);
+		} else if (e.isControlDown() || e.isMetaDown()) {
+			selection.add(i);
+		} else {
+			selection.clear();
+			selection.add(i);
+		}
+		for (GlyphListListener l : listeners) l.codePointsSelected(GlyphList.this, font);
+		repaint();
+	}
+	
+	private void continueSelection(InputEvent e, int i) {
+		selection.extend(i);
+		for (GlyphListListener l : listeners) l.codePointsSelected(GlyphList.this, font);
+		repaint();
+	}
+	
 	private class MyMouseListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
 			requestFocusInWindow();
+			int i = getClickedIndex(e);
+			startSelection(e, i);
+		}
+		public void mouseDragged(MouseEvent e) {
+			int i = getClickedIndex(e);
+			continueSelection(e, i);
+		}
+		public void mouseReleased(MouseEvent e) {
+			int i = getClickedIndex(e);
+			continueSelection(e, i);
+		}
+		public void mouseClicked(MouseEvent e) {
+			if (e.getClickCount() > 1 && !selection.isEmpty()) {
+				for (GlyphListListener l : listeners) {
+					l.codePointsOpened(GlyphList.this, font);
+				}
+			}
+		}
+		private int getClickedIndex(MouseEvent e) {
 			Insets insets = getInsets();
 			int w = getWidth() - insets.left - insets.right;
 			int x = (e.getX() - insets.left) * columnCount / w;
-			if (x >= 0 && x < columnCount) {
-				int y = (e.getY() - insets.top) / (cellSize + LABEL_HEIGHT);
-				int i = y * columnCount + x;
-				if (i >= 0 && i < codePoints.size()) {
-					setSelectedCodePoint(codePoints.get(i));
-				} else {
-					setSelectedCodePoint(-1);
-				}
-			} else {
-				setSelectedCodePoint(-1);
-			}
-		}
-		public void mouseDragged(MouseEvent e) {
-			mousePressed(e);
-		}
-		public void mouseReleased(MouseEvent e) {
-			mousePressed(e);
-		}
-		public void mouseClicked(MouseEvent e) {
-			if (e.getClickCount() > 1) {
-				if (codePoints.contains(selectedCodePoint)) {
-					FontGlyph glyph = font.getCharacter(selectedCodePoint);
-					for (GlyphListListener l : listeners) {
-						l.codePointOpened(selectedCodePoint, glyph, font);
-					}
-				}
-			}
+			if (x < 0) x = 0;
+			if (x >= columnCount) x = columnCount - 1;
+			int y = (e.getY() - insets.top) / (cellSize + LABEL_HEIGHT);
+			int i = y * columnCount + x;
+			if (i < 0) i = 0;
+			if (i >= codePoints.size()) i = codePoints.size() - 1;
+			return i;
 		}
 	}
 	
@@ -296,49 +349,44 @@ public class GlyphList extends JComponent implements Scrollable {
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_ESCAPE:
 				case KeyEvent.VK_CLEAR:
-					setSelectedCodePoint(-1);
+					clearSelection();
 					break;
 				case KeyEvent.VK_LEFT:
-					if (codePoints.contains(selectedCodePoint)) {
-						int i = codePoints.indexOf(selectedCodePoint) - 1;
-						if (i >= 0 && i < codePoints.size()) {
-							int cp = codePoints.get(i);
-							if (cp >= 0) setSelectedCodePoint(cp);
-						}
+					if (!selection.isEmpty()) {
+						int i = selection.getLast() - 1;
+						if (i < 0) i = 0;
+						if (i >= codePoints.size()) i = codePoints.size() - 1;
+						startSelection(e, i);
 					}
 					break;
 				case KeyEvent.VK_RIGHT:
-					if (codePoints.contains(selectedCodePoint)) {
-						int i = codePoints.indexOf(selectedCodePoint) + 1;
-						if (i >= 0 && i < codePoints.size()) {
-							int cp = codePoints.get(i);
-							if (cp >= 0) setSelectedCodePoint(cp);
-						}
+					if (!selection.isEmpty()) {
+						int i = selection.getLast() + 1;
+						if (i < 0) i = 0;
+						if (i >= codePoints.size()) i = codePoints.size() - 1;
+						startSelection(e, i);
 					}
 					break;
 				case KeyEvent.VK_UP:
-					if (codePoints.contains(selectedCodePoint)) {
-						int i = codePoints.indexOf(selectedCodePoint) - columnCount;
-						if (i >= 0 && i < codePoints.size()) {
-							int cp = codePoints.get(i);
-							if (cp >= 0) setSelectedCodePoint(cp);
-						}
+					if (!selection.isEmpty()) {
+						int i = selection.getLast() - columnCount;
+						if (i < 0) i = 0;
+						if (i >= codePoints.size()) i = codePoints.size() - 1;
+						startSelection(e, i);
 					}
 					break;
 				case KeyEvent.VK_DOWN:
-					if (codePoints.contains(selectedCodePoint)) {
-						int i = codePoints.indexOf(selectedCodePoint) + columnCount;
-						if (i >= 0 && i < codePoints.size()) {
-							int cp = codePoints.get(i);
-							if (cp >= 0) setSelectedCodePoint(cp);
-						}
+					if (!selection.isEmpty()) {
+						int i = selection.getLast() + columnCount;
+						if (i < 0) i = 0;
+						if (i >= codePoints.size()) i = codePoints.size() - 1;
+						startSelection(e, i);
 					}
 					break;
 				case KeyEvent.VK_ENTER:
-					if (codePoints.contains(selectedCodePoint)) {
-						FontGlyph glyph = font.getCharacter(selectedCodePoint);
+					if (!selection.isEmpty()) {
 						for (GlyphListListener l : listeners) {
-							l.codePointOpened(selectedCodePoint, glyph, font);
+							l.codePointsOpened(GlyphList.this, font);
 						}
 					}
 					break;
@@ -348,8 +396,12 @@ public class GlyphList extends JComponent implements Scrollable {
 			if (e.isMetaDown() || e.isControlDown()) return;
 			int cp = e.getKeyChar();
 			if ((cp >= 32 && cp < 127) || cp >= 160) {
-				if (codePoints.contains(cp)) {
-					setSelectedCodePoint(cp);
+				int i = codePoints.indexOf(cp);
+				if (i >= 0) {
+					selection.clear();
+					selection.add(i);
+					for (GlyphListListener l : listeners) l.codePointsSelected(GlyphList.this, font);
+					repaint();
 				}
 			}
 		}

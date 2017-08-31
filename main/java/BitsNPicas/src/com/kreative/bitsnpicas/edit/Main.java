@@ -145,10 +145,10 @@ public class Main {
 		}
 	}
 	
-	public static JFrame openGlyph(Font<?> font, FontGlyph glyph, int codePoint, GlyphList gl, SaveManager sm) {
+	public static JFrame openGlyph(Font<?> font, int codePoint, GlyphList gl, SaveManager sm) {
 		if (font instanceof BitmapFont) {
 			BitmapFont bfont = (BitmapFont)font;
-			BitmapFontGlyph bglyph = (BitmapFontGlyph)glyph;
+			BitmapFontGlyph bglyph = bfont.getCharacter(codePoint);
 			if (bglyph == null) {
 				bglyph = new BitmapFontGlyph();
 				bfont.putCharacter(codePoint, bglyph);
@@ -159,7 +159,7 @@ public class Main {
 			return f;
 		} else if (font instanceof VectorFont) {
 			VectorFont vfont = (VectorFont)font;
-			VectorFontGlyph vglyph = (VectorFontGlyph)glyph;
+			VectorFontGlyph vglyph = vfont.getCharacter(codePoint);
 			if (vglyph == null) {
 				vglyph = new VectorFontGlyph();
 				vfont.putCharacter(codePoint, vglyph);
@@ -169,6 +169,7 @@ public class Main {
 			f.setVisible(true);
 			return f;
 		} else {
+			FontGlyph glyph = font.getCharacter(codePoint);
 			if (glyph == null) return null;
 			JFrame f = new GlyphEditFrame(font, glyph, codePoint, gl, sm);
 			f.setVisible(true);

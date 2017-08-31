@@ -1,11 +1,11 @@
 package com.kreative.bitsnpicas.edit;
 
 import java.awt.BorderLayout;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.FontGlyph;
 import com.kreative.bitsnpicas.unicode.CharacterData;
 import com.kreative.bitsnpicas.unicode.CharacterDatabase;
 
@@ -25,18 +25,20 @@ public class GlyphListCharacterDataPanel extends JPanel implements GlyphListList
 		if (gl != null) gl.addGlyphListListener(this);
 	}
 	
-	public void codePointSelected(int codePoint) {
-		if (codePoint < 0) {
-			label.setText(" ");
-		} else {
+	public void codePointsSelected(GlyphList gl, Font<?> font) {
+		List<Integer> cps = gl.getSelectedCodePoints();
+		if (cps.size() == 1) {
+			int codePoint = cps.get(0);
 			String h = Integer.toHexString(codePoint).toUpperCase();
 			while (h.length() < 4) h = "0" + h;
 			String s = "U+" + h + "    #" + codePoint;
 			CharacterData cd = cdb.get(codePoint);
 			if (cd != null) s += "    " + cd.category + "    " + cd;
 			label.setText(s);
+		} else {
+			label.setText(" ");
 		}
 	}
 	
-	public void codePointOpened(int codePoint, FontGlyph glyph, Font<?> font) {}
+	public void codePointsOpened(GlyphList gl, Font<?> font) {}
 }

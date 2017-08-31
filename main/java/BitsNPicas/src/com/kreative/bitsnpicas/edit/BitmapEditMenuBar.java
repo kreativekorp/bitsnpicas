@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -114,7 +115,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			addSeparator();
 			add(new CutMenuItem(font, glyph, codePoint, handler, gc));
 			add(new CopyMenuItem(font, glyph, codePoint));
-			add(new PasteMenuItem(glyph, handler, gc));
+			add(new PasteMenuItem(font, glyph, handler, gc));
 			add(new ClearMenuItem(glyph, handler, gc));
 		}
 	}
@@ -156,7 +157,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-					cb.setContents(new BitmapGlyphSelection(font, glyph, codePoint), new ClipboardOwner() {
+					cb.setContents(new BitmapGlyphListSelection(font, Arrays.asList(codePoint)), new ClipboardOwner() {
 						public void lostOwnership(Clipboard cb, Transferable t) {}
 					});
 					handler.pushUndoState(null);
@@ -177,7 +178,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-					cb.setContents(new BitmapGlyphSelection(font, glyph, codePoint), new ClipboardOwner() {
+					cb.setContents(new BitmapGlyphListSelection(font, Arrays.asList(codePoint)), new ClipboardOwner() {
 						public void lostOwnership(Clipboard cb, Transferable t) {}
 					});
 				}
@@ -187,26 +188,31 @@ public class BitmapEditMenuBar extends JMenuBar {
 	
 	public static class PasteMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PasteMenuItem(final BitmapFontGlyph glyph, final BitmapToolHandler handler, final GlyphComponent gc) {
+		public PasteMenuItem(final BitmapFont font, final BitmapFontGlyph glyph, final BitmapToolHandler handler, final GlyphComponent gc) {
 			super("Paste");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-						if (cb.isDataFlavorAvailable(BitmapGlyphSelection.flavor)) {
-							BitmapGlyphState content = (BitmapGlyphState)cb.getData(BitmapGlyphSelection.flavor);
-							handler.pushUndoState(null);
-							content.apply(glyph);
-							gc.glyphChanged();
-						} else if (cb.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
+						if (cb.isDataFlavorAvailable(BitmapGlyphListSelection.flavor)) {
+							BitmapGlyphState[] content = (BitmapGlyphState[])cb.getData(BitmapGlyphListSelection.flavor);
+							if (content.length == 1) {
+								handler.pushUndoState(null);
+								content[0].apply(glyph);
+								gc.glyphChanged();
+								return;
+							}
+						}
+						if (cb.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
 							Image content = (Image)cb.getData(DataFlavor.imageFlavor);
 							BufferedImage image = SwingUtils.toBufferedImage(content);
 							if (image != null) {
 								handler.pushUndoState(null);
-								BitmapGlyphOps.setToImage(glyph, 0, -image.getHeight(), image);
+								BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
 								glyph.setCharacterWidth(image.getWidth());
 								gc.glyphChanged();
+								return;
 							}
 						}
 					} catch (IOException ioe) {

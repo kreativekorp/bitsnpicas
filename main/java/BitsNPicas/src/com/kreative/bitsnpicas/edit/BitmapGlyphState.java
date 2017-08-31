@@ -1,8 +1,11 @@
 package com.kreative.bitsnpicas.edit;
 
+import java.io.Serializable;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 
-public class BitmapGlyphState {
+public class BitmapGlyphState implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private final int x;
 	private final int y;
 	private final byte[][] glyph;

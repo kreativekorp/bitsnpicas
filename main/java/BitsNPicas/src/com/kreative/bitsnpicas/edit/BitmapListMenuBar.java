@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -98,15 +99,13 @@ public class BitmapListMenuBar extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int codePoint = gl.getSelectedCodePoint();
-					if (codePoint < 0) return;
-					BitmapFontGlyph glyph = font.getCharacter(codePoint);
-					if (glyph == null) return;
 					Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-					cb.setContents(new BitmapGlyphSelection(font, glyph, codePoint), new ClipboardOwner() {
+					cb.setContents(new BitmapGlyphListSelection(font, gl.getSelectedCodePoints()), new ClipboardOwner() {
 						public void lostOwnership(Clipboard cb, Transferable t) {}
 					});
-					font.removeCharacter(codePoint);
+					for (int cp : gl.getSelectedCodePoints()) {
+						font.removeCharacter(cp);
+					}
 					gl.repaint();
 				}
 			});
@@ -120,12 +119,8 @@ public class BitmapListMenuBar extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int codePoint = gl.getSelectedCodePoint();
-					if (codePoint < 0) return;
-					BitmapFontGlyph glyph = font.getCharacter(codePoint);
-					if (glyph == null) return;
 					Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-					cb.setContents(new BitmapGlyphSelection(font, glyph, codePoint), new ClipboardOwner() {
+					cb.setContents(new BitmapGlyphListSelection(font, gl.getSelectedCodePoints()), new ClipboardOwner() {
 						public void lostOwnership(Clipboard cb, Transferable t) {}
 					});
 				}
@@ -140,26 +135,31 @@ public class BitmapListMenuBar extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int codePoint = gl.getSelectedCodePoint();
-					if (codePoint < 0) return;
 					try {
 						Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-						if (cb.isDataFlavorAvailable(BitmapGlyphSelection.flavor)) {
-							BitmapGlyphState content = (BitmapGlyphState)cb.getData(BitmapGlyphSelection.flavor);
-							BitmapFontGlyph glyph = new BitmapFontGlyph();
-							content.apply(glyph);
-							font.putCharacter(codePoint, glyph);
+						if (cb.isDataFlavorAvailable(BitmapGlyphListSelection.flavor)) {
+							BitmapGlyphState[] content = (BitmapGlyphState[])cb.getData(BitmapGlyphListSelection.flavor);
+							if (content.length > 0) {
+								List<Integer> cps = gl.getSelectedCodePoints();
+								for (int i = 0, n = cps.size(); i < n; i++) {
+									BitmapFontGlyph glyph = new BitmapFontGlyph();
+									content[i % content.length].apply(glyph);
+									font.putCharacter(cps.get(i), glyph);
+								}
+							}
 							gl.repaint();
 						} else if (cb.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
 							Image content = (Image)cb.getData(DataFlavor.imageFlavor);
 							BufferedImage image = SwingUtils.toBufferedImage(content);
 							if (image != null) {
-								BitmapFontGlyph glyph = new BitmapFontGlyph();
-								BitmapGlyphOps.setToImage(glyph, 0, -image.getHeight(), image);
-								glyph.setCharacterWidth(image.getWidth());
-								font.putCharacter(codePoint, glyph);
-								gl.repaint();
+								for (int cp : gl.getSelectedCodePoints()) {
+									BitmapFontGlyph glyph = new BitmapFontGlyph();
+									BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
+									glyph.setCharacterWidth(image.getWidth());
+									font.putCharacter(cp, glyph);
+								}
 							}
+							gl.repaint();
 						}
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
@@ -177,9 +177,9 @@ public class BitmapListMenuBar extends JMenuBar {
 			super("Clear");
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int codePoint = gl.getSelectedCodePoint();
-					if (codePoint < 0) return;
-					font.removeCharacter(codePoint);
+					for (int cp : gl.getSelectedCodePoints()) {
+						font.removeCharacter(cp);
+					}
 					gl.repaint();
 				}
 			});

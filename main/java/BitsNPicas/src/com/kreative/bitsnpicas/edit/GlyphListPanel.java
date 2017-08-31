@@ -12,7 +12,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.FontGlyph;
 
 public class GlyphListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -51,9 +50,11 @@ public class GlyphListPanel extends JPanel {
 			}
 		});
 		gl.addGlyphListListener(new GlyphListListener() {
-			public void codePointSelected(int codePoint) {}
-			public void codePointOpened(int codePoint, FontGlyph glyph, Font<?> font) {
-				Main.openGlyph(font, glyph, codePoint, gl, sm);
+			public void codePointsSelected(GlyphList gl, Font<?> font) {}
+			public void codePointsOpened(GlyphList gl, Font<?> font) {
+				for (int cp : gl.getSelectedCodePoints()) {
+					Main.openGlyph(font, cp, gl, sm);
+				}
 			}
 		});
 	}
