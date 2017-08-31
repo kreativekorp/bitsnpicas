@@ -35,6 +35,8 @@ public class GlyphListCharacterDataPanel extends JPanel implements GlyphListList
 			CharacterData cd = cdb.get(codePoint);
 			if (cd != null) s += "    " + cd.category + "    " + cd;
 			label.setText(s);
+		} else if (cps.size() > 1) {
+			label.setText(cps.size() + " characters selected");
 		} else {
 			label.setText(" ");
 		}

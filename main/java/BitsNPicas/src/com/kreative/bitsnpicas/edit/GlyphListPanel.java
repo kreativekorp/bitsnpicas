@@ -43,6 +43,7 @@ public class GlyphListPanel extends JPanel {
 		main.setOneTouchExpandable(true);
 		setLayout(new BorderLayout());
 		add(main, BorderLayout.CENTER);
+		cpllv.setSelectedValue(gl.getCodePointList(), false);
 		cpllv.addListSelectionListener(new ListSelectionListener() {
 			@SuppressWarnings("unchecked")
 			public void valueChanged(ListSelectionEvent e) {

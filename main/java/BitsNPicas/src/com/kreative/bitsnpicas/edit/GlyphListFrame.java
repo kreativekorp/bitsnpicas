@@ -23,5 +23,6 @@ public class GlyphListFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(sm);
+		panel.getGlyphList().requestFocusInWindow();
 	}
 }

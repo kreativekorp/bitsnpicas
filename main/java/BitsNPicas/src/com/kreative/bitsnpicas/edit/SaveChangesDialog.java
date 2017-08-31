@@ -68,6 +68,7 @@ public class SaveChangesDialog extends JDialog {
 		setResizable(false);
 		pack();
 		setLocationRelativeTo(null);
+		saveButton.requestFocusInWindow();
 		
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

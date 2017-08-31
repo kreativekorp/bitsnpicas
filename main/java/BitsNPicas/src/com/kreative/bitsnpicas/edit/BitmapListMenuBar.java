@@ -87,6 +87,9 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new PasteMenuItem(font, gl));
 			add(new ClearMenuItem(font, gl));
 			addSeparator();
+			add(new GlyphListMenuBar.SelectAllMenuItem(gl));
+			add(new GlyphListMenuBar.SelectNoneMenuItem(gl));
+			addSeparator();
 			add(new GlyphListMenuBar.EditMenuItem(font, gl, sm));
 			add(new GlyphListMenuBar.DeleteMenuItem(font, gl));
 		}

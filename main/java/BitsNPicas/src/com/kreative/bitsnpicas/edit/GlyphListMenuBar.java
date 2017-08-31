@@ -42,8 +42,37 @@ public class GlyphListMenuBar extends JMenuBar {
 		private static final long serialVersionUID = 1L;
 		public EditMenu(final Font<?> font, final GlyphList gl, final SaveManager sm) {
 			super("Edit");
+			add(new SelectAllMenuItem(gl));
+			add(new SelectNoneMenuItem(gl));
+			addSeparator();
 			add(new EditMenuItem(font, gl, sm));
 			add(new DeleteMenuItem(font, gl));
+		}
+	}
+	
+	public static class SelectAllMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SelectAllMenuItem(final GlyphList gl) {
+			super("Select All");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, CommonMenuItems.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gl.selectAll();
+				}
+			});
+		}
+	}
+	
+	public static class SelectNoneMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SelectNoneMenuItem(final GlyphList gl) {
+			super("Select None");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gl.clearSelection();
+				}
+			});
 		}
 	}
 	
