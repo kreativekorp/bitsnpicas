@@ -37,6 +37,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 		add(new FileMenu(window, sm, font, handler, glyph, gc));
 		add(new EditMenu(handler, font, glyph, codePoint, gc));
 		add(new GlyphEditMenuBar.ViewMenu(gc));
+		add(new TransformMenu(font, glyph, gc));
 	}
 	
 	public static class FileMenu extends JMenu {
@@ -235,6 +236,28 @@ public class BitmapEditMenuBar extends JMenuBar {
 					glyph.setXY(0, 0);
 					glyph.setGlyph(new byte[0][0]);
 					glyph.setCharacterWidth(0);
+					gc.glyphChanged();
+				}
+			});
+		}
+	}
+	
+	public static class TransformMenu extends JMenu {
+		private static final long serialVersionUID = 1L;
+		public TransformMenu(final BitmapFont font, final BitmapFontGlyph glyph, final GlyphComponent gc) {
+			super("Transform");
+			add(new TransformMenuItem(font, glyph, gc, new BitmapGlyphTransform.Bold(), "Bold"));
+			add(new TransformMenuItem(font, glyph, gc, new BitmapGlyphTransform.Invert(), "Invert"));
+		}
+	}
+	
+	public static class TransformMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public TransformMenuItem(final BitmapFont font, final BitmapFontGlyph glyph, final GlyphComponent gc, final BitmapGlyphTransform tx, final String name) {
+			super(name);
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tx.transform(font, glyph);
 					gc.glyphChanged();
 				}
 			});

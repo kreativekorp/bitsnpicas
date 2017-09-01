@@ -28,6 +28,7 @@ public class BitmapListMenuBar extends JMenuBar {
 	public BitmapListMenuBar(final Window window, final SaveManager sm, final BitmapFont font, final GlyphList gl) {
 		add(new FileMenu(window, sm, font));
 		add(new EditMenu(font, gl, sm));
+		add(new TransformMenu(font, gl));
 	}
 	
 	public static class FileMenu extends JMenu {
@@ -182,6 +183,31 @@ public class BitmapListMenuBar extends JMenuBar {
 				public void actionPerformed(ActionEvent e) {
 					for (int cp : gl.getSelectedCodePoints()) {
 						font.removeCharacter(cp);
+					}
+					gl.repaint();
+				}
+			});
+		}
+	}
+	
+	public static class TransformMenu extends JMenu {
+		private static final long serialVersionUID = 1L;
+		public TransformMenu(final BitmapFont font, final GlyphList gl) {
+			super("Transform");
+			add(new TransformMenuItem(font, gl, new BitmapGlyphTransform.Bold(), "Bold"));
+			add(new TransformMenuItem(font, gl, new BitmapGlyphTransform.Invert(), "Invert"));
+		}
+	}
+	
+	public static class TransformMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public TransformMenuItem(final BitmapFont font, final GlyphList gl, final BitmapGlyphTransform tx, final String name) {
+			super(name);
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					for (int cp : gl.getSelectedCodePoints()) {
+						BitmapFontGlyph glyph = font.getCharacter(cp);
+						if (glyph != null) tx.transform(font, glyph);
 					}
 					gl.repaint();
 				}
