@@ -44,7 +44,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
 			add(new ExportMenuItem(font));
 			addSeparator();
-			add(new CommonMenuItems.FontInfoMenuItem(font));
+			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			add(new PreviewMenuItem(font));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();
@@ -110,7 +110,7 @@ public class BitmapListMenuBar extends JMenuBar {
 					for (int cp : gl.getSelectedCodePoints()) {
 						font.removeCharacter(cp);
 					}
-					gl.repaint();
+					gl.glyphsChanged();
 				}
 			});
 		}
@@ -151,7 +151,7 @@ public class BitmapListMenuBar extends JMenuBar {
 									font.putCharacter(cps.get(i), glyph);
 								}
 							}
-							gl.repaint();
+							gl.glyphsChanged();
 						} else if (cb.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
 							Image content = (Image)cb.getData(DataFlavor.imageFlavor);
 							BufferedImage image = SwingUtils.toBufferedImage(content);
@@ -163,7 +163,7 @@ public class BitmapListMenuBar extends JMenuBar {
 									font.putCharacter(cp, glyph);
 								}
 							}
-							gl.repaint();
+							gl.glyphsChanged();
 						}
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
@@ -184,7 +184,7 @@ public class BitmapListMenuBar extends JMenuBar {
 					for (int cp : gl.getSelectedCodePoints()) {
 						font.removeCharacter(cp);
 					}
-					gl.repaint();
+					gl.glyphsChanged();
 				}
 			});
 		}
@@ -209,7 +209,7 @@ public class BitmapListMenuBar extends JMenuBar {
 						BitmapFontGlyph glyph = font.getCharacter(cp);
 						if (glyph != null) tx.transform(font, glyph);
 					}
-					gl.repaint();
+					gl.glyphsChanged();
 				}
 			});
 		}

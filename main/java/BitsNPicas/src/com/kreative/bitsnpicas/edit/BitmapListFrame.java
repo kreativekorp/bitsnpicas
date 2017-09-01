@@ -13,7 +13,7 @@ public class BitmapListFrame extends JFrame {
 	private final BitmapListMenuBar mb;
 	
 	public BitmapListFrame(File fontFile, BitmapFontExporter format, BitmapFont font) {
-		this.sm = new SaveManager(fontFile, format, font);
+		this.sm = new SaveManager(this, fontFile, format, font);
 		this.panel = new GlyphListPanel(font, sm);
 		this.mb = new BitmapListMenuBar(this, sm, font, panel.getGlyphList());
 		setTitle(font.toString());

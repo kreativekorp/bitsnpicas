@@ -31,7 +31,7 @@ public class GlyphEditMenuBar extends JMenuBar {
 			add(new CommonMenuItems.SaveMenuItem(sm));
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
 			addSeparator();
-			add(new CommonMenuItems.FontInfoMenuItem(font));
+			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();
 				add(new CommonMenuItems.ExitMenuItem());

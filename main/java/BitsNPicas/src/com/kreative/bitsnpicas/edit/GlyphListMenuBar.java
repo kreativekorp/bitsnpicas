@@ -30,7 +30,7 @@ public class GlyphListMenuBar extends JMenuBar {
 			add(new CommonMenuItems.SaveMenuItem(sm));
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
 			addSeparator();
-			add(new CommonMenuItems.FontInfoMenuItem(font));
+			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();
 				add(new CommonMenuItems.ExitMenuItem());
@@ -101,7 +101,7 @@ public class GlyphListMenuBar extends JMenuBar {
 					for (int cp : gl.getSelectedCodePoints()) {
 						font.removeCharacter(cp);
 					}
-					gl.repaint();
+					gl.glyphsChanged();
 				}
 			});
 		}

@@ -189,6 +189,20 @@ public class GlyphList extends JComponent implements Scrollable {
 		this.listeners.remove(l);
 	}
 	
+	public void metricsChanged() {
+		for (GlyphListListener l : listeners) {
+			l.metricsChanged(this, font);
+		}
+		repaint();
+	}
+	
+	public void glyphsChanged() {
+		for (GlyphListListener l : listeners) {
+			l.glyphsChanged(this, font);
+		}
+		repaint();
+	}
+	
 	protected void paintComponent(Graphics g) {
 		SortedSet<Integer> sel = selection.toSet();
 		Rectangle vr = getVisibleRect();

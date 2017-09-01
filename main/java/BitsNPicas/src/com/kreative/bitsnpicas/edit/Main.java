@@ -152,7 +152,7 @@ public class Main {
 			if (bglyph == null) {
 				bglyph = new BitmapFontGlyph();
 				bfont.putCharacter(codePoint, bglyph);
-				gl.repaint();
+				gl.glyphsChanged();
 			}
 			JFrame f = new BitmapEditFrame(bfont, bglyph, codePoint, gl, sm);
 			f.setVisible(true);
@@ -163,7 +163,7 @@ public class Main {
 			if (vglyph == null) {
 				vglyph = new VectorFontGlyph();
 				vfont.putCharacter(codePoint, vglyph);
-				gl.repaint();
+				gl.glyphsChanged();
 			}
 			JFrame f = new GlyphEditFrame(vfont, vglyph, codePoint, gl, sm);
 			f.setVisible(true);

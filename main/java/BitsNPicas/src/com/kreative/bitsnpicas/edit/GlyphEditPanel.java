@@ -22,10 +22,10 @@ public class GlyphEditPanel<G extends FontGlyph> extends JPanel {
 		add(glyphComponent, BorderLayout.CENTER);
 		glyphComponent.addGlyphComponentListener(new GlyphComponentListener() {
 			public void metricsChanged(FontGlyph glyph, Font<?> font) {
-				if (glyphList != null) glyphList.repaint();
+				if (glyphList != null) glyphList.metricsChanged();
 			}
 			public void glyphChanged(FontGlyph glyph, Font<?> font) {
-				if (glyphList != null) glyphList.repaint();
+				if (glyphList != null) glyphList.glyphsChanged();
 			}
 			public Cursor getCursor(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return null; }
 			public boolean mouseMoved(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }

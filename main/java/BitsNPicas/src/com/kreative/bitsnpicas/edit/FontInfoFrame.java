@@ -15,12 +15,14 @@ public class FontInfoFrame extends JFrame {
 	
 	private final Font<?> font;
 	private final FontInfoPanel panel;
+	private final SaveManager sm;
 	
-	public FontInfoFrame(Font<?> font) {
+	public FontInfoFrame(Font<?> font, SaveManager sm) {
 		super("Font Info");
 		this.font = font;
 		this.panel = new FontInfoPanel();
 		this.panel.readFrom(this.font);
+		this.sm = sm;
 		
 		JButton cancelButton = new JButton("Cancel");
 		JButton okButton = new JButton("OK");
@@ -45,6 +47,7 @@ public class FontInfoFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				FontInfoFrame.this.panel.writeTo(FontInfoFrame.this.font);
 				FontInfoFrame.this.dispose();
+				FontInfoFrame.this.sm.setChanged();
 			}
 		});
 		

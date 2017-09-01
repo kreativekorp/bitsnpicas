@@ -59,7 +59,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			addSeparator();
 			add(new ImportMenuItem(handler, glyph, gc));
 			addSeparator();
-			add(new CommonMenuItems.FontInfoMenuItem(font));
+			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			add(new BitmapListMenuBar.PreviewMenuItem(font));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();

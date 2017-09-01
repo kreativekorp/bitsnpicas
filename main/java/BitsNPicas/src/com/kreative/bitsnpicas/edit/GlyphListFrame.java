@@ -13,7 +13,7 @@ public class GlyphListFrame extends JFrame {
 	private final GlyphListMenuBar mb;
 	
 	public GlyphListFrame(File fontFile, FontExporter<?> format, Font<?> font) {
-		this.sm = new SaveManager(fontFile, format, font);
+		this.sm = new SaveManager(this, fontFile, format, font);
 		this.panel = new GlyphListPanel(font, sm);
 		this.mb = new GlyphListMenuBar(this, sm, font, panel.getGlyphList());
 		setTitle(font.toString());

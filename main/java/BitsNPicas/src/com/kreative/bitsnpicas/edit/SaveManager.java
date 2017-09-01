@@ -4,23 +4,38 @@ import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import javax.swing.JFrame;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontExporter;
 
 public class SaveManager extends WindowAdapter {
+	private JFrame frame;
 	private File file;
 	private FontExporter<?> format;
 	private Font<?> font;
+	private boolean changed;
 	
-	public SaveManager(File file, FontExporter<?> format, Font<?> font) {
+	public SaveManager(JFrame frame, File file, FontExporter<?> format, Font<?> font) {
+		this.frame = frame;
 		this.file = file;
 		this.format = format;
 		this.font = font;
+		this.changed = false;
+		frame.getRootPane().putClientProperty("Window.documentFile", file);
+		frame.getRootPane().putClientProperty("Window.documentModified", changed);
+	}
+	
+	public void setChanged() {
+		this.changed = true;
+		frame.getRootPane().putClientProperty("Window.documentModified", changed);
 	}
 	
 	public boolean save() {
 		if (file == null || format == null) return saveAs();
-		return Main.saveFont(file, format, font);
+		boolean succeeded = Main.saveFont(file, format, font);
+		if (succeeded) changed = false;
+		frame.getRootPane().putClientProperty("Window.documentModified", changed);
+		return succeeded;
 	}
 	
 	public boolean saveAs() {
@@ -32,12 +47,16 @@ public class SaveManager extends WindowAdapter {
 		if (newFile == null) return false;
 		file = newFile;
 		format = newFormat;
-		return Main.saveFont(file, format, font);
+		boolean succeeded = Main.saveFont(file, format, font);
+		if (succeeded) changed = false;
+		frame.getRootPane().putClientProperty("Window.documentFile", file);
+		frame.getRootPane().putClientProperty("Window.documentModified", changed);
+		return succeeded;
 	}
 	
 	public void windowClosing(WindowEvent e) {
 		Window w = e.getWindow();
-		if (file == null && font.isEmpty()) w.dispose();
+		if (!changed || (file == null && font.isEmpty())) w.dispose();
 		else switch (new SaveChangesDialog(w, font.toString()).showDialog()) {
 			case SAVE: if (save()) w.dispose(); break;
 			case DONT_SAVE: w.dispose(); break;

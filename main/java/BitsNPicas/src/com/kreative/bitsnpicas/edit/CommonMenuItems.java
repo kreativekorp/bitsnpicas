@@ -101,12 +101,12 @@ public class CommonMenuItems {
 	
 	public static class FontInfoMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public FontInfoMenuItem(final Font<?> font) {
+		public FontInfoMenuItem(final Font<?> font, final SaveManager sm) {
 			super("Font Info");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new FontInfoFrame(font).setVisible(true);
+					new FontInfoFrame(font, sm).setVisible(true);
 				}
 			});
 		}

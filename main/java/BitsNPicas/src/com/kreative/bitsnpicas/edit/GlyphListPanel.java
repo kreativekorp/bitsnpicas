@@ -57,6 +57,12 @@ public class GlyphListPanel extends JPanel {
 					Main.openGlyph(font, cp, gl, sm);
 				}
 			}
+			public void metricsChanged(GlyphList gl, Font<?> font) {
+				sm.setChanged();
+			}
+			public void glyphsChanged(GlyphList gl, Font<?> font) {
+				sm.setChanged();
+			}
 		});
 	}
 	
