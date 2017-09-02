@@ -15,7 +15,7 @@ public class GlyphListMenuBar extends JMenuBar {
 	
 	public GlyphListMenuBar(final Window window, final SaveManager sm, final Font<?> font, final GlyphList gl) {
 		add(new FileMenu(window, sm, font));
-		add(new EditMenu(font, gl, sm));
+		add(new EditMenu(gl, window, font, sm));
 		add(new ViewMenu(window, gl));
 	}
 	
@@ -41,10 +41,11 @@ public class GlyphListMenuBar extends JMenuBar {
 	
 	public static class EditMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public EditMenu(final Font<?> font, final GlyphList gl, final SaveManager sm) {
+		public EditMenu(final GlyphList gl, final Window window, final Font<?> font, final SaveManager sm) {
 			super("Edit");
 			add(new SelectAllMenuItem(gl));
 			add(new SelectNoneMenuItem(gl));
+			add(new SetSelectionMenuItem(window, gl));
 			addSeparator();
 			add(new EditMenuItem(font, gl, sm));
 			add(new DeleteMenuItem(font, gl));
@@ -72,6 +73,19 @@ public class GlyphListMenuBar extends JMenuBar {
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					gl.clearSelection();
+				}
+			});
+		}
+	}
+	
+	public static class SetSelectionMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetSelectionMenuItem(final Window window, final GlyphList gl) {
+			super("Set Selection...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new SetSelectionDialog(window, gl).setVisible(true);
 				}
 			});
 		}
