@@ -20,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.edit.BitmapGlyphTransform.BitmapGlyphTransformInfo;
 import com.kreative.bitsnpicas.main.ViewFont;
 
 public class BitmapListMenuBar extends JMenuBar {
@@ -194,15 +195,21 @@ public class BitmapListMenuBar extends JMenuBar {
 		private static final long serialVersionUID = 1L;
 		public TransformMenu(final BitmapFont font, final GlyphList gl) {
 			super("Transform");
-			add(new TransformMenuItem(font, gl, new BitmapGlyphTransform.Bold(), "Bold"));
-			add(new TransformMenuItem(font, gl, new BitmapGlyphTransform.Invert(), "Invert"));
+			for (BitmapGlyphTransformInfo txi : BitmapGlyphTransform.TRANSFORMS) {
+				if (txi == null) addSeparator();
+				else add(new TransformMenuItem(font, gl, txi.transform, txi.name, txi.keystroke));
+			}
 		}
 	}
 	
 	public static class TransformMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public TransformMenuItem(final BitmapFont font, final GlyphList gl, final BitmapGlyphTransform tx, final String name) {
+		public TransformMenuItem(
+			final BitmapFont font, final GlyphList gl,
+			final BitmapGlyphTransform tx, final String name, final KeyStroke ks
+		) {
 			super(name);
+			setAccelerator(ks);
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					for (int cp : gl.getSelectedCodePoints()) {

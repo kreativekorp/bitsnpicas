@@ -360,6 +360,7 @@ public class GlyphList extends JComponent implements Scrollable {
 	
 	private class MyKeyListener extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
+			if ((e.isMetaDown() || e.isControlDown()) && e.isShiftDown()) return;
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_ESCAPE:
 				case KeyEvent.VK_CLEAR:
