@@ -16,6 +16,7 @@ public class GlyphListMenuBar extends JMenuBar {
 	public GlyphListMenuBar(final Window window, final SaveManager sm, final Font<?> font, final GlyphList gl) {
 		add(new FileMenu(window, sm, font));
 		add(new EditMenu(font, gl, sm));
+		add(new ViewMenu(window, gl));
 	}
 	
 	public static class FileMenu extends JMenu {
@@ -102,6 +103,52 @@ public class GlyphListMenuBar extends JMenuBar {
 						font.removeCharacter(cp);
 					}
 					gl.glyphsChanged();
+				}
+			});
+		}
+	}
+	
+	public static class ViewMenu extends JMenu {
+		private static final long serialVersionUID = 1L;
+		public ViewMenu(final Window window, final GlyphList gl) {
+			super("View");
+			add(new CellSizeMenuItem(window, gl, 12, KeyStroke.getKeyStroke(KeyEvent.VK_1, CommonMenuItems.SHORTCUT_KEY)));
+			add(new CellSizeMenuItem(window, gl, 24, KeyStroke.getKeyStroke(KeyEvent.VK_2, CommonMenuItems.SHORTCUT_KEY)));
+			add(new CellSizeMenuItem(window, gl, 36, KeyStroke.getKeyStroke(KeyEvent.VK_3, CommonMenuItems.SHORTCUT_KEY)));
+			add(new CellSizeMenuItem(window, gl, 48, KeyStroke.getKeyStroke(KeyEvent.VK_4, CommonMenuItems.SHORTCUT_KEY)));
+			add(new CellSizeMenuItem(window, gl, 72, KeyStroke.getKeyStroke(KeyEvent.VK_5, CommonMenuItems.SHORTCUT_KEY)));
+			add(new CellSizeMenuItem(window, gl, 96, KeyStroke.getKeyStroke(KeyEvent.VK_6, CommonMenuItems.SHORTCUT_KEY)));
+			add(new CellSizeMenuItem(window, gl, 128, KeyStroke.getKeyStroke(KeyEvent.VK_7, CommonMenuItems.SHORTCUT_KEY)));
+			addSeparator();
+			add(new ColumnCountMenuItem(window, gl, 8, KeyStroke.getKeyStroke(KeyEvent.VK_8, CommonMenuItems.SHORTCUT_KEY)));
+			add(new ColumnCountMenuItem(window, gl, 16, KeyStroke.getKeyStroke(KeyEvent.VK_9, CommonMenuItems.SHORTCUT_KEY)));
+			add(new ColumnCountMenuItem(window, gl, 32, KeyStroke.getKeyStroke(KeyEvent.VK_0, CommonMenuItems.SHORTCUT_KEY)));
+		}
+	}
+	
+	public static class CellSizeMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public CellSizeMenuItem(final Window window, final GlyphList gl, final int cellSize, final KeyStroke ks) {
+			super(cellSize + " Pixel Cell Size");
+			setAccelerator(ks);
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gl.setCellSize(cellSize);
+					window.pack();
+				}
+			});
+		}
+	}
+	
+	public static class ColumnCountMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ColumnCountMenuItem(final Window window, final GlyphList gl, final int columnCount, final KeyStroke ks) {
+			super(columnCount + " Cell Window");
+			setAccelerator(ks);
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gl.setColumnCount(columnCount);
+					window.pack();
 				}
 			});
 		}
