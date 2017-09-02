@@ -227,6 +227,7 @@ public class BitmapListMenuBar extends JMenuBar {
 						while (indexIter.hasNext() && glyphIter.hasNext()) {
 							int index = indexIter.next();
 							BitmapFontGlyph glyph = glyphIter.next();
+							if (glyph == null) continue;
 							if (copy) {
 								BitmapGlyphState state = new BitmapGlyphState(glyph);
 								glyph = new BitmapFontGlyph();
@@ -255,6 +256,7 @@ public class BitmapListMenuBar extends JMenuBar {
 						while (cpIter.hasNext() && glyphIter.hasNext()) {
 							int cp = cpIter.next();
 							BitmapFontGlyph glyph = glyphIter.next();
+							if (glyph == null) continue;
 							if (copy) {
 								BitmapGlyphState state = new BitmapGlyphState(glyph);
 								glyph = new BitmapFontGlyph();
