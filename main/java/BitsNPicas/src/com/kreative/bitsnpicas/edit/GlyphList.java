@@ -405,6 +405,12 @@ public class GlyphList extends JComponent implements Scrollable {
 						}
 					}
 					break;
+				case KeyEvent.VK_DELETE:
+					for (int cp : getSelectedCodePoints()) {
+						font.removeCharacter(cp);
+					}
+					glyphsChanged();
+					break;
 			}
 		}
 		public void keyTyped(KeyEvent e) {

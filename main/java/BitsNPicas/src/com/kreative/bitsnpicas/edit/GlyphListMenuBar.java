@@ -79,7 +79,7 @@ public class GlyphListMenuBar extends JMenuBar {
 	public static class EditMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
 		public EditMenuItem(final Font<?> font, final GlyphList gl, final SaveManager sm) {
-			super("Edit Glyph");
+			super("Edit Glyphs");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -94,7 +94,7 @@ public class GlyphListMenuBar extends JMenuBar {
 	public static class DeleteMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
 		public DeleteMenuItem(final Font<?> font, final GlyphList gl) {
-			super("Delete Glyph");
+			super("Delete Glyphs");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
