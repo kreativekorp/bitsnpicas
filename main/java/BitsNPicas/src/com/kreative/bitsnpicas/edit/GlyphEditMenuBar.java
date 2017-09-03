@@ -43,9 +43,10 @@ public class GlyphEditMenuBar extends JMenuBar {
 		private static final long serialVersionUID = 1L;
 		public ViewMenu(final GlyphComponent gc) {
 			super("View");
-			add(new FitToEmMenuItem(gc));
-			add(new ZoomInMenuItem(gc));
-			add(new ZoomOutMenuItem(gc));
+			FitToEmMenuItem fitToEm = new FitToEmMenuItem(gc);
+			add(fitToEm);
+			add(new ZoomOutMenuItem(gc, fitToEm));
+			add(new ZoomInMenuItem(gc, fitToEm));
 			addSeparator();
 			add(new ShowBoundingBoxMenuItem(gc));
 		}
@@ -59,7 +60,8 @@ public class GlyphEditMenuBar extends JMenuBar {
 			setSelected(gc.getFit());
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					gc.setFit(isSelected());
+					gc.setFit(true);
+					setSelected(true);
 				}
 			});
 		}
@@ -67,11 +69,13 @@ public class GlyphEditMenuBar extends JMenuBar {
 	
 	public static class ZoomInMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public ZoomInMenuItem(final GlyphComponent gc) {
+		public ZoomInMenuItem(final GlyphComponent gc, final FitToEmMenuItem fitToEm) {
 			super("Zoom In");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					gc.setFit(false);
+					fitToEm.setSelected(false);
 					double scale = gc.getScale() * 1.5;
 					if (scale <= 0) scale = 1;
 					if (scale >= 1) scale = Math.ceil(scale);
@@ -83,11 +87,13 @@ public class GlyphEditMenuBar extends JMenuBar {
 	
 	public static class ZoomOutMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public ZoomOutMenuItem(final GlyphComponent gc) {
+		public ZoomOutMenuItem(final GlyphComponent gc, final FitToEmMenuItem fitToEm) {
 			super("Zoom Out");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					gc.setFit(false);
+					fitToEm.setSelected(false);
 					double scale = gc.getScale() / 1.5;
 					if (scale <= 0) scale = 1;
 					if (scale >= 1) scale = Math.floor(scale);
