@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -75,6 +77,8 @@ public class SetSelectionDialog extends JDialog {
 		Dimension d = new Dimension(240, 120);
 		this.selectionField.setMinimumSize(d);
 		this.selectionField.setPreferredSize(d);
+		this.selectionField.setLineWrap(true);
+		this.selectionField.setWrapStyleWord(true);
 		this.selectionField.setText(
 			byIndex ?
 			intsToString(gl.getSelectedIndices(), false) :
@@ -113,6 +117,29 @@ public class SetSelectionDialog extends JDialog {
 		byIndexButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				selectionField.setText(intsToString(gl.getSelectedIndices(), false));
+			}
+		});
+		
+		selectionField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_ENTER:
+						okButton.doClick();
+						break;
+					case KeyEvent.VK_ESCAPE:
+						cancelButton.doClick();
+						break;
+					case KeyEvent.VK_U:
+						if (e.isControlDown() || e.isMetaDown()) {
+							byCodePointButton.doClick();
+						}
+						break;
+					case KeyEvent.VK_I:
+						if (e.isControlDown() || e.isMetaDown()) {
+							byIndexButton.doClick();
+						}
+						break;
+				}
 			}
 		});
 		

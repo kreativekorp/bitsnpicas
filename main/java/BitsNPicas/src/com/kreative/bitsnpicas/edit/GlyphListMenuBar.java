@@ -146,6 +146,11 @@ public class GlyphListMenuBar extends JMenuBar {
 			add(new ColumnCountMenuItem(ccg, window, gl, 8, KeyStroke.getKeyStroke(KeyEvent.VK_8, CommonMenuItems.SHORTCUT_KEY)));
 			add(new ColumnCountMenuItem(ccg, window, gl, 16, KeyStroke.getKeyStroke(KeyEvent.VK_9, CommonMenuItems.SHORTCUT_KEY)));
 			add(new ColumnCountMenuItem(ccg, window, gl, 32, KeyStroke.getKeyStroke(KeyEvent.VK_0, CommonMenuItems.SHORTCUT_KEY)));
+			addSeparator();
+			ButtonGroup rcg = new ButtonGroup();
+			add(new RowCountMenuItem(rcg, window, gl, 4, KeyStroke.getKeyStroke(KeyEvent.VK_8, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK)));
+			add(new RowCountMenuItem(rcg, window, gl, 8, KeyStroke.getKeyStroke(KeyEvent.VK_9, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK)));
+			add(new RowCountMenuItem(rcg, window, gl, 16, KeyStroke.getKeyStroke(KeyEvent.VK_0, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK)));
 		}
 	}
 	
@@ -216,7 +221,7 @@ public class GlyphListMenuBar extends JMenuBar {
 	public static class ColumnCountMenuItem extends JRadioButtonMenuItem {
 		private static final long serialVersionUID = 1L;
 		public ColumnCountMenuItem(final ButtonGroup group, final Window window, final GlyphList gl, final int columnCount, final KeyStroke ks) {
-			super(columnCount + " Cell Window");
+			super(columnCount + " Cell Wide Window");
 			setAccelerator(ks);
 			setSelected(gl.getColumnCount() == columnCount);
 			group.add(this);
@@ -230,6 +235,28 @@ public class GlyphListMenuBar extends JMenuBar {
 			gl.addComponentListener(new ComponentAdapter() {
 				public void componentResized(ComponentEvent e) {
 					setSelected(gl.getColumnCount() == columnCount);
+				}
+			});
+		}
+	}
+	
+	public static class RowCountMenuItem extends JRadioButtonMenuItem {
+		private static final long serialVersionUID = 1L;
+		public RowCountMenuItem(final ButtonGroup group, final Window window, final GlyphList gl, final int rowCount, final KeyStroke ks) {
+			super(rowCount + " Cell High Window");
+			setAccelerator(ks);
+			setSelected(gl.getRowCount() == rowCount);
+			group.add(this);
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gl.setRowCount(rowCount);
+					setSelected(true);
+					window.pack();
+				}
+			});
+			gl.addComponentListener(new ComponentAdapter() {
+				public void componentResized(ComponentEvent e) {
+					setSelected(gl.getRowCount() == rowCount);
 				}
 			});
 		}

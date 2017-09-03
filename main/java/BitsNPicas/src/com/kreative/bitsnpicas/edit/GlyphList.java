@@ -48,6 +48,7 @@ public class GlyphList extends JComponent implements Scrollable {
 	private final Font<?> font;
 	private int cellSize;
 	private int columnCount;
+	private int rowCount;
 	private List<Integer> codePoints;
 	private final GlyphListSelection selection;
 	private Dimension preferredSize;
@@ -58,6 +59,7 @@ public class GlyphList extends JComponent implements Scrollable {
 		this.font = font;
 		this.cellSize = 36;
 		this.columnCount = 16;
+		this.rowCount = 8;
 		this.codePoints = new Block(0, 255, "Latin-1");
 		this.selection = new GlyphListSelection();
 		this.preferredSize = null;
@@ -103,6 +105,18 @@ public class GlyphList extends JComponent implements Scrollable {
 		if (cc > 8) cc &=~ 7;
 		if (this.columnCount != cc && cc > 0) {
 			this.columnCount = cc;
+			this.revalidate();
+			this.repaint();
+		}
+	}
+	
+	public int getRowCount() {
+		return this.rowCount;
+	}
+	
+	public void setRowCount(int rowCount) {
+		if (this.rowCount != rowCount && rowCount > 0) {
+			this.rowCount = rowCount;
 			this.revalidate();
 			this.repaint();
 		}
@@ -263,10 +277,8 @@ public class GlyphList extends JComponent implements Scrollable {
 		if (preferredSize != null) {
 			return preferredSize;
 		} else {
-			int rows = (codePoints.size() + columnCount - 1) / columnCount;
-			if (rows > 8) rows = 8;
 			int w = cellSize * columnCount + 1;
-			int h = (cellSize + LABEL_HEIGHT) * rows + 1;
+			int h = (cellSize + LABEL_HEIGHT) * rowCount + 1;
 			Insets i = getInsets();
 			return new Dimension(w + i.left + i.right, h + i.top + i.bottom);
 		}
