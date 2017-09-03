@@ -58,7 +58,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
 			add(new BitmapListMenuBar.ExportMenuItem(font));
 			addSeparator();
-			add(new ImportMenuItem(handler, glyph, gc));
+			add(new ImportMenuItem(handler, font, glyph, gc));
 			addSeparator();
 			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			add(new BitmapListMenuBar.PreviewMenuItem(font));
@@ -71,9 +71,9 @@ public class BitmapEditMenuBar extends JMenuBar {
 	
 	public static class ImportMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public ImportMenuItem(final BitmapToolHandler handler, final BitmapFontGlyph glyph, final GlyphComponent gc) {
+		public ImportMenuItem(final BitmapToolHandler handler, final BitmapFont font, final BitmapFontGlyph glyph, final GlyphComponent gc) {
 			super("Import Image...");
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, CommonMenuItems.SHORTCUT_KEY));
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					FileDialog fd = new FileDialog(new Frame(), "Import Image", FileDialog.LOAD);
@@ -84,7 +84,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 						BufferedImage image = ImageIO.read(file);
 						if (image != null) {
 							handler.pushUndoState(null);
-							BitmapGlyphOps.setToImage(glyph, 0, -image.getHeight(), image);
+							BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
 							glyph.setCharacterWidth(image.getWidth());
 							gc.glyphChanged();
 						} else {

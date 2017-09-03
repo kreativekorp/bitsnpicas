@@ -1,5 +1,7 @@
 package com.kreative.bitsnpicas.edit;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -12,14 +14,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
+import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
@@ -32,7 +37,7 @@ public class BitmapListMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
 	public BitmapListMenuBar(final Window window, final SaveManager sm, final BitmapFont font, final GlyphList gl) {
-		add(new FileMenu(window, sm, font));
+		add(new FileMenu(window, sm, font, gl));
 		add(new EditMenu(font, gl, window, sm));
 		add(new GlyphListMenuBar.ViewMenu(window, gl));
 		add(new TransformMenu(font, gl));
@@ -40,7 +45,7 @@ public class BitmapListMenuBar extends JMenuBar {
 	
 	public static class FileMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public FileMenu(final Window window, final SaveManager sm, final BitmapFont font) {
+		public FileMenu(final Window window, final SaveManager sm, final BitmapFont font, final GlyphList gl) {
 			super("File");
 			add(new CommonMenuItems.NewBitmapFontMenuItem());
 			// add(new CommonMenuItems.NewVectorFontMenuItem());
@@ -50,6 +55,8 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new CommonMenuItems.SaveMenuItem(sm));
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
 			add(new ExportMenuItem(font));
+			addSeparator();
+			add(new ImportMenuItem(font, gl));
 			addSeparator();
 			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			add(new PreviewMenuItem(font));
@@ -68,6 +75,47 @@ public class BitmapListMenuBar extends JMenuBar {
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					new BitmapExportFrame(font).setVisible(true);
+				}
+			});
+		}
+	}
+	
+	public static class ImportMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ImportMenuItem(final BitmapFont font, final GlyphList gl) {
+			super("Import Image...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					FileDialog fd = new FileDialog(new Frame(), "Import Image", FileDialog.LOAD);
+					fd.setVisible(true);
+					if (fd.getDirectory() == null || fd.getFile() == null) return;
+					File file = new File(fd.getDirectory(), fd.getFile());
+					try {
+						BufferedImage image = ImageIO.read(file);
+						if (image != null) {
+							for (int cp : gl.getSelectedCodePoints()) {
+								BitmapFontGlyph glyph = font.getCharacter(cp);
+								if (glyph == null) {
+									glyph = new BitmapFontGlyph();
+									font.putCharacter(cp, glyph);
+								}
+								BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
+								glyph.setCharacterWidth(image.getWidth());
+							}
+							gl.glyphsChanged();
+						} else {
+							JOptionPane.showMessageDialog(
+								null, "The selected file was not recognized as an image file.",
+								"Import Image", JOptionPane.ERROR_MESSAGE
+							);
+						}
+					} catch (IOException ioe) {
+						JOptionPane.showMessageDialog(
+							null, "An error occurred while reading the selected file.",
+							"Import Image", JOptionPane.ERROR_MESSAGE
+						);
+					}
 				}
 			});
 		}
