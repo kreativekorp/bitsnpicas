@@ -10,6 +10,7 @@ import com.kreative.bitsnpicas.truetype.TrueTypeFile;
 
 public class ExtractSvg {
 	public static void main(String[] args) {
+		try { System.setProperty("apple.awt.UIElement", "true"); } catch (Exception e) {}
 		for (String arg : args) {
 			File file = new File(arg);
 			System.out.print("Processing " + file.getAbsolutePath() + "... ");

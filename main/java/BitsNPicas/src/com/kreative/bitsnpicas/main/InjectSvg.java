@@ -20,6 +20,7 @@ import com.kreative.bitsnpicas.truetype.TrueTypeFile;
 
 public class InjectSvg {
 	public static void main(String[] args) {
+		try { System.setProperty("apple.awt.UIElement", "true"); } catch (Exception e) {}
 		// Note: Microsoft claims the SVG-in-OpenType specification supports
 		// gzip-compressed SVG glyphs, and the availability of a version of
 		// EmojiOne with gzip-compressed SVG glyphs appears to back this up.

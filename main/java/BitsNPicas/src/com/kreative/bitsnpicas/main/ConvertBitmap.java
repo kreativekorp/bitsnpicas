@@ -16,6 +16,7 @@ import com.kreative.bitsnpicas.transformer.*;
 
 public class ConvertBitmap {
 	public static void main(String[] args) {
+		try { System.setProperty("apple.awt.UIElement", "true"); } catch (Exception e) {}
 		if (args.length == 0) {
 			printHelp();
 		} else {

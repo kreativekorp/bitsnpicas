@@ -21,20 +21,19 @@ public class SaveManager extends WindowAdapter {
 		this.format = format;
 		this.font = font;
 		this.changed = false;
-		frame.getRootPane().putClientProperty("Window.documentFile", file);
-		frame.getRootPane().putClientProperty("Window.documentModified", changed);
+		updateWindow();
 	}
 	
 	public void setChanged() {
 		this.changed = true;
-		frame.getRootPane().putClientProperty("Window.documentModified", changed);
+		updateWindow();
 	}
 	
 	public boolean save() {
 		if (file == null || format == null) return saveAs();
 		boolean succeeded = Main.saveFont(file, format, font);
 		if (succeeded) changed = false;
-		frame.getRootPane().putClientProperty("Window.documentModified", changed);
+		updateWindow();
 		return succeeded;
 	}
 	
@@ -49,8 +48,7 @@ public class SaveManager extends WindowAdapter {
 		format = newFormat;
 		boolean succeeded = Main.saveFont(file, format, font);
 		if (succeeded) changed = false;
-		frame.getRootPane().putClientProperty("Window.documentFile", file);
-		frame.getRootPane().putClientProperty("Window.documentModified", changed);
+		updateWindow();
 		return succeeded;
 	}
 	
@@ -61,6 +59,15 @@ public class SaveManager extends WindowAdapter {
 			case SAVE: if (save()) w.dispose(); break;
 			case DONT_SAVE: w.dispose(); break;
 			case CANCEL: break;
+		}
+	}
+	
+	private void updateWindow() {
+		if (CommonMenuItems.IS_MAC_OS) {
+			frame.getRootPane().putClientProperty("Window.documentFile", file);
+			frame.getRootPane().putClientProperty("Window.documentModified", changed);
+		} else {
+			frame.setTitle(changed ? (font.toString() + " \u2022") : font.toString());
 		}
 	}
 }

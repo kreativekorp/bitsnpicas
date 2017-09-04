@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 
 public class ImageToSvg {
 	public static void main(String[] args) {
+		try { System.setProperty("apple.awt.UIElement", "true"); } catch (Exception e) {}
 		boolean parsingOptions = true;
 		int[] imageRect = new int[]{ 0, -700, 800, 800 };
 		int argi = 0;
