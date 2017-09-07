@@ -11,19 +11,21 @@ clean:
 	rm -rf doc
 	rm -rf BitsNPicas*.jar
 	rm -rf BitsNPicas*.tgz
+	rm -rf BitsNPicas*.app
 
 eclipseclean:
 	rm -rf BitsNPicas*.jar
 	rm -rf BitsNPicas*.tgz
+	rm -rf BitsNPicas*.app
 
 bin: src
 	mkdir -p bin
-	javac -classpath dep/KSFL.jar -sourcepath src $(SRCFILES) -d bin
+	javac -classpath dep/KSFL.jar:dep/orange-extensions.jar -sourcepath src $(SRCFILES) -d bin
 	$(foreach res,$(RESFILES),cp src/$(res) bin/$(res);)
 
 doc: src
 	mkdir -p doc
-	javadoc -classpath dep/KSFL.jar -sourcepath src $(PACKAGES) -d doc
+	javadoc -classpath dep/KSFL.jar:dep/orange-extensions.jar -sourcepath src $(PACKAGES) -d doc
 
 BitsNPicas.jar: bin
 	export COPYFILE_DISABLE=true
@@ -35,7 +37,7 @@ BitsNPicas.app: dep BitsNPicas.jar
 	mkdir -p BitsNPicas.app/Contents/Resources/Java
 	cp -f dep/PkgInfo BitsNPicas.app/Contents
 	cp -f dep/Info.plist BitsNPicas.app/Contents
-	cp -f dep/JavaApplicationStub BitsNPicas.app/Contents/MacOS/BitsNPicas
+	cp -f dep/universalJavaApplicationStub BitsNPicas.app/Contents/MacOS/BitsNPicas
 	cp -f dep/*.icns BitsNPicas.app/Contents/Resources
 	cp -f dep/*.jar BitsNPicas.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas.app/Contents/Resources/Java
