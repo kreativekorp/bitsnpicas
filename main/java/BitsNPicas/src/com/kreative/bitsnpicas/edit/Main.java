@@ -18,6 +18,7 @@ import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
+import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
@@ -75,6 +76,9 @@ public class Main {
 				return openFonts(file, new KBnPVectorFontExporter(), fonts);
 			} else if (lname.endsWith(".sfd")) {
 				BitmapFont[] fonts = new SFDBitmapFontImporter().importFont(file);
+				return openFonts(file, null, fonts);
+			} else if (lname.endsWith(".bdf")) {
+				BitmapFont[] fonts = new BDFBitmapFontImporter().importFont(file);
 				return openFonts(file, null, fonts);
 			} else if (lname.endsWith(".suit")) {
 				file = new File(file, "..namedfork");

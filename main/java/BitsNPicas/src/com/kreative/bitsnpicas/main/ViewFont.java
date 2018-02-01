@@ -19,6 +19,8 @@ public class ViewFont extends JFrame {
 					open(new KBnPBitmapFontImporter(), file);
 				} else if (lname.endsWith(".sfd")) {
 					open(new SFDBitmapFontImporter(), file);
+				} else if (lname.endsWith(".bdf")) {
+					open(new BDFBitmapFontImporter(), file);
 				} else if (lname.endsWith(".suit")) {
 					file = new File(file, "..namedfork");
 					file = new File(file, "rsrc");

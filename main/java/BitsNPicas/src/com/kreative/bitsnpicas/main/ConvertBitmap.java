@@ -299,6 +299,9 @@ public class ConvertBitmap {
 		} else if (lname.endsWith(".sfd")) {
 			ret.fonts = new SFDBitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_POSTSCRIPT;
+		} else if (lname.endsWith(".bdf")) {
+			ret.fonts = new BDFBitmapFontImporter().importFont(file);
+			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
 		} else if (lname.endsWith(".suit")) {
 			file = new File(file, "..namedfork");
 			file = new File(file, "rsrc");

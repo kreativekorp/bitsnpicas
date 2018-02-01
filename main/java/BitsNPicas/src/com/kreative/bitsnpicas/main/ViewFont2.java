@@ -25,6 +25,11 @@ public class ViewFont2 extends JFrame {
 					File mfile = sibling(file, 4, "Mask.sfd");
 					if (!mfile.exists()) ViewFont.open(imp, file);
 					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
+				} else if (lname.endsWith(".bdf")) {
+					BDFBitmapFontImporter imp = new BDFBitmapFontImporter();
+					File mfile = sibling(file, 4, "Mask.bdf");
+					if (!mfile.exists()) ViewFont.open(imp, file);
+					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
 				} else if (lname.endsWith(".suit")) {
 					NFNTBitmapFontImporter imp = new NFNTBitmapFontImporter();
 					File mfile = sibling(file, 5, "Mask.suit");
