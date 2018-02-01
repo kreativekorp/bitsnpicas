@@ -27,6 +27,7 @@ This will convert the bitmap strikes in the FontForge file `myfont.sfd` to outli
 The input format is determined by the file extension of the input file. Supported input formats include:
   *  `.kbits` - Bits'N'Picas native save format
   *  `.sfd` - FontForge
+  *  `.bdf` - X11 Bitmap Distribution Format
   *  `.suit` - Mac OS Classic font suitcase (in the resource fork)
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
