@@ -25,6 +25,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RawBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
@@ -210,7 +211,7 @@ public class BitmapExportPanel extends JPanel {
 						);
 						break;
 					case RFONT:
-						exporter = new SFontBitmapFontExporter(
+						exporter = new RFontBitmapFontExporter(
 							(pngColorRed.getNumber().intValue() << 16) |
 							(pngColorGreen.getNumber().intValue() << 8) |
 							(pngColorBlue.getNumber().intValue() << 0)
