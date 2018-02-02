@@ -12,6 +12,17 @@ Launch the Bits'N'Picas JAR without any arguments or with the `edit` command to 
 
 `java -jar BitsNPicas.jar edit myfont.sfd`
 
+The input format is determined by the file extension of the input file. Supported input formats include:
+  *  `.kbits` - Bits'N'Picas native save format
+  *  `.sfd` - FontForge
+  *  `.bdf` - X11 Bitmap Distribution Format
+  *  `.suit` - Mac OS Classic font suitcase (in the resource fork)
+  *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
+  *  `.png` - SFont or RFont, Kreative Software's extension of SFont
+  *  `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp` - Create from image (GUI only)
+  *  `.bin`, `.rom` - Create from binary file (GUI only)
+  *  `.dsf` - DOSStart! by Daniel L. Nice
+
 On Mac OS X you can also launch or drop a font file onto the Bits'N'Picas application.
 
 ![](https://github.com/kreativekorp/bitsnpicas/blob/master/wiki/screenshot.png?raw=true)
