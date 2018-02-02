@@ -104,6 +104,10 @@ public class Main {
 				JFrame f = new ImageBitmapFontImporterFrame(file);
 				f.setVisible(true);
 				return f;
+			} else if (lname.endsWith(".bin") || lname.endsWith(".rom")) {
+				JFrame f = new BinaryBitmapFontImporterFrame(file);
+				f.setVisible(true);
+				return f;
 			} else if (lname.endsWith(".dsf")) {
 				BitmapFont[] fonts = new DSFBitmapFontImporter().importFont(file);
 				return openFonts(file, null, fonts);
