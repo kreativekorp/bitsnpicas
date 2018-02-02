@@ -90,7 +90,20 @@ public class Main {
 				return openFonts(file, null, fonts);
 			} else if (lname.endsWith(".png")) {
 				BitmapFont[] fonts = new SRFontBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
+				if (fonts != null && fonts.length > 0) {
+					return openFonts(file, null, fonts);
+				} else {
+					JFrame f = new ImageBitmapFontImporterFrame(file);
+					f.setVisible(true);
+					return f;
+				}
+			} else if (
+				lname.endsWith(".jpg") || lname.endsWith(".jpeg") ||
+				lname.endsWith(".gif") || lname.endsWith(".bmp")
+			) {
+				JFrame f = new ImageBitmapFontImporterFrame(file);
+				f.setVisible(true);
+				return f;
 			} else if (lname.endsWith(".dsf")) {
 				BitmapFont[] fonts = new DSFBitmapFontImporter().importFont(file);
 				return openFonts(file, null, fonts);
