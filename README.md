@@ -21,7 +21,9 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
   *  `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp` - Create from image (GUI only)
   *  `.bin`, `.rom` - Create from binary file (GUI only)
+  *  `.fzx` - FZX by Andrew Owen (for ZX Spectrum)
   *  `.dsf` - DOSStart! by Daniel L. Nice
+  *  `.sbf` - Sabriel Bitmap Font
 
 On Mac OS X you can also launch or drop a font file onto the Bits'N'Picas application.
 
@@ -42,23 +44,26 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.suit` - Mac OS Classic font suitcase (in the resource fork)
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
+  *  `.fzx` - FZX by Andrew Owen (for ZX Spectrum)
   *  `.dsf` - DOSStart! by Daniel L. Nice
+  *  `.sbf` - Sabriel Bitmap Font
 
 The output format is determined by the `-f` option. Supported output formats include:
   *  `kbits` or `kbnp` - Bits'N'Picas native save format
-  *  `ttf` - TrueType
+  *  `ttf` or `truetype` - TrueType
   *  `bdf` - X11 Bitmap Distribution Format
-  *  `nfnt` - Mac OS Classic font suitcase (see also the `-D` and `-R` options below)
-  *  `sfont` or `png` - SFont
+  *  `nfnt` or `suit` - Mac OS Classic font suitcase (in the resource fork)
+  *  `dfont` - Mac OS Classic font suitcase (in the data fork)
+  *  `png` or `sfont` - SDL SFont
   *  `rfont` - RFont, Kreative Software's extension of SFont
+  *  `fzx` - FZX by Andrew Owen (for ZX Spectrum)
+  *  `sbf` - Sabriel Bitmap Font
 
 Additional options include:
   *  `-s` *regex* `-r` *replacement* - Perform a search-and-replace on the font name.
   *  `-b` - Apply a faux-bold effect.
   *  `-w` *units* `-h` *units* - Specify the width and height of pixels in em units (for `ttf` format).
   *  `-i` *fontid* `-z` *size* - Specify the Macintosh font ID and font size (for `nfnt` format).
-  *  `-D` - Write to the data fork / create a `.dfont` (for `nfnt` format).
-  *  `-R` - Write to the resource fork / create a `.suit` (for `nfnt` format).
 
 ## Extracting Images from Emoji/Color Fonts
 
