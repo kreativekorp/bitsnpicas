@@ -25,6 +25,7 @@ import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
+import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 
@@ -114,6 +115,9 @@ public class Main {
 				return openFonts(file, null, fonts);
 			} else if (lname.endsWith(".dsf")) {
 				BitmapFont[] fonts = new DSFBitmapFontImporter().importFont(file);
+				return openFonts(file, null, fonts);
+			} else if (lname.endsWith(".sbf")) {
+				BitmapFont[] fonts = new SBFBitmapFontImporter().importFont(file);
 				return openFonts(file, null, fonts);
 			} else if (lname.endsWith(".s10")) {
 				BitmapFont[] fonts = new S10BitmapFontImporter().importFont(file);

@@ -319,6 +319,9 @@ public class ConvertBitmap {
 		} else if (lname.endsWith(".dsf")) {
 			ret.fonts = new DSFBitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_FAMILY;
+		} else if (lname.endsWith(".sbf")) {
+			ret.fonts = new SBFBitmapFontImporter().importFont(file);
+			ret.nameType = BitmapFont.NAME_FAMILY;
 		} else if (lname.endsWith(".s10")) {
 			ret.fonts = new S10BitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;

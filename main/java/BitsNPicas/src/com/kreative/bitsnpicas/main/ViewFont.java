@@ -33,6 +33,8 @@ public class ViewFont extends JFrame {
 					open(new FZXBitmapFontImporter(), file);
 				} else if (lname.endsWith(".dsf")) {
 					open(new DSFBitmapFontImporter(), file);
+				} else if (lname.endsWith(".sbf")) {
+					open(new SBFBitmapFontImporter(), file);
 				} else if (lname.endsWith(".s10")) {
 					open(new S10BitmapFontImporter(), file);
 				} else {

@@ -67,13 +67,15 @@ public class SBFBitmapFontExporter implements BitmapFontExporter {
 			if (g == null) {
 				out.writeLong(0);
 			} else {
+				int byteWidth = bitsToBytes(g.getGlyphWidth());
+				int overhang = (byteWidth << 3) - g.getGlyphWidth();
 				out.writeShort(Short.reverseBytes((short)offset[ch]));
-				out.writeByte(bitsToBytes(g.getGlyphWidth()));
+				out.writeByte(byteWidth);
 				out.writeByte(g.getGlyphHeight());
 				out.writeByte(g.getGlyphOffset());
 				out.writeByte(g.getGlyphAscent());
 				out.writeByte(g.getCharacterWidth());
-				out.writeByte(0);
+				out.writeByte(overhang);
 			}
 		}
 		
