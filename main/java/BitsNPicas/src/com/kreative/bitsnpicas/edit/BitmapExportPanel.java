@@ -27,9 +27,9 @@ import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.RawBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
 
 public class BitmapExportPanel extends JPanel {
@@ -221,11 +221,11 @@ public class BitmapExportPanel extends JPanel {
 					case FZX:
 						exporter = new FZXBitmapFontExporter();
 						break;
-					case VGA:
-						exporter = new RawBitmapFontExporter();
-						break;
 					case SBF:
 						exporter = new SBFBitmapFontExporter();
+						break;
+					case TOS:
+						exporter = new TOSBitmapFontExporter();
 						break;
 				}
 				if (exporter == null) return;
@@ -263,10 +263,10 @@ public class BitmapExportPanel extends JPanel {
 		SUIT("Mac OS Classic Font Suitcase (Resource Fork)", ".suit", "mac", true),
 		DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac"),
 		SFONT("PNG (SDL SFont)", ".png", "color"),
-		RFONT("PNG (RFont)", ".png", "color"),
+		RFONT("PNG (Kreative RFont)", ".png", "color"),
 		FZX("FZX (ZX Spectrum)", ".fzx", "none"),
-		VGA("VGA Character Set", ".ft", "none"),
-		SBF("SBF (Sabriel Font)", ".sbf", "none");
+		SBF("SBF (Sabriel Font)", ".sbf", "none"),
+		TOS("TOS Character Set", ".ft", "none");
 		
 		public final String name;
 		public final String suffix;

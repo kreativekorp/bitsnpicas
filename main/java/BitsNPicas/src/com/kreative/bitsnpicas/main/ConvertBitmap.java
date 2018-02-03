@@ -113,7 +113,7 @@ public class ConvertBitmap {
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
 		System.out.println("  -f <format>   Set the output format. One of:");
 		System.out.println("                    kbits, kbnp, ttf (the default), bdf, nfnt,");
-		System.out.println("                    png, sfont, rfont, vga, raw, sbf");
+		System.out.println("                    png, sfont, rfont, fzx, sbf, tos, ft");
 		System.out.println("  -w <number>   Pixel width in em units (for ttf). Default: 100.");
 		System.out.println("  -h <number>   Pixel height in em units (for ttf). Default: 100.");
 		System.out.println("  -p <preset>   Use a preset for -s, -r, -w, and -h. One of:");
@@ -381,13 +381,13 @@ public class ConvertBitmap {
 			File out = getOutputFile(o.dest, name, ".fzx");
 			new FZXBitmapFontExporter().exportFontToFile(font, out);
 			return true;
-		} else if (format.equals("vga") || format.equals("raw")) {
-			File out = getOutputFile(o.dest, name, ".ft");
-			new RawBitmapFontExporter().exportFontToFile(font, out);
-			return true;
 		} else if (format.equals("sbf")) {
 			File out = getOutputFile(o.dest, name, ".sbf");
 			new SBFBitmapFontExporter().exportFontToFile(font, out);
+			return true;
+		} else if (format.equals("tos") || format.equals("ft")) {
+			File out = getOutputFile(o.dest, name, ".ft");
+			new TOSBitmapFontExporter().exportFontToFile(font, out);
 			return true;
 		} else {
 			return false;
