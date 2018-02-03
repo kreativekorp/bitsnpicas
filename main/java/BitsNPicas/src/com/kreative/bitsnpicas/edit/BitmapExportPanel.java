@@ -24,6 +24,7 @@ import javax.swing.SpinnerNumberModel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RawBitmapFontExporter;
@@ -217,6 +218,9 @@ public class BitmapExportPanel extends JPanel {
 							(pngColorBlue.getNumber().intValue() << 0)
 						);
 						break;
+					case FZX:
+						exporter = new FZXBitmapFontExporter();
+						break;
 					case VGA:
 						exporter = new RawBitmapFontExporter();
 						break;
@@ -260,6 +264,7 @@ public class BitmapExportPanel extends JPanel {
 		DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac"),
 		SFONT("PNG (SDL SFont)", ".png", "color"),
 		RFONT("PNG (RFont)", ".png", "color"),
+		FZX("FZX (ZX Spectrum)", ".fzx", "none"),
 		VGA("VGA Character Set", ".ft", "none"),
 		SBF("SBF (Sabriel Font)", ".sbf", "none");
 		

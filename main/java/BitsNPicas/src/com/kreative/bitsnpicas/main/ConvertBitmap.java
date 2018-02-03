@@ -313,6 +313,9 @@ public class ConvertBitmap {
 		} else if (lname.endsWith(".png")) {
 			ret.fonts = new SRFontBitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
+		} else if (lname.endsWith(".fzx")) {
+			ret.fonts = new FZXBitmapFontImporter().importFont(file);
+			ret.nameType = BitmapFont.NAME_FAMILY;
 		} else if (lname.endsWith(".dsf")) {
 			ret.fonts = new DSFBitmapFontImporter().importFont(file);
 			ret.nameType = BitmapFont.NAME_FAMILY;
@@ -370,6 +373,10 @@ public class ConvertBitmap {
 		} else if (format.equals("rfont")) {
 			File out = getOutputFile(o.dest, name, ".png");
 			new RFontBitmapFontExporter().exportFontToFile(font, out);
+			return true;
+		} else if (format.equals("fzx")) {
+			File out = getOutputFile(o.dest, name, ".fzx");
+			new FZXBitmapFontExporter().exportFontToFile(font, out);
 			return true;
 		} else if (format.equals("vga") || format.equals("raw")) {
 			File out = getOutputFile(o.dest, name, ".ft");

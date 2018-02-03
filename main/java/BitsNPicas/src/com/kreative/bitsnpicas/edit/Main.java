@@ -20,6 +20,7 @@ import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
@@ -108,6 +109,9 @@ public class Main {
 				JFrame f = new BinaryBitmapFontImporterFrame(file);
 				f.setVisible(true);
 				return f;
+			} else if (lname.endsWith(".fzx")) {
+				BitmapFont[] fonts = new FZXBitmapFontImporter().importFont(file);
+				return openFonts(file, null, fonts);
 			} else if (lname.endsWith(".dsf")) {
 				BitmapFont[] fonts = new DSFBitmapFontImporter().importFont(file);
 				return openFonts(file, null, fonts);
