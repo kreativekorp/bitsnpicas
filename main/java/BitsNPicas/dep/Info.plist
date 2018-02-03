@@ -84,6 +84,164 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>bdf</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Bitmap Distribution Format Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>fzx</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FZX Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>dsf</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>DOSStart! Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sbf</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Sabriel Bitmap Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sfd</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FontForge Font</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>suit</string>
+				<string>dfont</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Font Suitcase</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>FFIL</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>png</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Portable Network Graphics Image</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>jpg</string>
+				<string>jpeg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Joint Photography Experts Group Image</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>gif</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Graphic Interchange Format Image</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>bmp</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Bitmap Image</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>bin</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Binary File</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>rom</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>ROM Image</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
 	</array>
 </dict>
 </plist>
