@@ -5,7 +5,6 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import com.kreative.bitsnpicas.*;
-import com.kreative.bitsnpicas.importer.*;
 
 public class ViewFont2 extends JFrame {
 	private static final long serialVersionUID = 1;
@@ -14,68 +13,35 @@ public class ViewFont2 extends JFrame {
 		for (String arg : args) {
 			try {
 				File file = new File(arg);
-				String lname = file.getName().toLowerCase();
-				if (lname.endsWith(".kbits")) {
-					KBnPBitmapFontImporter imp = new KBnPBitmapFontImporter();
-					File mfile = sibling(file, 6, "Mask.kbits");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".sfd")) {
-					SFDBitmapFontImporter imp = new SFDBitmapFontImporter();
-					File mfile = sibling(file, 4, "Mask.sfd");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".bdf")) {
-					BDFBitmapFontImporter imp = new BDFBitmapFontImporter();
-					File mfile = sibling(file, 4, "Mask.bdf");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".suit")) {
-					NFNTBitmapFontImporter imp = new NFNTBitmapFontImporter();
-					File mfile = sibling(file, 5, "Mask.suit");
-					if (!mfile.exists()) {
-						file = new File(file, "..namedfork");
-						file = new File(file, "rsrc");
-						ViewFont.open(new NFNTBitmapFontImporter(), file);
-					} else {
-						file = new File(file, "..namedfork");
-						file = new File(file, "rsrc");
-						mfile = new File(mfile, "..namedfork");
-						mfile = new File(mfile, "rsrc");
-						new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-					}
-				} else if (lname.endsWith(".dfont")) {
-					NFNTBitmapFontImporter imp = new NFNTBitmapFontImporter();
-					File mfile = sibling(file, 6, "Mask.dfont");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".png")) {
-					SRFontBitmapFontImporter imp = new SRFontBitmapFontImporter();
-					File mfile = sibling(file, 4, "Mask.png");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".fzx")) {
-					FZXBitmapFontImporter imp = new FZXBitmapFontImporter();
-					File mfile = sibling(file, 4, "Mask.fzx");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".dsf")) {
-					DSFBitmapFontImporter imp = new DSFBitmapFontImporter();
-					File mfile = sibling(file, 4, "Mask.dsf");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".sbf")) {
-					SBFBitmapFontImporter imp = new SBFBitmapFontImporter();
-					File mfile = sibling(file, 4, "Mask.sbf");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else if (lname.endsWith(".s10")) {
-					S10BitmapFontImporter imp = new S10BitmapFontImporter();
-					File mfile = sibling(file, 4, "Mask.s10");
-					if (!mfile.exists()) ViewFont.open(imp, file);
-					else new ViewFont2(imp.importFont(file)[0], imp.importFont(mfile)[0]);
-				} else {
+				BitmapInputFormat format = BitmapInputFormat.forFile(file);
+				if (format == null) {
 					System.err.println("Unknown type: " + arg);
+				} else {
+					String ext = format.extensions[0];
+					File mfile = sibling(file, ext.length(), "Mask" + ext);
+					if (!mfile.exists()) {
+						if (format.macResFork) {
+							file = new File(new File(file, "..namedfork"), "rsrc");
+						}
+						BitmapFont[] fonts = format.createImporter().importFont(file);
+						if (fonts == null || fonts.length == 0) {
+							System.err.println("No fonts found: " + arg);
+						} else {
+							for (BitmapFont font : fonts) new ViewFont(font);
+						}
+					} else {
+						if (format.macResFork) {
+							file = new File(new File(file, "..namedfork"), "rsrc");
+							mfile = new File(new File(mfile, "..namedfork"), "rsrc");
+						}
+						BitmapFont[] fonts = format.createImporter().importFont(file);
+						BitmapFont[] mfonts = format.createImporter().importFont(mfile);
+						if (fonts == null || mfonts == null || fonts.length != 1 || mfonts.length != 1) {
+							System.err.println("Bad number of fonts found: " + arg);
+						} else {
+							new ViewFont2(fonts[0], mfonts[0]);
+						}
+					}
 				}
 			} catch (IOException e) {
 				System.err.println("Could not load " + arg);

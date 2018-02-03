@@ -5,7 +5,6 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import com.kreative.bitsnpicas.*;
-import com.kreative.bitsnpicas.importer.*;
 
 public class ViewFont extends JFrame {
 	private static final long serialVersionUID = 1;
@@ -14,44 +13,24 @@ public class ViewFont extends JFrame {
 		for (String arg : args) {
 			try {
 				File file = new File(arg);
-				String lname = file.getName().toLowerCase();
-				if (lname.endsWith(".kbits")) {
-					open(new KBnPBitmapFontImporter(), file);
-				} else if (lname.endsWith(".sfd")) {
-					open(new SFDBitmapFontImporter(), file);
-				} else if (lname.endsWith(".bdf")) {
-					open(new BDFBitmapFontImporter(), file);
-				} else if (lname.endsWith(".suit")) {
-					file = new File(file, "..namedfork");
-					file = new File(file, "rsrc");
-					open(new NFNTBitmapFontImporter(), file);
-				} else if (lname.endsWith(".dfont")) {
-					open(new NFNTBitmapFontImporter(), file);
-				} else if (lname.endsWith(".png")) {
-					open(new SRFontBitmapFontImporter(), file);
-				} else if (lname.endsWith(".fzx")) {
-					open(new FZXBitmapFontImporter(), file);
-				} else if (lname.endsWith(".dsf")) {
-					open(new DSFBitmapFontImporter(), file);
-				} else if (lname.endsWith(".sbf")) {
-					open(new SBFBitmapFontImporter(), file);
-				} else if (lname.endsWith(".s10")) {
-					open(new S10BitmapFontImporter(), file);
-				} else {
+				BitmapInputFormat format = BitmapInputFormat.forFile(file);
+				if (format == null) {
 					System.err.println("Unknown type: " + arg);
+				} else {
+					if (format.macResFork) {
+						file = new File(new File(file, "..namedfork"), "rsrc");
+					}
+					BitmapFont[] fonts = format.createImporter().importFont(file);
+					if (fonts == null || fonts.length == 0) {
+						System.err.println("No fonts found: " + arg);
+					} else {
+						for (BitmapFont font : fonts) new ViewFont(font);
+					}
 				}
 			} catch (IOException e) {
 				System.err.println("Could not load " + arg);
 			}
 		}
-	}
-	
-	public static void open(BitmapFontImporter im, File f) throws IOException {
-		open(im.importFont(f));
-	}
-	
-	public static void open(BitmapFont[] fonts) {
-		for (BitmapFont font : fonts) new ViewFont(font);
 	}
 	
 	private BitmapFont myFont;

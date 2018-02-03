@@ -13,6 +13,7 @@ import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontGlyph;
+import com.kreative.bitsnpicas.FontImporter;
 import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
@@ -70,65 +71,38 @@ public class Main {
 	public static JFrame openFonts(File file) {
 		try {
 			String lname = file.getName().toLowerCase();
-			if (lname.endsWith(".kbits")) {
-				BitmapFont[] fonts = new KBnPBitmapFontImporter().importFont(file);
-				return openFonts(file, new KBnPBitmapFontExporter(), fonts);
-			} else if (lname.endsWith(".kpcas")) {
-				VectorFont[] fonts = new KBnPVectorFontImporter().importFont(file);
-				return openFonts(file, new KBnPVectorFontExporter(), fonts);
-			} else if (lname.endsWith(".sfd")) {
-				BitmapFont[] fonts = new SFDBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else if (lname.endsWith(".bdf")) {
-				BitmapFont[] fonts = new BDFBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else if (lname.endsWith(".suit")) {
-				file = new File(file, "..namedfork");
-				file = new File(file, "rsrc");
-				BitmapFont[] fonts = new NFNTBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else if (lname.endsWith(".dfont")) {
-				BitmapFont[] fonts = new NFNTBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else if (lname.endsWith(".png")) {
-				BitmapFont[] fonts = new SRFontBitmapFontImporter().importFont(file);
-				if (fonts != null && fonts.length > 0) {
-					return openFonts(file, null, fonts);
-				} else {
-					JFrame f = new ImageBitmapFontImporterFrame(file);
-					f.setVisible(true);
-					return f;
+			for (Format format : Format.values()) {
+				for (String ext : format.extensions) {
+					if (lname.endsWith(ext)) {
+						if (format.macResFork) {
+							file = new File(file, "..namedfork");
+							file = new File(file, "rsrc");
+						}
+						FontImporter<?> importer = format.createImporter();
+						if (importer != null) {
+							Font<?>[] fonts = importer.importFont(file);
+							if (fonts != null && fonts.length > 0) {
+								return openFonts(file, format.createExporter(), fonts);
+							}
+						}
+						JFrame f = format.createOptionFrame(file);
+						if (f != null) {
+							f.setVisible(true);
+							return f;
+						}
+						JOptionPane.showMessageDialog(
+							null, "The selected file did not contain any fonts.",
+							"Open", JOptionPane.ERROR_MESSAGE
+						);
+						return null;
+					}
 				}
-			} else if (
-				lname.endsWith(".jpg") || lname.endsWith(".jpeg") ||
-				lname.endsWith(".gif") || lname.endsWith(".bmp")
-			) {
-				JFrame f = new ImageBitmapFontImporterFrame(file);
-				f.setVisible(true);
-				return f;
-			} else if (lname.endsWith(".bin") || lname.endsWith(".rom")) {
-				JFrame f = new BinaryBitmapFontImporterFrame(file);
-				f.setVisible(true);
-				return f;
-			} else if (lname.endsWith(".fzx")) {
-				BitmapFont[] fonts = new FZXBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else if (lname.endsWith(".dsf")) {
-				BitmapFont[] fonts = new DSFBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else if (lname.endsWith(".sbf")) {
-				BitmapFont[] fonts = new SBFBitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else if (lname.endsWith(".s10")) {
-				BitmapFont[] fonts = new S10BitmapFontImporter().importFont(file);
-				return openFonts(file, null, fonts);
-			} else {
-				JOptionPane.showMessageDialog(
-					null, "The selected file was not recognized as a font file readable by Bits'n'Picas.",
-					"Open", JOptionPane.ERROR_MESSAGE
-				);
-				return null;
 			}
+			JOptionPane.showMessageDialog(
+				null, "The selected file was not recognized as a font file readable by Bits'n'Picas.",
+				"Open", JOptionPane.ERROR_MESSAGE
+			);
+			return null;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(
 				null, "An error occurred while reading the selected file.",
@@ -273,6 +247,76 @@ public class Main {
 				"Save", JOptionPane.ERROR_MESSAGE
 			);
 			return false;
+		}
+	}
+	
+	private static enum Format {
+		KBITS(".kbits") {
+			public FontImporter<?> createImporter() { return new KBnPBitmapFontImporter(); }
+			public FontExporter<?> createExporter() { return new KBnPBitmapFontExporter(); }
+		},
+		KPCAS(".kpcas") {
+			public FontImporter<?> createImporter() { return new KBnPVectorFontImporter(); }
+			public FontExporter<?> createExporter() { return new KBnPVectorFontExporter(); }
+		},
+		SFD(".sfd") {
+			public FontImporter<?> createImporter() { return new SFDBitmapFontImporter(); }
+		},
+		BDF(".bdf") {
+			public FontImporter<?> createImporter() { return new BDFBitmapFontImporter(); }
+		},
+		SUIT(".suit", true) {
+			public FontImporter<?> createImporter() { return new NFNTBitmapFontImporter(); }
+		},
+		DFONT(".dfont") {
+			public FontImporter<?> createImporter() { return new NFNTBitmapFontImporter(); }
+		},
+		PNG(".png") {
+			public FontImporter<?> createImporter() { return new SRFontBitmapFontImporter(); }
+			public JFrame createOptionFrame(File file) throws IOException {
+				return new ImageBitmapFontImporterFrame(file);
+			}
+		},
+		IMAGE(".jpg", ".jpeg", ".gif", ".bmp") {
+			public JFrame createOptionFrame(File file) throws IOException {
+				return new ImageBitmapFontImporterFrame(file);
+			}
+		},
+		BINARY(".bin", ".rom") {
+			public JFrame createOptionFrame(File file) throws IOException {
+				return new BinaryBitmapFontImporterFrame(file);
+			}
+		},
+		FZX(".fzx") {
+			public FontImporter<?> createImporter() { return new FZXBitmapFontImporter(); }
+		},
+		DSF(".dsf") {
+			public FontImporter<?> createImporter() { return new DSFBitmapFontImporter(); }
+		},
+		SBF(".sbf") {
+			public FontImporter<?> createImporter() { return new SBFBitmapFontImporter(); }
+		},
+		S10(".s10") {
+			public FontImporter<?> createImporter() { return new S10BitmapFontImporter(); }
+		};
+		
+		public final String[] extensions;
+		public final boolean macResFork;
+		
+		private Format(String... extensions) {
+			this.extensions = extensions;
+			this.macResFork = false;
+		}
+		
+		private Format(String extension, boolean macResFork) {
+			this.extensions = new String[]{extension};
+			this.macResFork = macResFork;
+		}
+		
+		public FontImporter<?> createImporter() { return null; }
+		public FontExporter<?> createExporter() { return null; }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return null;
 		}
 	}
 }

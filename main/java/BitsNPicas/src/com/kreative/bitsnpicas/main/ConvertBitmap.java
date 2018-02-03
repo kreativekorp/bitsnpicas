@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import com.kreative.bitsnpicas.BitmapFont;
+import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
 import com.kreative.bitsnpicas.exporter.*;
-import com.kreative.bitsnpicas.importer.*;
 import com.kreative.bitsnpicas.transformer.*;
 
 public class ConvertBitmap {
@@ -63,10 +62,6 @@ public class ConvertBitmap {
 						o.macSnapSize = false;
 					} else if (arg.equals("-S")) {
 						o.macSnapSize = true;
-					} else if (arg.equals("-D")) {
-						o.macResFork = false;
-					} else if (arg.equals("-R")) {
-						o.macResFork = System.getProperty("os.name").toUpperCase().contains("MAC OS");
 					} else if (arg.equals("--help")) {
 						printHelp();
 					} else {
@@ -75,22 +70,30 @@ public class ConvertBitmap {
 				} else {
 					try {
 						System.out.print(arg + "...");
-						ImportFontResult r = importFont(new File(arg));
-						if (r.fonts == null) {
+						File file = new File(arg);
+						BitmapInputFormat format = BitmapInputFormat.forFile(file);
+						if (format == null) {
 							System.out.println(" FAILED: Unknown input format.");
-						} else if (r.fonts.length == 0) {
-							System.out.println(" FAILED: No fonts found.");
 						} else {
-							boolean anyDone = false;
-							for (BitmapFont font : r.fonts) {
-								transformFont(font, o);
-								font.autoFillNames();
-								String name = font.getName(r.nameType);
-								boolean done = exportFont(font, name, o);
-								if (done) anyDone = true;
+							if (format.macResFork) {
+								file = new File(file, "..namedfork");
+								file = new File(file, "rsrc");
 							}
-							if (anyDone) System.out.println(" DONE");
-							else System.out.println(" FAILED: Unknown output format.");
+							BitmapFont[] fonts = format.createImporter().importFont(file);
+							if (fonts == null || fonts.length == 0) {
+								System.out.println(" FAILED: No fonts found.");
+							} else {
+								boolean anyDone = false;
+								for (BitmapFont font : fonts) {
+									transformFont(font, o);
+									font.autoFillNames();
+									String name = font.getName(format.nameType);
+									boolean done = exportFont(font, name, o);
+									if (done) anyDone = true;
+								}
+								if (anyDone) System.out.println(" DONE");
+								else System.out.println(" FAILED: Unknown output format.");
+							}
 						}
 					} catch (IOException e) {
 						System.out.println(" FAILED: " + e.getClass().getSimpleName() + ": " + e.getMessage());
@@ -112,8 +115,17 @@ public class ConvertBitmap {
 		System.out.println("  -b            Transform the font using faux bold.");
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
 		System.out.println("  -f <format>   Set the output format. One of:");
-		System.out.println("                    kbits, kbnp, ttf (the default), bdf, nfnt,");
-		System.out.println("                    png, sfont, rfont, fzx, sbf, tos, ft");
+		List<String> ids = new ArrayList<String>();
+		for (Format f : Format.values()) for (String id : f.ids) ids.add(id);
+		for (int row = 0; row < 2; row++) {
+			System.out.print("                   ");
+			for (int i = ids.size() * row / 2, n = ids.size() * (row + 1) / 2; i < n; i++) {
+				System.out.print(" ");
+				System.out.print(ids.get(i));
+				if (i < ids.size() - 1) System.out.print(",");
+			}
+			System.out.println();
+		}
 		System.out.println("  -w <number>   Pixel width in em units (for ttf). Default: 100.");
 		System.out.println("  -h <number>   Pixel height in em units (for ttf). Default: 100.");
 		System.out.println("  -p <preset>   Use a preset for -s, -r, -w, and -h. One of:");
@@ -131,8 +143,6 @@ public class ConvertBitmap {
 		System.out.println("  -E            Use any font size (for nfnt).");
 		System.out.println("  -S            Use only standard font sizes (for nfnt).");
 		System.out.println("                    (9, 10, 12, 14, 18, 24, 36, 48, and 72.)");
-		System.out.println("  -D            Write to the data fork / create a dfont (nfnt).");
-		System.out.println("  -R            Write to the resource fork / create a font suitcase (nfnt).");
 		System.out.println("  --            Process remaining arguments as file names.");
 		System.out.println();
 	}
@@ -146,7 +156,6 @@ public class ConvertBitmap {
 		public int xSize = 100, ySize = 100;
 		public int macID = 0, macSize = 0;
 		public boolean macSnapSize = false;
-		public boolean macResFork = false;
 	}
 	
 	private static int parseInt(String s, int def) {
@@ -286,49 +295,6 @@ public class ConvertBitmap {
 		}
 	}
 	
-	private static class ImportFontResult {
-		public BitmapFont[] fonts;
-		public int nameType;
-	}
-	private static ImportFontResult importFont(File file) throws IOException {
-		ImportFontResult ret = new ImportFontResult();
-		String lname = file.getName().toLowerCase();
-		if (lname.endsWith(".kbits")) {
-			ret.fonts = new KBnPBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
-		} else if (lname.endsWith(".sfd")) {
-			ret.fonts = new SFDBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_POSTSCRIPT;
-		} else if (lname.endsWith(".bdf")) {
-			ret.fonts = new BDFBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
-		} else if (lname.endsWith(".suit")) {
-			file = new File(file, "..namedfork");
-			file = new File(file, "rsrc");
-			ret.fonts = new NFNTBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
-		} else if (lname.endsWith(".dfont")) {
-			ret.fonts = new NFNTBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
-		} else if (lname.endsWith(".png")) {
-			ret.fonts = new SRFontBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
-		} else if (lname.endsWith(".fzx")) {
-			ret.fonts = new FZXBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY;
-		} else if (lname.endsWith(".dsf")) {
-			ret.fonts = new DSFBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY;
-		} else if (lname.endsWith(".sbf")) {
-			ret.fonts = new SBFBitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY;
-		} else if (lname.endsWith(".s10")) {
-			ret.fonts = new S10BitmapFontImporter().importFont(file);
-			ret.nameType = BitmapFont.NAME_FAMILY_AND_STYLE;
-		}
-		return ret;
-	}
-	
 	private static void transformFont(BitmapFont font, Options o) {
 		if (o.nameSearchPattern != null && o.nameReplacePattern != null) {
 			for (int key : font.nameTypes()) {
@@ -343,55 +309,24 @@ public class ConvertBitmap {
 	
 	private static boolean exportFont(BitmapFont font, String name, Options o) throws IOException {
 		String format = o.format.toLowerCase();
-		if (format.equals("kbits") || format.equals("kbnp")) {
-			File out = getOutputFile(o.dest, name, ".kbits");
-			new KBnPBitmapFontExporter().exportFontToFile(font, out);
-			return true;
-		} else if (format.equals("ttf")) {
-			File out = getOutputFile(o.dest, name, ".ttf");
-			new TTFBitmapFontExporter(o.xSize, o.ySize).exportFontToFile(font, out);
-			return true;
-		} else if (format.equals("bdf")) {
-			File out = getOutputFile(o.dest, name, ".bdf");
-			new BDFBitmapFontExporter().exportFontToFile(font, out);
-			return true;
-		} else if (format.equals("nfnt")) {
-			File out = getOutputFile(o.dest, name, o.macResFork ? ".suit" : ".dfont");
-			if (o.macResFork) {
-				out.createNewFile();
-				out = new File(out, "..namedfork");
-				out = new File(out, "rsrc");
+		for (Format f : Format.values()) {
+			for (String id : f.ids) {
+				if (format.equals(id)) {
+					File out = getOutputFile(o.dest, name, f.suffix);
+					if (f.macResFork) {
+						out.createNewFile();
+						out = new File(out, "..namedfork");
+						out = new File(out, "rsrc");
+					}
+					BitmapFontExporter exporter = f.createExporter(o);
+					exporter.exportFontToFile(font, out);
+					if (f.macResFork) out = out.getParentFile().getParentFile();
+					f.postProcess(out);
+					return true;
+				}
 			}
-			new NFNTBitmapFontExporter(o.macID, o.macSize, o.macSnapSize).exportFontToFile(font, out);
-			if (o.macResFork) {
-				out = out.getParentFile().getParentFile().getAbsoluteFile();
-				String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", out.getAbsolutePath()};
-				Runtime.getRuntime().exec(cmd);
-			}
-			return true;
-		} else if (format.equals("sfont") || format.equals("png")) {
-			File out = getOutputFile(o.dest, name, ".png");
-			new SFontBitmapFontExporter().exportFontToFile(font, out);
-			return true;
-		} else if (format.equals("rfont")) {
-			File out = getOutputFile(o.dest, name, ".png");
-			new RFontBitmapFontExporter().exportFontToFile(font, out);
-			return true;
-		} else if (format.equals("fzx")) {
-			File out = getOutputFile(o.dest, name, ".fzx");
-			new FZXBitmapFontExporter().exportFontToFile(font, out);
-			return true;
-		} else if (format.equals("sbf")) {
-			File out = getOutputFile(o.dest, name, ".sbf");
-			new SBFBitmapFontExporter().exportFontToFile(font, out);
-			return true;
-		} else if (format.equals("tos") || format.equals("ft")) {
-			File out = getOutputFile(o.dest, name, ".ft");
-			new TOSBitmapFontExporter().exportFontToFile(font, out);
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 	
 	private static File getOutputFile(File dest, String name, String ext) {
@@ -421,5 +356,81 @@ public class ConvertBitmap {
 		if (ext == null) return "";
 		if (ext.equals("") || ext.startsWith(".")) return ext;
 		return "." + ext;
+	}
+	
+	private static enum Format {
+		KBITS(".kbits", "kbits", "kbnp") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new KBnPBitmapFontExporter();
+			}
+		},
+		TTF(".ttf", "ttf", "truetype") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new TTFBitmapFontExporter(o.xSize, o.ySize);
+			}
+		},
+		BDF(".bdf", "bdf") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new BDFBitmapFontExporter();
+			}
+		},
+		SUIT(".suit", "nfnt", "suit", true) {
+			public BitmapFontExporter createExporter(Options o) {
+				return new NFNTBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
+			}
+			public void postProcess(File file) throws IOException {
+				String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", file.getAbsolutePath()};
+				Runtime.getRuntime().exec(cmd);
+			}
+		},
+		DFONT(".dfont", "dfont") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new NFNTBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
+			}
+		},
+		SFONT(".png", "png", "sfont") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new SFontBitmapFontExporter();
+			}
+		},
+		RFONT(".png", "rfont") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new RFontBitmapFontExporter();
+			}
+		},
+		FZX(".fzx", "fzx") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new FZXBitmapFontExporter();
+			}
+		},
+		SBF(".sbf", "sbf") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new SBFBitmapFontExporter();
+			}
+		},
+		TOS(".ft", "tos", "ft") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new TOSBitmapFontExporter();
+			}
+		};
+		
+		public final String[] ids;
+		public final String suffix;
+		public final boolean macResFork;
+		
+		private Format(String suffix, String... ids) {
+			this.ids = ids;
+			this.suffix = suffix;
+			this.macResFork = false;
+		}
+		
+		private Format(String suffix, String id1, String id2, boolean macResFork) {
+			this.ids = new String[]{id1, id2};
+			this.suffix = suffix;
+			this.macResFork = macResFork;
+		}
+		
+		public abstract BitmapFontExporter createExporter(Options o);
+		public void postProcess(File file) throws IOException {}
 	}
 }
