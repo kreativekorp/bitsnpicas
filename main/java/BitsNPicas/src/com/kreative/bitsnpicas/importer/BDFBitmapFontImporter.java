@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
@@ -15,6 +18,11 @@ import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
 
 public class BDFBitmapFontImporter implements BitmapFontImporter {
+	// List of mappings from charsets encountered in BDF files to ones supported by Java.
+	private static final String[][] CHARSET_REGISTRIES = {
+		{"JISX0208.1990", "JIS0208"},
+	};
+	
 	public BitmapFont[] importFont(byte[] data) throws IOException {
 		return importFont(new Scanner(new ByteArrayInputStream(data), "UTF-8"));
 	}
@@ -38,9 +46,10 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 	
 	private BitmapFont readFont(Scanner scan) throws IOException {
 		BitmapFont bm = new BitmapFont();
+		Charset cs = null;
 		while (scan.hasNextLine()) {
 			String[] kv = scan.nextLine().trim().split("\\s+", 2);
-			if (kv[0].equals("STARTCHAR")) readChar(scan, bm);
+			if (kv[0].equals("STARTCHAR")) readChar(scan, bm, cs);
 			else if (kv[0].equals("ENDFONT")) break;
 			else if (kv.length < 2) continue;
 			else if (kv[0].equals("FAMILY_NAME")) bm.setName(Font.NAME_FAMILY, dequote(kv[1]));
@@ -68,11 +77,32 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 					bm.setXHeight(i);
 				} catch (NumberFormatException nfe) {}
 			}
+			else if (kv[0].equals("CHARSET_REGISTRY")) {
+				String name = dequote(kv[1]);
+				if (name.equalsIgnoreCase("ISO10646")) {
+					cs = null;
+				} else if (name.equalsIgnoreCase("FontSpecific")) {
+					cs = FONT_SPECIFIC;
+				} else try {
+					cs = Charset.forName(name);
+				} catch (Exception e1) {
+					cs = null;
+					for (String[] entry : CHARSET_REGISTRIES) {
+						if (name.equalsIgnoreCase(entry[0])) {
+							try { cs = Charset.forName(entry[1]); break; }
+							catch (Exception e2) { continue; }
+						}
+					}
+					if (cs == null) {
+						System.err.println("Warning: Unsupported CHARSET_REGISTRY: " + name);
+					}
+				}
+			}
 		}
 		return bm;
 	}
 	
-	private void readChar(Scanner scan, BitmapFont bm) throws IOException {
+	private void readChar(Scanner scan, BitmapFont bm, Charset cs) throws IOException {
 		BitmapFontGlyph g = new BitmapFontGlyph();
 		int encoding = -1;
 		while (scan.hasNextLine()) {
@@ -81,8 +111,21 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 			else if (kv[0].equals("ENDCHAR")) break;
 			else if (kv.length < 2) continue;
 			else if (kv[0].equals("ENCODING")) {
-				try { encoding = Integer.parseInt(dequote(kv[1])); }
-				catch (NumberFormatException nfe) { encoding = -1; }
+				try {
+					encoding = Integer.parseInt(dequote(kv[1]));
+					if (cs == FONT_SPECIFIC) encoding += 0xF000;
+					else if (cs != null) {
+						String es = new String(toByteArray(encoding), cs);
+						if (es.codePointCount(0, es.length()) == 1) {
+							encoding = es.codePointAt(0);
+						} else {
+							System.err.println("Warning: Undecodable ENCODING: " + encoding);
+							encoding = -1;
+						}
+					}
+				} catch (NumberFormatException nfe) {
+					encoding = -1;
+				}
 			}
 			else if (kv[0].equals("DWIDTH")) {
 				try {
@@ -127,6 +170,13 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 		}
 	}
 	
+	private static byte[] toByteArray(int v) {
+		if ((v & 0xFFFFFF00) == 0) return new byte[]{(byte)v};
+		if ((v & 0xFFFF0000) == 0) return new byte[]{(byte)(v >> 8), (byte)v};
+		if ((v & 0xFF000000) == 0) return new byte[]{(byte)(v >> 16), (byte)(v >> 8), (byte)v};
+		return new byte[]{(byte)(v >> 24), (byte)(v >> 16), (byte)(v >> 8), (byte)v};
+	}
+	
 	private static void unpack(String h, byte[] b) {
 		int i = 0;
 		CharacterIterator ci = new StringCharacterIterator(h);
@@ -141,4 +191,11 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 			if (i < b.length) b[i++] = (byte)(((v & 0x01) == 0) ? 0 : -1);
 		}
 	}
+	
+	// This is only used as a marker and is handled internally.
+	private static final Charset FONT_SPECIFIC = new Charset("X", null) {
+		public boolean contains(Charset cs) { return false; }
+		public CharsetDecoder newDecoder() { return null; }
+		public CharsetEncoder newEncoder() { return null; }
+	};
 }
