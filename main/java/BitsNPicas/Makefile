@@ -42,6 +42,13 @@ BitsNPicas.app: dep BitsNPicas.jar
 	cp -f dep/*.jar BitsNPicas.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas.app/Contents/Resources/Java
 
+BitsNPicas.dmg: BitsNPicas.app
+	mkdir -p dmgtmp
+	cp -R BitsNPicas.app dmgtmp
+	cp BitsNPicas.jar dmgtmp
+	hdiutil create -fs HFS+ -volname "Bits'n'Picas" -srcfolder dmgtmp BitsNPicas.dmg
+	rm -rf dmgtmp
+
 BitsNPicas-src.tgz: src
 	export COPYFILE_DISABLE=true
 	find src -name .DS_Store -delete
