@@ -54,4 +54,18 @@ BitsNPicas-src.tgz: src
 	find src -name .DS_Store -delete
 	tar -czf BitsNPicas-src.tgz src/com/kreative/bitsnpicas LICENSE
 
-.PHONY: all eclipseall clean eclipseclean
+install: BitsNPicas.jar
+	sudo mkdir -p /usr/local/lib/
+	sudo cp -f BitsNPicas.jar /usr/local/lib/bitsnpicas.jar
+	sudo chmod -f 644 /usr/local/lib/bitsnpicas.jar
+	sudo mkdir -p /usr/local/bin/
+	sudo cp -f dep/bitsnpicas /usr/local/bin/bitsnpicas
+	sudo chmod -f 755 /usr/local/bin/bitsnpicas
+	sudo mkdir -p /usr/share/icons/hicolor/128x128/apps/
+	sudo cp -f dep/bitsnpicas.png /usr/share/icons/hicolor/128x128/apps/bitsnpicas.png
+	sudo chmod -f 644 /usr/share/icons/hicolor/128x128/apps/bitsnpicas.png
+	sudo mkdir -p /usr/share/applications/
+	sudo cp -f dep/bitsnpicas.desktop /usr/share/applications/bitsnpicas.desktop
+	sudo chmod -f 644 /usr/share/applications/bitsnpicas.desktop
+
+.PHONY: all eclipseall clean eclipseclean install
