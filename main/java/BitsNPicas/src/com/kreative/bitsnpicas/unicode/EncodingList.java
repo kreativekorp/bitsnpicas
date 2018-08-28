@@ -22,6 +22,7 @@ public class EncodingList extends AbstractList<EncodingTable> {
 		"ISO 8859-11", "ISO 8859-13", "ISO 8859-14", "ISO 8859-15", "ISO 8859-16",
 		"Kreative SuperLatin", "Kreative SuperLatin C0",
 		"Kreative SuperRoman", "Kreative SuperRoman C0",
+		"Kreative Super437", "Kreative Super437 C0",
 		"MacCeltic", "MacCentralEuropean", "MacCroatian", "MacCyrillic",
 		"MacDingbats", "MacGaelic", "MacGreek", "MacIcelandic", "MacInuit",
 		"MacRoman", "MacRomanian", "MacTurkish", "FZX"
