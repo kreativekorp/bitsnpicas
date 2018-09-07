@@ -24,6 +24,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.fzx` - FZX by Andrew Owen (for ZX Spectrum)
   *  `.dsf` - DOSStart! by Daniel L. Nice
   *  `.sbf` - Sabriel Bitmap Font
+  *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
 
 On Mac OS X you can also launch or drop a font file onto the Bits'N'Picas application.
 
@@ -47,6 +48,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.fzx` - FZX by Andrew Owen (for ZX Spectrum)
   *  `.dsf` - DOSStart! by Daniel L. Nice
   *  `.sbf` - Sabriel Bitmap Font
+  *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
 
 The output format is determined by the `-f` option. Supported output formats include:
   *  `kbits` or `kbnp` - Bits'N'Picas native save format
@@ -58,6 +60,7 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `rfont` - RFont, Kreative Software's extension of SFont
   *  `fzx` - FZX by Andrew Owen (for ZX Spectrum)
   *  `sbf` - Sabriel Bitmap Font
+  *  `hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
 
 Additional options include:
   *  `-s` *regex* `-r` *replacement* - Perform a search-and-replace on the font name.

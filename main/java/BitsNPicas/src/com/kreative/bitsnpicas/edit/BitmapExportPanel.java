@@ -32,6 +32,7 @@ import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 
 public class BitmapExportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -292,7 +293,12 @@ public class BitmapExportPanel extends JPanel {
 			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
 				return new TOSBitmapFontExporter();
 			}
-		};
+        },
+        HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
+            public BitmapFontExporter createExporter(BitmapExportPanel bep) {
+                return new HMZKBitmapFontExporter();
+            }
+        };
 		
 		public final String name;
 		public final String suffix;

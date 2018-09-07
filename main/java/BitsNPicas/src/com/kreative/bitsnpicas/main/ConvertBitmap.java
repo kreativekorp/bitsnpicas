@@ -412,6 +412,11 @@ public class ConvertBitmap {
 			public BitmapFontExporter createExporter(Options o) {
 				return new TOSBitmapFontExporter();
 			}
+		},
+		HMZK(".hmzk", "hmzk", "hmzk") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new HMZKBitmapFontExporter();
+			}
 		};
 		
 		public final String[] ids;
