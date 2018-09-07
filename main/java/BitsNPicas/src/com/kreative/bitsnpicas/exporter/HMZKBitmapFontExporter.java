@@ -3,6 +3,7 @@ package com.kreative.bitsnpicas.exporter;
 import java.io.*;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
@@ -37,13 +38,21 @@ public class HMZKBitmapFontExporter implements BitmapFontExporter {
         // header
         out.writeInt(0x484d5a4b);
         out.writeInt(0x01ffffff);
-        out.writeInt(0xff00ffff);
+        //out.writeInt(0xff00ffff); // it's like this in Mili_pro.ft.en
+        out.writeInt(0xffffffff); // and like this in Mili_pro.ft
         out.writeShort(0xffff);
 
         ByteArrayOutputStream chbuf = new ByteArrayOutputStream();
         ByteArrayOutputStream glbuf = new ByteArrayOutputStream();
-        // map should be implicitly sorted by char
         Iterator<Map.Entry<Integer, BitmapFontGlyph>> fit = font.characterIterator();
+        // HashMap is not totally sorted, so we build a TreeMap from it
+        // There are probably more efficient ways to do this, but it's only for export anyway
+        TreeMap<Integer, BitmapFontGlyph> charmap = new TreeMap<>();
+        while (fit.hasNext()) {
+            Map.Entry<Integer, BitmapFontGlyph> entry = fit.next();
+            charmap.put(entry.getKey(), entry.getValue());
+        }
+        fit = charmap.entrySet().iterator();
         while (fit.hasNext()) {
             len++;
             if (2 * len > 0x3874) {
