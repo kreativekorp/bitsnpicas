@@ -44,22 +44,20 @@ public class HMZKBitmapFontExporter implements BitmapFontExporter {
 
         ByteArrayOutputStream chbuf = new ByteArrayOutputStream();
         ByteArrayOutputStream glbuf = new ByteArrayOutputStream();
-        Iterator<Map.Entry<Integer, BitmapFontGlyph>> fit = font.characterIterator();
         // HashMap is not totally sorted, so we build a TreeMap from it
         // There are probably more efficient ways to do this, but it's only for export anyway
-        TreeMap<Integer, BitmapFontGlyph> charmap = new TreeMap<>();
+        TreeMap<Integer, BitmapFontGlyph> charmap = new TreeMap<Integer, BitmapFontGlyph>();
+        Iterator<Map.Entry<Integer, BitmapFontGlyph>> fit = font.characterIterator();
         while (fit.hasNext()) {
             Map.Entry<Integer, BitmapFontGlyph> entry = fit.next();
             charmap.put(entry.getKey(), entry.getValue());
         }
-        fit = charmap.entrySet().iterator();
-        while (fit.hasNext()) {
+        for (Map.Entry<Integer, BitmapFontGlyph> entry : charmap.entrySet()) {
             len++;
             if (2 * len > 0x3874) {
                 System.out.println("Probably too many characters, not all were written to the file.");
                 break;
             }
-            Map.Entry<Integer, BitmapFontGlyph> entry = fit.next();
             int ch = entry.getKey();
             BitmapFontGlyph glyph = entry.getValue();
             int gx = glyph.getX();
@@ -94,11 +92,6 @@ public class HMZKBitmapFontExporter implements BitmapFontExporter {
                     }
                 }
                 glbuf.write(b);
-            }
-            int h = glarr.length;
-            int w = 0;
-            if (h > 0) {
-                w = glarr[0].length;
             }
         }
         out.writeShort(Short.reverseBytes((short)(len * 2)));

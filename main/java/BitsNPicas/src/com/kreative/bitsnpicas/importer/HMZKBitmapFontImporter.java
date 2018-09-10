@@ -1,13 +1,10 @@
 package com.kreative.bitsnpicas.importer;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
@@ -18,7 +15,7 @@ import com.kreative.bitsnpicas.BitmapFontImporter;
  */
 public class HMZKBitmapFontImporter implements BitmapFontImporter {
     public BitmapFont[] importFont(byte[] b) {
-        BitmapFont bm = new BitmapFont(16, 0, 16, 0, 0, 0);
+        BitmapFont bm = new BitmapFont(16, 0, 16, 0, 16, 0);
         // skip magic and padding
         // FIXME: check magic number/charsLen and throw exceptions
         int offset = 14;
@@ -37,9 +34,7 @@ public class HMZKBitmapFontImporter implements BitmapFontImporter {
             BitmapFontGlyph glyph = new BitmapFontGlyph(gd, 0, 16, 16);
             int ch = ((b[charOff + 1] & 0xFF) << 8) | (b[charOff] & 0xFF);
             bm.putCharacter(ch, glyph);
-
         }
-        bm.setXHeight(16);
         return new BitmapFont[]{bm};
     }
 

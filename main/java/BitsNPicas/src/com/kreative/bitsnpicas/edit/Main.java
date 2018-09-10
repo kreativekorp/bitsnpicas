@@ -300,9 +300,9 @@ public class Main {
 		S10(".s10") {
 			public FontImporter<?> createImporter() { return new S10BitmapFontImporter(); }
 		},
-        HMZK(".hmzk") {
-            public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
-        };
+		HMZK(".hmzk") {
+			public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
+		};
 		
 		public final String[] extensions;
 		public final boolean macResFork;

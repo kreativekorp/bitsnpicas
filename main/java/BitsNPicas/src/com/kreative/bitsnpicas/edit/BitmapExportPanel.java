@@ -293,12 +293,12 @@ public class BitmapExportPanel extends JPanel {
 			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
 				return new TOSBitmapFontExporter();
 			}
-        },
-        HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
-            public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-                return new HMZKBitmapFontExporter();
-            }
-        };
+		},
+		HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
+			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
+				return new HMZKBitmapFontExporter();
+			}
+		};
 		
 		public final String name;
 		public final String suffix;
