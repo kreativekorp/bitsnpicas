@@ -1,10 +1,10 @@
 SRCFILES := $(shell find src -name \*.java)
 RESFILES := $(shell (find src -name \*.png ; find src -name \*.ttf ; find src -name \*.txt) | sed s/^src\\///)
-PACKAGES := $(shell find src/com/kreative/bitsnpicas -type d \! -path \*/.\* | sed s/^src\\/// | tr / .)
+PACKAGES := $(shell find src -type d \! -path \*/.\* | sed s/^src\\/// | tr / .)
 
-all: clean bin doc BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz
+all: clean bin doc BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz
 
-eclipseall: eclipseclean BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz
+eclipseall: eclipseclean BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz
 
 clean:
 	rm -rf bin
@@ -12,11 +12,17 @@ clean:
 	rm -rf BitsNPicas*.jar
 	rm -rf BitsNPicas*.tgz
 	rm -rf BitsNPicas*.app
+	rm -rf MapEdit*.jar
+	rm -rf MapEdit*.tgz
+	rm -rf MapEdit*.app
 
 eclipseclean:
 	rm -rf BitsNPicas*.jar
 	rm -rf BitsNPicas*.tgz
 	rm -rf BitsNPicas*.app
+	rm -rf MapEdit*.jar
+	rm -rf MapEdit*.tgz
+	rm -rf MapEdit*.app
 
 bin: src
 	mkdir -p bin
@@ -38,7 +44,7 @@ BitsNPicas.app: dep BitsNPicas.jar
 	cp -f dep/PkgInfo BitsNPicas.app/Contents
 	cp -f dep/Info.plist BitsNPicas.app/Contents
 	cp -f dep/universalJavaApplicationStub BitsNPicas.app/Contents/MacOS/BitsNPicas
-	cp -f dep/*.icns BitsNPicas.app/Contents/Resources
+	cp -f dep/kbnp*.icns BitsNPicas.app/Contents/Resources
 	cp -f dep/*.jar BitsNPicas.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas.app/Contents/Resources/Java
 
@@ -53,6 +59,32 @@ BitsNPicas-src.tgz: src
 	export COPYFILE_DISABLE=true
 	find src -name .DS_Store -delete
 	tar -czf BitsNPicas-src.tgz src/com/kreative/bitsnpicas LICENSE
+
+MapEdit.jar: bin
+	export COPYFILE_DISABLE=true
+	find bin -name .DS_Store -delete
+	jar cmf dep/MANIFEST-ME.MF MapEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/mapedit
+
+MapEdit.app: dep MapEdit.jar
+	mkdir -p MapEdit.app/Contents/MacOS
+	mkdir -p MapEdit.app/Contents/Resources/Java
+	cp -f dep/PkgInfo-ME MapEdit.app/Contents/PkgInfo
+	cp -f dep/Info-ME.plist MapEdit.app/Contents/Info.plist
+	cp -f dep/universalJavaApplicationStub MapEdit.app/Contents/MacOS/MapEdit
+	cp -f dep/mapedit*.icns MapEdit.app/Contents/Resources
+	cp -f MapEdit.jar MapEdit.app/Contents/Resources/Java
+
+MapEdit.dmg: MapEdit.app
+	mkdir -p dmgtmp
+	cp -R MapEdit.app dmgtmp
+	cp MapEdit.jar dmgtmp
+	hdiutil create -fs HFS+ -volname "MapEdit" -srcfolder dmgtmp MapEdit.dmg
+	rm -rf dmgtmp
+
+MapEdit-src.tgz: src
+	export COPYFILE_DISABLE=true
+	find src -name .DS_Store -delete
+	tar -czf MapEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/mapedit LICENSE
 
 install: BitsNPicas.jar
 	sudo mkdir -p /usr/local/lib/
