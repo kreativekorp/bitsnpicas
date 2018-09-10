@@ -29,6 +29,7 @@ import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 
 public class Main {
 	public static void main(String[] args) {
@@ -298,7 +299,10 @@ public class Main {
 		},
 		S10(".s10") {
 			public FontImporter<?> createImporter() { return new S10BitmapFontImporter(); }
-		};
+		},
+        HMZK(".hmzk") {
+            public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
+        };
 		
 		public final String[] extensions;
 		public final boolean macResFork;
