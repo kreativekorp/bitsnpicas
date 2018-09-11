@@ -413,7 +413,7 @@ public class ConvertBitmap {
 				return new TOSBitmapFontExporter();
 			}
 		},
-		HMZK(".hmzk", "hmzk", "hmzk") {
+		HMZK(".hmzk", "hmzk") {
 			public BitmapFontExporter createExporter(Options o) {
 				return new HMZKBitmapFontExporter();
 			}
