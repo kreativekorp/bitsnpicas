@@ -25,7 +25,7 @@ public class EncodingList extends AbstractList<EncodingTable> {
 		"Kreative Super437", "Kreative Super437 C0",
 		"MacCeltic", "MacCentralEuropean", "MacCroatian", "MacCyrillic",
 		"MacDingbats", "MacGaelic", "MacGreek", "MacIcelandic", "MacInuit",
-		"MacRoman", "MacRomanian", "MacTurkish", "FZX"
+		"MacRoman", "MacRomanian", "MacTurkish", "MacVT100", "FZX"
 	};
 	
 	private static EncodingList instance = null;
