@@ -6,6 +6,7 @@ import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
@@ -35,6 +36,10 @@ public enum BitmapInputFormat {
 	FZX(".fzx", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter() { return new FZXBitmapFontImporter(); }
 	},
+	HMZK(".hmzk", BitmapFont.NAME_FAMILY) {
+		public BitmapFontImporter createImporter() { return new HMZKBitmapFontImporter(); }
+	},
+	// **** Add new formats here. ****
 	DSF(".dsf", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter() { return new DSFBitmapFontImporter(); }
 	},

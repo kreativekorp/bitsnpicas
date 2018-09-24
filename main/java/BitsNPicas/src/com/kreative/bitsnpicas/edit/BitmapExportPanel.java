@@ -284,6 +284,12 @@ public class BitmapExportPanel extends JPanel {
 				return new FZXBitmapFontExporter();
 			}
 		},
+		HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
+			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
+				return new HMZKBitmapFontExporter();
+			}
+		},
+		// **** Add new formats here. ****
 		SBF("SBF (Sabriel Font)", ".sbf", "none") {
 			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
 				return new SBFBitmapFontExporter();
@@ -292,11 +298,6 @@ public class BitmapExportPanel extends JPanel {
 		TOS("TOS Character Set", ".ft", "none") {
 			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
 				return new TOSBitmapFontExporter();
-			}
-		},
-		HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new HMZKBitmapFontExporter();
 			}
 		};
 		

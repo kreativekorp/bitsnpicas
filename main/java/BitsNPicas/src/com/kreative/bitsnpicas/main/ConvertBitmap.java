@@ -403,6 +403,12 @@ public class ConvertBitmap {
 				return new FZXBitmapFontExporter();
 			}
 		},
+		HMZK(".hmzk", "hmzk") {
+			public BitmapFontExporter createExporter(Options o) {
+				return new HMZKBitmapFontExporter();
+			}
+		},
+		// **** Add new formats here. ****
 		SBF(".sbf", "sbf") {
 			public BitmapFontExporter createExporter(Options o) {
 				return new SBFBitmapFontExporter();
@@ -411,11 +417,6 @@ public class ConvertBitmap {
 		TOS(".ft", "tos", "ft") {
 			public BitmapFontExporter createExporter(Options o) {
 				return new TOSBitmapFontExporter();
-			}
-		},
-		HMZK(".hmzk", "hmzk") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new HMZKBitmapFontExporter();
 			}
 		};
 		

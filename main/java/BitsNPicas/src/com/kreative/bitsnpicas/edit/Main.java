@@ -291,6 +291,10 @@ public class Main {
 		FZX(".fzx") {
 			public FontImporter<?> createImporter() { return new FZXBitmapFontImporter(); }
 		},
+		HMZK(".hmzk") {
+			public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
+		},
+		// **** Add new formats here. ****
 		DSF(".dsf") {
 			public FontImporter<?> createImporter() { return new DSFBitmapFontImporter(); }
 		},
@@ -299,9 +303,6 @@ public class Main {
 		},
 		S10(".s10") {
 			public FontImporter<?> createImporter() { return new S10BitmapFontImporter(); }
-		},
-		HMZK(".hmzk") {
-			public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
 		};
 		
 		public final String[] extensions;
