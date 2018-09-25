@@ -10,8 +10,7 @@ import java.util.regex.PatternSyntaxException;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
-import com.kreative.bitsnpicas.exporter.*;
-import com.kreative.bitsnpicas.transformer.*;
+import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 
 public class ConvertBitmap {
 	public static void main(String[] args) {
@@ -116,7 +115,9 @@ public class ConvertBitmap {
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
 		System.out.println("  -f <format>   Set the output format. One of:");
 		List<String> ids = new ArrayList<String>();
-		for (Format f : Format.values()) for (String id : f.ids) ids.add(id);
+		for (BitmapOutputFormat f : BitmapOutputFormat.values()) {
+			for (String id : f.ids) ids.add(id);
+		}
 		for (int row = 0; row < 2; row++) {
 			System.out.print("                   ");
 			for (int i = ids.size() * row / 2, n = ids.size() * (row + 1) / 2; i < n; i++) {
@@ -147,15 +148,12 @@ public class ConvertBitmap {
 		System.out.println();
 	}
 	
-	private static class Options {
+	private static class Options extends BitmapOutputOptions {
 		public Pattern nameSearchPattern = null;
 		public String nameReplacePattern = "";
 		public List<BitmapFontGlyphTransformer> transform = new ArrayList<BitmapFontGlyphTransformer>();
 		public File dest = null;
 		public String format = "ttf";
-		public int xSize = 100, ySize = 100;
-		public int macID = 0, macSize = 0;
-		public boolean macSnapSize = false;
 	}
 	
 	private static int parseInt(String s, int def) {
@@ -309,7 +307,7 @@ public class ConvertBitmap {
 	
 	private static boolean exportFont(BitmapFont font, String name, Options o) throws IOException {
 		String format = o.format.toLowerCase();
-		for (Format f : Format.values()) {
+		for (BitmapOutputFormat f : BitmapOutputFormat.values()) {
 			for (String id : f.ids) {
 				if (format.equals(id)) {
 					File out = getOutputFile(o.dest, name, f.suffix);
@@ -356,87 +354,5 @@ public class ConvertBitmap {
 		if (ext == null) return "";
 		if (ext.equals("") || ext.startsWith(".")) return ext;
 		return "." + ext;
-	}
-	
-	private static enum Format {
-		KBITS(".kbits", "kbits", "kbnp") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new KBnPBitmapFontExporter();
-			}
-		},
-		TTF(".ttf", "ttf", "truetype") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new TTFBitmapFontExporter(o.xSize, o.ySize);
-			}
-		},
-		BDF(".bdf", "bdf") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new BDFBitmapFontExporter();
-			}
-		},
-		SUIT(".suit", "nfnt", "suit", true) {
-			public BitmapFontExporter createExporter(Options o) {
-				return new NFNTBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
-			}
-			public void postProcess(File file) throws IOException {
-				String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", file.getAbsolutePath()};
-				Runtime.getRuntime().exec(cmd);
-			}
-		},
-		DFONT(".dfont", "dfont") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new NFNTBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
-			}
-		},
-		SFONT(".png", "png", "sfont") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new SFontBitmapFontExporter();
-			}
-		},
-		RFONT(".png", "rfont") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new RFontBitmapFontExporter();
-			}
-		},
-		FZX(".fzx", "fzx") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new FZXBitmapFontExporter();
-			}
-		},
-		HMZK(".hmzk", "hmzk") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new HMZKBitmapFontExporter();
-			}
-		},
-		// **** Add new formats here. ****
-		SBF(".sbf", "sbf") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new SBFBitmapFontExporter();
-			}
-		},
-		TOS(".ft", "tos", "ft") {
-			public BitmapFontExporter createExporter(Options o) {
-				return new TOSBitmapFontExporter();
-			}
-		};
-		
-		public final String[] ids;
-		public final String suffix;
-		public final boolean macResFork;
-		
-		private Format(String suffix, String... ids) {
-			this.ids = ids;
-			this.suffix = suffix;
-			this.macResFork = false;
-		}
-		
-		private Format(String suffix, String id1, String id2, boolean macResFork) {
-			this.ids = new String[]{id1, id2};
-			this.suffix = suffix;
-			this.macResFork = macResFork;
-		}
-		
-		public abstract BitmapFontExporter createExporter(Options o);
-		public void postProcess(File file) throws IOException {}
 	}
 }
