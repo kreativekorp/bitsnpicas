@@ -24,17 +24,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 
-public class BitmapExportPanel extends JPanel {
+public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private static final long serialVersionUID = 1L;
 	
 	private final BitmapFont font;
@@ -55,7 +47,7 @@ public class BitmapExportPanel extends JPanel {
 	
 	public BitmapExportPanel(BitmapFont font) {
 		this.font = font;
-		this.format = new JComboBox(Format.values());
+		this.format = new JComboBox(BitmapExportFormat.values());
 		this.pixelWidth = new SpinnerNumberModel(100, 1, 1000, 1);
 		this.pixelHeight = new SpinnerNumberModel(100, 1, 1000, 1);
 		this.macFontIdAuto = new JRadioButton("Auto");
@@ -143,8 +135,8 @@ public class BitmapExportPanel extends JPanel {
 		formatOptionsPanel.add(new JPanel(), "none");
 		
 		format.setEditable(false);
-		format.setMaximumRowCount(Format.values().length);
-		format.setSelectedItem(Format.TTF);
+		format.setMaximumRowCount(BitmapExportFormat.values().length);
+		format.setSelectedItem(BitmapExportFormat.TTF);
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		buttonPanel.add(exportButton);
 		JPanel mainPanel = new JPanel(new BorderLayout(8, 8));
@@ -158,7 +150,7 @@ public class BitmapExportPanel extends JPanel {
 		
 		format.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				Format f = (Format)format.getSelectedItem();
+				BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 				formatOptionsLayout.show(formatOptionsPanel, f.cardName);
 				Window c = getMyContainingWindow();
 				if (c != null) c.pack();
@@ -167,7 +159,7 @@ public class BitmapExportPanel extends JPanel {
 		
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Format f = (Format)format.getSelectedItem();
+				BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 				if (f == null) return;
 				BitmapFontExporter exporter = f.createExporter(BitmapExportPanel.this);
 				if (exporter == null) return;
@@ -202,14 +194,16 @@ public class BitmapExportPanel extends JPanel {
 		return null;
 	}
 	
-	private Dimension getMyPixelDimension() {
+	@Override
+	public Dimension getPixelDimension() {
 		return new Dimension(
 			pixelWidth.getNumber().intValue(),
 			pixelHeight.getNumber().intValue()
 		);
 	}
 	
-	private int getMySelectedColor() {
+	@Override
+	public int getSelectedColor() {
 		return (
 			(pngColorRed.getNumber().intValue() << 16) |
 			(pngColorGreen.getNumber().intValue() << 8) |
@@ -217,7 +211,8 @@ public class BitmapExportPanel extends JPanel {
 		);
 	}
 	
-	private NFNTBitmapFontExporter createNFNTExporter() {
+	@Override
+	public NFNTBitmapFontExporter createNFNTExporter() {
 		if (macFontIdManual.isSelected()) {
 			if (macFontSizeManual.isSelected()) {
 				return new NFNTBitmapFontExporter(
@@ -240,91 +235,6 @@ public class BitmapExportPanel extends JPanel {
 					macFontSizeAutoStandard.isSelected()
 				);
 			}
-		}
-	}
-	
-	private static enum Format {
-		TTF("TTF (TrueType)", ".ttf", "pixel") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				Dimension d = bep.getMyPixelDimension();
-				return new TTFBitmapFontExporter(d.width, d.height);
-			}
-		},
-		BDF("BDF (Bitmap Distribution Format)", ".bdf", "none") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new BDFBitmapFontExporter();
-			}
-		},
-		SUIT("Mac OS Classic Font Suitcase (Resource Fork)", ".suit", "mac", true) {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return bep.createNFNTExporter();
-			}
-			public void postProcess(File file) throws IOException {
-				String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", file.getAbsolutePath()};
-				Runtime.getRuntime().exec(cmd);
-			}
-		},
-		DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return bep.createNFNTExporter();
-			}
-		},
-		SFONT("PNG (SDL SFont)", ".png", "color") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new SFontBitmapFontExporter(bep.getMySelectedColor());
-			}
-		},
-		RFONT("PNG (Kreative RFont)", ".png", "color") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new RFontBitmapFontExporter(bep.getMySelectedColor());
-			}
-		},
-		FZX("FZX (ZX Spectrum)", ".fzx", "none") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new FZXBitmapFontExporter();
-			}
-		},
-		HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new HMZKBitmapFontExporter();
-			}
-		},
-		// **** Add new formats here. ****
-		SBF("SBF (Sabriel Font)", ".sbf", "none") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new SBFBitmapFontExporter();
-			}
-		},
-		TOS("TOS Character Set", ".ft", "none") {
-			public BitmapFontExporter createExporter(BitmapExportPanel bep) {
-				return new TOSBitmapFontExporter();
-			}
-		};
-		
-		public final String name;
-		public final String suffix;
-		public final String cardName;
-		public final boolean macResFork;
-		
-		private Format(String name, String suffix, String cardName) {
-			this.name = name;
-			this.suffix = suffix;
-			this.cardName = cardName;
-			this.macResFork = false;
-		}
-		
-		private Format(String name, String suffix, String cardName, boolean macResFork) {
-			this.name = name;
-			this.suffix = suffix;
-			this.cardName = cardName;
-			this.macResFork = macResFork;
-		}
-		
-		public abstract BitmapFontExporter createExporter(BitmapExportPanel bep);
-		public void postProcess(File file) throws IOException {}
-		
-		public String toString() {
-			return this.name;
 		}
 	}
 }

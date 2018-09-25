@@ -64,7 +64,9 @@ public enum BitmapOutputFormat {
 			return new HMZKBitmapFontExporter();
 		}
 	},
-	// **** Add new formats here. ****
+	
+	// **** Add new formats above this line. ****
+	
 	SBF(".sbf", "sbf") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new SBFBitmapFontExporter();

@@ -39,7 +39,9 @@ public enum BitmapInputFormat {
 	HMZK(".hmzk", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter() { return new HMZKBitmapFontImporter(); }
 	},
-	// **** Add new formats here. ****
+	
+	// **** Add new formats above this line. ****
+	
 	DSF(".dsf", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter() { return new DSFBitmapFontImporter(); }
 	},
