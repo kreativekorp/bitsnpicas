@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-java -jar /usr/local/lib/bitsnpicas.jar "$@"
+java -Xmx1024M -jar /usr/local/lib/bitsnpicas.jar "$@"

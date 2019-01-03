@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -35,6 +34,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+import com.kreative.bitsnpicas.WindingOrder;
 import com.kreative.bitsnpicas.importer.ImageBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.ImageBitmapFontImporter.PreviewResult;
 import com.kreative.bitsnpicas.unicode.CharacterData;
@@ -48,7 +48,7 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 	private final ImageBitmapFontImporter importer;
 	
 	private BufferedImage previewImage = null;
-	private List<Point> previewPoints = null;
+	private Point[] previewPoints = null;
 	private final JLabel previewLabel = new JLabel();
 	private final EncodingTableModel eTableModel = new EncodingTableModel();
 	private final JTable eTable = new JTable(eTableModel);
@@ -73,6 +73,7 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 		final SpinnerNumberModel deltaY = new SpinnerNumberModel(importer.deltaY, 0, image.getHeight(), 1);
 		final SpinnerNumberModel columnCount = new SpinnerNumberModel(importer.columnCount, 0, image.getWidth(), 1);
 		final SpinnerNumberModel rowCount = new SpinnerNumberModel(importer.rowCount, 0, image.getHeight(), 1);
+		final JComboBox order = new JComboBox(WindingOrder.values()); order.setEditable(false);
 		final JCheckBox invert = new JCheckBox("Invert"); invert.setSelected(importer.invert);
 		final SpinnerNumberModel threshold = new SpinnerNumberModel(importer.threshold, 0, 255, 1);
 		
@@ -89,13 +90,13 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 			new JLabel("Matte:"), new JLabel("Offset:"),
 			new JLabel("Char. Width:"), new JLabel("Char. Height:"), new JLabel("Ascent:"),
 			new JLabel("Spacing:"), new JLabel("Columns:"), new JLabel("Rows:"),
-			new JLabel("Threshold:")
+			new JLabel("Order:"), new JLabel("Threshold:")
 		);
 		final JPanel ctrlPanel = gridLayout(0, 1, 4, 4,
 			matte, startPanel,
 			cellWidthPanel, cellHeightPanel, ascentPanel,
 			deltaPanel, columnCountPanel, rowCountPanel,
-			thresholdPanel
+			order, thresholdPanel
 		);
 		final JPanel settingsPanel = borderLayout(8, 8, labelPanel, BorderLayout.LINE_START, ctrlPanel, BorderLayout.CENTER);
 		
@@ -180,6 +181,12 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 				updatePreview();
 			}
 		});
+		order.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				importer.order = (WindingOrder)order.getSelectedItem();
+				updatePreview();
+			}
+		});
 		invert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				importer.invert = invert.isSelected();
@@ -206,8 +213,8 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 		previewPoints = pr.points;
 		previewLabel.setIcon(new ImageIcon(pr.preview));
 		if (importer.encoding == null) importer.encoding = new ArrayList<Integer>();
-		for (int es = importer.encoding.size(), ps = pr.points.size(); es < ps; importer.encoding.add(0xF0000 + es), es++);
-		for (int ps = pr.points.size(), es = importer.encoding.size(); ps < es; importer.encoding.remove(ps), es--);
+		for (int es = importer.encoding.size(), ps = pr.points.length; es < ps; importer.encoding.add(0xF0000 + es), es++);
+		for (int ps = pr.points.length, es = importer.encoding.size(); ps < es; importer.encoding.remove(ps), es--);
 		eTableModel.fireTableDataChanged();
 		eTable.setRowHeight(Math.max(16, importer.cellHeight + 4));
 		setColumnWidth(eTable.getColumnModel().getColumn(0), Math.max(20, importer.cellWidth + 8));
@@ -244,7 +251,7 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 			switch (col) {
 				case 0:
 					if (previewPoints == null) return null;
-					if (row < previewPoints.size()) return previewPoints.get(row);
+					if (row < previewPoints.length) return previewPoints[row];
 					return null;
 				case 1:
 					if (importer.encoding == null) return null;

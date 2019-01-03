@@ -9,12 +9,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
+import com.kreative.bitsnpicas.WindingOrder;
 
 public class ImageBitmapFontImporter implements BitmapFontImporter {
 	public int matte = -1;
@@ -22,21 +22,24 @@ public class ImageBitmapFontImporter implements BitmapFontImporter {
 	public int cellWidth = 8, cellHeight = 8, ascent = 7;
 	public int deltaX = 0, deltaY = 0;
 	public int columnCount = 0, rowCount = 0;
+	public WindingOrder order = WindingOrder.LTR_TTB;
 	public boolean invert = false;
 	public int threshold = 128;
 	public List<Integer> encoding = null;
 	
 	public static final class PreviewResult {
 		public final BufferedImage preview;
-		public final List<Point> points;
-		private PreviewResult(BufferedImage preview) {
+		public final Point[] points;
+		private PreviewResult(BufferedImage preview, int count) {
 			this.preview = preview;
-			this.points = new ArrayList<Point>();
+			this.points = new Point[count];
 		}
 	}
 	
 	public PreviewResult preview(BufferedImage in) {
 		int w = in.getWidth(), h = in.getHeight();
+		int rows = 0; for (int y = startY; (y + cellHeight <= h) && (rowCount <= 0 || rows < rowCount); y += cellHeight + deltaY, rows++);
+		int columns = 0; for (int x = startX; (x + cellWidth <= w) && (columnCount <= 0 || columns < columnCount); x += cellWidth + deltaX, columns++);
 		BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gr = out.createGraphics();
 		gr.setColor(new Color(matte));
@@ -45,18 +48,10 @@ public class ImageBitmapFontImporter implements BitmapFontImporter {
 		gr.setColor(new Color(0x80808080, true));
 		gr.fillRect(0, 0, w, h);
 		gr.dispose();
-		PreviewResult result = new PreviewResult(out);
+		PreviewResult result = new PreviewResult(out, rows * columns);
 		int[] rgb = new int[cellHeight * cellWidth];
-		for (
-			int y = startY, j = 0;
-			(y + cellHeight <= h) && (rowCount <= 0 || j < rowCount);
-			y += cellHeight + deltaY, j++
-		) {
-			for (
-				int x = startX, i = 0;
-				(x + cellWidth <= w) && (columnCount <= 0 || i < columnCount);
-				x += cellWidth + deltaX, i++
-			) {
+		for (int y = startY, j = 0; j < rows; y += cellHeight + deltaY, j++) {
+			for (int x = startX, i = 0; i < columns; x += cellWidth + deltaX, i++) {
 				in.getRGB(x, y, cellWidth, cellHeight, rgb, 0, cellWidth);
 				for (int z = 0, gy = 0; gy < cellHeight; gy++) {
 					for (int gx = 0; gx < cellWidth; gx++, z++) {
@@ -76,8 +71,9 @@ public class ImageBitmapFontImporter implements BitmapFontImporter {
 						else if (gy == ascent) rgb[z] ^= 0x00FFFF;
 					}
 				}
+				int ci = order.getIndex(rows, columns, j, i);
 				out.setRGB(x, y, cellWidth, cellHeight, rgb, 0, cellWidth);
-				result.points.add(new Point(x, y));
+				result.points[ci] = new Point(x, y);
 			}
 		}
 		return result;
@@ -86,17 +82,11 @@ public class ImageBitmapFontImporter implements BitmapFontImporter {
 	public BitmapFont importFont(BufferedImage in) {
 		BitmapFont bm = new BitmapFont(ascent, cellHeight - ascent, ascent, cellHeight - ascent, 0, 0);
 		int w = in.getWidth(), h = in.getHeight();
+		int rows = 0; for (int y = startY; (y + cellHeight <= h) && (rowCount <= 0 || rows < rowCount); y += cellHeight + deltaY, rows++);
+		int columns = 0; for (int x = startX; (x + cellWidth <= w) && (columnCount <= 0 || columns < columnCount); x += cellWidth + deltaX, columns++);
 		int[] rgb = new int[cellHeight * cellWidth];
-		for (
-			int ci = 0, y = startY, j = 0;
-			(y + cellHeight <= h) && (rowCount <= 0 || j < rowCount);
-			y += cellHeight + deltaY, j++
-		) {
-			for (
-				int x = startX, i = 0;
-				(x + cellWidth <= w) && (columnCount <= 0 || i < columnCount);
-				x += cellWidth + deltaX, i++, ci++
-			) {
+		for (int y = startY, j = 0; j < rows; y += cellHeight + deltaY, j++) {
+			for (int x = startX, i = 0; i < columns; x += cellWidth + deltaX, i++) {
 				byte[][] gd = new byte[cellHeight][cellWidth];
 				in.getRGB(x, y, cellWidth, cellHeight, rgb, 0, cellWidth);
 				for (int z = 0, gy = 0; gy < cellHeight; gy++) {
@@ -114,6 +104,7 @@ public class ImageBitmapFontImporter implements BitmapFontImporter {
 						gd[gy][gx] = (byte)(255 - k);
 					}
 				}
+				int ci = order.getIndex(rows, columns, j, i);
 				BitmapFontGlyph glyph = new BitmapFontGlyph(gd, 0, cellWidth, ascent);
 				if (encoding == null || encoding.isEmpty()) {
 					bm.putCharacter(0xF0000 + ci, glyph);
