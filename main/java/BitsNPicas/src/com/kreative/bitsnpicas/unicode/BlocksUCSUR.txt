@@ -60,6 +60,7 @@ E630..E64F; Seussian Latin Extensions
 E650..E67F; Sylabica
 E680..E6CF; Ewellic
 E6D0..E6EF; Amlin
+E6F0..E73F; Unifon Extended
 E740..E76F; Unifon
 E770..E77F; Solresol
 E780..E7FF; Visible Speech
@@ -68,9 +69,10 @@ E830..E88F; Dni
 E890..E8DF; Aurebesh
 E8E0..E8FF; Tonal
 E900..E97F; Glaitha-A
-E980..E9DF; Glaitha-B
+E980..E9FF; Glaitha-B
 EA00..EA9F; Lhenazi
 EAA0..EAFF; Wanya
+EB00..EB3F; Orokin
 ED00..ED3F; Deini
 ED40..ED7F; Niji
 EF80..F89F; Private Use Area
