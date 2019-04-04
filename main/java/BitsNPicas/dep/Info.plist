@@ -101,10 +101,38 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>hex</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Hex Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>fzx</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>FZX Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>hmzk</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Mi Band 2 Font</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>CFBundleTypeIconFile</key>
