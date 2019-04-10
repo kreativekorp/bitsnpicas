@@ -21,6 +21,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
   *  `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp` - Create from image (GUI only)
   *  `.bin`, `.rom` - Create from binary file (GUI only)
+  *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
@@ -45,6 +46,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.suit` - Mac OS Classic font suitcase (in the resource fork)
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
+  *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
@@ -58,6 +60,7 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `png` or `sfont` - SDL SFont
   *  `rfont` - RFont, Kreative Software's extension of SFont
+  *  `hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `sbf` - Sabriel Bitmap Font
