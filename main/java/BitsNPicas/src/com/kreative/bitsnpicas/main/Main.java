@@ -18,6 +18,10 @@ public class Main {
 				ConvertBitmap.main(args);
 			} else if (arg0.equals("viewbitmap")) {
 				ViewFont2.main(args);
+			} else if (arg0.equals("extractcbdt")) {
+				ExtractCbdt.main(args);
+			} else if (arg0.equals("injectcbdt")) {
+				InjectCbdt.main(args);
 			} else if (arg0.equals("extractsbix")) {
 				ExtractSbix.main(args);
 			} else if (arg0.equals("injectsbix")) {
@@ -40,6 +44,8 @@ public class Main {
 		System.out.println("  java -jar BitsNPicas.jar edit <files>");
 		System.out.println("  java -jar BitsNPicas.jar convertbitmap <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar viewbitmap <files>");
+		System.out.println("  java -jar BitsNPicas.jar extractcbdt <files>");
+		System.out.println("  java -jar BitsNPicas.jar injectcbdt <files>");
 		System.out.println("  java -jar BitsNPicas.jar extractsbix <files>");
 		System.out.println("  java -jar BitsNPicas.jar injectsbix <files>");
 		System.out.println("  java -jar BitsNPicas.jar extractsvg <files>");

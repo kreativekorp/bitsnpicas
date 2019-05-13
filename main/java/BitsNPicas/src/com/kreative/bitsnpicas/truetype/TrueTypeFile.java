@@ -25,8 +25,14 @@ public class TrueTypeFile extends ArrayList<TrueTypeTable> {
 	
 	private static final TrueTypeTable createTable(int tableId) {
 		switch (tableId) {
+			case 0x43424454: return new EbdtTable(SbitTableType.COLOR);
+			case 0x43424C43: return new EblcTable(SbitTableType.COLOR);
+			case 0x45424454: return new EbdtTable(SbitTableType.OPENTYPE);
+			case 0x45424C43: return new EblcTable(SbitTableType.OPENTYPE);
 			case 0x4F532F32: return new Os2Table();
 			case 0x53564720: return new SvgTable();
+			case 0x62646174: return new EbdtTable(SbitTableType.TRUETYPE);
+			case 0x626C6F63: return new EblcTable(SbitTableType.TRUETYPE);
 			case 0x636D6170: return new CmapTable();
 			case 0x676C7966: return new GlyfTable();
 			case 0x68656164: return new HeadTable();
@@ -59,6 +65,15 @@ public class TrueTypeFile extends ArrayList<TrueTypeTable> {
 			}
 		}
 		return null;
+	}
+	
+	public boolean isOpenType() {
+		for (TrueTypeTable table : this) {
+			String name = table.tableName();
+			if ("CFF ".equals(name)) return true;
+			if ("CFF2".equals(name)) return true;
+		}
+		return false;
 	}
 	
 	public byte[] compile() throws IOException {

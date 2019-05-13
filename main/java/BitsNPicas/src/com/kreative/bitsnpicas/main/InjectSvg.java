@@ -88,7 +88,7 @@ public class InjectSvg {
 					}
 					Collections.sort(svg);
 					byte[] outData = ttf.compile();
-					String ext = (ttf.getByTableName("CFF ") != null) ? ".otf" : ".ttf";
+					String ext = ttf.isOpenType() ? ".otf" : ".ttf";
 					File outputFile = new File(file.getParent(), file.getName() + ".svg" + ext);
 					FileOutputStream out = new FileOutputStream(outputFile);
 					out.write(outData);
