@@ -10,6 +10,8 @@ import com.kreative.bitsnpicas.truetype.CbdtEntry;
 import com.kreative.bitsnpicas.truetype.CbdtEntryFormat17;
 import com.kreative.bitsnpicas.truetype.CbdtEntryFormat18;
 import com.kreative.bitsnpicas.truetype.CbdtEntryFormat19;
+import com.kreative.bitsnpicas.truetype.CmapSubtable;
+import com.kreative.bitsnpicas.truetype.CmapTable;
 import com.kreative.bitsnpicas.truetype.EbdtComponent;
 import com.kreative.bitsnpicas.truetype.EbdtEntry;
 import com.kreative.bitsnpicas.truetype.EbdtEntryFormat1;
@@ -30,6 +32,7 @@ import com.kreative.bitsnpicas.truetype.EblcIndexSubtable4;
 import com.kreative.bitsnpicas.truetype.EblcIndexSubtable5;
 import com.kreative.bitsnpicas.truetype.EblcTable;
 import com.kreative.bitsnpicas.truetype.HheaTable;
+import com.kreative.bitsnpicas.truetype.HmtxTable;
 import com.kreative.bitsnpicas.truetype.Os2Table;
 import com.kreative.bitsnpicas.truetype.SbitBigGlyphMetrics;
 import com.kreative.bitsnpicas.truetype.SbitLineMetrics;
@@ -66,17 +69,34 @@ public class ExtractCbdt {
 						debugPR.println("ascent: " + hhea.ascent);
 						debugPR.println("descent: " + hhea.descent);
 						debugPR.println("lineGap: " + hhea.lineGap);
+						debugPR.println("advanceWidthMax: " + hhea.advanceWidthMax);
 					}
 					Os2Table os2 = (Os2Table)ttf.getByTableName("OS/2");
 					if (os2 != null) {
-						debugPR.println("winAscent: " + os2.winAscent);
-						debugPR.println("winDescent: " + os2.winDescent);
+						debugPR.println("vendorID: " + os2.getVendorIDString());
 						debugPR.println("typoAscent: " + os2.typoAscent);
 						debugPR.println("typoDescent: " + os2.typoDescent);
 						debugPR.println("typoLineGap: " + os2.typoLineGap);
-						debugPR.println("capHeight: " + os2.capHeight);
+						debugPR.println("winAscent: " + os2.winAscent);
+						debugPR.println("winDescent: " + os2.winDescent);
 						debugPR.println("xHeight: " + os2.xHeight);
-						debugPR.println("vendorID: " + os2.getVendorIDString());
+						debugPR.println("capHeight: " + os2.capHeight);
+					}
+					CmapTable cmap = (CmapTable)ttf.getByTableName("cmap");
+					if (cmap != null) {
+						CmapSubtable cmapsub = cmap.getBestSubtable();
+						if (cmapsub != null) {
+							int spg = cmapsub.getGlyphIndex(32);
+							int nbspg = cmapsub.getGlyphIndex(160);
+							if (spg != 0) debugPR.println("space.glyphId: " + spg);
+							if (nbspg != 0) debugPR.println("nbsp.glyphId: " + nbspg);
+						}
+					}
+					HmtxTable hmtx = (HmtxTable)ttf.getByTableName("hmtx");
+					if (hmtx != null) {
+						for (int i = 0, n = hmtx.size(); i < n; i++) {
+							debugPR.println("advanceWidth[" + i + "]: " + hmtx.get(i).advanceWidth);
+						}
 					}
 					debugPR.flush();
 					debugPR.close();
