@@ -10,7 +10,8 @@ import java.util.Set;
 
 public class CharacterDatabase extends AbstractMap<Integer,CharacterData> {
 	private static final String[] DATABASE_FILES = new String[]{
-		"UnicodeData.txt", "UnicodeDataUCSUR.txt"
+		"UnicodeData.txt",
+		"UnicodeDataUCSUR.txt"
 	};
 	
 	private static CharacterDatabase instance = null;

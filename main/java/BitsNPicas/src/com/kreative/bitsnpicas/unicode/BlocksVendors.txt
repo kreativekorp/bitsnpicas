@@ -1,0 +1,16 @@
+F000..F0FF; Microsoft Symbol Area
+F100..F3FF; SIL Private Use Area
+F100..F13F; SIL Specials
+F160..F17F; SIL Combining Marks
+F180..F1FF; SIL Modifier Letters
+F200..F2FF; SIL Latin Extensions
+F300..F31F; SIL Hebrew Extensions
+F320..F33F; SIL Cyrillic Extensions
+F4C0..F4EF; Ath
+F600..F61F; Kreative Software Private Use F6
+F700..F7FF; Kreative Software Private Use F7
+F800..F89F; Kreative Software Private Use F8
+FF000..FF0FF; Kreative Software Private Use FF0
+FF100..FF1FF; Kreative Software Private Use FF1
+FF400..FF51F; Voynich
+FF700..FF7FF; Seven-Segment Display Patterns

@@ -11,7 +11,10 @@ import java.util.Scanner;
 
 public class BlockList extends AbstractList<Block> {
 	private static final String[] BLOCK_FILES = new String[]{
-		"BlocksRoadmap.txt", "Blocks.txt", "BlocksUCSUR.txt"
+		"BlocksRoadmap.txt",
+		"Blocks.txt",
+		"BlocksUCSUR.txt",
+		"BlocksVendors.txt"
 	};
 	
 	private static BlockList instance = null;
