@@ -1,5 +1,5 @@
 # Blocks-UCSUR.txt
-# Date: 2018-07-23, 20:58:40 PST
+# Date: 2019-09-14, 23:32:50 PST
 #
 # Under-ConScript Unicode Registry Character Database
 # Copyright (c) 2009-2017 Kreative Korporation
@@ -73,6 +73,7 @@ E980..E9FF; Glaitha-B
 EA00..EA9F; Lhenazi
 EAA0..EAFF; Wanya
 EB00..EB3F; Orokin
+EB40..EB5F; Standard Galactic
 ED00..ED3F; Deini
 ED40..ED7F; Niji
 EF80..F89F; Private Use Area
