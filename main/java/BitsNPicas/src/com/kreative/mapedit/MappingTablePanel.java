@@ -2,6 +2,7 @@ package com.kreative.mapedit;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -39,12 +40,12 @@ public class MappingTablePanel extends JPanel {
 	
 	private final MappingTable mt;
 	private final JLabel[] fields;
+	private final Font defaultFont;
 	private final List<MappingTablePanelListener> listeners;
 	
 	public MappingTablePanel(MappingTable table) {
 		mt = table;
 		fields = new JLabel[256];
-		listeners = new ArrayList<MappingTablePanelListener>();
 		JPanel panel = new JPanel(new GridLayout(16, 16, 4, 4));
 		for (int i = 0; i < 256; i++) {
 			fields[i] = new JLabel();
@@ -58,6 +59,8 @@ public class MappingTablePanel extends JPanel {
 			fields[i].addKeyListener(ml);
 			fields[i].addMouseListener(ml);
 		}
+		defaultFont = fields[0].getFont();
+		listeners = new ArrayList<MappingTablePanelListener>();
 		update();
 		panel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 		panel.setPreferredSize(new Dimension(484, 484));
@@ -75,10 +78,12 @@ public class MappingTablePanel extends JPanel {
 		CodePointSequence cs = mt.getSequence(i);
 		if (cs == null) {
 			fields[i].setText(" ");
+			fields[i].setFont(defaultFont);
 		} else {
 			String css = cs.toString().trim();
-			if (css.length() == 0) css = " ";
-			fields[i].setText(css);
+			FontMapEntry fme = FontMapController.getInstance().entryForString(css);
+			fields[i].setText((css.length() > 0) ? css : " ");
+			fields[i].setFont((fme != null) ? fme.getFont() : defaultFont);
 		}
 		if (mt.getSubtable(i) != null) {
 			fields[i].setBackground(BG_MB);

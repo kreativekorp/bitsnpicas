@@ -152,6 +152,8 @@ public class MapEditMenuBar extends JMenuBar {
 			add(new LeftToRightMenuItem(ctrl));
 			add(new RightToLeftMenuItem(ctrl));
 			add(new ReverseVideoMenuItem(ctrl));
+			addSeparator();
+			add(new FontMapMenuItem());
 		}
 	}
 	
@@ -327,6 +329,19 @@ public class MapEditMenuBar extends JMenuBar {
 					}
 					seq = new CodePointSequence(sl);
 					ctrl.setSequence(index, seq);
+				}
+			});
+		}
+	}
+	
+	public static class FontMapMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public FontMapMenuItem() {
+			super("Font Map");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					FontMapController.getInstance().getFrame().setVisible(true);
 				}
 			});
 		}
