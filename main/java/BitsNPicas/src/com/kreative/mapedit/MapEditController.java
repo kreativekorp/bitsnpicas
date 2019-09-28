@@ -34,10 +34,23 @@ public class MapEditController {
 		mtp.getTextField(i).requestFocusInWindow();
 	}
 	
+	public CodePointSequence getSequence(int i) {
+		if (i < 0 || i >= 256) return null;
+		return mtp.getMappingTable().getSequence(i);
+	}
+	
 	public String getSequenceString(int i) {
 		if (i < 0 || i >= 256) return null;
 		CodePointSequence cs = mtp.getMappingTable().getSequence(i);
 		return (cs != null) ? cs.toString() : null;
+	}
+	
+	public void setSequence(int i, CodePointSequence seq) {
+		if (i < 0 || i >= 256 || seq == null) return;
+		if (index == i) csp.setCodePointSequence(seq, i, false);
+		mtp.getMappingTable().setSequence(seq, i);
+		mtp.update(i);
+		for (MapEditListener l : listeners) l.codePointSequenceChanged();
 	}
 	
 	public void setSequenceString(int i, String s) {

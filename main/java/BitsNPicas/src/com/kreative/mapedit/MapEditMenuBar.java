@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -147,6 +148,10 @@ public class MapEditMenuBar extends JMenuBar {
 			addSeparator();
 			add(new OpenSubtableMenuItem(ctrl));
 			add(new DeleteSubtableMenuItem(ctrl));
+			addSeparator();
+			add(new LeftToRightMenuItem(ctrl));
+			add(new RightToLeftMenuItem(ctrl));
+			add(new ReverseVideoMenuItem(ctrl));
 		}
 	}
 	
@@ -254,6 +259,74 @@ public class MapEditMenuBar extends JMenuBar {
 					int index = ctrl.getSelectedIndex();
 					if (index < 0) return;
 					ctrl.deleteSubtable(index);
+				}
+			});
+		}
+	}
+	
+	public static class LeftToRightMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public LeftToRightMenuItem(final MapEditController ctrl) {
+			super("Left-to-Right");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int index = ctrl.getSelectedIndex();
+					if (index < 0) return;
+					CodePointSequence seq = ctrl.getSequence(index);
+					if (seq == null) return;
+					List<Integer> sl = seq.toList();
+					sl.remove(Integer.valueOf(MappingTag.RL.intValue));
+					if (!sl.remove(Integer.valueOf(MappingTag.LR.intValue))) {
+						sl.add(0, Integer.valueOf(MappingTag.LR.intValue));
+					}
+					seq = new CodePointSequence(sl);
+					ctrl.setSequence(index, seq);
+				}
+			});
+		}
+	}
+	
+	public static class RightToLeftMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public RightToLeftMenuItem(final MapEditController ctrl) {
+			super("Right-to-Left");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int index = ctrl.getSelectedIndex();
+					if (index < 0) return;
+					CodePointSequence seq = ctrl.getSequence(index);
+					if (seq == null) return;
+					List<Integer> sl = seq.toList();
+					sl.remove(Integer.valueOf(MappingTag.LR.intValue));
+					if (!sl.remove(Integer.valueOf(MappingTag.RL.intValue))) {
+						sl.add(0, Integer.valueOf(MappingTag.RL.intValue));
+					}
+					seq = new CodePointSequence(sl);
+					ctrl.setSequence(index, seq);
+				}
+			});
+		}
+	}
+	
+	public static class ReverseVideoMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ReverseVideoMenuItem(final MapEditController ctrl) {
+			super("Reverse Video");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int index = ctrl.getSelectedIndex();
+					if (index < 0) return;
+					CodePointSequence seq = ctrl.getSequence(index);
+					if (seq == null) return;
+					List<Integer> sl = seq.toList();
+					if (!sl.remove(Integer.valueOf(MappingTag.RV.intValue))) {
+						sl.add(0, Integer.valueOf(MappingTag.RV.intValue));
+					}
+					seq = new CodePointSequence(sl);
+					ctrl.setSequence(index, seq);
 				}
 			});
 		}
