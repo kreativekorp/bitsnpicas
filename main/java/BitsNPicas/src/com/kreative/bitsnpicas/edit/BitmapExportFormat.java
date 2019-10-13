@@ -26,7 +26,7 @@ public enum BitmapExportFormat {
 			return new BDFBitmapFontExporter();
 		}
 	},
-	SUIT("Mac OS Classic Font Suitcase (Resource Fork)", ".suit", "mac", true) {
+	SUIT("Mac OS Classic Font Suitcase (Resource Fork)", ".suit", "mac", "MacRoman", true) {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return o.createNFNTExporter();
 		}
@@ -35,7 +35,7 @@ public enum BitmapExportFormat {
 			Runtime.getRuntime().exec(cmd);
 		}
 	},
-	DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac") {
+	DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac", "MacRoman", false) {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return o.createNFNTExporter();
 		}
@@ -55,9 +55,9 @@ public enum BitmapExportFormat {
 			return new HexBitmapFontExporter();
 		}
 	},
-	FZX("FZX (ZX Spectrum)", ".fzx", "none") {
+	FZX("FZX (ZX Spectrum)", ".fzx", "encoding", "FZX") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return new FZXBitmapFontExporter();
+			return new FZXBitmapFontExporter(o.getSelectedEncoding());
 		}
 	},
 	HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
@@ -68,9 +68,9 @@ public enum BitmapExportFormat {
 	
 	// **** Add new formats above this line. ****
 	
-	SBF("SBF (Sabriel Font)", ".sbf", "none") {
+	SBF("SBF (Sabriel Font)", ".sbf", "encoding", "Kreative SuperLatin") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return new SBFBitmapFontExporter();
+			return new SBFBitmapFontExporter(o.getSelectedEncoding());
 		}
 	},
 	TOS("TOS Character Set", ".ft", "none") {
@@ -82,19 +82,30 @@ public enum BitmapExportFormat {
 	public final String name;
 	public final String suffix;
 	public final String cardName;
+	public final String defaultEncodingName;
 	public final boolean macResFork;
 	
 	private BitmapExportFormat(String name, String suffix, String cardName) {
 		this.name = name;
 		this.suffix = suffix;
 		this.cardName = cardName;
+		this.defaultEncodingName = null;
 		this.macResFork = false;
 	}
 	
-	private BitmapExportFormat(String name, String suffix, String cardName, boolean macResFork) {
+	private BitmapExportFormat(String name, String suffix, String cardName, String defaultEncodingName) {
 		this.name = name;
 		this.suffix = suffix;
 		this.cardName = cardName;
+		this.defaultEncodingName = defaultEncodingName;
+		this.macResFork = false;
+	}
+	
+	private BitmapExportFormat(String name, String suffix, String cardName, String defaultEncodingName, boolean macResFork) {
+		this.name = name;
+		this.suffix = suffix;
+		this.cardName = cardName;
+		this.defaultEncodingName = defaultEncodingName;
 		this.macResFork = macResFork;
 	}
 	

@@ -25,6 +25,8 @@ import javax.swing.SpinnerNumberModel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.unicode.EncodingList;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private static final long serialVersionUID = 1L;
@@ -40,6 +42,8 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final JRadioButton macFontSizeAutoStandard;
 	private final JRadioButton macFontSizeManual;
 	private final SpinnerNumberModel macFontSize;
+	private final JComboBox macEncoding;
+	private final JComboBox generalEncoding;
 	private final SpinnerNumberModel pngColorRed;
 	private final SpinnerNumberModel pngColorGreen;
 	private final SpinnerNumberModel pngColorBlue;
@@ -57,6 +61,8 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.macFontSizeAutoStandard = new JRadioButton("Auto (Standard Sizes)");
 		this.macFontSizeManual = new JRadioButton("Manual:");
 		this.macFontSize = new SpinnerNumberModel(12, 1, 127, 1);
+		this.macEncoding = new JComboBox(EncodingList.instance().toArray());
+		this.generalEncoding = new JComboBox(EncodingList.instance().toArray());
 		this.pngColorRed = new SpinnerNumberModel(0, 0, 255, 1);
 		this.pngColorGreen = new SpinnerNumberModel(0, 0, 255, 1);
 		this.pngColorBlue = new SpinnerNumberModel(0, 0, 255, 1);
@@ -97,12 +103,14 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		macLabelPanel.add(new JLabel("Macintosh Font Size"));
 		macLabelPanel.add(new JLabel(" "));
 		macLabelPanel.add(new JLabel(" "));
+		macLabelPanel.add(new JLabel("Encoding"));
 		JPanel macControlPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		macControlPanel.add(macFontIdAuto);
 		macControlPanel.add(macFontIdManualPanel);
 		macControlPanel.add(macFontSizeAutoAny);
 		macControlPanel.add(macFontSizeAutoStandard);
 		macControlPanel.add(macFontSizeManualPanel);
+		macControlPanel.add(macEncoding);
 		JPanel macInnerPanel = new JPanel(new BorderLayout(8, 8));
 		macInnerPanel.add(macLabelPanel, BorderLayout.LINE_START);
 		macInnerPanel.add(macControlPanel, BorderLayout.CENTER);
@@ -110,6 +118,12 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		macOuterPanel.add(macInnerPanel, BorderLayout.LINE_START);
 		JPanel macPanel = new JPanel(new BorderLayout());
 		macPanel.add(macOuterPanel, BorderLayout.PAGE_START);
+		
+		JPanel encodingInnerPanel = new JPanel(new BorderLayout(8, 8));
+		encodingInnerPanel.add(new JLabel("Encoding"), BorderLayout.LINE_START);
+		encodingInnerPanel.add(generalEncoding, BorderLayout.CENTER);
+		JPanel encodingPanel = new JPanel(new BorderLayout());
+		encodingPanel.add(encodingInnerPanel, BorderLayout.PAGE_START);
 		
 		JPanel pngColorLabelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		pngColorLabelPanel.add(new JLabel("Red"));
@@ -127,12 +141,18 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		JPanel pngColorPanel = new JPanel(new BorderLayout());
 		pngColorPanel.add(pngColorOuterPanel, BorderLayout.PAGE_START);
 		
+		JLabel noneLabel = new JLabel("This format has no options.");
+		noneLabel.setHorizontalAlignment(JLabel.CENTER);
+		JPanel nonePanel = new JPanel(new BorderLayout());
+		nonePanel.add(noneLabel, BorderLayout.CENTER);
+		
 		final CardLayout formatOptionsLayout = new CardLayout();
 		final JPanel formatOptionsPanel = new JPanel(formatOptionsLayout);
 		formatOptionsPanel.add(pixelPanel, "pixel");
 		formatOptionsPanel.add(macPanel, "mac");
+		formatOptionsPanel.add(encodingPanel, "encoding");
 		formatOptionsPanel.add(pngColorPanel, "color");
-		formatOptionsPanel.add(new JPanel(), "none");
+		formatOptionsPanel.add(nonePanel, "none");
 		
 		format.setEditable(false);
 		format.setMaximumRowCount(BitmapExportFormat.values().length);
@@ -152,6 +172,12 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 			public void itemStateChanged(ItemEvent e) {
 				BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 				formatOptionsLayout.show(formatOptionsPanel, f.cardName);
+				EncodingTable enc = (
+					(f.defaultEncodingName == null) ? null :
+					EncodingList.instance().get(f.defaultEncodingName)
+				);
+				macEncoding.setSelectedItem(enc);
+				generalEncoding.setSelectedItem(enc);
 				Window c = getMyContainingWindow();
 				if (c != null) c.pack();
 			}
@@ -212,27 +238,36 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	}
 	
 	@Override
+	public EncodingTable getSelectedEncoding() {
+		return (EncodingTable)(generalEncoding.getSelectedItem());
+	}
+	
+	@Override
 	public NFNTBitmapFontExporter createNFNTExporter() {
 		if (macFontIdManual.isSelected()) {
 			if (macFontSizeManual.isSelected()) {
 				return new NFNTBitmapFontExporter(
 					macFontId.getNumber().intValue(),
-					macFontSize.getNumber().intValue()
+					macFontSize.getNumber().intValue(),
+					(EncodingTable)(macEncoding.getSelectedItem())
 				);
 			} else {
 				return new NFNTBitmapFontExporter(
 					macFontId.getNumber().intValue(),
-					macFontSizeAutoStandard.isSelected()
+					macFontSizeAutoStandard.isSelected(),
+					(EncodingTable)(macEncoding.getSelectedItem())
 				);
 			}
 		} else {
 			if (macFontSizeManual.isSelected()) {
 				return new NFNTBitmapFontExporter(
-					macFontSize.getNumber().floatValue()
+					macFontSize.getNumber().floatValue(),
+					(EncodingTable)(macEncoding.getSelectedItem())
 				);
 			} else {
 				return new NFNTBitmapFontExporter(
-					macFontSizeAutoStandard.isSelected()
+					macFontSizeAutoStandard.isSelected(),
+					(EncodingTable)(macEncoding.getSelectedItem())
 				);
 			}
 		}
