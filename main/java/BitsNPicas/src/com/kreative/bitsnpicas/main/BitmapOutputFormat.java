@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
+import com.kreative.bitsnpicas.unicode.EncodingList;
 
 public enum BitmapOutputFormat {
 	KBITS(".kbits", "kbits", "kbnp") {
@@ -33,7 +34,11 @@ public enum BitmapOutputFormat {
 	},
 	SUIT(".suit", "nfnt", "suit", true) {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new NFNTBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
+			return new NFNTBitmapFontExporter(
+				o.macID, o.macSize, o.macSnapSize,
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
 		}
 		public void postProcess(File file) throws IOException {
 			String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", file.getAbsolutePath()};
@@ -42,7 +47,11 @@ public enum BitmapOutputFormat {
 	},
 	DFONT(".dfont", "dfont") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new NFNTBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
+			return new NFNTBitmapFontExporter(
+				o.macID, o.macSize, o.macSnapSize,
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
 		}
 	},
 	SFONT(".png", "png", "sfont") {
@@ -62,7 +71,10 @@ public enum BitmapOutputFormat {
 	},
 	FZX(".fzx", "fzx") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new FZXBitmapFontExporter();
+			return new FZXBitmapFontExporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
 		}
 	},
 	HMZK(".hmzk", "hmzk") {
@@ -75,7 +87,10 @@ public enum BitmapOutputFormat {
 	
 	SBF(".sbf", "sbf") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new SBFBitmapFontExporter();
+			return new SBFBitmapFontExporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
 		}
 	},
 	TOS(".ft", "tos", "ft") {

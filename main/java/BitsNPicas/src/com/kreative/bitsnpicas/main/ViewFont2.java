@@ -10,6 +10,7 @@ public class ViewFont2 extends JFrame {
 	private static final long serialVersionUID = 1;
 	
 	public static void main(String[] args) {
+		BitmapInputOptions o = new BitmapInputOptions();
 		for (String arg : args) {
 			try {
 				File file = new File(arg);
@@ -23,7 +24,7 @@ public class ViewFont2 extends JFrame {
 						if (format.macResFork) {
 							file = new File(new File(file, "..namedfork"), "rsrc");
 						}
-						BitmapFont[] fonts = format.createImporter().importFont(file);
+						BitmapFont[] fonts = format.createImporter(o).importFont(file);
 						if (fonts == null || fonts.length == 0) {
 							System.err.println("No fonts found: " + arg);
 						} else {
@@ -34,8 +35,8 @@ public class ViewFont2 extends JFrame {
 							file = new File(new File(file, "..namedfork"), "rsrc");
 							mfile = new File(new File(mfile, "..namedfork"), "rsrc");
 						}
-						BitmapFont[] fonts = format.createImporter().importFont(file);
-						BitmapFont[] mfonts = format.createImporter().importFont(mfile);
+						BitmapFont[] fonts = format.createImporter(o).importFont(file);
+						BitmapFont[] mfonts = format.createImporter(o).importFont(mfile);
 						if (fonts == null || mfonts == null || fonts.length != 1 || mfonts.length != 1) {
 							System.err.println("Bad number of fonts found: " + arg);
 						} else {

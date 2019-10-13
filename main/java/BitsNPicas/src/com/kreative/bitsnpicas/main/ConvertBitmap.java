@@ -11,6 +11,8 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
+import com.kreative.bitsnpicas.unicode.EncodingList;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public class ConvertBitmap {
 	public static void main(String[] args) {
@@ -46,21 +48,27 @@ public class ConvertBitmap {
 					} else if (arg.equals("-f") && argi < args.length) {
 						o.format = args[argi++];
 					} else if ((arg.equals("-w") || arg.equals("-x")) && argi < args.length) {
-						o.xSize = parseInt(args[argi++], 100);
+						o.oo.xSize = parseInt(args[argi++], 100);
 					} else if ((arg.equals("-h") || arg.equals("-y")) && argi < args.length) {
-						o.ySize = parseInt(args[argi++], 100);
+						o.oo.ySize = parseInt(args[argi++], 100);
 					} else if (arg.equals("-p") && argi < args.length) {
 						String s = args[argi++];
 						boolean done = loadPreset(o, s);
 						if (!done) System.err.println("Unknown preset: " + s);
 					} else if (arg.equals("-i") && argi < args.length) {
-						o.macID = parseInt(args[argi++], 0);
+						o.oo.macID = parseInt(args[argi++], 0);
 					} else if (arg.equals("-z") && argi < args.length) {
-						o.macSize = parseInt(args[argi++], 0);
+						o.oo.macSize = parseInt(args[argi++], 0);
 					} else if (arg.equals("-E")) {
-						o.macSnapSize = false;
+						o.oo.macSnapSize = false;
 					} else if (arg.equals("-S")) {
-						o.macSnapSize = true;
+						o.oo.macSnapSize = true;
+					} else if (arg.equals("-e") && argi < args.length) {
+						o.io.encodingName = o.oo.encodingName = args[argi++];
+					} else if (arg.equals("-ie") && argi < args.length) {
+						o.io.encodingName = args[argi++];
+					} else if (arg.equals("-oe") && argi < args.length) {
+						o.oo.encodingName = args[argi++];
 					} else if (arg.equals("--help")) {
 						printHelp();
 					} else {
@@ -78,7 +86,7 @@ public class ConvertBitmap {
 								file = new File(file, "..namedfork");
 								file = new File(file, "rsrc");
 							}
-							BitmapFont[] fonts = format.createImporter().importFont(file);
+							BitmapFont[] fonts = format.createImporter(o.io).importFont(file);
 							if (fonts == null || fonts.length == 0) {
 								System.out.println(" FAILED: No fonts found.");
 							} else {
@@ -118,15 +126,7 @@ public class ConvertBitmap {
 		for (BitmapOutputFormat f : BitmapOutputFormat.values()) {
 			for (String id : f.ids) ids.add(id);
 		}
-		for (int row = 0; row < 2; row++) {
-			System.out.print("                   ");
-			for (int i = ids.size() * row / 2, n = ids.size() * (row + 1) / 2; i < n; i++) {
-				System.out.print(" ");
-				System.out.print(ids.get(i));
-				if (i < ids.size() - 1) System.out.print(",");
-			}
-			System.out.println();
-		}
+		printHelpList(ids);
 		System.out.println("  -w <number>   Pixel width in em units (for ttf). Default: 100.");
 		System.out.println("  -h <number>   Pixel height in em units (for ttf). Default: 100.");
 		System.out.println("  -p <preset>   Use a preset for -s, -r, -w, and -h. One of:");
@@ -144,11 +144,40 @@ public class ConvertBitmap {
 		System.out.println("  -E            Use any font size (for nfnt).");
 		System.out.println("  -S            Use only standard font sizes (for nfnt).");
 		System.out.println("                    (9, 10, 12, 14, 18, 24, 36, 48, and 72.)");
+		System.out.println("  -e <enc>      Use the specified encoding (for nfnt, fzx, sbf).");
+		System.out.println("  -ie <enc>     Use the specified encoding for reading only.");
+		System.out.println("  -oe <enc>     Use the specified encoding for writing only.");
+		List<String> encs = new ArrayList<String>();
+		for (EncodingTable e : EncodingList.instance()) {
+			encs.add(e.name);
+		}
+		printHelpList(encs);
 		System.out.println("  --            Process remaining arguments as file names.");
 		System.out.println();
 	}
 	
-	private static class Options extends BitmapOutputOptions {
+	private static void printHelpList(List<String> list) {
+		int col = 0;
+		for (int i = 0, n = list.size(); i < n; i++) {
+			String item = " " + list.get(i);
+			if (i < n - 1) item += ",";
+			if (col + item.length() > 78) {
+				System.out.println();
+				col = 0;
+			}
+			if (col == 0) {
+				System.out.print("                   ");
+				col = 19;
+			}
+			System.out.print(item);
+			col += item.length();
+		}
+		System.out.println();
+	}
+	
+	private static class Options {
+		public final BitmapInputOptions io = new BitmapInputOptions();
+		public final BitmapOutputOptions oo = new BitmapOutputOptions();
 		public Pattern nameSearchPattern = null;
 		public String nameReplacePattern = "";
 		public List<BitmapFontGlyphTransformer> transform = new ArrayList<BitmapFontGlyphTransformer>();
@@ -166,127 +195,127 @@ public class ConvertBitmap {
 		if (name.equals("") || name.equals("none")) {
 			o.nameSearchPattern = null;
 			o.nameReplacePattern = null;
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("apple2") || name.equals("apple2-40col")) {
 			o.nameSearchPattern = Pattern.compile("Apple II");
 			o.nameReplacePattern = "Print Char 21";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("apple2-80col")) {
 			o.nameSearchPattern = Pattern.compile("Apple II");
 			o.nameReplacePattern = "PR Number 3";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("apple2-hgr")) {
 			o.nameSearchPattern = Pattern.compile("II");
 			o.nameReplacePattern = "II HGR";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("apple2-dhr")) {
 			o.nameSearchPattern = Pattern.compile("II");
 			o.nameReplacePattern = "II DHR";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("lisa") || name.equals("lisa-2x3y")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "2X3Y";
-			o.xSize = 80; o.ySize = 120;
+			o.oo.xSize = 80; o.oo.ySize = 120;
 			return true;
 		} else if (name.equals("lisa-raw")) {
 			o.nameSearchPattern = Pattern.compile("2X3Y");
 			o.nameReplacePattern = "Raw";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("iigs-320")) {
 			o.nameSearchPattern = Pattern.compile("Shaston");
 			o.nameReplacePattern = "Shaston 320";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("iigs-640")) {
 			o.nameSearchPattern = Pattern.compile("Shaston");
 			o.nameReplacePattern = "Shaston 640";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("iigs-320h")) {
 			o.nameSearchPattern = Pattern.compile("Shaston");
 			o.nameReplacePattern = "Shaston Hi 320";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("iigs-640h")) {
 			o.nameSearchPattern = Pattern.compile("Shaston");
 			o.nameReplacePattern = "Shaston Hi 640";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("atari") || name.equals("atari-40col")) {
 			o.nameSearchPattern = Pattern.compile("Colleen");
 			o.nameReplacePattern = "Candy";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("atari-80col")) {
 			o.nameSearchPattern = Pattern.compile("Candy");
 			o.nameReplacePattern = "Colleen";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("commodore") || name.equals("commodore-40col")) {
 			o.nameSearchPattern = null;
 			o.nameReplacePattern = null;
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("commodore-20col")) {
 			o.nameSearchPattern = Pattern.compile("Pet.*$");
 			o.nameReplacePattern = "$0 2X";
-			o.xSize = 200; o.ySize = 100;
+			o.oo.xSize = 200; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("commodore-80col")) {
 			o.nameSearchPattern = Pattern.compile("Pet.*$");
 			o.nameReplacePattern = "$0 2Y";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("trs80") || name.equals("trs80-64col") || name.equals("trs80-m1") || name.equals("trs80-m1-64col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "64C 2X3Y";
-			o.xSize = 80; o.ySize = 120;
+			o.oo.xSize = 80; o.oo.ySize = 120;
 			return true;
 		} else if (name.equals("trs80-32col") || name.equals("trs80-m1-32col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "32C 4X3Y";
-			o.xSize = 160; o.ySize = 120;
+			o.oo.xSize = 160; o.oo.ySize = 120;
 			return true;
 		} else if (name.equals("trs80-m2")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "2Y";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("trs80-m3") || name.equals("trs80-m3-64col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "64C";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("trs80-m3-32col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "32C";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else if (name.equals("trs80-m4") || name.equals("trs80-m4-64col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "64C";
-			o.xSize = 100; o.ySize = 160;
+			o.oo.xSize = 100; o.oo.ySize = 160;
 			return true;
 		} else if (name.equals("trs80-m4-32col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "32C";
-			o.xSize = 100; o.ySize = 80;
+			o.oo.xSize = 100; o.oo.ySize = 80;
 			return true;
 		} else if (name.equals("trs80-m4-80col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "80C";
-			o.xSize = 100; o.ySize = 200;
+			o.oo.xSize = 100; o.oo.ySize = 200;
 			return true;
 		} else if (name.equals("trs80-m4-40col")) {
 			o.nameSearchPattern = Pattern.compile("Raw");
 			o.nameReplacePattern = "40C";
-			o.xSize = 100; o.ySize = 100;
+			o.oo.xSize = 100; o.oo.ySize = 100;
 			return true;
 		} else {
 			return false;
@@ -316,7 +345,7 @@ public class ConvertBitmap {
 						out = new File(out, "..namedfork");
 						out = new File(out, "rsrc");
 					}
-					BitmapFontExporter exporter = f.createExporter(o);
+					BitmapFontExporter exporter = f.createExporter(o.oo);
 					exporter.exportFontToFile(font, out);
 					if (f.macResFork) out = out.getParentFile().getParentFile();
 					f.postProcess(out);

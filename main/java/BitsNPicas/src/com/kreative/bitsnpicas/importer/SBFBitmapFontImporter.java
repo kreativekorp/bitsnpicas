@@ -11,8 +11,19 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public class SBFBitmapFontImporter implements BitmapFontImporter {
+	private EncodingTable encoding;
+	
+	public SBFBitmapFontImporter() {
+		this.encoding = null;
+	}
+	
+	public SBFBitmapFontImporter(EncodingTable encoding) {
+		this.encoding = encoding;
+	}
+	
 	@Override
 	public BitmapFont[] importFont(byte[] data) throws IOException {
 		DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
@@ -52,7 +63,8 @@ public class SBFBitmapFontImporter implements BitmapFontImporter {
 					}
 				}
 				BitmapFontGlyph g = new BitmapFontGlyph(gd, goffset[ch], advance[ch], gascent[ch]);
-				f.putCharacter(fromSuperLatin(ch), g);
+				int cp = (encoding != null) ? encoding.get(ch) : fromSuperLatin(ch);
+				if (cp >= 0) f.putCharacter(cp, g);
 			}
 		}
 		

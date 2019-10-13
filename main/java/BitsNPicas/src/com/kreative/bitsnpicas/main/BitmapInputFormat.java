@@ -14,46 +14,83 @@ import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
+import com.kreative.bitsnpicas.unicode.EncodingList;
 
 public enum BitmapInputFormat {
 	KBITS(".kbits", BitmapFont.NAME_FAMILY_AND_STYLE) {
-		public BitmapFontImporter createImporter() { return new KBnPBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new KBnPBitmapFontImporter();
+		}
 	},
 	SFD(".sfd", BitmapFont.NAME_POSTSCRIPT) {
-		public BitmapFontImporter createImporter() { return new SFDBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new SFDBitmapFontImporter();
+		}
 	},
 	BDF(".bdf", BitmapFont.NAME_FAMILY_AND_STYLE) {
-		public BitmapFontImporter createImporter() { return new BDFBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new BDFBitmapFontImporter();
+		}
 	},
 	SUIT(".suit", BitmapFont.NAME_FAMILY_AND_STYLE, true) {
-		public BitmapFontImporter createImporter() { return new NFNTBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new NFNTBitmapFontImporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
+		}
 	},
 	DFONT(".dfont", BitmapFont.NAME_FAMILY_AND_STYLE) {
-		public BitmapFontImporter createImporter() { return new NFNTBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new NFNTBitmapFontImporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
+		}
 	},
 	PNG(".png", BitmapFont.NAME_FAMILY_AND_STYLE) {
-		public BitmapFontImporter createImporter() { return new SRFontBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new SRFontBitmapFontImporter();
+		}
 	},
 	HEX(".hex", BitmapFont.NAME_FAMILY) {
-		public BitmapFontImporter createImporter() { return new HexBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new HexBitmapFontImporter();
+		}
 	},
 	FZX(".fzx", BitmapFont.NAME_FAMILY) {
-		public BitmapFontImporter createImporter() { return new FZXBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new FZXBitmapFontImporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
+		}
 	},
 	HMZK(".hmzk", BitmapFont.NAME_FAMILY) {
-		public BitmapFontImporter createImporter() { return new HMZKBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new HMZKBitmapFontImporter();
+		}
 	},
 	
 	// **** Add new formats above this line. ****
 	
 	DSF(".dsf", BitmapFont.NAME_FAMILY) {
-		public BitmapFontImporter createImporter() { return new DSFBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new DSFBitmapFontImporter();
+		}
 	},
 	SBF(".sbf", BitmapFont.NAME_FAMILY) {
-		public BitmapFontImporter createImporter() { return new SBFBitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new SBFBitmapFontImporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
+		}
 	},
 	S10(".s10", BitmapFont.NAME_FAMILY_AND_STYLE) {
-		public BitmapFontImporter createImporter() { return new S10BitmapFontImporter(); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new S10BitmapFontImporter();
+		}
 	};
 	
 	public final String[] extensions;
@@ -72,7 +109,7 @@ public enum BitmapInputFormat {
 		this.macResFork = macResFork;
 	}
 	
-	public abstract BitmapFontImporter createImporter();
+	public abstract BitmapFontImporter createImporter(BitmapInputOptions o);
 	
 	public static BitmapInputFormat forFile(File file) {
 		String lname = file.getName().toLowerCase();

@@ -6,12 +6,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public class SBFBitmapFontExporter implements BitmapFontExporter {
+	private EncodingTable encoding;
+	
+	public SBFBitmapFontExporter() {
+		this.encoding = null;
+	}
+	
+	public SBFBitmapFontExporter(EncodingTable encoding) {
+		this.encoding = encoding;
+	}
+	
 	@Override
 	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -40,7 +50,8 @@ public class SBFBitmapFontExporter implements BitmapFontExporter {
 		int height = font.getLineAscent() + font.getLineDescent() + font.getLineGap();
 		for (int ch = 0; ch < 256; ch++) {
 			offset[ch] = currentOffset;
-			BitmapFontGlyph g = font.getCharacter(fromSuperLatin(ch));
+			int cp = (encoding != null) ? encoding.get(ch) : fromSuperLatin(ch);
+			BitmapFontGlyph g = font.getCharacter(cp);
 			if (g != null) {
 				currentOffset += bitsToBytes(g.getGlyphWidth()) * g.getGlyphHeight();
 				if (first) {
@@ -63,7 +74,8 @@ public class SBFBitmapFontExporter implements BitmapFontExporter {
 		out.writeByte(font.getLineDescent());
 		
 		for (int ch = 1; ch < 256; ch++) {
-			BitmapFontGlyph g = font.getCharacter(fromSuperLatin(ch));
+			int cp = (encoding != null) ? encoding.get(ch) : fromSuperLatin(ch);
+			BitmapFontGlyph g = font.getCharacter(cp);
 			if (g == null) {
 				out.writeLong(0);
 			} else {
@@ -80,7 +92,8 @@ public class SBFBitmapFontExporter implements BitmapFontExporter {
 		}
 		
 		for (int ch = 0; ch < 256; ch++) {
-			BitmapFontGlyph g = font.getCharacter(fromSuperLatin(ch));
+			int cp = (encoding != null) ? encoding.get(ch) : fromSuperLatin(ch);
+			BitmapFontGlyph g = font.getCharacter(cp);
 			if (g != null) {
 				for (byte[] row : g.getGlyph()) {
 					byte[] newrow = new byte[bitsToBytes(row.length)];
