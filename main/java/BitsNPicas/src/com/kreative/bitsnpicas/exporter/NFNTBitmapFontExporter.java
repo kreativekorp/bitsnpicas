@@ -5,6 +5,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 import com.kreative.ksfl.*;
 import com.kreative.rsrc.*;
 
@@ -14,6 +15,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 	private boolean generateID;
 	private boolean generateSize;
 	private boolean snapSize;
+	private EncodingTable encoding;
 	
 	public NFNTBitmapFontExporter() {
 		myID = 0;
@@ -21,6 +23,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = true;
 		generateSize = true;
 		snapSize = false;
+		encoding = null;
 	}
 	
 	public NFNTBitmapFontExporter(boolean snapsize) {
@@ -29,6 +32,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = true;
 		generateSize = true;
 		snapSize = snapsize;
+		encoding = null;
 	}
 	
 	public NFNTBitmapFontExporter(float size) {
@@ -37,6 +41,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = true;
 		generateSize = false;
 		snapSize = false;
+		encoding = null;
 	}
 	
 	public NFNTBitmapFontExporter(float size, boolean snapsize) {
@@ -45,6 +50,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = true;
 		generateSize = false;
 		snapSize = snapsize;
+		encoding = null;
 	}
 	
 	public NFNTBitmapFontExporter(int id) {
@@ -53,6 +59,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = false;
 		generateSize = true;
 		snapSize = false;
+		encoding = null;
 	}
 	
 	public NFNTBitmapFontExporter(int id, boolean snapsize) {
@@ -61,6 +68,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = false;
 		generateSize = true;
 		snapSize = snapsize;
+		encoding = null;
 	}
 	
 	public NFNTBitmapFontExporter(int id, int size) {
@@ -69,6 +77,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = false;
 		generateSize = false;
 		snapSize = false;
+		encoding = null;
 	}
 	
 	public NFNTBitmapFontExporter(int id, int size, boolean snapsize) {
@@ -77,6 +86,79 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		generateID = false;
 		generateSize = false;
 		snapSize = snapsize;
+		encoding = null;
+	}
+	
+	public NFNTBitmapFontExporter(EncodingTable enc) {
+		myID = 0;
+		mySize = 0;
+		generateID = true;
+		generateSize = true;
+		snapSize = false;
+		encoding = enc;
+	}
+	
+	public NFNTBitmapFontExporter(boolean snapsize, EncodingTable enc) {
+		myID = 0;
+		mySize = 0;
+		generateID = true;
+		generateSize = true;
+		snapSize = snapsize;
+		encoding = enc;
+	}
+	
+	public NFNTBitmapFontExporter(float size, EncodingTable enc) {
+		myID = 0;
+		mySize = (int)size;
+		generateID = true;
+		generateSize = false;
+		snapSize = false;
+		encoding = enc;
+	}
+	
+	public NFNTBitmapFontExporter(float size, boolean snapsize, EncodingTable enc) {
+		myID = 0;
+		mySize = (int)size;
+		generateID = true;
+		generateSize = false;
+		snapSize = snapsize;
+		encoding = enc;
+	}
+	
+	public NFNTBitmapFontExporter(int id, EncodingTable enc) {
+		myID = id;
+		mySize = 0;
+		generateID = false;
+		generateSize = true;
+		snapSize = false;
+		encoding = enc;
+	}
+	
+	public NFNTBitmapFontExporter(int id, boolean snapsize, EncodingTable enc) {
+		myID = id;
+		mySize = 0;
+		generateID = false;
+		generateSize = true;
+		snapSize = snapsize;
+		encoding = enc;
+	}
+	
+	public NFNTBitmapFontExporter(int id, int size, EncodingTable enc) {
+		myID = id;
+		mySize = size;
+		generateID = false;
+		generateSize = false;
+		snapSize = false;
+		encoding = enc;
+	}
+	
+	public NFNTBitmapFontExporter(int id, int size, boolean snapsize, EncodingTable enc) {
+		myID = id;
+		mySize = size;
+		generateID = false;
+		generateSize = false;
+		snapSize = snapsize;
+		encoding = enc;
 	}
 	
 	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
@@ -104,7 +186,8 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		// calculate metrics
 		int width = 0;
 		for (int i = 0; i < 256; i++) {
-			BitmapFontGlyph c = font.getCharacter(MACROMAN[i]);
+			int cp = (encoding != null) ? encoding.get(i) : MACROMAN[i];
+			BitmapFontGlyph c = font.getCharacter(cp);
 			if (c != null) {
 				if (i < firstChar) firstChar = i;
 				if (i > lastChar) lastChar = i;
@@ -124,7 +207,8 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		// make bitmap and tables
 		int xcoord = 0;
 		for (int i = firstChar, o = 0; i <= lastChar && o < offsets.length; i++, o++) {
-			BitmapFontGlyph c = font.getCharacter(MACROMAN[i]);
+			int cp = (encoding != null) ? encoding.get(i) : MACROMAN[i];
+			BitmapFontGlyph c = font.getCharacter(cp);
 			if (c != null) {
 				byte[][] g = c.getGlyph();
 				for (int gy = 0, by = font.getLineAscent() - c.getGlyphAscent(); gy < g.length && by < bitmap.length; gy++, by++) {

@@ -6,10 +6,21 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 import com.kreative.ksfl.*;
 import com.kreative.rsrc.*;
 
 public class NFNTBitmapFontImporter implements BitmapFontImporter {
+	private EncodingTable encoding;
+	
+	public NFNTBitmapFontImporter() {
+		this.encoding = null;
+	}
+	
+	public NFNTBitmapFontImporter(EncodingTable encoding) {
+		this.encoding = encoding;
+	}
+	
 	public BitmapFont[] importFont(byte[] data) throws IOException {
 		MacResourceProvider rp = new MacResourceArray(data);
 		BitmapFont[] fonts = importFont(rp);
@@ -135,7 +146,8 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 					}
 				}
 				BitmapFontGlyph g = new BitmapFontGlyph(glyph, offsets[i], widths[i] & 0xFF, ascent);
-				font.putCharacter(MACROMAN[ch], g);
+				int cp = (encoding != null) ? encoding.get(ch) : MACROMAN[ch];
+				if (cp >= 0) font.putCharacter(cp, g);
 			}
 		}
 		font.setName(Font.NAME_FAMILY, fontName);

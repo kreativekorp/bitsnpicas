@@ -8,8 +8,19 @@ import java.io.OutputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public class FZXBitmapFontExporter implements BitmapFontExporter {
+	private EncodingTable encoding;
+	
+	public FZXBitmapFontExporter() {
+		this.encoding = null;
+	}
+	
+	public FZXBitmapFontExporter(EncodingTable encoding) {
+		this.encoding = encoding;
+	}
+	
 	@Override
 	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -112,6 +123,7 @@ public class FZXBitmapFontExporter implements BitmapFontExporter {
 	}
 	
 	private int zxcp(int ch) {
+		if (encoding != null) return encoding.get(ch);
 		if (ch == 96) return 163;
 		if (ch == 127) return 169;
 		if (ch < 128) return ch;

@@ -9,9 +9,20 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public class FZXBitmapFontImporter implements BitmapFontImporter {
 	private static final char[] X_HEIGHT_CHARS = new char[]{'x', 'X', '0', '!'};
+	
+	private EncodingTable encoding;
+	
+	public FZXBitmapFontImporter() {
+		this.encoding = null;
+	}
+	
+	public FZXBitmapFontImporter(EncodingTable encoding) {
+		this.encoding = encoding;
+	}
 	
 	@Override
 	public BitmapFont[] importFont(byte[] data) throws IOException {
@@ -70,18 +81,15 @@ public class FZXBitmapFontImporter implements BitmapFontImporter {
 		
 		BitmapFont f = new BitmapFont(ascent, descent, ascent, descent, xheight, 0);
 		for (int i = 0, ch = 32; ch <= lastchar; ch++, i++) {
-			int cp = (
-				(ch == 96) ? 163 :
-				(ch == 127) ? 169 :
-				(ch < 128) ? ch :
-				(0xF000 + ch)
-			);
-			BitmapFontGlyph g = new BitmapFontGlyph(
-				gd[i], -kern[i],
-				width[i] - kern[i] + tracking,
-				ascent - shift[i]
-			);
-			f.putCharacter(cp, g);
+			int cp = zxcp(ch);
+			if (cp >= 0) {
+				BitmapFontGlyph g = new BitmapFontGlyph(
+					gd[i], -kern[i],
+					width[i] - kern[i] + tracking,
+					ascent - shift[i]
+				);
+				f.putCharacter(cp, g);
+			}
 		}
 		return new BitmapFont[]{f};
 	}
@@ -114,5 +122,13 @@ public class FZXBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		return f;
+	}
+	
+	private int zxcp(int ch) {
+		if (encoding != null) return encoding.get(ch);
+		if (ch == 96) return 163;
+		if (ch == 127) return 169;
+		if (ch < 128) return ch;
+		return (0xF000 + ch);
 	}
 }
