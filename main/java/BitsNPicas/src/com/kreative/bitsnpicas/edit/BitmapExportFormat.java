@@ -55,7 +55,7 @@ public enum BitmapExportFormat {
 			return new HexBitmapFontExporter();
 		}
 	},
-	FZX("FZX (ZX Spectrum)", ".fzx", "encoding", "FZX") {
+	FZX("FZX (ZX Spectrum)", ".fzx", "encoding", "FZX PUA") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new FZXBitmapFontExporter(o.getSelectedEncoding());
 		}

@@ -75,7 +75,7 @@ public enum ImportFormat {
 	},
 	FZX(".fzx") {
 		public JFrame createOptionFrame(File file) throws IOException {
-			return new EncodingSelectionFrame("FZX", file, new EncodingSelectionImporter() {
+			return new EncodingSelectionFrame("FZX PUA", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(EncodingTable encoding) {
 					return new FZXBitmapFontImporter(encoding);
 				}
