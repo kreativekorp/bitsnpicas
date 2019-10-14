@@ -19,6 +19,7 @@ import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public enum ImportFormat {
 	KBITS(".kbits") {
@@ -36,10 +37,22 @@ public enum ImportFormat {
 		public FontImporter<?> createImporter() { return new BDFBitmapFontImporter(); }
 	},
 	SUIT(".suit", true) {
-		public FontImporter<?> createImporter() { return new NFNTBitmapFontImporter(); }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable encoding) {
+					return new NFNTBitmapFontImporter(encoding);
+				}
+			});
+		}
 	},
-	DFONT(".dfont") {
-		public FontImporter<?> createImporter() { return new NFNTBitmapFontImporter(); }
+	DFONT(".dfont", false) {
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable encoding) {
+					return new NFNTBitmapFontImporter(encoding);
+				}
+			});
+		}
 	},
 	PNG(".png") {
 		public FontImporter<?> createImporter() { return new SRFontBitmapFontImporter(); }
@@ -61,7 +74,13 @@ public enum ImportFormat {
 		public FontImporter<?> createImporter() { return new HexBitmapFontImporter(); }
 	},
 	FZX(".fzx") {
-		public FontImporter<?> createImporter() { return new FZXBitmapFontImporter(); }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("FZX", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable encoding) {
+					return new FZXBitmapFontImporter(encoding);
+				}
+			});
+		}
 	},
 	HMZK(".hmzk") {
 		public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
@@ -73,7 +92,13 @@ public enum ImportFormat {
 		public FontImporter<?> createImporter() { return new DSFBitmapFontImporter(); }
 	},
 	SBF(".sbf") {
-		public FontImporter<?> createImporter() { return new SBFBitmapFontImporter(); }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("Kreative SuperLatin", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable encoding) {
+					return new SBFBitmapFontImporter(encoding);
+				}
+			});
+		}
 	},
 	S10(".s10") {
 		public FontImporter<?> createImporter() { return new S10BitmapFontImporter(); }

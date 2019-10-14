@@ -84,6 +84,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		
 		macFontIdAuto.setSelected(true);
 		macFontSizeAutoAny.setSelected(true);
+		macEncoding.setEditable(false);
 		ButtonGroup macFontIdGroup = new ButtonGroup();
 		macFontIdGroup.add(macFontIdAuto);
 		macFontIdGroup.add(macFontIdManual);
@@ -119,6 +120,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		JPanel macPanel = new JPanel(new BorderLayout());
 		macPanel.add(macOuterPanel, BorderLayout.PAGE_START);
 		
+		generalEncoding.setEditable(false);
 		JPanel encodingInnerPanel = new JPanel(new BorderLayout(8, 8));
 		encodingInnerPanel.add(new JLabel("Encoding"), BorderLayout.LINE_START);
 		encodingInnerPanel.add(generalEncoding, BorderLayout.CENTER);
