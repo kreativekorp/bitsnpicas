@@ -28,6 +28,7 @@ public class EncodingList extends AbstractList<EncodingTable> {
 		"MacRoman", "MacRomanian", "MacTurkish", "MacVT100",
 		"FZX PUA", "FZX Latin-1", "FZX Latin-5", "FZX Latin-9",
 		"FZX SuperLatin", "FZX Desktop", "FZX KOI-8",
+		"U8/M Apple II", "U8/M PETSCII",
 	};
 	
 	private static EncodingList instance = null;
@@ -43,12 +44,13 @@ public class EncodingList extends AbstractList<EncodingTable> {
 	private EncodingList() {
 		List<EncodingTable> encodings = new ArrayList<EncodingTable>();
 		Map<String,EncodingTable> encodingMap = new HashMap<String,EncodingTable>();
-		for (String fileName : ENCODING_NAMES) {
+		for (String encName : ENCODING_NAMES) {
 			int[] codePoints = new int[256];
 			for (int i = 0; i < 256; i++) {
 				codePoints[i] = (i < 32 || (i >= 127 && i < 160)) ? i : -1;
 			}
-			Scanner scan = new Scanner(EncodingList.class.getResourceAsStream(fileName.replaceAll("\\s+", "_") + ".txt"));
+			String fileName = encName.replaceAll("\\s+", "_").replaceAll("[^A-Za-z0-9_]+", "-") + ".txt";
+			Scanner scan = new Scanner(EncodingList.class.getResourceAsStream(fileName));
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine().trim();
 				if (line.length() > 0 && line.charAt(0) != '#') {
@@ -69,9 +71,9 @@ public class EncodingList extends AbstractList<EncodingTable> {
 				}
 			}
 			scan.close();
-			EncodingTable e = new EncodingTable(codePoints, fileName);
+			EncodingTable e = new EncodingTable(codePoints, encName);
 			encodings.add(e);
-			String nn = fileName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+			String nn = encName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
 			encodingMap.put(nn, e);
 		}
 		this.encodings = Collections.unmodifiableList(encodings);

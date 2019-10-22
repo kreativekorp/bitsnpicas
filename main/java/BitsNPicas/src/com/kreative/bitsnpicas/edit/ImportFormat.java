@@ -19,6 +19,7 @@ import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.U8MBitmapFontImporter;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public enum ImportFormat {
@@ -81,6 +82,9 @@ public enum ImportFormat {
 				}
 			});
 		}
+	},
+	U8M(".u8m") {
+		public FontImporter<?> createImporter() { return new U8MBitmapFontImporter(); }
 	},
 	HMZK(".hmzk") {
 		public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }

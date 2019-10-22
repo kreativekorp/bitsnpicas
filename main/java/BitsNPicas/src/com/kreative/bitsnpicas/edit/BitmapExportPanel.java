@@ -16,11 +16,13 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
@@ -44,6 +46,9 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final SpinnerNumberModel macFontSize;
 	private final JComboBox macEncoding;
 	private final JComboBox generalEncoding;
+	private final JComboBox u8mEncoding;
+	private final JCheckBox u8mHasLoadAddress;
+	private final JTextField u8mLoadAddress;
 	private final SpinnerNumberModel pngColorRed;
 	private final SpinnerNumberModel pngColorGreen;
 	private final SpinnerNumberModel pngColorBlue;
@@ -63,6 +68,9 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.macFontSize = new SpinnerNumberModel(12, 1, 127, 1);
 		this.macEncoding = new JComboBox(EncodingList.instance().toArray());
 		this.generalEncoding = new JComboBox(EncodingList.instance().toArray());
+		this.u8mEncoding = new JComboBox(EncodingList.instance().toArray());
+		this.u8mHasLoadAddress = new JCheckBox("Load Address:");
+		this.u8mLoadAddress = new JTextField("$A000");
 		this.pngColorRed = new SpinnerNumberModel(0, 0, 255, 1);
 		this.pngColorGreen = new SpinnerNumberModel(0, 0, 255, 1);
 		this.pngColorBlue = new SpinnerNumberModel(0, 0, 255, 1);
@@ -127,6 +135,22 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		JPanel encodingPanel = new JPanel(new BorderLayout());
 		encodingPanel.add(encodingInnerPanel, BorderLayout.PAGE_START);
 		
+		u8mEncoding.setEditable(false);
+		u8mLoadAddress.setEnabled(false);
+		JPanel u8mLabelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
+		u8mLabelPanel.add(u8mHasLoadAddress);
+		u8mLabelPanel.add(new JLabel("Native Encoding:"));
+		JPanel u8mLoadAddressPanel = new JPanel(new BorderLayout());
+		u8mLoadAddressPanel.add(u8mLoadAddress, BorderLayout.LINE_START);
+		JPanel u8mControlPanel = new JPanel(new GridLayout(0, 1, 4, 4));
+		u8mControlPanel.add(u8mLoadAddressPanel);
+		u8mControlPanel.add(u8mEncoding);
+		JPanel u8mInnerPanel = new JPanel(new BorderLayout(8, 8));
+		u8mInnerPanel.add(u8mLabelPanel, BorderLayout.LINE_START);
+		u8mInnerPanel.add(u8mControlPanel, BorderLayout.CENTER);
+		JPanel u8mPanel = new JPanel(new BorderLayout());
+		u8mPanel.add(u8mInnerPanel, BorderLayout.PAGE_START);
+		
 		JPanel pngColorLabelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		pngColorLabelPanel.add(new JLabel("Red"));
 		pngColorLabelPanel.add(new JLabel("Green"));
@@ -153,6 +177,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		formatOptionsPanel.add(pixelPanel, "pixel");
 		formatOptionsPanel.add(macPanel, "mac");
 		formatOptionsPanel.add(encodingPanel, "encoding");
+		formatOptionsPanel.add(u8mPanel, "u8m");
 		formatOptionsPanel.add(pngColorPanel, "color");
 		formatOptionsPanel.add(nonePanel, "none");
 		
@@ -180,8 +205,16 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 				);
 				macEncoding.setSelectedItem(enc);
 				generalEncoding.setSelectedItem(enc);
+				u8mEncoding.setSelectedItem(enc);
 				Window c = getMyContainingWindow();
 				if (c != null) c.pack();
+			}
+		});
+		
+		u8mHasLoadAddress.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				u8mLoadAddress.setEnabled(u8mHasLoadAddress.isSelected());
 			}
 		});
 		
@@ -240,7 +273,23 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	}
 	
 	@Override
+	public Integer getLoadAddress() {
+		if (u8mHasLoadAddress.isSelected()) {
+			String s = u8mLoadAddress.getText();
+			try {
+				if (s.startsWith("0X") || s.startsWith("0x")) return Integer.parseInt(s.substring(2), 16);
+				if (s.startsWith("$")) return Integer.parseInt(s.substring(1), 16);
+				return Integer.parseInt(s);
+			} catch (NumberFormatException e) {}
+		}
+		return null;
+	}
+	
+	@Override
 	public EncodingTable getSelectedEncoding() {
+		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
+		if (f.cardName.equals("mac")) return (EncodingTable)(macEncoding.getSelectedItem());
+		if (f.cardName.equals("u8m")) return (EncodingTable)(u8mEncoding.getSelectedItem());
 		return (EncodingTable)(generalEncoding.getSelectedItem());
 	}
 	

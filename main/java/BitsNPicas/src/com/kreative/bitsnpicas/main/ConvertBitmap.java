@@ -69,6 +69,8 @@ public class ConvertBitmap {
 						o.io.encodingName = args[argi++];
 					} else if (arg.equals("-oe") && argi < args.length) {
 						o.oo.encodingName = args[argi++];
+					} else if (arg.equals("-a") && argi < args.length) {
+						o.oo.u8mLoadAddress = parseInt16(args[argi++]);
 					} else if (arg.equals("--help")) {
 						printHelp();
 					} else {
@@ -147,6 +149,7 @@ public class ConvertBitmap {
 		System.out.println("  -e <enc>      Use the specified encoding (for nfnt, fzx, sbf).");
 		System.out.println("  -ie <enc>     Use the specified encoding for reading only.");
 		System.out.println("  -oe <enc>     Use the specified encoding for writing only.");
+		System.out.println("  -a <addr>     Add a loading address to the file (for u8m).");
 		List<String> encs = new ArrayList<String>();
 		for (EncodingTable e : EncodingList.instance()) {
 			encs.add(e.name);
@@ -188,6 +191,16 @@ public class ConvertBitmap {
 	private static int parseInt(String s, int def) {
 		try { return Integer.parseInt(s); }
 		catch (NumberFormatException e) { return def; }
+	}
+	
+	private static Integer parseInt16(String s) {
+		try {
+			if (s.startsWith("0x") || s.startsWith("0X")) return Integer.parseInt(s.substring(2), 16);
+			if (s.startsWith("$")) return Integer.parseInt(s.substring(1), 16);
+			return Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 	
 	private static boolean loadPreset(Options o, String name) {

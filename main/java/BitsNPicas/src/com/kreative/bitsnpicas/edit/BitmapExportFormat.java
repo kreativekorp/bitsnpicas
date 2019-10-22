@@ -13,6 +13,7 @@ import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.U8MBitmapFontExporter;
 
 public enum BitmapExportFormat {
 	TTF("TTF (TrueType)", ".ttf", "pixel") {
@@ -58,6 +59,11 @@ public enum BitmapExportFormat {
 	FZX("FZX (ZX Spectrum)", ".fzx", "encoding", "FZX PUA") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new FZXBitmapFontExporter(o.getSelectedEncoding());
+		}
+	},
+	U8M("U8/M (UTF-8 for Microcomputers)", ".u8m", "u8m", "U8/M PETSCII") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new U8MBitmapFontExporter(o.getLoadAddress(), o.getSelectedEncoding());
 		}
 	},
 	HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {

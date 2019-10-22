@@ -129,6 +129,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>u8m</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>U8/M Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>hmzk</string>
 			</array>
 			<key>CFBundleTypeName</key>

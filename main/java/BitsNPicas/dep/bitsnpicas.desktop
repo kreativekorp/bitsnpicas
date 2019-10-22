@@ -8,4 +8,4 @@ Icon=/usr/share/icons/hicolor/128x128/apps/bitsnpicas.png
 Terminal=false
 Type=Application
 Categories=Graphics;
-MimeType=application/x-font-kbits;application/x-font-kpcas;application/x-font-bdf;application/x-font-fzx;application/x-font-sbf;application/x-font-sdf;image/png;image/gif;image/jpeg;image/bmp;
+MimeType=application/x-font-kbits;application/x-font-kpcas;application/x-font-bdf;application/x-font-fzx;application/x-font-hex;application/x-font-sbf;application/x-font-sdf;application/x-font-u8m;image/png;image/gif;image/jpeg;image/bmp;

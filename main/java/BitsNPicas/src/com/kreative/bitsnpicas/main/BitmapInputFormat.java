@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.U8MBitmapFontImporter;
 import com.kreative.bitsnpicas.unicode.EncodingList;
 
 public enum BitmapInputFormat {
@@ -64,6 +65,11 @@ public enum BitmapInputFormat {
 				(o.encodingName == null) ? null :
 				EncodingList.instance().get(o.encodingName)
 			);
+		}
+	},
+	U8M(".u8m", BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new U8MBitmapFontImporter();
 		}
 	},
 	HMZK(".hmzk", BitmapFont.NAME_FAMILY) {
