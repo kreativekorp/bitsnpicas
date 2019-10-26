@@ -23,6 +23,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.bin`, `.rom` - Create from binary file (GUI only)
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
+  *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
   *  `.sbf` - Sabriel Bitmap Font
@@ -48,6 +49,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
+  *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
   *  `.sbf` - Sabriel Bitmap Font
@@ -62,6 +64,7 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `rfont` - RFont, Kreative Software's extension of SFont
   *  `hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
+  *  `u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `sbf` - Sabriel Bitmap Font
 
