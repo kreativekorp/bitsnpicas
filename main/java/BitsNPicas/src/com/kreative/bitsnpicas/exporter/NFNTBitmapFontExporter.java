@@ -275,7 +275,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 			id = myID++;
 		}
 		if (generateSize) {
-			size = height;
+			size = font.getEmAscent() + font.getEmDescent();
 		} else {
 			size = mySize;
 		}

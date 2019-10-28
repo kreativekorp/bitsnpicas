@@ -97,6 +97,7 @@ public class U8MBitmapFontExporter implements BitmapFontExporter {
 		}
 		
 		RandomAccessFile raf = new RandomAccessFile(file, "rwd");
+		raf.setLength(0);
 		if (loadAddress != null) {
 			raf.writeShort(Short.reverseBytes(loadAddress.shortValue()));
 			u.write(raf, 0, 2);

@@ -141,15 +141,16 @@ public class ConvertBitmap {
 		System.out.println("                    trs80-m2, trs80-m3, trs80-m3-64col, trs80-m3-32col,");
 		System.out.println("                    trs80-m4, trs80-m4-64col, trs80-m4-32col,");
 		System.out.println("                    trs80-m4-80col, trs80-m4-40col");
-		System.out.println("  -i <number>   Macintosh font ID number (for nfnt).");
-		System.out.println("  -z <number>   Macintosh font size (for nfnt).");
-		System.out.println("  -E            Use any font size (for nfnt).");
-		System.out.println("  -S            Use only standard font sizes (for nfnt).");
-		System.out.println("                    (9, 10, 12, 14, 18, 24, 36, 48, and 72.)");
-		System.out.println("  -e <enc>      Use the specified encoding (for nfnt, fzx, sbf).");
-		System.out.println("  -ie <enc>     Use the specified encoding for reading only.");
-		System.out.println("  -oe <enc>     Use the specified encoding for writing only.");
+		System.out.println("  -i <number>   Font ID number (for nfnt or geos).");
+		System.out.println("  -z <number>   Font point size (for nfnt or geos).");
+		System.out.println("  -E            Use any point size (for nfnt or geos).");
+		System.out.println("  -S            Use only standard point sizes (for nfnt or geos).");
+		System.out.println("                    (9, 10, 12, 14, 18, 24, 36, 48, and 72 for nfnt,)");
+		System.out.println("                    (9, 10, 12, 14, 18, 24, 36, 48, and 60 for geos.)");
 		System.out.println("  -a <addr>     Add a loading address to the file (for u8m).");
+		System.out.println("  -e <enc>      Use the specified encoding (for nfnt, fzx, sbf). One of:");
+		System.out.println("  -ie <enc>     Use the specified encoding for reading only. One of:");
+		System.out.println("  -oe <enc>     Use the specified encoding for writing only. One of:");
 		List<String> encs = new ArrayList<String>();
 		for (EncodingTable e : EncodingList.instance()) {
 			encs.add(e.name);

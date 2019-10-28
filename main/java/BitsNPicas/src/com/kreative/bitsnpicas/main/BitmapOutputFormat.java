@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
@@ -68,6 +69,11 @@ public enum BitmapOutputFormat {
 	HEX(".hex", "hex") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new HexBitmapFontExporter();
+		}
+	},
+	CVT(".cvt", "cvt", "geos") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new GEOSBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
 		}
 	},
 	FZX(".fzx", "fzx") {

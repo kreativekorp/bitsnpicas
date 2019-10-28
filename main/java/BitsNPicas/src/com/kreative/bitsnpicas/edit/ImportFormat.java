@@ -10,6 +10,7 @@ import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
@@ -73,6 +74,9 @@ public enum ImportFormat {
 	},
 	HEX(".hex") {
 		public FontImporter<?> createImporter() { return new HexBitmapFontImporter(); }
+	},
+	CVT(".cvt") {
+		public FontImporter<?> createImporter() { return new GEOSBitmapFontImporter(); }
 	},
 	FZX(".fzx") {
 		public JFrame createOptionFrame(File file) throws IOException {
