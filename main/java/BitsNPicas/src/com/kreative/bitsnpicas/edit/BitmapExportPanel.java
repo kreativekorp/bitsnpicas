@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.unicode.EncodingList;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
@@ -29,6 +30,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final BitmapFont font;
 	private final JComboBox format;
 	private final BitmapExportPixelPanel pixelPanel;
+	private final BitmapExportGEOSPanel geosPanel;
 	private final BitmapExportMacPanel macPanel;
 	private final BitmapExportEncodingPanel encodingPanel;
 	private final BitmapExportU8MPanel u8mPanel;
@@ -39,6 +41,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.font = font;
 		this.format = new JComboBox(BitmapExportFormat.values());
 		this.pixelPanel = new BitmapExportPixelPanel();
+		this.geosPanel = new BitmapExportGEOSPanel();
 		this.macPanel = new BitmapExportMacPanel();
 		this.encodingPanel = new BitmapExportEncodingPanel();
 		this.u8mPanel = new BitmapExportU8MPanel();
@@ -53,6 +56,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		final CardLayout formatOptionsLayout = new CardLayout();
 		final JPanel formatOptionsPanel = new JPanel(formatOptionsLayout);
 		formatOptionsPanel.add(pixelPanel, "pixel");
+		formatOptionsPanel.add(geosPanel, "geos");
 		formatOptionsPanel.add(macPanel, "mac");
 		formatOptionsPanel.add(encodingPanel, "encoding");
 		formatOptionsPanel.add(u8mPanel, "u8m");
@@ -152,5 +156,10 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	@Override
 	public NFNTBitmapFontExporter createNFNTExporter() {
 		return macPanel.createNFNTExporter();
+	}
+	
+	@Override
+	public GEOSBitmapFontExporter createGEOSExporter() {
+		return geosPanel.createGEOSExporter();
 	}
 }
