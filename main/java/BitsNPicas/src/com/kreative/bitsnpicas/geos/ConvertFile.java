@@ -74,6 +74,26 @@ public class ConvertFile implements CBMConstants {
 		}
 	}
 	
+	public void recalculate() {
+		directoryBlock.sectorSize = 0;
+		if (directoryBlock.geosFileType == 0) {
+			directoryBlock.sectorSize += (sequentialData.length + 253) / 254;
+		} else {
+			directoryBlock.sectorSize++; // info block
+			if (infoBlock.fileStructure == FILE_STRUCTURE_VLIR) {
+				directoryBlock.sectorSize++; // record block
+				recordBlock.clear();
+				for (byte[] data : vlirData) {
+					VLIRRecordBlock.Entry e = new VLIRRecordBlock.Entry(data.length);
+					directoryBlock.sectorSize += e.sectorCount;
+					recordBlock.add(e);
+				}
+			} else {
+				directoryBlock.sectorSize += (sequentialData.length + 253) / 254;
+			}
+		}
+	}
+	
 	public void read(DataInput in) throws IOException {
 		directoryBlock = new CBMDirectoryBlock();
 		directoryBlock.read(in);

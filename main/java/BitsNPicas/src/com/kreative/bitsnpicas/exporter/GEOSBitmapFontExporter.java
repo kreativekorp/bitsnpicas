@@ -14,7 +14,6 @@ import com.kreative.bitsnpicas.geos.CBMConstants;
 import com.kreative.bitsnpicas.geos.ConvertFile;
 import com.kreative.bitsnpicas.geos.GEOSFont;
 import com.kreative.bitsnpicas.geos.GEOSIcons;
-import com.kreative.bitsnpicas.geos.VLIRRecordBlock;
 
 public class GEOSBitmapFontExporter implements BitmapFontExporter {
 	private int myID;
@@ -178,16 +177,9 @@ public class GEOSBitmapFontExporter implements BitmapFontExporter {
 		cvt.infoBlock.setFontRecordLengths(Arrays.asList(gfdata.length));
 		cvt.infoBlock.setDescriptionString(desc);
 		for (int i = 0; i < 127; i++) {
-			if (i == size) {
-				VLIRRecordBlock.Entry e = new VLIRRecordBlock.Entry(gfdata.length);
-				cvt.directoryBlock.sectorSize += e.sectorCount;
-				cvt.recordBlock.add(e);
-				cvt.vlirData.add(gfdata);
-			} else {
-				cvt.recordBlock.add(new VLIRRecordBlock.Entry(0));
-				cvt.vlirData.add(new byte[0]);
-			}
+			cvt.vlirData.add((i == size) ? gfdata : new byte[0]);
 		}
+		cvt.recalculate();
 		
 		DataOutputStream out = new DataOutputStream(os);
 		cvt.write(out);
