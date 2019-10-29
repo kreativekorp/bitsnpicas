@@ -1,6 +1,8 @@
 package com.kreative.bitsnpicas.main;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
@@ -132,6 +134,25 @@ public enum BitmapInputFormat {
 				}
 			}
 		}
-		return null;
+		try {
+			String[] cmd = {"/usr/bin/GetFileInfo", "-c", file.getAbsolutePath()};
+			Process p = Runtime.getRuntime().exec(cmd);
+			Scanner scan = new Scanner(p.getInputStream());
+			if (scan.hasNextLine()) {
+				String creator = scan.nextLine().trim();
+				if (creator.equals("\"DMOV\"") || creator.equals("\"movr\"")) {
+					scan.close();
+					p.waitFor();
+					return SUIT;
+				}
+			}
+			scan.close();
+			p.waitFor();
+			return null;
+		} catch (IOException e) {
+			return null;
+		} catch (InterruptedException e) {
+			return null;
+		}
 	}
 }

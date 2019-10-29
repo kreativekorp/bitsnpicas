@@ -60,39 +60,36 @@ public class Main {
 	
 	public static JFrame openFonts(File file) {
 		try {
-			String lname = file.getName().toLowerCase();
-			for (ImportFormat format : ImportFormat.values()) {
-				for (String ext : format.extensions) {
-					if (lname.endsWith(ext)) {
-						if (format.macResFork) {
-							file = new File(file, "..namedfork");
-							file = new File(file, "rsrc");
-						}
-						FontImporter<?> importer = format.createImporter();
-						if (importer != null) {
-							Font<?>[] fonts = importer.importFont(file);
-							if (fonts != null && fonts.length > 0) {
-								return openFonts(file, format.createExporter(), fonts);
-							}
-						}
-						JFrame f = format.createOptionFrame(file);
-						if (f != null) {
-							f.setVisible(true);
-							return f;
-						}
-						JOptionPane.showMessageDialog(
-							null, "The selected file did not contain any fonts.",
-							"Open", JOptionPane.ERROR_MESSAGE
-						);
-						return null;
+			ImportFormat format = ImportFormat.forFile(file);
+			if (format != null) {
+				if (format.macResFork) {
+					file = new File(file, "..namedfork");
+					file = new File(file, "rsrc");
+				}
+				FontImporter<?> importer = format.createImporter();
+				if (importer != null) {
+					Font<?>[] fonts = importer.importFont(file);
+					if (fonts != null && fonts.length > 0) {
+						return openFonts(file, format.createExporter(), fonts);
 					}
 				}
+				JFrame f = format.createOptionFrame(file);
+				if (f != null) {
+					f.setVisible(true);
+					return f;
+				}
+				JOptionPane.showMessageDialog(
+					null, "The selected file did not contain any fonts.",
+					"Open", JOptionPane.ERROR_MESSAGE
+				);
+				return null;
+			} else {
+				JOptionPane.showMessageDialog(
+					null, "The selected file was not recognized as a font file readable by Bits'n'Picas.",
+					"Open", JOptionPane.ERROR_MESSAGE
+				);
+				return null;
 			}
-			JOptionPane.showMessageDialog(
-				null, "The selected file was not recognized as a font file readable by Bits'n'Picas.",
-				"Open", JOptionPane.ERROR_MESSAGE
-			);
-			return null;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(
 				null, "An error occurred while reading the selected file.",

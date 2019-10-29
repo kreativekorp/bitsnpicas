@@ -2,6 +2,7 @@ package com.kreative.bitsnpicas.edit;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 import javax.swing.JFrame;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontImporter;
@@ -129,5 +130,36 @@ public enum ImportFormat {
 	public FontExporter<?> createExporter() { return null; }
 	public JFrame createOptionFrame(File file) throws IOException {
 		return null;
+	}
+	
+	public static ImportFormat forFile(File file) {
+		String lname = file.getName().toLowerCase();
+		for (ImportFormat format : values()) {
+			for (String ext : format.extensions) {
+				if (lname.endsWith(ext)) {
+					return format;
+				}
+			}
+		}
+		try {
+			String[] cmd = {"/usr/bin/GetFileInfo", "-c", file.getAbsolutePath()};
+			Process p = Runtime.getRuntime().exec(cmd);
+			Scanner scan = new Scanner(p.getInputStream());
+			if (scan.hasNextLine()) {
+				String creator = scan.nextLine().trim();
+				if (creator.equals("\"DMOV\"") || creator.equals("\"movr\"")) {
+					scan.close();
+					p.waitFor();
+					return SUIT;
+				}
+			}
+			scan.close();
+			p.waitFor();
+			return null;
+		} catch (IOException e) {
+			return null;
+		} catch (InterruptedException e) {
+			return null;
+		}
 	}
 }
