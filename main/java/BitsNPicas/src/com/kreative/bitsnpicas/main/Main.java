@@ -32,6 +32,10 @@ public class Main {
 				InjectSvg.main(args);
 			} else if (arg0.equals("imagetosvg")) {
 				ImageToSvg.main(args);
+			} else if (arg0.equals("splitsuit")) {
+				SplitSuit.main(args);
+			} else if (arg0.equals("mergesuit")) {
+				MergeSuit.main(args);
 			} else if (arg0.equals("splitgeos")) {
 				SplitGEOS.main(args);
 			} else if (arg0.equals("mergegeos")) {
