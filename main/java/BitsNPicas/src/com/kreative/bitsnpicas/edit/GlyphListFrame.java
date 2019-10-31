@@ -13,10 +13,22 @@ public class GlyphListFrame extends JFrame {
 	private final GlyphListMenuBar mb;
 	
 	public GlyphListFrame(File fontFile, FontExporter<?> format, Font<?> font) {
+		super(font.toString());
 		this.sm = new SaveManager(this, fontFile, format, font);
 		this.panel = new GlyphListPanel(font, sm);
 		this.mb = new GlyphListMenuBar(this, sm, font, panel.getGlyphList());
-		setTitle(font.toString());
+		makeUI();
+	}
+	
+	public GlyphListFrame(SaveRoutine routine, Font<?> font) {
+		super(font.toString());
+		this.sm = new SaveManager(this, routine, font);
+		this.panel = new GlyphListPanel(font, sm);
+		this.mb = new GlyphListMenuBar(this, sm, font, panel.getGlyphList());
+		makeUI();
+	}
+	
+	public void makeUI() {
 		setJMenuBar(mb);
 		setContentPane(panel);
 		pack();

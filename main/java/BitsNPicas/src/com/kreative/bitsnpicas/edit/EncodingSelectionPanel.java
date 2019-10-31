@@ -44,11 +44,23 @@ public class EncodingSelectionPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					EncodingTable enc = (EncodingTable)(encoding.getSelectedItem());
-					Font<?>[] font = importer.createImporter(enc).importFont(file);
-					Main.openFonts(file, null, font);
+					Font<?>[] fonts = importer.createImporter(enc).importFont(file);
+					if (fonts != null && fonts.length > 0) {
+						Main.openFonts(file, null, fonts);
+					} else {
+						JOptionPane.showMessageDialog(
+							null, "The selected file did not contain any fonts.",
+							"Open", JOptionPane.ERROR_MESSAGE
+						);
+					}
 				} catch (IOException ioe) {
 					JOptionPane.showMessageDialog(
 						null, "An error occurred while reading the selected file.",
+						"Open", JOptionPane.ERROR_MESSAGE
+					);
+				} catch (NoClassDefFoundError nce) {
+					JOptionPane.showMessageDialog(
+						null, "The selected file requires KSFL, but KSFL is not in the classpath.",
 						"Open", JOptionPane.ERROR_MESSAGE
 					);
 				}

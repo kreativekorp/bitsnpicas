@@ -12,6 +12,7 @@ public class SaveManager extends WindowAdapter {
 	private JFrame frame;
 	private File file;
 	private FontExporter<?> format;
+	private SaveRoutine routine;
 	private Font<?> font;
 	private boolean changed;
 	
@@ -19,6 +20,17 @@ public class SaveManager extends WindowAdapter {
 		this.frame = frame;
 		this.file = file;
 		this.format = format;
+		this.routine = null;
+		this.font = font;
+		this.changed = false;
+		updateWindow();
+	}
+	
+	public SaveManager(JFrame frame, SaveRoutine routine, Font<?> font) {
+		this.frame = frame;
+		this.file = null;
+		this.format = null;
+		this.routine = routine;
 		this.font = font;
 		this.changed = false;
 		updateWindow();
@@ -30,11 +42,18 @@ public class SaveManager extends WindowAdapter {
 	}
 	
 	public boolean save() {
-		if (file == null || format == null) return saveAs();
-		boolean succeeded = Main.saveFont(file, format, font);
-		if (succeeded) changed = false;
-		updateWindow();
-		return succeeded;
+		if (routine == null) {
+			if (file == null || format == null) return saveAs();
+			boolean succeeded = Main.saveFont(file, format, font);
+			if (succeeded) changed = false;
+			updateWindow();
+			return succeeded;
+		} else {
+			boolean succeeded = routine.save(font);
+			if (succeeded) changed = false;
+			updateWindow();
+			return succeeded;
+		}
 	}
 	
 	public boolean saveAs() {

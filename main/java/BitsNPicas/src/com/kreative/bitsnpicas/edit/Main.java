@@ -141,6 +141,24 @@ public class Main {
 		}
 	}
 	
+	public static JFrame openFont(SaveRoutine routine, Font<?> font) {
+		if (font instanceof BitmapFont) {
+			BitmapFont bfont = (BitmapFont)font;
+			JFrame f = new BitmapListFrame(routine, bfont);
+			f.setVisible(true);
+			return f;
+		} else if (font instanceof VectorFont) {
+			VectorFont vfont = (VectorFont)font;
+			JFrame f = new GlyphListFrame(routine, vfont);
+			f.setVisible(true);
+			return f;
+		} else {
+			JFrame f = new GlyphListFrame(routine, font);
+			f.setVisible(true);
+			return f;
+		}
+	}
+	
 	public static JFrame openGlyph(Font<?> font, int codePoint, GlyphList gl, SaveManager sm) {
 		if (font instanceof BitmapFont) {
 			BitmapFont bfont = (BitmapFont)font;
