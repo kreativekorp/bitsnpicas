@@ -2,28 +2,29 @@ package com.kreative.bitsnpicas.geos;
 
 import java.io.ByteArrayOutputStream;
 
-public class GEOSFont {
-	public static final int XCOORD_COUNT = 97;
-	
+public class GEOSFontStrike {
+	public final int numChars;
 	public int ascent;
 	public int rowWidth;
 	public int height;
 	public int[] xCoord;
 	public byte[] bitmap;
 	
-	public GEOSFont() {
-		clear();
+	public GEOSFontStrike() {
+		this.numChars = 96;
+		this.clear();
 	}
 	
-	public GEOSFont(byte[] data) {
-		read(data);
+	public GEOSFontStrike(byte[] data) {
+		this.numChars = 96;
+		this.read(data);
 	}
 	
 	public void clear() {
 		ascent = 0;
 		rowWidth = 0;
 		height = 0;
-		xCoord = new int[XCOORD_COUNT];
+		xCoord = new int[numChars + 1];
 		bitmap = new byte[0];
 	}
 	
@@ -65,8 +66,8 @@ public class GEOSFont {
 		height = data[3] & 0xFF;
 		int xo = (data[4] & 0xFF) | ((data[5] & 0xFF) << 8);
 		int bo = (data[6] & 0xFF) | ((data[7] & 0xFF) << 8);
-		xCoord = new int[XCOORD_COUNT];
-		for (int a = xo, i = 0; i < XCOORD_COUNT; i++, a += 2) {
+		xCoord = new int[numChars + 1];
+		for (int a = xo, i = 0; i < xCoord.length; i++, a += 2) {
 			xCoord[i] = (data[a] & 0xFF) | ((data[a+1] & 0xFF) << 8);
 		}
 		bitmap = new byte[rowWidth * height];
@@ -83,9 +84,9 @@ public class GEOSFont {
 		out.write(height);
 		out.write(0x08);
 		out.write(0);
-		out.write(0x08 + XCOORD_COUNT * 2);
+		out.write(0x08 + xCoord.length * 2);
 		out.write(0);
-		for (int i = 0; i < XCOORD_COUNT; i++) {
+		for (int i = 0; i < xCoord.length; i++) {
 			out.write(xCoord[i]);
 			out.write(xCoord[i] >> 8);
 		}

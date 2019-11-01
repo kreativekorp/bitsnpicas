@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import com.kreative.bitsnpicas.geos.CBMConstants;
-import com.kreative.bitsnpicas.geos.ConvertFile;
+import com.kreative.bitsnpicas.geos.GEOSFontFile;
 
 public class SplitGEOS {
 	public static void main(String[] args) {
@@ -35,39 +33,26 @@ public class SplitGEOS {
 						System.out.print(arg + "...");
 						File file = new File(arg);
 						DataInputStream in = new DataInputStream(new FileInputStream(file));
-						ConvertFile cvt = new ConvertFile();
-						cvt.read(in);
+						GEOSFontFile inFont = new GEOSFontFile(in);
 						in.close();
-						if (
-							cvt.infoBlock != null &&
-							cvt.infoBlock.geosFileType == CBMConstants.GEOS_FILE_TYPE_FONT &&
-							cvt.vlirData != null
-						) {
-							for (int fontSize = 0; fontSize < cvt.vlirData.size(); fontSize++) {
-								byte[] data = cvt.vlirData.get(fontSize);
-								if (data.length > 8) {
-									ConvertFile outcvt = new ConvertFile(
-										CBMConstants.CBM_FILE_TYPE_CLOSED | CBMConstants.CBM_FILE_TYPE_USR,
-										CBMConstants.GEOS_FILE_TYPE_FONT, CBMConstants.FILE_STRUCTURE_VLIR
-									);
-									outcvt.directoryBlock = cvt.directoryBlock;
-									outcvt.infoBlock = cvt.infoBlock;
-									outcvt.infoBlock.setFontPointSizes(Arrays.asList(fontSize));
-									outcvt.infoBlock.setFontRecordLengths(Arrays.asList(data.length));
-									for (int i = 0; i < 127; i++) {
-										outcvt.vlirData.add((i == fontSize) ? data : new byte[0]);
-									}
-									outcvt.recalculate();
-									
-									File outfile = new File(
-										((outputDir != null) ? outputDir : file.getParentFile()),
-										(cvt.directoryBlock.getFileName(true, true) + "." + fontSize + ".cvt")
-									);
-									DataOutputStream out = new DataOutputStream(new FileOutputStream(outfile));
-									outcvt.write(out);
-									out.flush();
-									out.close();
-								}
+						if (inFont.isValid()) {
+							for (int fontSize : inFont.getFontPointSizes()) {
+								GEOSFontFile outFont = new GEOSFontFile();
+								outFont.setFontName(inFont.getFontName());
+								outFont.setClassTextString(inFont.getClassTextString());
+								outFont.setDescriptionString(inFont.getDescriptionString());
+								outFont.setFontID(inFont.getFontID());
+								outFont.setFontStrike(fontSize, inFont.getFontStrike(fontSize));
+								outFont.recalculate();
+								
+								File outfile = new File(
+									((outputDir != null) ? outputDir : file.getParentFile()),
+									(inFont.getFontName() + "." + fontSize + ".cvt")
+								);
+								DataOutputStream out = new DataOutputStream(new FileOutputStream(outfile));
+								outFont.write(out);
+								out.flush();
+								out.close();
 							}
 							System.out.println(" DONE");
 						} else {

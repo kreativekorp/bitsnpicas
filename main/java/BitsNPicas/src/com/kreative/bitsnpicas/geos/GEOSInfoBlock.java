@@ -5,8 +5,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GEOSInfoBlock implements CBMConstants {
 	public static final int ICON_WIDTH = 3;
@@ -137,74 +135,6 @@ public class GEOSInfoBlock implements CBMConstants {
 				if (a >= 0x89 && a <= 0x9F) appData    [a - 0x89] = b;
 				if (a >= 0xA0 && a <= 0xFF) description[a - 0xA0] = b;
 				break;
-		}
-	}
-	
-	public int getFontID() {
-		return (getByte(0x80) & 0xFF) | ((getByte(0x81) & 0xFF) << 8);
-	}
-	
-	public List<Integer> getFontPointSizes() {
-		List<Integer> pointSizes = new ArrayList<Integer>();
-		for (int a = 0x82, i = 0; i < 15; i++, a += 2) {
-			int pointSize = getByte(a) & 0x3F;
-			if (pointSize == 0) break;
-			pointSizes.add(pointSize);
-		}
-		return pointSizes;
-	}
-	
-	public List<Integer> getFontRecordLengths() {
-		List<Integer> recordLengths = new ArrayList<Integer>();
-		int n = getFontPointSizes().size();
-		for (int a = 0x61, i = 0; i < n; i++, a += 2) {
-			int recordLength = (getByte(a) & 0xFF);
-			recordLength |= ((getByte(a+1) & 0xFF) << 8);
-			recordLengths.add(recordLength);
-		}
-		return recordLengths;
-	}
-	
-	public void setFontID(int fontID) {
-		setByte(0x80, (byte)fontID);
-		setByte(0x81, (byte)(fontID >> 8));
-		fontID <<= 6;
-		for (int a = 0x82, i = 0; i < 15; i++, a += 2) {
-			int pointSize = getByte(a) & 0x3F;
-			if (pointSize == 0) break;
-			setByte(a, (byte)(pointSize | fontID));
-			setByte(a+1, (byte)(fontID >> 8));
-		}
-	}
-	
-	public void setFontPointSizes(List<Integer> pointSizes) {
-		int fontID = getFontID() << 6;
-		int a = 0x82, i = 0, n = pointSizes.size();
-		while (i < n && i < 15) {
-			int pointSize = pointSizes.get(i) & 0x3F;
-			setByte(a, (byte)(pointSize | fontID));
-			setByte(a+1, (byte)(fontID >> 8));
-			i++; a += 2;
-		}
-		while (i < 15) {
-			setByte(a, (byte)0);
-			setByte(a+1, (byte)0);
-			i++; a += 2;
-		}
-	}
-	
-	public void setFontRecordLengths(List<Integer> recordLengths) {
-		int a = 0x61, i = 0, n = recordLengths.size();
-		while (i < n && i < 15) {
-			int recordLength = recordLengths.get(i);
-			setByte(a, (byte)recordLength);
-			setByte(a+1, (byte)(recordLength >> 8));
-			i++; a += 2;
-		}
-		while (i < 15) {
-			setByte(a, (byte)0);
-			setByte(a+1, (byte)0);
-			i++; a += 2;
 		}
 	}
 	

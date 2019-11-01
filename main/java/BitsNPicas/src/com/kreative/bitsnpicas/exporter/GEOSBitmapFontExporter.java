@@ -6,14 +6,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
-import com.kreative.bitsnpicas.geos.CBMConstants;
-import com.kreative.bitsnpicas.geos.ConvertFile;
-import com.kreative.bitsnpicas.geos.GEOSFont;
-import com.kreative.bitsnpicas.geos.GEOSIcons;
+import com.kreative.bitsnpicas.geos.GEOSFontFile;
+import com.kreative.bitsnpicas.geos.GEOSFontStrike;
 
 public class GEOSBitmapFontExporter implements BitmapFontExporter {
 	private int myID;
@@ -130,7 +127,7 @@ public class GEOSBitmapFontExporter implements BitmapFontExporter {
 		String desc = font.getName(BitmapFont.NAME_DESCRIPTION);
 		if (desc == null || desc.length() == 0) desc = "Available in " + size + " point.";
 		
-		GEOSFont gf = new GEOSFont();
+		GEOSFontStrike gf = new GEOSFontStrike();
 		gf.height = font.getLineAscent() + font.getLineDescent();
 		gf.ascent = font.getLineAscent() - 1;
 		for (int i = 0; i < 96; i++) {
@@ -163,26 +160,17 @@ public class GEOSBitmapFontExporter implements BitmapFontExporter {
 				gf.setGlyph(i, ngd);
 			}
 		}
-		byte[] gfdata = gf.write();
 		
-		ConvertFile cvt = new ConvertFile(
-			CBMConstants.CBM_FILE_TYPE_CLOSED | CBMConstants.CBM_FILE_TYPE_USR,
-			CBMConstants.GEOS_FILE_TYPE_FONT, CBMConstants.FILE_STRUCTURE_VLIR
-		);
-		cvt.directoryBlock.setFileName(family, true, true);
-		cvt.infoBlock.iconBitmap = GEOSIcons.fontIcon();
-		cvt.infoBlock.setClassTextString(getClassText(font));
-		cvt.infoBlock.setFontID(id);
-		cvt.infoBlock.setFontPointSizes(Arrays.asList(size));
-		cvt.infoBlock.setFontRecordLengths(Arrays.asList(gfdata.length));
-		cvt.infoBlock.setDescriptionString(desc);
-		for (int i = 0; i < 127; i++) {
-			cvt.vlirData.add((i == size) ? gfdata : new byte[0]);
-		}
-		cvt.recalculate();
+		GEOSFontFile gff = new GEOSFontFile();
+		gff.setFontName(family);
+		gff.setClassTextString(getClassText(font));
+		gff.setDescriptionString(desc);
+		gff.setFontID(id);
+		gff.setFontStrike(size, gf);
+		gff.recalculate();
 		
 		DataOutputStream out = new DataOutputStream(os);
-		cvt.write(out);
+		gff.write(out);
 		out.flush();
 	}
 	

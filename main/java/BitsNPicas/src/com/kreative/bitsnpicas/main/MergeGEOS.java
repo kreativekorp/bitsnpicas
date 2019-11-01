@@ -6,12 +6,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import com.kreative.bitsnpicas.geos.CBMConstants;
-import com.kreative.bitsnpicas.geos.ConvertFile;
+import com.kreative.bitsnpicas.geos.GEOSFontFile;
 
 public class MergeGEOS {
 	public static void main(String[] args) {
@@ -19,7 +16,7 @@ public class MergeGEOS {
 			printHelp();
 		} else {
 			boolean processingOptions = true;
-			Map<String,ConvertFile> families = new HashMap<String,ConvertFile>();
+			Map<String,GEOSFontFile> families = new HashMap<String,GEOSFontFile>();
 			File outputDir = new File(".");
 			int argi = 0;
 			while (argi < args.length) {
@@ -39,23 +36,17 @@ public class MergeGEOS {
 						System.out.print(arg + "...");
 						File file = new File(arg);
 						DataInputStream in = new DataInputStream(new FileInputStream(file));
-						ConvertFile cvt = new ConvertFile();
-						cvt.read(in);
+						GEOSFontFile inFont = new GEOSFontFile(in);
 						in.close();
-						if (
-							cvt.infoBlock != null &&
-							cvt.infoBlock.geosFileType == CBMConstants.GEOS_FILE_TYPE_FONT &&
-							cvt.vlirData != null
-						) {
-							String family = cvt.directoryBlock.getFileName(true, true);
+						if (inFont.isValid()) {
+							String family = inFont.getFontName();
 							if (families.containsKey(family)) {
-								ConvertFile outcvt = families.get(family);
-								for (int fontSize = 0; fontSize < cvt.vlirData.size(); fontSize++) {
-									byte[] data = cvt.vlirData.get(fontSize);
-									if (data.length > 8) outcvt.vlirData.set(fontSize, data);
+								GEOSFontFile outFont = families.get(family);
+								for (int fontSize : inFont.getFontPointSizes()) {
+									outFont.setFontStrike(fontSize, inFont.getFontStrike(fontSize));
 								}
 							} else {
-								families.put(family, cvt);
+								families.put(family, inFont);
 							}
 							System.out.println(" READ");
 						} else {
@@ -66,26 +57,15 @@ public class MergeGEOS {
 					}
 				}
 			}
-			for (Map.Entry<String,ConvertFile> e : families.entrySet()) {
+			for (Map.Entry<String,GEOSFontFile> e : families.entrySet()) {
 				try {
 					System.out.print(e.getKey() + "...");
-					ConvertFile outcvt = e.getValue();
-					List<Integer> pointSizes = new ArrayList<Integer>();
-					List<Integer> recordLengths = new ArrayList<Integer>();
-					for (int fontSize = 0; fontSize < outcvt.vlirData.size(); fontSize++) {
-						byte[] data = outcvt.vlirData.get(fontSize);
-						if (data.length > 8) {
-							pointSizes.add(fontSize);
-							recordLengths.add(data.length);
-						}
-					}
-					outcvt.infoBlock.setFontPointSizes(pointSizes);
-					outcvt.infoBlock.setFontRecordLengths(recordLengths);
-					outcvt.recalculate();
+					GEOSFontFile outFont = e.getValue();
+					outFont.recalculate();
 					
 					File outfile = new File(outputDir, e.getKey() + ".cvt");
 					DataOutputStream out = new DataOutputStream(new FileOutputStream(outfile));
-					outcvt.write(out);
+					outFont.write(out);
 					out.flush();
 					out.close();
 					System.out.println(" DONE");
