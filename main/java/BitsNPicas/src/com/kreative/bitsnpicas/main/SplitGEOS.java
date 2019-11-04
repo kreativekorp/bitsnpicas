@@ -36,7 +36,7 @@ public class SplitGEOS {
 						GEOSFontFile inFont = new GEOSFontFile(in);
 						in.close();
 						if (inFont.isValid()) {
-							for (int fontSize : inFont.getFontPointSizes()) {
+							for (int fontSize : inFont.getFontStrikes()) {
 								GEOSFontFile outFont = new GEOSFontFile();
 								outFont.setFontName(inFont.getFontName());
 								outFont.setClassTextString(inFont.getClassTextString());

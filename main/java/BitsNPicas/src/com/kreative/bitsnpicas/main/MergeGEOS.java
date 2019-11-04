@@ -42,7 +42,7 @@ public class MergeGEOS {
 							String family = inFont.getFontName();
 							if (families.containsKey(family)) {
 								GEOSFontFile outFont = families.get(family);
-								for (int fontSize : inFont.getFontPointSizes()) {
+								for (int fontSize : inFont.getFontStrikes()) {
 									outFont.setFontStrike(fontSize, inFont.getFontStrike(fontSize));
 								}
 							} else {

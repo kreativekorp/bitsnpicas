@@ -29,7 +29,7 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 		DataInputStream in = new DataInputStream(is);
 		GEOSFontFile gff = new GEOSFontFile(in);
 		if (gff.isValid()) {
-			for (int fontSize : gff.getFontPointSizes()) {
+			for (int fontSize : gff.getFontStrikes()) {
 				GEOSFontStrike gf = gff.getFontStrike(fontSize);
 				int ascent = gf.ascent + 1;
 				int descent = gf.height - ascent;
@@ -48,17 +48,21 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 				String[] classFields = classText.split(" +");
 				
 				BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0);
-				for (int i = 0; i < gf.numChars; i++) {
+				for (int i = 0; i < gf.getGlyphCount(); i++) {
 					byte[][] gd = gf.getGlyph(i);
-					int width = gd[0].length;
-					BitmapFontGlyph g = new BitmapFontGlyph(gd, 0, width, ascent);
-					f.putCharacter(0x20 + i, g);
+					if (gd != null) {
+						int width = gd[0].length;
+						BitmapFontGlyph g = new BitmapFontGlyph(gd, 0, width, ascent);
+						f.putCharacter(0x20 + i, g);
+					}
 				}
-				f.setName(BitmapFont.NAME_FAMILY, gff.getFontName());
-				f.setName(BitmapFont.NAME_VERSION, classFields[classFields.length - 1]);
-				f.setName(BitmapFont.NAME_DESCRIPTION, gff.getDescriptionString());
-				f.setXHeight();
-				fonts.add(f);
+				if (!f.isEmpty()) {
+					f.setName(BitmapFont.NAME_FAMILY, gff.getFontName());
+					f.setName(BitmapFont.NAME_VERSION, classFields[classFields.length - 1]);
+					f.setName(BitmapFont.NAME_DESCRIPTION, gff.getDescriptionString());
+					f.setXHeight();
+					fonts.add(f);
+				}
 			}
 		}
 		return fonts.toArray(new BitmapFont[fonts.size()]);

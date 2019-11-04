@@ -35,6 +35,22 @@ public class GEOSFontFile extends ConvertFile {
 		);
 	}
 	
+	public boolean isMega() {
+		byte[] r54 = vlirData.get(54);
+		if (r54 != null && r54.length > 8) {
+			int bo = (r54[6] & 0xFF) | ((r54[7] & 0xFF) << 8);
+			if (bo >= r54.length) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isUTF8() {
+		byte[] r126 = vlirData.get(126);
+		return (r126 != null && r126.length > 0);
+	}
+	
 	public String getFontName() {
 		return directoryBlock.getFileName(true, true);
 	}
@@ -71,26 +87,26 @@ public class GEOSFontFile extends ConvertFile {
 		infoBlock.setByte(0x81, (byte)(fontID >> 8));
 		fontID <<= 6;
 		for (int a = 0x82, i = 0; i < 15; i++, a += 2) {
-			int pointSize = infoBlock.getByte(a) & 0x3F;
-			if (pointSize == 0) break;
-			infoBlock.setByte(a, (byte)(pointSize | fontID));
+			int index = infoBlock.getByte(a) & 0x3F;
+			if (index == 0) break;
+			infoBlock.setByte(a, (byte)(index | fontID));
 			infoBlock.setByte(a+1, (byte)(fontID >> 8));
 		}
 	}
 	
-	public List<Integer> getFontPointSizes() {
-		List<Integer> pointSizes = new ArrayList<Integer>();
+	public List<Integer> getFontStrikes() {
+		List<Integer> indices = new ArrayList<Integer>();
 		for (int a = 0x82, i = 0; i < 15; i++, a += 2) {
-			int pointSize = infoBlock.getByte(a) & 0x3F;
-			if (pointSize == 0) break;
-			pointSizes.add(pointSize);
+			int index = infoBlock.getByte(a) & 0x3F;
+			if (index == 0) break;
+			indices.add(index);
 		}
-		return pointSizes;
+		return indices;
 	}
 	
-	public GEOSFontStrike getFontStrike(int pointSize) {
-		if (pointSize >= 0 && pointSize < vlirData.size()) {
-			byte[] data = vlirData.get(pointSize);
+	public GEOSFontStrike getFontStrike(int index) {
+		if (index >= 0 && index < vlirData.size()) {
+			byte[] data = vlirData.get(index);
 			if (data != null && data.length > 8) {
 				return new GEOSFontStrike(data);
 			}
@@ -98,31 +114,47 @@ public class GEOSFontFile extends ConvertFile {
 		return null;
 	}
 	
-	public void removeFontStrike(int pointSize) {
-		if (pointSize >= 0 && pointSize < vlirData.size()) {
-			vlirData.set(pointSize, new byte[0]);
+	public GEOSFontStrike getFontStrike(int record, int sector) {
+		byte[] r126 = vlirData.get(126);
+		if (r126 != null) {
+			for (int i = 0; i + 4 <= r126.length; i += 4) {
+				if ((r126[i] & 0xFF) == record && (r126[i+1] & 0xFF) == sector) {
+					int length = (r126[i+2] & 0xFF) | ((r126[i+3] & 0xFF) << 8);
+					byte[] data = vlirData.get(record);
+					if (data != null && data.length >= (sector * 254 + length)) {
+						return new GEOSFontStrike(data, sector * 254, length);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public void removeFontStrike(int index) {
+		if (index >= 0 && index < vlirData.size()) {
+			vlirData.set(index, new byte[0]);
 		}
 	}
 	
-	public void setFontStrike(int pointSize, GEOSFontStrike gfs) {
-		if (pointSize >= 0 && pointSize < vlirData.size()) {
-			vlirData.set(pointSize, gfs.write());
+	public void setFontStrike(int index, GEOSFontStrike gfs) {
+		if (index >= 0 && index < vlirData.size()) {
+			vlirData.set(index, gfs.write());
 		}
 	}
 	
 	public void recalculate() {
-		List<Integer> pointSizes = new ArrayList<Integer>();
-		List<Integer> recordLengths = new ArrayList<Integer>();
-		for (int fontSize = 0; fontSize < vlirData.size(); fontSize++) {
-			byte[] data = vlirData.get(fontSize);
+		List<Integer> indices = new ArrayList<Integer>();
+		List<Integer> lengths = new ArrayList<Integer>();
+		for (int index = 0; index < vlirData.size(); index++) {
+			byte[] data = vlirData.get(index);
 			if (data.length > 8) {
-				pointSizes.add(fontSize);
-				recordLengths.add(data.length);
+				indices.add(index);
+				lengths.add(data.length);
 			}
 		}
-		updateDescription(pointSizes);
-		setFontPointSizes(pointSizes);
-		setFontRecordLengths(recordLengths);
+		updateDescription(indices);
+		setFontStrikes(indices);
+		setFontRecordLengths(lengths);
 		super.recalculate();
 	}
 	
@@ -130,8 +162,8 @@ public class GEOSFontFile extends ConvertFile {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Available in ");
 		int count = pointSizes.size();
-		for (int fontSize : pointSizes) {
-			sb.append(fontSize); count--;
+		for (int pointSize : pointSizes) {
+			sb.append(pointSize); count--;
 			if (count > 1) sb.append(", ");
 			if (count == 1) sb.append(" and ");
 		}
@@ -142,12 +174,12 @@ public class GEOSFontFile extends ConvertFile {
 		infoBlock.setDescriptionString(d);
 	}
 	
-	private void setFontPointSizes(List<Integer> pointSizes) {
+	private void setFontStrikes(List<Integer> indices) {
 		int fontID = getFontID() << 6;
-		int a = 0x82, i = 0, n = pointSizes.size();
+		int a = 0x82, i = 0, n = indices.size();
 		while (i < n && i < 15) {
-			int pointSize = pointSizes.get(i) & 0x3F;
-			infoBlock.setByte(a, (byte)(pointSize | fontID));
+			int index = indices.get(i) & 0x3F;
+			infoBlock.setByte(a, (byte)(index | fontID));
 			infoBlock.setByte(a+1, (byte)(fontID >> 8));
 			i++; a += 2;
 		}
@@ -158,12 +190,12 @@ public class GEOSFontFile extends ConvertFile {
 		}
 	}
 	
-	private void setFontRecordLengths(List<Integer> recordLengths) {
-		int a = 0x61, i = 0, n = recordLengths.size();
+	private void setFontRecordLengths(List<Integer> lengths) {
+		int a = 0x61, i = 0, n = lengths.size();
 		while (i < n && i < 15) {
-			int recordLength = recordLengths.get(i);
-			infoBlock.setByte(a, (byte)recordLength);
-			infoBlock.setByte(a+1, (byte)(recordLength >> 8));
+			int length = lengths.get(i);
+			infoBlock.setByte(a, (byte)length);
+			infoBlock.setByte(a+1, (byte)(length >> 8));
 			i++; a += 2;
 		}
 		while (i < 15) {
