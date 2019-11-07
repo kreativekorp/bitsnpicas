@@ -8,8 +8,8 @@ public class GEOSFontStrike {
 	public int height;
 	public int[] xCoord;
 	public byte[] bitmap;
-	public int[] offsetWidths;
-	public int[] utf8Pointers;
+	public OffsetWidth[] offsetWidths;
+	public UTF8StrikeMap utf8Map;
 	
 	public GEOSFontStrike() {
 		this.clear(96, false, false);
@@ -53,8 +53,8 @@ public class GEOSFontStrike {
 		this.height = 0;
 		this.xCoord = new int[numChars + 1];
 		this.bitmap = new byte[0];
-		this.offsetWidths = kerning ? new int[numChars] : null;
-		this.utf8Pointers = utf8 ? new int[0] : null;
+		this.offsetWidths = kerning ? new OffsetWidth[numChars] : null;
+		this.utf8Map = utf8 ? new UTF8StrikeMap() : null;
 	}
 	
 	public int getGlyphCount() {
@@ -122,7 +122,6 @@ public class GEOSFontStrike {
 		int xl = calculateLength(xo, length, bo, ko, uo);
 		int bl = calculateLength(bo, length, xo, ko, uo);
 		int kl = calculateLength(ko, length, xo, bo, uo);
-		int ul = calculateLength(uo, length, xo, bo, ko);
 		xCoord = new int[xl / 2];
 		for (int a = offset + xo, i = 0; i < xCoord.length; i++, a += 2) {
 			xCoord[i] = (data[a] & 0xFF) | ((data[a+1] & 0xFF) << 8);
@@ -132,20 +131,18 @@ public class GEOSFontStrike {
 			bitmap[i] = data[a];
 		}
 		if (kerning) {
-			offsetWidths = new int[kl / 2];
+			offsetWidths = new OffsetWidth[kl / 2];
 			for (int a = offset + ko, i = 0; i < offsetWidths.length; i++, a += 2) {
-				offsetWidths[i] = (data[a] << 8) | (data[a+1] & 0xFF);
+				offsetWidths[i] = new OffsetWidth(data[a], (data[a+1] & 0xFF));
 			}
 		} else {
 			offsetWidths = null;
 		}
 		if (utf8) {
-			utf8Pointers = new int[ul / 2];
-			for (int a = offset + uo, i = 0; i < utf8Pointers.length; i++, a += 2) {
-				utf8Pointers[i] = (data[a] & 0xFF) | ((data[a+1] & 0xFF) << 8);
-			}
+			utf8Map = new UTF8StrikeMap();
+			utf8Map.read(data, offset + uo);
 		} else {
-			utf8Pointers = null;
+			utf8Map = null;
 		}
 	}
 	
@@ -155,7 +152,7 @@ public class GEOSFontStrike {
 		out.write(rowWidth);
 		out.write(rowWidth >> 8);
 		out.write(height);
-		int xo = (utf8Pointers != null) ? 12 : (offsetWidths != null) ? 10 : 8;
+		int xo = (utf8Map != null) ? 12 : (offsetWidths != null) ? 10 : 8;
 		int ko = xo + xCoord.length * 2;
 		int bo = (offsetWidths != null) ? (ko + offsetWidths.length * 2) : ko;
 		int uo = bo + bitmap.length;
@@ -163,10 +160,10 @@ public class GEOSFontStrike {
 		out.write(xo >> 8);
 		out.write(bo);
 		out.write(bo >> 8);
-		if (offsetWidths != null || utf8Pointers != null) {
+		if (offsetWidths != null || utf8Map != null) {
 			out.write(ko);
 			out.write(ko >> 8);
-			if (utf8Pointers != null) {
+			if (utf8Map != null) {
 				out.write(uo);
 				out.write(uo >> 8);
 			}
@@ -179,8 +176,13 @@ public class GEOSFontStrike {
 		// ko
 		if (offsetWidths != null) {
 			for (int i = 0; i < offsetWidths.length; i++) {
-				out.write(offsetWidths[i] >> 8);
-				out.write(offsetWidths[i]);
+				if (offsetWidths[i] != null) {
+					out.write(offsetWidths[i].offset);
+					out.write(offsetWidths[i].width);
+				} else {
+					out.write(0);
+					out.write(0);
+				}
 			}
 		}
 		// bo
@@ -188,10 +190,10 @@ public class GEOSFontStrike {
 			out.write(bitmap[i]);
 		}
 		// uo
-		if (utf8Pointers != null) {
-			for (int i = 0; i < utf8Pointers.length; i++) {
-				out.write(utf8Pointers[i]);
-				out.write(utf8Pointers[i] >> 8);
+		if (utf8Map != null) {
+			byte[] utf8Data = utf8Map.write(uo);
+			for (int i = 0; i < utf8Data.length; i++) {
+				out.write(utf8Data[i]);
 			}
 		}
 		return out.toByteArray();
@@ -205,5 +207,14 @@ public class GEOSFontStrike {
 			}
 		}
 		return thisEnd - thisStart;
+	}
+	
+	public static final class OffsetWidth {
+		public final int offset;
+		public final int width;
+		public OffsetWidth(int offset, int width) {
+			this.offset = offset;
+			this.width = width;
+		}
 	}
 }

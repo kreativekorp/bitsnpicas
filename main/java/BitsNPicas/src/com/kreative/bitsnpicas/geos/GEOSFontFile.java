@@ -3,7 +3,9 @@ package com.kreative.bitsnpicas.geos;
 import java.io.DataInput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GEOSFontFile extends ConvertFile {
 	public GEOSFontFile() {
@@ -142,17 +144,55 @@ public class GEOSFontFile extends ConvertFile {
 		}
 	}
 	
+	public UTF8StrikeIndex getUTF8StrikeIndex() {
+		byte[] r126 = vlirData.get(126);
+		if (r126 != null && r126.length > 0) {
+			UTF8StrikeIndex index = new UTF8StrikeIndex();
+			index.read(r126);
+			return index;
+		}
+		return null;
+	}
+	
+	public void removeUTF8StrikeIndex() {
+		vlirData.set(126, new byte[0]);
+	}
+	
+	public void setUTF8StrikeIndex(UTF8StrikeIndex index) {
+		vlirData.set(126, index.write());
+	}
+	
 	public void recalculate() {
+		Set<Integer> pointSizeExclusions = new HashSet<Integer>();
+		if (isMega()) {
+			for (int i = 49; i <= 54; i++) {
+				pointSizeExclusions.add(i);
+			}
+		}
+		Set<Integer> recordExclusions = new HashSet<Integer>();
+		byte[] r126 = vlirData.get(126);
+		if (r126 != null && r126.length > 0) {
+			recordExclusions.add(126);
+			for (int i = 0; i + 4 <= r126.length; i += 4) {
+				recordExclusions.add(r126[i] & 0xFF);
+			}
+		}
+		List<Integer> pointSizes = new ArrayList<Integer>();
 		List<Integer> indices = new ArrayList<Integer>();
 		List<Integer> lengths = new ArrayList<Integer>();
 		for (int index = 0; index < vlirData.size(); index++) {
-			byte[] data = vlirData.get(index);
-			if (data.length > 8) {
-				indices.add(index);
-				lengths.add(data.length);
+			if (!recordExclusions.contains(index)) {
+				byte[] data = vlirData.get(index);
+				if (data.length > 8) {
+					if (!pointSizeExclusions.contains(index)) {
+						pointSizes.add(index);
+					}
+					indices.add(index);
+					lengths.add(data.length);
+				}
 			}
 		}
-		updateDescription(indices);
+		updateDescription(pointSizes);
 		setFontStrikes(indices);
 		setFontRecordLengths(lengths);
 		super.recalculate();
