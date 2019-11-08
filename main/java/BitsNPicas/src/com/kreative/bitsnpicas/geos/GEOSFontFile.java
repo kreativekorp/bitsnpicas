@@ -1,10 +1,13 @@
 package com.kreative.bitsnpicas.geos;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class GEOSFontFile extends ConvertFile {
@@ -142,6 +145,140 @@ public class GEOSFontFile extends ConvertFile {
 		if (index >= 0 && index < vlirData.size()) {
 			vlirData.set(index, gfs.write());
 		}
+	}
+	
+	public List<Integer> getFontPointSizes() {
+		Set<Integer> exclusions = new HashSet<Integer>();
+		if (isMega()) {
+			for (int i = 49; i <= 54; i++) {
+				exclusions.add(i);
+			}
+		}
+		byte[] r126 = vlirData.get(126);
+		if (r126 != null && r126.length > 0) {
+			exclusions.add(126);
+			for (int i = 0; i + 4 <= r126.length; i += 4) {
+				exclusions.add(r126[i] & 0xFF);
+			}
+		}
+		List<Integer> pointSizes = new ArrayList<Integer>();
+		for (int index = 0; index < vlirData.size(); index++) {
+			if (!exclusions.contains(index)) {
+				byte[] data = vlirData.get(index);
+				if (data.length > 8) pointSizes.add(index);
+			}
+		}
+		return pointSizes;
+	}
+	
+	public GEOSFontPointSize getFontPointSize(int pointSize) {
+		GEOSFontPointSize f = new GEOSFontPointSize(pointSize);
+		if (pointSize >= 48 && pointSize <= 54 && isMega()) {
+			f.megaStrikes = new GEOSFontStrike[6];
+			f.megaStrikes[0] = getFontStrike(48);
+			f.megaStrikes[1] = getFontStrike(49);
+			f.megaStrikes[2] = getFontStrike(50);
+			f.megaStrikes[3] = getFontStrike(51);
+			f.megaStrikes[4] = getFontStrike(52);
+			f.megaStrikes[5] = getFontStrike(53);
+			f.megaStrikeIndex = getFontStrike(54);
+			f.utf8Map = f.megaStrikeIndex.utf8Map;
+		} else {
+			f.strike = getFontStrike(pointSize);
+			if (f.strike == null) return null;
+			f.utf8Map = f.strike.utf8Map;
+		}
+		if (f.utf8Map != null) {
+			f.utf8Strikes = new HashMap<UTF8StrikeEntry, GEOSFontStrike>();
+			for (UTF8StrikeEntry e : f.utf8Map.lowEntries) {
+				if (e != null) {
+					f.utf8Strikes.put(e, getFontStrike(e.recordIndex, e.sectorIndex));
+				}
+			}
+			for (UTF8StrikeMap.SubMap sm : f.utf8Map.highEntries) {
+				if (sm != null) {
+					for (UTF8StrikeEntry e : sm.entries) {
+						if (e != null) {
+							f.utf8Strikes.put(e, getFontStrike(e.recordIndex, e.sectorIndex));
+						}
+					}
+				}
+			}
+			for (UTF8StrikeMap.AstralMap am : f.utf8Map.astralEntries) {
+				if (am != null) {
+					for (UTF8StrikeMap.SubMap sm : am.entries) {
+						if (sm != null) {
+							for (UTF8StrikeEntry e : sm.entries) {
+								if (e != null) {
+									f.utf8Strikes.put(e, getFontStrike(e.recordIndex, e.sectorIndex));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return f;
+	}
+	
+	public void setFontPointSize(int pointSize, GEOSFontPointSize f) {
+		if (f.isUTF8()) {
+			Map<UTF8StrikeEntry,UTF8StrikeEntry> remap = new HashMap<UTF8StrikeEntry,UTF8StrikeEntry>();
+			UTF8StrikeIndex si = getUTF8StrikeIndex();
+			if (si == null) si = new UTF8StrikeIndex();
+			int recordLength = 0;
+			int recordIndex = nextRecordIndex();
+			ByteArrayOutputStream recordOut = new ByteArrayOutputStream();
+			for (UTF8StrikeEntry e : f.utf8Map.entryList()) {
+				byte[] data = f.utf8Strikes.get(e).write();
+				int nextSector = ((recordLength + 253) / 254);
+				int nextStart = nextSector * 254;
+				if (nextStart + data.length > 65536) {
+					vlirData.set(recordIndex, recordOut.toByteArray());
+					recordLength = 0;
+					recordIndex = nextRecordIndex();
+					recordOut = new ByteArrayOutputStream();
+					nextSector = 0;
+					nextStart = 0;
+				}
+				remap.put(e, new UTF8StrikeEntry(recordIndex, nextSector, data.length));
+				si.add(new UTF8StrikeEntry(recordIndex, nextSector, data.length));
+				while (recordLength < nextStart) {
+					recordOut.write(0);
+					recordLength++;
+				}
+				for (byte b : data) {
+					recordOut.write(b);
+					recordLength++;
+				}
+			}
+			if (recordLength > 0) {
+				vlirData.set(recordIndex, recordOut.toByteArray());
+			}
+			setUTF8StrikeIndex(si);
+			f.remap(remap);
+		}
+		if (f.isMega()) {
+			setFontStrike(48, f.megaStrikes[0]);
+			setFontStrike(49, f.megaStrikes[1]);
+			setFontStrike(50, f.megaStrikes[2]);
+			setFontStrike(51, f.megaStrikes[3]);
+			setFontStrike(52, f.megaStrikes[4]);
+			setFontStrike(53, f.megaStrikes[5]);
+			setFontStrike(54, f.megaStrikeIndex);
+		} else {
+			setFontStrike(pointSize, f.strike);
+		}
+	}
+	
+	public int nextRecordIndex() {
+		int nextID = 125;
+		while (nextID > 0) {
+			byte[] data = vlirData.get(nextID);
+			if (data == null || data.length == 0) break;
+			nextID--;
+		}
+		return nextID;
 	}
 	
 	public UTF8StrikeIndex getUTF8StrikeIndex() {
