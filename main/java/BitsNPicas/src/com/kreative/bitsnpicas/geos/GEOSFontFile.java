@@ -119,17 +119,11 @@ public class GEOSFontFile extends ConvertFile {
 		return null;
 	}
 	
-	public GEOSFontStrike getFontStrike(int record, int sector) {
-		byte[] r126 = vlirData.get(126);
-		if (r126 != null) {
-			for (int i = 0; i + 4 <= r126.length; i += 4) {
-				if ((r126[i] & 0xFF) == record && (r126[i+1] & 0xFF) == sector) {
-					int length = (r126[i+2] & 0xFF) | ((r126[i+3] & 0xFF) << 8);
-					byte[] data = vlirData.get(record);
-					if (data != null && data.length >= (sector * 254 + length)) {
-						return new GEOSFontStrike(data, sector * 254, length);
-					}
-				}
+	public GEOSFontStrike getFontStrike(int record, int sector, int length) {
+		if (record >= 0 && record < vlirData.size()) {
+			byte[] data = vlirData.get(record);
+			if (data != null && data.length >= (sector * 254 + length)) {
+				return new GEOSFontStrike(data, sector * 254, length);
 			}
 		}
 		return null;
@@ -192,14 +186,18 @@ public class GEOSFontFile extends ConvertFile {
 			f.utf8Strikes = new HashMap<UTF8StrikeEntry, GEOSFontStrike>();
 			for (UTF8StrikeEntry e : f.utf8Map.lowEntries) {
 				if (e != null) {
-					f.utf8Strikes.put(e, getFontStrike(e.recordIndex, e.sectorIndex));
+					f.utf8Strikes.put(e, getFontStrike(
+						e.recordIndex, e.sectorIndex, e.length
+					));
 				}
 			}
 			for (UTF8StrikeMap.SubMap sm : f.utf8Map.highEntries) {
 				if (sm != null) {
 					for (UTF8StrikeEntry e : sm.entries) {
 						if (e != null) {
-							f.utf8Strikes.put(e, getFontStrike(e.recordIndex, e.sectorIndex));
+							f.utf8Strikes.put(e, getFontStrike(
+								e.recordIndex, e.sectorIndex, e.length
+							));
 						}
 					}
 				}
@@ -210,7 +208,9 @@ public class GEOSFontFile extends ConvertFile {
 						if (sm != null) {
 							for (UTF8StrikeEntry e : sm.entries) {
 								if (e != null) {
-									f.utf8Strikes.put(e, getFontStrike(e.recordIndex, e.sectorIndex));
+									f.utf8Strikes.put(e, getFontStrike(
+										e.recordIndex, e.sectorIndex, e.length
+									));
 								}
 							}
 						}
@@ -233,7 +233,7 @@ public class GEOSFontFile extends ConvertFile {
 				byte[] data = f.utf8Strikes.get(e).write();
 				int nextSector = ((recordLength + 253) / 254);
 				int nextStart = nextSector * 254;
-				if (nextStart + data.length > 65536) {
+				if (nextStart + data.length > 12192) {
 					vlirData.set(recordIndex, recordOut.toByteArray());
 					recordLength = 0;
 					recordIndex = nextRecordIndex();

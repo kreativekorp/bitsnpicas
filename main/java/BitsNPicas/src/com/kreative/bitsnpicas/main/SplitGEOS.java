@@ -36,18 +36,18 @@ public class SplitGEOS {
 						GEOSFontFile inFont = new GEOSFontFile(in);
 						in.close();
 						if (inFont.isValid()) {
-							for (int fontSize : inFont.getFontStrikes()) {
+							for (int pointSize : inFont.getFontPointSizes()) {
 								GEOSFontFile outFont = new GEOSFontFile();
 								outFont.setFontName(inFont.getFontName());
 								outFont.setClassTextString(inFont.getClassTextString());
 								outFont.setDescriptionString(inFont.getDescriptionString());
 								outFont.setFontID(inFont.getFontID());
-								outFont.setFontStrike(fontSize, inFont.getFontStrike(fontSize));
+								outFont.setFontPointSize(pointSize, inFont.getFontPointSize(pointSize));
 								outFont.recalculate();
 								
 								File outfile = new File(
 									((outputDir != null) ? outputDir : file.getParentFile()),
-									(inFont.getFontName() + "." + fontSize + ".cvt")
+									(inFont.getFontName() + "." + pointSize + ".cvt")
 								);
 								DataOutputStream out = new DataOutputStream(new FileOutputStream(outfile));
 								outFont.write(out);
