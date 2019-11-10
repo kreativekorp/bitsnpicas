@@ -5,160 +5,27 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 import com.kreative.ksfl.*;
 import com.kreative.rsrc.*;
 
 public class NFNTBitmapFontExporter implements BitmapFontExporter {
-	private int myID;
-	private int mySize;
-	private boolean generateID;
-	private boolean generateSize;
-	private boolean snapSize;
+	private IDGenerator idgen;
+	private PointSizeGenerator sizegen;
 	private EncodingTable encoding;
 	
-	public NFNTBitmapFontExporter() {
-		myID = 0;
-		mySize = 0;
-		generateID = true;
-		generateSize = true;
-		snapSize = false;
-		encoding = null;
+	public NFNTBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen) {
+		this.idgen = idgen;
+		this.sizegen = sizegen;
+		this.encoding = null;
 	}
 	
-	public NFNTBitmapFontExporter(boolean snapsize) {
-		myID = 0;
-		mySize = 0;
-		generateID = true;
-		generateSize = true;
-		snapSize = snapsize;
-		encoding = null;
-	}
-	
-	public NFNTBitmapFontExporter(float size) {
-		myID = 0;
-		mySize = (int)size;
-		generateID = true;
-		generateSize = false;
-		snapSize = false;
-		encoding = null;
-	}
-	
-	public NFNTBitmapFontExporter(float size, boolean snapsize) {
-		myID = 0;
-		mySize = (int)size;
-		generateID = true;
-		generateSize = false;
-		snapSize = snapsize;
-		encoding = null;
-	}
-	
-	public NFNTBitmapFontExporter(int id) {
-		myID = id;
-		mySize = 0;
-		generateID = false;
-		generateSize = true;
-		snapSize = false;
-		encoding = null;
-	}
-	
-	public NFNTBitmapFontExporter(int id, boolean snapsize) {
-		myID = id;
-		mySize = 0;
-		generateID = false;
-		generateSize = true;
-		snapSize = snapsize;
-		encoding = null;
-	}
-	
-	public NFNTBitmapFontExporter(int id, int size) {
-		myID = id;
-		mySize = size;
-		generateID = false;
-		generateSize = false;
-		snapSize = false;
-		encoding = null;
-	}
-	
-	public NFNTBitmapFontExporter(int id, int size, boolean snapsize) {
-		myID = id;
-		mySize = size;
-		generateID = false;
-		generateSize = false;
-		snapSize = snapsize;
-		encoding = null;
-	}
-	
-	public NFNTBitmapFontExporter(EncodingTable enc) {
-		myID = 0;
-		mySize = 0;
-		generateID = true;
-		generateSize = true;
-		snapSize = false;
-		encoding = enc;
-	}
-	
-	public NFNTBitmapFontExporter(boolean snapsize, EncodingTable enc) {
-		myID = 0;
-		mySize = 0;
-		generateID = true;
-		generateSize = true;
-		snapSize = snapsize;
-		encoding = enc;
-	}
-	
-	public NFNTBitmapFontExporter(float size, EncodingTable enc) {
-		myID = 0;
-		mySize = (int)size;
-		generateID = true;
-		generateSize = false;
-		snapSize = false;
-		encoding = enc;
-	}
-	
-	public NFNTBitmapFontExporter(float size, boolean snapsize, EncodingTable enc) {
-		myID = 0;
-		mySize = (int)size;
-		generateID = true;
-		generateSize = false;
-		snapSize = snapsize;
-		encoding = enc;
-	}
-	
-	public NFNTBitmapFontExporter(int id, EncodingTable enc) {
-		myID = id;
-		mySize = 0;
-		generateID = false;
-		generateSize = true;
-		snapSize = false;
-		encoding = enc;
-	}
-	
-	public NFNTBitmapFontExporter(int id, boolean snapsize, EncodingTable enc) {
-		myID = id;
-		mySize = 0;
-		generateID = false;
-		generateSize = true;
-		snapSize = snapsize;
-		encoding = enc;
-	}
-	
-	public NFNTBitmapFontExporter(int id, int size, EncodingTable enc) {
-		myID = id;
-		mySize = size;
-		generateID = false;
-		generateSize = false;
-		snapSize = false;
-		encoding = enc;
-	}
-	
-	public NFNTBitmapFontExporter(int id, int size, boolean snapsize, EncodingTable enc) {
-		myID = id;
-		mySize = size;
-		generateID = false;
-		generateSize = false;
-		snapSize = snapsize;
-		encoding = enc;
+	public NFNTBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen, EncodingTable enc) {
+		this.idgen = idgen;
+		this.sizegen = sizegen;
+		this.encoding = enc;
 	}
 	
 	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
@@ -267,29 +134,8 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		// make meta
 		font.autoFillNames();
 		name = font.getName(Font.NAME_FAMILY);
-		if (generateID) {
-			id = name.hashCode();
-			id = (id & 0xFFF) ^ ((id >> 11) & 0xFFF) ^ ((id >> 22) & 0xFFF);
-			id += 1024;
-		} else {
-			id = myID++;
-		}
-		if (generateSize) {
-			size = font.getEmAscent() + font.getEmDescent();
-		} else {
-			size = mySize;
-		}
-		if (snapSize) {
-			if (size <= 9) size = 9;
-			else if (size <= 11) size = 10;
-			else if (size <= 13) size = 12;
-			else if (size <= 16) size = 14;
-			else if (size <= 21) size = 18;
-			else if (size <= 30) size = 24;
-			else if (size <= 42) size = 36;
-			else if (size <= 60) size = 48;
-			else size = 72;
-		}
+		id = idgen.generateID(font);
+		size = sizegen.generatePointSize(font);
 		
 		// make NFNT
 		ByteArrayOutputStream nfntOut = new ByteArrayOutputStream();

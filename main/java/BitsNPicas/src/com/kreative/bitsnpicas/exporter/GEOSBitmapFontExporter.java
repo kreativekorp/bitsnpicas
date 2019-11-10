@@ -9,78 +9,18 @@ import java.io.OutputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.geos.GEOSFontFile;
 import com.kreative.bitsnpicas.geos.GEOSFontStrike;
 
 public class GEOSBitmapFontExporter implements BitmapFontExporter {
-	private int myID;
-	private int mySize;
-	private boolean generateID;
-	private boolean generateSize;
-	private boolean snapSize;
+	private IDGenerator idgen;
+	private PointSizeGenerator sizegen;
 	
-	public GEOSBitmapFontExporter() {
-		myID = 0;
-		mySize = 0;
-		generateID = true;
-		generateSize = true;
-		snapSize = false;
-	}
-	
-	public GEOSBitmapFontExporter(boolean snapsize) {
-		myID = 0;
-		mySize = 0;
-		generateID = true;
-		generateSize = true;
-		snapSize = snapsize;
-	}
-	
-	public GEOSBitmapFontExporter(float size) {
-		myID = 0;
-		mySize = (int)size;
-		generateID = true;
-		generateSize = false;
-		snapSize = false;
-	}
-	
-	public GEOSBitmapFontExporter(float size, boolean snapsize) {
-		myID = 0;
-		mySize = (int)size;
-		generateID = true;
-		generateSize = false;
-		snapSize = snapsize;
-	}
-	
-	public GEOSBitmapFontExporter(int id) {
-		myID = id;
-		mySize = 0;
-		generateID = false;
-		generateSize = true;
-		snapSize = false;
-	}
-	
-	public GEOSBitmapFontExporter(int id, boolean snapsize) {
-		myID = id;
-		mySize = 0;
-		generateID = false;
-		generateSize = true;
-		snapSize = snapsize;
-	}
-	
-	public GEOSBitmapFontExporter(int id, int size) {
-		myID = id;
-		mySize = size;
-		generateID = false;
-		generateSize = false;
-		snapSize = false;
-	}
-	
-	public GEOSBitmapFontExporter(int id, int size, boolean snapsize) {
-		myID = id;
-		mySize = size;
-		generateID = false;
-		generateSize = false;
-		snapSize = snapsize;
+	public GEOSBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen) {
+		this.idgen = idgen;
+		this.sizegen = sizegen;
 	}
 	
 	@Override
@@ -96,33 +36,8 @@ public class GEOSBitmapFontExporter implements BitmapFontExporter {
 	public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
 		font.autoFillNames();
 		String family = font.getName(BitmapFont.NAME_FAMILY);
-		
-		int id, size;
-		if (generateID) {
-			id = family.hashCode();
-			id = (id & 0x1FF) ^ ((id >> 8) & 0x1FF) ^ ((id >> 16) & 0x1FF) ^ ((id >> 24) & 0x1FF);
-			id |= 0x200;
-		} else {
-			id = myID++;
-		}
-		if (generateSize) {
-			size = font.getEmAscent() + font.getEmDescent();
-		} else {
-			size = mySize;
-		}
-		if (snapSize) {
-			if (size <= 9) size = 9;
-			else if (size <= 11) size = 10;
-			else if (size <= 13) size = 12;
-			else if (size <= 16) size = 14;
-			else if (size <= 21) size = 18;
-			else if (size <= 30) size = 24;
-			else if (size <= 42) size = 36;
-			else if (size <= 54) size = 48;
-			else size = 60;
-		} else if (size > 60) {
-			size = 60;
-		}
+		int id = idgen.generateID(font);
+		int size = sizegen.generatePointSize(font);
 		
 		String desc = font.getName(BitmapFont.NAME_DESCRIPTION);
 		if (desc == null || desc.length() == 0) desc = "Available in " + size + " point.";

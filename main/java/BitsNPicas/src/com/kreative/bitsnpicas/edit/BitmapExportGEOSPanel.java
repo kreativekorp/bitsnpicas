@@ -8,7 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
+import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.PointSizeGenerator;
 
 public class BitmapExportGEOSPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -67,29 +68,23 @@ public class BitmapExportGEOSPanel extends JPanel {
 		this.add(geosOuterPanel, BorderLayout.PAGE_START);
 	}
 	
-	public GEOSBitmapFontExporter createGEOSExporter() {
+	public IDGenerator getIDGenerator() {
 		if (geosFontIdManual.isSelected()) {
-			if (geosFontSizeManual.isSelected()) {
-				return new GEOSBitmapFontExporter(
-					geosFontId.getNumber().intValue(),
-					geosFontSize.getNumber().intValue()
-				);
-			} else {
-				return new GEOSBitmapFontExporter(
-					geosFontId.getNumber().intValue(),
-					geosFontSizeAutoStandard.isSelected()
-				);
-			}
+			int id = geosFontId.getNumber().intValue();
+			return new IDGenerator.Sequential(id, 128, 1024);
 		} else {
-			if (geosFontSizeManual.isSelected()) {
-				return new GEOSBitmapFontExporter(
-					geosFontSize.getNumber().floatValue()
-				);
-			} else {
-				return new GEOSBitmapFontExporter(
-					geosFontSizeAutoStandard.isSelected()
-				);
-			}
+			return new IDGenerator.HashCode(128, 1024);
+		}
+	}
+	
+	public PointSizeGenerator getPointSizeGenerator() {
+		if (geosFontSizeManual.isSelected()) {
+			int size = geosFontSize.getNumber().intValue();
+			return new PointSizeGenerator.Fixed(size);
+		} else if (geosFontSizeAutoStandard.isSelected()) {
+			return new PointSizeGenerator.Standard(9, 10, 12, 14, 18, 24, 36, 48, 60);
+		} else {
+			return new PointSizeGenerator.Automatic(6, 63);
 		}
 	}
 }

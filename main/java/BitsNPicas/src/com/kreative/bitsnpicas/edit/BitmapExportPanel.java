@@ -19,8 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.unicode.EncodingList;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 
@@ -154,12 +154,16 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	}
 	
 	@Override
-	public NFNTBitmapFontExporter createNFNTExporter() {
-		return macPanel.createNFNTExporter();
+	public IDGenerator getIDGenerator() {
+		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
+		if (f.cardName.equals("geos")) return geosPanel.getIDGenerator();
+		return macPanel.getIDGenerator();
 	}
 	
 	@Override
-	public GEOSBitmapFontExporter createGEOSExporter() {
-		return geosPanel.createGEOSExporter();
+	public PointSizeGenerator getPointSizeGenerator() {
+		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
+		if (f.cardName.equals("geos")) return geosPanel.getPointSizeGenerator();
+		return macPanel.getPointSizeGenerator();
 	}
 }

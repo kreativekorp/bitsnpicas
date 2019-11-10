@@ -6,8 +6,10 @@ import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
@@ -29,7 +31,11 @@ public enum BitmapExportFormat {
 	},
 	SUIT("Mac OS Classic Font Suitcase (Resource Fork)", ".suit", "mac", "MacRoman", true) {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return o.createNFNTExporter();
+			return new NFNTBitmapFontExporter(
+				o.getIDGenerator(),
+				o.getPointSizeGenerator(),
+				o.getSelectedEncoding()
+			);
 		}
 		public void postProcess(File file) throws IOException {
 			String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", file.getAbsolutePath()};
@@ -38,7 +44,11 @@ public enum BitmapExportFormat {
 	},
 	DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac", "MacRoman", false) {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return o.createNFNTExporter();
+			return new NFNTBitmapFontExporter(
+				o.getIDGenerator(),
+				o.getPointSizeGenerator(),
+				o.getSelectedEncoding()
+			);
 		}
 	},
 	SFONT("PNG (SDL SFont)", ".png", "color") {
@@ -58,7 +68,10 @@ public enum BitmapExportFormat {
 	},
 	CVT("GEOS Font in Convert Wrapper", ".cvt", "geos") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return o.createGEOSExporter();
+			return new GEOSBitmapFontExporter(
+				o.getIDGenerator(),
+				o.getPointSizeGenerator()
+			);
 		}
 	},
 	FZX("FZX (ZX Spectrum)", ".fzx", "encoding", "FZX PUA") {

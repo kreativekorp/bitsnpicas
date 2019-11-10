@@ -10,6 +10,8 @@ import java.util.regex.PatternSyntaxException;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
+import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 import com.kreative.bitsnpicas.unicode.EncodingList;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
@@ -56,13 +58,19 @@ public class ConvertBitmap {
 						boolean done = loadPreset(o, s);
 						if (!done) System.err.println("Unknown preset: " + s);
 					} else if (arg.equals("-i") && argi < args.length) {
-						o.oo.macID = parseInt(args[argi++], 0);
+						int id = parseInt(args[argi++], 0);
+						o.oo.idgen = new IDGenerator.Sequential(id, 128, 32768);
+					} else if (arg.equals("-R")) {
+						o.oo.idgen = new IDGenerator.Random(128, 32768);
+					} else if (arg.equals("-H")) {
+						o.oo.idgen = new IDGenerator.HashCode(128, 32768);
 					} else if (arg.equals("-z") && argi < args.length) {
-						o.oo.macSize = parseInt(args[argi++], 0);
+						int size = parseInt(args[argi++], 0);
+						o.oo.sizegen = new PointSizeGenerator.Fixed(size);
 					} else if (arg.equals("-E")) {
-						o.oo.macSnapSize = false;
+						o.oo.sizegen = new PointSizeGenerator.Automatic(4, 127);
 					} else if (arg.equals("-S")) {
-						o.oo.macSnapSize = true;
+						o.oo.sizegen = new PointSizeGenerator.Standard(9, 10, 12, 14, 18, 24, 36, 48, 72);
 					} else if (arg.equals("-e") && argi < args.length) {
 						o.io.encodingName = o.oo.encodingName = args[argi++];
 					} else if (arg.equals("-ie") && argi < args.length) {
@@ -142,6 +150,8 @@ public class ConvertBitmap {
 		System.out.println("                    trs80-m4, trs80-m4-64col, trs80-m4-32col,");
 		System.out.println("                    trs80-m4-80col, trs80-m4-40col");
 		System.out.println("  -i <number>   Font ID number (for nfnt or geos).");
+		System.out.println("  -R            Use random ID number (for nfnt or geos).");
+		System.out.println("  -H            Use ID number derived from font name (for nfnt or geos).");
 		System.out.println("  -z <number>   Font point size (for nfnt or geos).");
 		System.out.println("  -E            Use any point size (for nfnt or geos).");
 		System.out.println("  -S            Use only standard point sizes (for nfnt or geos).");

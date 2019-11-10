@@ -36,8 +36,11 @@ public enum BitmapOutputFormat {
 	},
 	SUIT(".suit", "nfnt", "suit", true) {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			o.idgen.setRange(128, 32768);
+			o.sizegen.setRange(4, 127);
+			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 72);
 			return new NFNTBitmapFontExporter(
-				o.macID, o.macSize, o.macSnapSize,
+				o.idgen, o.sizegen,
 				(o.encodingName == null) ? null :
 				EncodingList.instance().get(o.encodingName)
 			);
@@ -49,8 +52,11 @@ public enum BitmapOutputFormat {
 	},
 	DFONT(".dfont", "dfont") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			o.idgen.setRange(128, 32768);
+			o.sizegen.setRange(4, 127);
+			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 72);
 			return new NFNTBitmapFontExporter(
-				o.macID, o.macSize, o.macSnapSize,
+				o.idgen, o.sizegen,
 				(o.encodingName == null) ? null :
 				EncodingList.instance().get(o.encodingName)
 			);
@@ -73,7 +79,10 @@ public enum BitmapOutputFormat {
 	},
 	CVT(".cvt", "cvt", "geos") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new GEOSBitmapFontExporter(o.macID, o.macSize, o.macSnapSize);
+			o.idgen.setRange(128, 1024);
+			o.sizegen.setRange(6, 63);
+			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 60);
+			return new GEOSBitmapFontExporter(o.idgen, o.sizegen);
 		}
 	},
 	FZX(".fzx", "fzx") {

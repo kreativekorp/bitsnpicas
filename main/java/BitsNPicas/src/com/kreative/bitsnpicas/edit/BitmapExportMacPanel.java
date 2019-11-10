@@ -9,7 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.unicode.EncodingList;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 
@@ -83,33 +84,23 @@ public class BitmapExportMacPanel extends JPanel {
 		macEncoding.setSelectedItem(enc);
 	}
 	
-	public NFNTBitmapFontExporter createNFNTExporter() {
+	public IDGenerator getIDGenerator() {
 		if (macFontIdManual.isSelected()) {
-			if (macFontSizeManual.isSelected()) {
-				return new NFNTBitmapFontExporter(
-					macFontId.getNumber().intValue(),
-					macFontSize.getNumber().intValue(),
-					(EncodingTable)(macEncoding.getSelectedItem())
-				);
-			} else {
-				return new NFNTBitmapFontExporter(
-					macFontId.getNumber().intValue(),
-					macFontSizeAutoStandard.isSelected(),
-					(EncodingTable)(macEncoding.getSelectedItem())
-				);
-			}
+			int id = macFontId.getNumber().intValue();
+			return new IDGenerator.Sequential(id, 128, 32768);
 		} else {
-			if (macFontSizeManual.isSelected()) {
-				return new NFNTBitmapFontExporter(
-					macFontSize.getNumber().floatValue(),
-					(EncodingTable)(macEncoding.getSelectedItem())
-				);
-			} else {
-				return new NFNTBitmapFontExporter(
-					macFontSizeAutoStandard.isSelected(),
-					(EncodingTable)(macEncoding.getSelectedItem())
-				);
-			}
+			return new IDGenerator.HashCode(128, 32768);
+		}
+	}
+	
+	public PointSizeGenerator getPointSizeGenerator() {
+		if (macFontSizeManual.isSelected()) {
+			int size = macFontSize.getNumber().intValue();
+			return new PointSizeGenerator.Fixed(size);
+		} else if (macFontSizeAutoStandard.isSelected()) {
+			return new PointSizeGenerator.Standard(9, 10, 12, 14, 18, 24, 36, 48, 72);
+		} else {
+			return new PointSizeGenerator.Automatic(4, 127);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package com.kreative.bitsnpicas.edit;
 
 import java.awt.Dimension;
-import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public interface BitmapExportOptions {
@@ -10,6 +10,6 @@ public interface BitmapExportOptions {
 	public int getSelectedColor();
 	public Integer getLoadAddress();
 	public EncodingTable getSelectedEncoding();
-	public NFNTBitmapFontExporter createNFNTExporter();
-	public GEOSBitmapFontExporter createGEOSExporter();
+	public IDGenerator getIDGenerator();
+	public PointSizeGenerator getPointSizeGenerator();
 }
