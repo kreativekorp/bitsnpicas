@@ -99,17 +99,7 @@ public class GEOSFontFile extends ConvertFile {
 		}
 	}
 	
-	public List<Integer> getFontStrikes() {
-		List<Integer> indices = new ArrayList<Integer>();
-		for (int a = 0x82, i = 0; i < 15; i++, a += 2) {
-			int index = infoBlock.getByte(a) & 0x3F;
-			if (index == 0) break;
-			indices.add(index);
-		}
-		return indices;
-	}
-	
-	public GEOSFontStrike getFontStrike(int index) {
+	private GEOSFontStrike getFontStrike(int index) {
 		if (index >= 0 && index < vlirData.size()) {
 			byte[] data = vlirData.get(index);
 			if (data != null && data.length > 8) {
@@ -119,7 +109,7 @@ public class GEOSFontFile extends ConvertFile {
 		return null;
 	}
 	
-	public GEOSFontStrike getFontStrike(int record, int sector, int length) {
+	private GEOSFontStrike getFontStrike(int record, int sector, int length) {
 		if (record >= 0 && record < vlirData.size()) {
 			byte[] data = vlirData.get(record);
 			if (data != null && data.length >= (sector * 254 + length)) {
@@ -129,13 +119,7 @@ public class GEOSFontFile extends ConvertFile {
 		return null;
 	}
 	
-	public void removeFontStrike(int index) {
-		if (index >= 0 && index < vlirData.size()) {
-			vlirData.set(index, new byte[0]);
-		}
-	}
-	
-	public void setFontStrike(int index, GEOSFontStrike gfs) {
+	private void setFontStrike(int index, GEOSFontStrike gfs) {
 		if (index >= 0 && index < vlirData.size()) {
 			vlirData.set(index, gfs.write());
 		}
@@ -271,7 +255,7 @@ public class GEOSFontFile extends ConvertFile {
 		}
 	}
 	
-	public int nextRecordIndex() {
+	private int nextRecordIndex() {
 		int nextID = 125;
 		while (nextID > 0) {
 			byte[] data = vlirData.get(nextID);
@@ -281,7 +265,7 @@ public class GEOSFontFile extends ConvertFile {
 		return nextID;
 	}
 	
-	public UTF8StrikeIndex getUTF8StrikeIndex() {
+	private UTF8StrikeIndex getUTF8StrikeIndex() {
 		byte[] r126 = vlirData.get(126);
 		if (r126 != null && r126.length > 0) {
 			UTF8StrikeIndex index = new UTF8StrikeIndex();
@@ -291,11 +275,7 @@ public class GEOSFontFile extends ConvertFile {
 		return null;
 	}
 	
-	public void removeUTF8StrikeIndex() {
-		vlirData.set(126, new byte[0]);
-	}
-	
-	public void setUTF8StrikeIndex(UTF8StrikeIndex index) {
+	private void setUTF8StrikeIndex(UTF8StrikeIndex index) {
 		vlirData.set(126, index.write());
 	}
 	

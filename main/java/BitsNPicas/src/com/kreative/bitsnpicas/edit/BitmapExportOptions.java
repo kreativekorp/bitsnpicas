@@ -12,4 +12,7 @@ public interface BitmapExportOptions {
 	public EncodingTable getSelectedEncoding();
 	public IDGenerator getIDGenerator();
 	public PointSizeGenerator getPointSizeGenerator();
+	public boolean getGEOSMega();
+	public boolean getGEOSKerning();
+	public boolean getGEOSUTF8();
 }

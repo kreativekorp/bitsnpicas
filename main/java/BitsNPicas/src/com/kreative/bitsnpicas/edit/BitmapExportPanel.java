@@ -166,4 +166,16 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		if (f.cardName.equals("geos")) return geosPanel.getPointSizeGenerator();
 		return macPanel.getPointSizeGenerator();
 	}
+	
+	public boolean getGEOSMega() {
+		return geosPanel.getGEOSMega();
+	}
+	
+	public boolean getGEOSKerning() {
+		return geosPanel.getGEOSKerning();
+	}
+	
+	public boolean getGEOSUTF8() {
+		return geosPanel.getGEOSUTF8();
+	}
 }

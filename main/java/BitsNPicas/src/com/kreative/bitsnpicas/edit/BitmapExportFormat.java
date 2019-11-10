@@ -69,8 +69,8 @@ public enum BitmapExportFormat {
 	CVT("GEOS Font in Convert Wrapper", ".cvt", "geos") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new GEOSBitmapFontExporter(
-				o.getIDGenerator(),
-				o.getPointSizeGenerator()
+				o.getIDGenerator(), o.getPointSizeGenerator(),
+				o.getGEOSMega(), o.getGEOSKerning(), o.getGEOSUTF8()
 			);
 		}
 	},

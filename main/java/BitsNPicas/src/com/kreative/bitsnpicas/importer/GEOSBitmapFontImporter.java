@@ -12,6 +12,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.geos.GEOSFontFile;
+import com.kreative.bitsnpicas.geos.GEOSFontPointSize;
 import com.kreative.bitsnpicas.geos.GEOSFontStrike;
 
 public class GEOSBitmapFontImporter implements BitmapFontImporter {
@@ -29,31 +30,34 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 		DataInputStream in = new DataInputStream(is);
 		GEOSFontFile gff = new GEOSFontFile(in);
 		if (gff.isValid()) {
-			for (int fontSize : gff.getFontStrikes()) {
-				GEOSFontStrike gf = gff.getFontStrike(fontSize);
-				int ascent = gf.ascent + 1;
-				int descent = gf.height - ascent;
+			for (int pointSize : gff.getFontPointSizes()) {
+				GEOSFontPointSize gfps = gff.getFontPointSize(pointSize);
+				GEOSFontStrike gfs = gfps.isMega() ? gfps.megaStrikeIndex : gfps.strike;
+				int ascent = gfs.ascent + 1;
+				int descent = gfs.height - ascent;
 				int emAscent = ascent;
 				int emDescent = descent;
-				while (emAscent + emDescent < fontSize) {
-					if (emAscent + emDescent < fontSize) emAscent++;
-					if (emAscent + emDescent < fontSize) emDescent++;
+				while (emAscent + emDescent < pointSize) {
+					if (emAscent + emDescent < pointSize) emAscent++;
+					if (emAscent + emDescent < pointSize) emDescent++;
 				}
-				while (emAscent + emDescent > fontSize) {
-					if (emAscent + emDescent > fontSize) emAscent--;
-					if (emAscent + emDescent > fontSize) emDescent--;
+				while (emAscent + emDescent > pointSize) {
+					if (emAscent + emDescent > pointSize) emAscent--;
+					if (emAscent + emDescent > pointSize) emDescent--;
 				}
 				
 				String classText = gff.getClassTextString();
 				String[] classFields = classText.split(" +");
 				
 				BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0);
-				for (int i = 0; i < gf.getGlyphCount(); i++) {
-					byte[][] gd = gf.getGlyph(i);
-					if (gd != null) {
-						int width = gd[0].length;
-						BitmapFontGlyph g = new BitmapFontGlyph(gd, 0, width, ascent);
-						f.putCharacter(0x20 + i, g);
+				for (int cp = 0x20; cp < 0x80; cp++) {
+					BitmapFontGlyph g = getASCIIGlyph(gfps, cp);
+					if (g != null) f.putCharacter(cp, g);
+				}
+				if (gfps.isUTF8()) {
+					for (int cp = 0x80; cp < 0x110000; cp++) {
+						BitmapFontGlyph g = getUTF8Glyph(gfps, cp);
+						if (g != null) f.putCharacter(cp, g);
 					}
 				}
 				if (!f.isEmpty()) {
@@ -66,6 +70,32 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		return fonts.toArray(new BitmapFont[fonts.size()]);
+	}
+	
+	private static BitmapFontGlyph getASCIIGlyph(GEOSFontPointSize gfps, int cp) {
+		int i = cp - 0x20;
+		GEOSFontStrike gfs = gfps.isMega() ? gfps.megaStrikes[i >> 4] : gfps.strike;
+		return getGlyph(gfs, i);
+	}
+	
+	private static BitmapFontGlyph getUTF8Glyph(GEOSFontPointSize gfps, int cp) {
+		GEOSFontStrike gfs = gfps.utf8Strikes.get(gfps.utf8Map.get(cp));
+		return getGlyph(gfs, cp & 0x3F);
+	}
+	
+	private static BitmapFontGlyph getGlyph(GEOSFontStrike gfs, int index) {
+		if (gfs == null) return null;
+		byte[][] gd = gfs.getGlyph(index);
+		if (gd == null) return null;
+		int offset, width;
+		if (gfs.offsetWidths != null) {
+			offset = gfs.offsetWidths[index].offset;
+			width = gfs.offsetWidths[index].width;
+		} else {
+			offset = 0;
+			width = gd[0].length;
+		}
+		return new BitmapFontGlyph(gd, offset, width, gfs.ascent + 1);
 	}
 	
 	@Override

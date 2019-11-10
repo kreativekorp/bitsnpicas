@@ -82,7 +82,10 @@ public enum BitmapOutputFormat {
 			o.idgen.setRange(128, 1024);
 			o.sizegen.setRange(6, 63);
 			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 60);
-			return new GEOSBitmapFontExporter(o.idgen, o.sizegen);
+			return new GEOSBitmapFontExporter(
+				o.idgen, o.sizegen, o.geosMega,
+				o.geosKerning, o.geosUTF8
+			);
 		}
 	},
 	FZX(".fzx", "fzx") {

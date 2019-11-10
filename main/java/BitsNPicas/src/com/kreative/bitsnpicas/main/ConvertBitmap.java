@@ -79,6 +79,18 @@ public class ConvertBitmap {
 						o.oo.encodingName = args[argi++];
 					} else if (arg.equals("-a") && argi < args.length) {
 						o.oo.u8mLoadAddress = parseInt16(args[argi++]);
+					} else if (arg.equals("-m")) {
+						o.oo.geosMega = true;
+					} else if (arg.equals("-M")) {
+						o.oo.geosMega = false;
+					} else if (arg.equals("-k")) {
+						o.oo.geosKerning = true;
+					} else if (arg.equals("-K")) {
+						o.oo.geosKerning = false;
+					} else if (arg.equals("-u")) {
+						o.oo.geosUTF8 = true;
+					} else if (arg.equals("-U")) {
+						o.oo.geosUTF8 = false;
 					} else if (arg.equals("--help")) {
 						printHelp();
 					} else {
@@ -157,6 +169,9 @@ public class ConvertBitmap {
 		System.out.println("  -S            Use only standard point sizes (for nfnt or geos).");
 		System.out.println("                    (9, 10, 12, 14, 18, 24, 36, 48, and 72 for nfnt,)");
 		System.out.println("                    (9, 10, 12, 14, 18, 24, 36, 48, and 60 for geos.)");
+		System.out.println("  -m / -M       Generate a MEGA / standard font (for geos).");
+		System.out.println("  -k / -K       Generate / don't generate kerning tables (for geos).");
+		System.out.println("  -u / -U       Generate / don't generate UTF-8 tables (for geos).");
 		System.out.println("  -a <addr>     Add a loading address to the file (for u8m).");
 		System.out.println("  -e <enc>      Use the specified encoding (for nfnt, fzx, sbf). One of:");
 		System.out.println("  -ie <enc>     Use the specified encoding for reading only. One of:");
