@@ -6,6 +6,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.kreative.bitsnpicas.geos.GEOSFontPointSize;
@@ -17,15 +18,18 @@ public class GEOSFontPointSizeSelection implements ClipboardOwner, Transferable 
 	private List<GEOSFontPointSize> gfps;
 	
 	public GEOSFontPointSizeSelection(GEOSFontPointSize gfps) {
-		this.gfps = Arrays.asList(gfps);
+		this.gfps = new ArrayList<GEOSFontPointSize>();
+		this.gfps.add(gfps);
 	}
 	
 	public GEOSFontPointSizeSelection(GEOSFontPointSize[] gfps) {
-		this.gfps = Arrays.asList(gfps);
+		this.gfps = new ArrayList<GEOSFontPointSize>();
+		this.gfps.addAll(Arrays.asList(gfps));
 	}
 	
 	public GEOSFontPointSizeSelection(List<GEOSFontPointSize> gfps) {
-		this.gfps = Arrays.asList(gfps.toArray(new GEOSFontPointSize[gfps.size()]));
+		this.gfps = new ArrayList<GEOSFontPointSize>();
+		this.gfps.addAll(gfps);
 	}
 	
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {

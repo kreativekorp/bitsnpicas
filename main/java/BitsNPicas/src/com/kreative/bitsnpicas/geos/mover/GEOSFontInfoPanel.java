@@ -73,7 +73,7 @@ public class GEOSFontInfoPanel extends JPanel {
 		init();
 	}
 	
-	public void init() {
+	private void init() {
 		iconWell.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				gff.infoBlock.iconBitmap = iconWell.getIconData();

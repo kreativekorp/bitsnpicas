@@ -1,15 +1,25 @@
 package com.kreative.bitsnpicas.geos.mover;
 
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import com.kreative.bitsnpicas.datatransfer.ClearMenuItem;
+import com.kreative.bitsnpicas.datatransfer.CopyMenuItem;
+import com.kreative.bitsnpicas.datatransfer.CutMenuItem;
+import com.kreative.bitsnpicas.datatransfer.PasteMenuItem;
 import com.kreative.bitsnpicas.edit.CommonMenuItems;
 
 public class GEOSMoverMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
-	public GEOSMoverMenuBar(final Window window, final SaveManager sm) {
+	public GEOSMoverMenuBar(final Window window, final SaveManager sm, final GEOSFontPointSizeTable table) {
 		add(new FileMenu(window, sm));
+		add(new EditMenu(table));
 	}
 	
 	public static class FileMenu extends JMenu {
@@ -27,6 +37,32 @@ public class GEOSMoverMenuBar extends JMenuBar {
 				addSeparator();
 				add(new CommonMenuItems.ExitMenuItem());
 			}
+		}
+	}
+	
+	public static class EditMenu extends JMenu {
+		private static final long serialVersionUID = 1L;
+		public EditMenu(final GEOSFontPointSizeTable table) {
+			super("Edit");
+			add(new CutMenuItem());
+			add(new CopyMenuItem());
+			add(new PasteMenuItem());
+			add(new ClearMenuItem());
+			addSeparator();
+			add(new ImportMenuItem(table));
+		}
+	}
+	
+	public static class ImportMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ImportMenuItem(final GEOSFontPointSizeTable table) {
+			super("Import");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, CommonMenuItems.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					table.doOpen();
+				}
+			});
 		}
 	}
 }

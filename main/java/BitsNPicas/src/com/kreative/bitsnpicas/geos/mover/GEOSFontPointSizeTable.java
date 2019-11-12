@@ -36,7 +36,7 @@ import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
 public class GEOSFontPointSizeTable extends JTable {
 	private static final long serialVersionUID = 1L;
 	
-	public GEOSFontPointSizeTable(final GEOSFontPointSizeTableModel model) {
+	public GEOSFontPointSizeTable(GEOSFontPointSizeTableModel model) {
 		super(model);
 		setColumnWidth(0, 40);
 		setColumnWidth(1, 100);

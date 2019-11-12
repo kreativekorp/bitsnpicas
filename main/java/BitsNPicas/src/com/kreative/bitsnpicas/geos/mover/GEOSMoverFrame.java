@@ -18,7 +18,7 @@ public class GEOSMoverFrame extends JFrame {
 		super(gff.getFontName());
 		this.sm = new SaveManager(this, file, gff);
 		this.panel = new GEOSMoverPanel(this, gff, sm);
-		this.mb = new GEOSMoverMenuBar(this, sm);
+		this.mb = new GEOSMoverMenuBar(this, sm, panel.getTable());
 		
 		setJMenuBar(mb);
 		setContentPane(panel);

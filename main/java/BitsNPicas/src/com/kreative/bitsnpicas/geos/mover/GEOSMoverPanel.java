@@ -52,4 +52,12 @@ public class GEOSMoverPanel extends JPanel {
 			}
 		});
 	}
+	
+	public GEOSFontPointSizeTableModel getTableModel() {
+		return tableModel;
+	}
+	
+	public GEOSFontPointSizeTable getTable() {
+		return table;
+	}
 }
