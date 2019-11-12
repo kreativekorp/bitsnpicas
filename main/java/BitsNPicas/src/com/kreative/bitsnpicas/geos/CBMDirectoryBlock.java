@@ -121,6 +121,30 @@ public class CBMDirectoryBlock implements CBMConstants {
 		}
 	}
 	
+	public GregorianCalendar getDate() {
+		if (year == 1900 && month == 0 && day == 0 && hour == 0 && minute == 0) {
+			return null;
+		} else {
+			return new GregorianCalendar(year, month - 1, day, hour, minute);
+		}
+	}
+	
+	public void setDate(GregorianCalendar cal) {
+		if (cal == null) {
+			year = 1900;
+			month = 0;
+			day = 0;
+			hour = 0;
+			minute = 0;
+		} else {
+			year = cal.get(Calendar.YEAR);
+			month = cal.get(Calendar.MONTH) + 1;
+			day = cal.get(Calendar.DAY_OF_MONTH);
+			hour = cal.get(Calendar.HOUR_OF_DAY);
+			minute = cal.get(Calendar.MINUTE);
+		}
+	}
+	
 	public String getCommentString() {
 		try { return new String(comment, "US-ASCII"); }
 		catch (UnsupportedEncodingException e) {

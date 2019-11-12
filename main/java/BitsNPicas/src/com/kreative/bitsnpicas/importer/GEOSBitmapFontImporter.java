@@ -31,45 +31,49 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 		GEOSFontFile gff = new GEOSFontFile(in);
 		if (gff.isValid()) {
 			for (int pointSize : gff.getFontPointSizes()) {
-				GEOSFontPointSize gfps = gff.getFontPointSize(pointSize);
-				GEOSFontStrike gfs = gfps.isMega() ? gfps.megaStrikeIndex : gfps.strike;
-				int ascent = gfs.ascent + 1;
-				int descent = gfs.height - ascent;
-				int emAscent = ascent;
-				int emDescent = descent;
-				while (emAscent + emDescent < pointSize) {
-					if (emAscent + emDescent < pointSize) emAscent++;
-					if (emAscent + emDescent < pointSize) emDescent++;
-				}
-				while (emAscent + emDescent > pointSize) {
-					if (emAscent + emDescent > pointSize) emAscent--;
-					if (emAscent + emDescent > pointSize) emDescent--;
-				}
-				
-				String classText = gff.getClassTextString();
-				String[] classFields = classText.split(" +");
-				
-				BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0);
-				for (int cp = 0x20; cp < 0x80; cp++) {
-					BitmapFontGlyph g = getASCIIGlyph(gfps, cp);
-					if (g != null) f.putCharacter(cp, g);
-				}
-				if (gfps.isUTF8()) {
-					for (int cp = 0x80; cp < 0x110000; cp++) {
-						BitmapFontGlyph g = getUTF8Glyph(gfps, cp);
-						if (g != null) f.putCharacter(cp, g);
-					}
-				}
-				if (!f.isEmpty()) {
-					f.setName(BitmapFont.NAME_FAMILY, gff.getFontName());
-					f.setName(BitmapFont.NAME_VERSION, classFields[classFields.length - 1]);
-					f.setName(BitmapFont.NAME_DESCRIPTION, gff.getDescriptionString());
-					f.setXHeight();
-					fonts.add(f);
-				}
+				BitmapFont f = importFont(gff, pointSize);
+				if (f != null) fonts.add(f);
 			}
 		}
 		return fonts.toArray(new BitmapFont[fonts.size()]);
+	}
+	
+	public BitmapFont importFont(GEOSFontFile gff, int pointSize) {
+		GEOSFontPointSize gfps = gff.getFontPointSize(pointSize);
+		GEOSFontStrike gfs = gfps.isMega() ? gfps.megaStrikeIndex : gfps.strike;
+		int ascent = gfs.ascent + 1;
+		int descent = gfs.height - ascent;
+		int emAscent = ascent;
+		int emDescent = descent;
+		while (emAscent + emDescent < pointSize) {
+			if (emAscent + emDescent < pointSize) emAscent++;
+			if (emAscent + emDescent < pointSize) emDescent++;
+		}
+		while (emAscent + emDescent > pointSize) {
+			if (emAscent + emDescent > pointSize) emAscent--;
+			if (emAscent + emDescent > pointSize) emDescent--;
+		}
+		
+		String classText = gff.getClassTextString();
+		String[] classFields = classText.split(" +");
+		
+		BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0);
+		for (int cp = 0x20; cp < 0x80; cp++) {
+			BitmapFontGlyph g = getASCIIGlyph(gfps, cp);
+			if (g != null) f.putCharacter(cp, g);
+		}
+		if (gfps.isUTF8()) {
+			for (int cp = 0x80; cp < 0x110000; cp++) {
+				BitmapFontGlyph g = getUTF8Glyph(gfps, cp);
+				if (g != null) f.putCharacter(cp, g);
+			}
+		}
+		if (f.isEmpty()) return null;
+		f.setName(BitmapFont.NAME_FAMILY, gff.getFontName());
+		f.setName(BitmapFont.NAME_VERSION, classFields[classFields.length - 1]);
+		f.setName(BitmapFont.NAME_DESCRIPTION, gff.getDescriptionString());
+		f.setXHeight();
+		return f;
 	}
 	
 	private static BitmapFontGlyph getASCIIGlyph(GEOSFontPointSize gfps, int cp) {

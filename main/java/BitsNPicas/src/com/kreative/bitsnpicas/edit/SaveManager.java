@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontExporter;
 
-public class SaveManager extends WindowAdapter {
+public class SaveManager extends WindowAdapter implements SaveInterface {
 	private JFrame frame;
 	private File file;
 	private FontExporter<?> format;

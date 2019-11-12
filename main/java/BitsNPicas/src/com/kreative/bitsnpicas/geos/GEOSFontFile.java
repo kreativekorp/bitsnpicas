@@ -119,6 +119,12 @@ public class GEOSFontFile extends ConvertFile {
 		return null;
 	}
 	
+	private void removeFontStrike(int index) {
+		if (index >= 0 && index < vlirData.size()) {
+			vlirData.set(index, new byte[0]);
+		}
+	}
+	
 	private void setFontStrike(int index, GEOSFontStrike gfs) {
 		if (index >= 0 && index < vlirData.size()) {
 			vlirData.set(index, gfs.write());
@@ -203,6 +209,80 @@ public class GEOSFontFile extends ConvertFile {
 			}
 		}
 		return f;
+	}
+	
+	public int getFontPointSizeSectorCount(int pointSize) {
+		int sectorCount = 0;
+		UTF8StrikeMap utf8Map = null;
+		if (pointSize >= 48 && pointSize <= 54 && isMega()) {
+			for (int i = 48; i <= 54; i++) {
+				byte[] data = vlirData.get(i);
+				if (data != null) sectorCount += (data.length + 253) / 254;
+			}
+			GEOSFontStrike gfs = getFontStrike(54);
+			if (gfs != null) utf8Map = gfs.utf8Map;
+		} else {
+			byte[] data = vlirData.get(pointSize);
+			if (data != null) sectorCount += (data.length + 253) / 254;
+			GEOSFontStrike gfs = getFontStrike(pointSize);
+			if (gfs != null) utf8Map = gfs.utf8Map;
+		}
+		if (utf8Map != null) {
+			Set<Integer> records = new HashSet<Integer>();
+			for (UTF8StrikeEntry e : utf8Map.entryList()) {
+				records.add(e.recordIndex);
+			}
+			for (int i : records) {
+				byte[] data = vlirData.get(i);
+				if (data != null) sectorCount += (data.length + 253) / 254;
+			}
+		}
+		return sectorCount;
+	}
+	
+	public String getFontPointSizeTypeString(int pointSize) {
+		String typeString = "font";
+		UTF8StrikeMap utf8Map = null;
+		if (pointSize >= 48 && pointSize <= 54 && isMega()) {
+			typeString = "mega " + typeString;
+			GEOSFontStrike gfs = getFontStrike(54);
+			if (gfs != null) utf8Map = gfs.utf8Map;
+		} else {
+			GEOSFontStrike gfs = getFontStrike(pointSize);
+			if (gfs != null) utf8Map = gfs.utf8Map;
+		}
+		if (utf8Map != null) {
+			typeString = "UTF-8 " + typeString;
+		}
+		return typeString;
+	}
+	
+	public void removeFontPointSize(int pointSize) {
+		UTF8StrikeMap utf8Map = null;
+		if (pointSize >= 48 && pointSize <= 54 && isMega()) {
+			GEOSFontStrike gfs = getFontStrike(54);
+			if (gfs != null) utf8Map = gfs.utf8Map;
+			removeFontStrike(48);
+			removeFontStrike(49);
+			removeFontStrike(50);
+			removeFontStrike(51);
+			removeFontStrike(52);
+			removeFontStrike(53);
+			removeFontStrike(54);
+		} else {
+			GEOSFontStrike gfs = getFontStrike(pointSize);
+			if (gfs != null) utf8Map = gfs.utf8Map;
+			removeFontStrike(pointSize);
+		}
+		if (utf8Map != null) {
+			UTF8StrikeIndex si = getUTF8StrikeIndex();
+			if (si == null) si = new UTF8StrikeIndex();
+			for (UTF8StrikeEntry e : utf8Map.entryList()) {
+				removeFontStrike(e.recordIndex);
+				si.remove(e);
+			}
+			setUTF8StrikeIndex(si);
+		}
 	}
 	
 	public void setFontPointSize(int pointSize, GEOSFontPointSize f) {

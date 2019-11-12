@@ -75,7 +75,7 @@ public class CommonMenuItems {
 	
 	public static class SaveMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public SaveMenuItem(final SaveManager sm) {
+		public SaveMenuItem(final SaveInterface sm) {
 			super("Save");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
@@ -88,7 +88,7 @@ public class CommonMenuItems {
 	
 	public static class SaveAsMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public SaveAsMenuItem(final SaveManager sm) {
+		public SaveAsMenuItem(final SaveInterface sm) {
 			super("Save As...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {

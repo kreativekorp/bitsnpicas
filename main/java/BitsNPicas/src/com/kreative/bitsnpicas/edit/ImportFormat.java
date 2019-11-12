@@ -8,10 +8,10 @@ import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontImporter;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
+import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
@@ -77,7 +77,9 @@ public enum ImportFormat {
 		public FontImporter<?> createImporter() { return new HexBitmapFontImporter(); }
 	},
 	CVT(".cvt") {
-		public FontImporter<?> createImporter() { return new GEOSBitmapFontImporter(); }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return GEOSMoverFrame.forFile(file);
+		}
 	},
 	FZX(".fzx") {
 		public JFrame createOptionFrame(File file) throws IOException {
