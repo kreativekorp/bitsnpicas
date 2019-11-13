@@ -8,6 +8,15 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -78,6 +87,53 @@ public class GEOSFontPointSizeTable extends JTable {
 		am.put("Clear", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent e) { doClear(); }
+		});
+		
+		DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
+			this, DnDConstants.ACTION_COPY, new DragGestureListener() {
+				public void dragGestureRecognized(DragGestureEvent e) {
+					if (e.getDragOrigin().x < 40) {
+						List<GEOSFontPointSize> gfps = getSelectedPointSizeObjects();
+						if (gfps.isEmpty()) return;
+						e.startDrag(null, new GEOSFontPointSizeSelection(gfps));
+					}
+				}
+			}
+		);
+	}
+	
+	public void createDropTarget(JComponent c) {
+		new DropTarget(c, new DropTargetListener() {
+			public void dragEnter(DropTargetDragEvent e) {}
+			public void dragExit(DropTargetEvent e) {}
+			public void dragOver(DropTargetDragEvent e) {}
+			public void dropActionChanged(DropTargetDragEvent e) {}
+			public void drop(DropTargetDropEvent e) {
+				try {
+					e.acceptDrop(e.getDropAction());
+					Transferable t = e.getTransferable();
+					DataFlavor fl = GEOSFontPointSizeSelection.geosFontPointSizeFlavor;
+					if (t.isDataFlavorSupported(fl)) {
+						List<?> gfpsl = (List<?>)t.getTransferData(fl);
+						if (gfpsl != null && !gfpsl.isEmpty()) {
+							GEOSFontPointSizeTableModel model = getPointSizeModel();
+							GEOSFontFile gff = model.getFontFile();
+							for (Object gfpso : gfpsl) {
+								GEOSFontPointSize gfps = (GEOSFontPointSize)gfpso;
+								gff.setFontPointSize(gfps.pointSize, gfps);
+							}
+							model.refresh();
+							e.dropComplete(true);
+						} else {
+							e.dropComplete(false);
+						}
+					} else {
+						e.dropComplete(false);
+					}
+				} catch (Exception ex) {
+					e.dropComplete(false);
+				}
+			}
 		});
 	}
 	

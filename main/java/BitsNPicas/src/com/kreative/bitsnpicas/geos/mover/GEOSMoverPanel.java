@@ -19,19 +19,22 @@ public class GEOSMoverPanel extends JPanel {
 	private final GEOSFontInfoPanel infoPanel;
 	private final GEOSFontPointSizeTableModel tableModel;
 	private final GEOSFontPointSizeTable table;
+	private final JScrollPane tablePane;
 	
 	public GEOSMoverPanel(JFrame parent, GEOSFontFile gff, final SaveManager sm) {
 		this.infoPanel = new GEOSFontInfoPanel(gff);
 		this.tableModel = new GEOSFontPointSizeTableModel(gff);
 		this.table = new GEOSFontPointSizeTable(tableModel);
+		this.tablePane = new JScrollPane(
+			table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+			JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS
+		);
 		
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		infoPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 		mainPanel.add(infoPanel, BorderLayout.PAGE_START);
-		mainPanel.add(new JScrollPane(
-			table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS
-		));
+		mainPanel.add(tablePane);
+		table.createDropTarget(tablePane);
 		
 		setLayout(new BorderLayout());
 		add(mainPanel, BorderLayout.CENTER);

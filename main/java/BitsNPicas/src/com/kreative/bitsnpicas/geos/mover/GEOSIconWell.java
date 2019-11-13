@@ -12,6 +12,15 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -86,6 +95,36 @@ public class GEOSIconWell extends JComponent {
 		am.put("Clear", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent e) { resetIcon(); }
+		});
+		
+		DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
+			this, DnDConstants.ACTION_COPY, new DragGestureListener() {
+				public void dragGestureRecognized(DragGestureEvent e) {
+					e.startDrag(null, new ImageSelection(iconImage));
+				}
+			}
+		);
+		
+		new DropTarget(this, new DropTargetListener() {
+			public void dragEnter(DropTargetDragEvent e) {}
+			public void dragExit(DropTargetEvent e) {}
+			public void dragOver(DropTargetDragEvent e) {}
+			public void dropActionChanged(DropTargetDragEvent e) {}
+			public void drop(DropTargetDropEvent e) {
+				try {
+					e.acceptDrop(e.getDropAction());
+					Transferable t = e.getTransferable();
+					if (t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+						Image image = (Image)t.getTransferData(DataFlavor.imageFlavor);
+						setIcon(image);
+						e.dropComplete(true);
+					} else {
+						e.dropComplete(false);
+					}
+				} catch (Exception ex) {
+					e.dropComplete(false);
+				}
+			}
 		});
 	}
 	
