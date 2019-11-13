@@ -91,7 +91,7 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 		int firstChar = nfntIn.readShort();
 		int lastChar = nfntIn.readShort();
 		/* int maxWidth = */ nfntIn.readShort();
-		/* int kerning = */ nfntIn.readShort();
+		int kerning = nfntIn.readShort();
 		/* int nDescent = */ nfntIn.readShort();
 		/* int rectWidth = */ nfntIn.readShort();
 		int height = nfntIn.readShort();
@@ -145,7 +145,9 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 						glyph[y][gx] = bitmap[y][bx];
 					}
 				}
-				BitmapFontGlyph g = new BitmapFontGlyph(glyph, offsets[i], widths[i] & 0xFF, ascent);
+				int offset = offsets[i] + kerning;
+				int advance = widths[i] & 0xFF;
+				BitmapFontGlyph g = new BitmapFontGlyph(glyph, offset, advance, ascent);
 				int cp = (encoding != null) ? encoding.get(ch) : MACROMAN[ch];
 				if (cp >= 0) font.putCharacter(cp, g);
 			}

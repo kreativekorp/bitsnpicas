@@ -59,6 +59,8 @@ public class Main {
 		System.out.println("  java -jar BitsNPicas.jar extractsvg <files>");
 		System.out.println("  java -jar BitsNPicas.jar injectsvg <files>");
 		System.out.println("  java -jar BitsNPicas.jar imagetosvg <options> <files>");
+		System.out.println("  java -jar BitsNPicas.jar splitsuit <options> <files>");
+		System.out.println("  java -jar BitsNPicas.jar mergesuit <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar splitgeos <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar mergegeos <options> <files>");
 		System.out.println();

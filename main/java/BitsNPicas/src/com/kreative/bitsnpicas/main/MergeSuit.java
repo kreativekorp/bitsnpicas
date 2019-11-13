@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.ksfl.KSFLConstants;
 import com.kreative.rsrc.MacResource;
 import com.kreative.rsrc.MacResourceFile;
@@ -107,11 +108,7 @@ public class MergeSuit {
 				}
 				rp.close();
 				
-				if (inRes) try {
-					String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", outputFile.getAbsolutePath()};
-					Runtime.getRuntime().exec(cmd);
-				} catch (IOException ignored) {}
-				
+				if (inRes) MacUtility.setTypeAndCreator(outputFile, "FFIL", "DMOV");
 				System.out.println(" DONE");
 			} catch (IOException ioe) {
 				System.out.println(" ERROR: " + ioe.getClass().getSimpleName() + ": " + ioe.getMessage());

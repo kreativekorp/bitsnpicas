@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.ksfl.KSFLConstants;
 import com.kreative.rsrc.MacResource;
 import com.kreative.rsrc.MacResourceFile;
@@ -138,11 +139,10 @@ public class SplitSuit {
 		rp.add(new MacResource(KSFLConstants.FOND, (short)fondId, fondName, out.toByteArray()));
 		rp.add(font);
 		rp.close();
-		if (inRes) try {
+		if (inRes) {
 			String type = ((fontSize == 0) ? "tfil" : "ffil");
-			String[] cmd = {"/usr/bin/SetFile", "-t", type, "-c", "movr", "-a", "S", file.getAbsolutePath()};
-			Runtime.getRuntime().exec(cmd);
-		} catch (IOException ignored) {}
+			MacUtility.setTypeAndCreator(file, type, "movr");
+		}
 	}
 	
 	private static String styleString(int fontStyle) {

@@ -2,10 +2,10 @@ package com.kreative.bitsnpicas.edit;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 import javax.swing.JFrame;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontImporter;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
 import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
@@ -143,25 +143,14 @@ public enum ImportFormat {
 				}
 			}
 		}
-		try {
-			String[] cmd = {"/usr/bin/GetFileInfo", "-c", file.getAbsolutePath()};
-			Process p = Runtime.getRuntime().exec(cmd);
-			Scanner scan = new Scanner(p.getInputStream());
-			if (scan.hasNextLine()) {
-				String creator = scan.nextLine().trim();
-				if (creator.equals("\"DMOV\"") || creator.equals("\"movr\"")) {
-					scan.close();
-					p.waitFor();
-					return SUIT;
-				}
-			}
-			scan.close();
-			p.waitFor();
-			return null;
-		} catch (IOException e) {
-			return null;
-		} catch (InterruptedException e) {
-			return null;
+		String creator = MacUtility.getCreator(file);
+		if (creator == null) return null;
+		if (creator.equals("DMOV") || creator.equals("movr")) return SUIT;
+		if (creator.equals("MACS") || creator.equals("macs")) {
+			String type = MacUtility.getType(file);
+			if (type == null) return null;
+			if (type.equals("ZSYS") || type.equals("zsys")) return SUIT;
 		}
+		return null;
 	}
 }

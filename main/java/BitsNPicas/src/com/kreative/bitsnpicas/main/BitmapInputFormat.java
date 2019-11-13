@@ -1,10 +1,9 @@
 package com.kreative.bitsnpicas.main;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontImporter;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
@@ -134,25 +133,14 @@ public enum BitmapInputFormat {
 				}
 			}
 		}
-		try {
-			String[] cmd = {"/usr/bin/GetFileInfo", "-c", file.getAbsolutePath()};
-			Process p = Runtime.getRuntime().exec(cmd);
-			Scanner scan = new Scanner(p.getInputStream());
-			if (scan.hasNextLine()) {
-				String creator = scan.nextLine().trim();
-				if (creator.equals("\"DMOV\"") || creator.equals("\"movr\"")) {
-					scan.close();
-					p.waitFor();
-					return SUIT;
-				}
-			}
-			scan.close();
-			p.waitFor();
-			return null;
-		} catch (IOException e) {
-			return null;
-		} catch (InterruptedException e) {
-			return null;
+		String creator = MacUtility.getCreator(file);
+		if (creator == null) return null;
+		if (creator.equals("DMOV") || creator.equals("movr")) return SUIT;
+		if (creator.equals("MACS") || creator.equals("macs")) {
+			String type = MacUtility.getType(file);
+			if (type == null) return null;
+			if (type.equals("ZSYS") || type.equals("zsys")) return SUIT;
 		}
+		return null;
 	}
 }

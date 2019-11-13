@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFontExporter;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
@@ -38,8 +39,7 @@ public enum BitmapExportFormat {
 			);
 		}
 		public void postProcess(File file) throws IOException {
-			String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", file.getAbsolutePath()};
-			Runtime.getRuntime().exec(cmd);
+			MacUtility.setTypeAndCreator(file, "FFIL", "DMOV");
 		}
 	},
 	DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac", "MacRoman", false) {

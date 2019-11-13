@@ -3,6 +3,7 @@ package com.kreative.bitsnpicas.main;
 import java.io.File;
 import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFontExporter;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
@@ -46,8 +47,7 @@ public enum BitmapOutputFormat {
 			);
 		}
 		public void postProcess(File file) throws IOException {
-			String[] cmd = {"/usr/bin/SetFile", "-t", "FFIL", "-c", "DMOV", file.getAbsolutePath()};
-			Runtime.getRuntime().exec(cmd);
+			MacUtility.setTypeAndCreator(file, "FFIL", "DMOV");
 		}
 	},
 	DFONT(".dfont", "dfont") {
