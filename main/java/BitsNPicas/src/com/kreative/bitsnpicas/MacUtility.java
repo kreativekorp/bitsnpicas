@@ -5,10 +5,28 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class MacUtility {
+	public static File getDataFork(File file) {
+		if (file.getName().equals("rsrc")) {
+			File parent = file.getParentFile();
+			if (parent != null && parent.getName().equals("..namedfork")) {
+				File gparent = parent.getParentFile();
+				if (gparent != null) return gparent;
+			}
+		}
+		return file;
+	}
+	
+	public static File getResourceFork(File file) {
+		if (getDataFork(file) != file) return file;
+		return new File(new File(file, "..namedfork"), "rsrc");
+	}
+	
 	public static void setTypeAndCreator(File file, String type, String creator) {
 		try {
 			String[] cmd = {"/usr/bin/SetFile", "-t", type, "-c", creator, file.getAbsolutePath()};
-			Runtime.getRuntime().exec(cmd);
+			Process p = Runtime.getRuntime().exec(cmd);
+			try { p.waitFor(); }
+			catch (InterruptedException e) {}
 		} catch (IOException e) {
 			// Ignored.
 		}

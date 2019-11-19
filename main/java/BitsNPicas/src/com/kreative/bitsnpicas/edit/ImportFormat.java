@@ -16,12 +16,12 @@ import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
-import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.U8MBitmapFontImporter;
+import com.kreative.bitsnpicas.mover.MoverFrame;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public enum ImportFormat {
@@ -41,20 +41,12 @@ public enum ImportFormat {
 	},
 	SUIT(".suit", true) {
 		public JFrame createOptionFrame(File file) throws IOException {
-			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable encoding) {
-					return new NFNTBitmapFontImporter(encoding);
-				}
-			});
+			return MoverFrame.forFile(file);
 		}
 	},
 	DFONT(".dfont", false) {
 		public JFrame createOptionFrame(File file) throws IOException {
-			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable encoding) {
-					return new NFNTBitmapFontImporter(encoding);
-				}
-			});
+			return MoverFrame.forFile(file);
 		}
 	},
 	PNG(".png") {

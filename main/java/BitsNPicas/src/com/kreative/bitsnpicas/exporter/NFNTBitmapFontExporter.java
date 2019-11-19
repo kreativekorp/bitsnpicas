@@ -7,6 +7,8 @@ import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
+import com.kreative.bitsnpicas.mover.FONDEntry;
+import com.kreative.bitsnpicas.mover.FONDResource;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 import com.kreative.ksfl.*;
 import com.kreative.rsrc.*;
@@ -161,48 +163,22 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		}
 		
 		// make FOND
-		ByteArrayOutputStream fondOut = new ByteArrayOutputStream();
-		DataOutputStream fondIn = new DataOutputStream(fondOut);
-		fondIn.writeShort(type);
-		fondIn.writeShort(id);
-		fondIn.writeShort(firstChar);
-		fondIn.writeShort(lastChar);
-		fondIn.writeShort(ascent);
-		fondIn.writeShort(descent);
-		fondIn.writeShort(leading);
-		fondIn.writeShort(maxWidth);
-		fondIn.writeInt(0); // offset to width tables
-		fondIn.writeInt(0); // offset to kerning tables
-		fondIn.writeInt(0); // offset to style mapping tables
-		fondIn.writeShort(0); // unused
-		fondIn.writeShort(0); // extra width for bold
-		fondIn.writeShort(0); // extra width for italic
-		fondIn.writeShort(0); // extra width for underline
-		fondIn.writeShort(0); // extra width for outline
-		fondIn.writeShort(0); // extra width for shadow
-		fondIn.writeShort(0); // extra width for condensed
-		fondIn.writeShort(0); // extra width for extended
-		fondIn.writeShort(0); // undefined
-		fondIn.writeInt(0); // rsvd for international
-		fondIn.writeShort(3); // fond version
-		fondIn.writeShort(0); // font entries (-1 = no entries, 0 = 1 entry, 1 = 2 entries, etc.)
-		fondIn.writeShort(size);
-		fondIn.writeShort(font.getMacStyle());
-		fondIn.writeShort(id);
+		FONDResource fond = new FONDResource(name, id);
+		fond.entries.add(new FONDEntry(size, font.getMacStyle(), id));
 		
 		// make resource fork
 		MacResourceArray rp = new MacResourceArray();
-		rp.add(new MacResource(KSFLConstants.FOND, (short)id, name, fondOut.toByteArray()));
+		rp.add(new MacResource(KSFLConstants.FOND, (short)id, name, fond.toByteArray()));
 		rp.add(new MacResource(KSFLConstants.NFNT, (short)id, name, nfntOut.toByteArray()));
 		return rp.getBytes();
 	}
-
+	
 	public void exportFontToFile(BitmapFont font, File file) throws IOException {
 		OutputStream os = new FileOutputStream(file);
 		os.write(exportFontToBytes(font));
 		os.close();
 	}
-
+	
 	public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
 		os.write(exportFontToBytes(font));
 	}

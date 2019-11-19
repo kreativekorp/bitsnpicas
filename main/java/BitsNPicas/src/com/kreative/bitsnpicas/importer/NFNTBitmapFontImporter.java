@@ -6,6 +6,9 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.mover.FONDEntry;
+import com.kreative.bitsnpicas.mover.MoverFile;
+import com.kreative.bitsnpicas.mover.ResourceBundle;
 import com.kreative.bitsnpicas.unicode.EncodingTable;
 import com.kreative.ksfl.*;
 import com.kreative.rsrc.*;
@@ -46,42 +49,42 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 		return fonts;
 	}
 	
-	private BitmapFont[] importFont(MacResourceProvider rp) throws IOException {
+	public BitmapFont[] importFont(MacResourceProvider rp) throws IOException {
 		List<BitmapFont> fonts = new ArrayList<BitmapFont>();
-		for (short id : rp.getIDs(KSFLConstants.FOND)) {
-			MacResource fond = rp.get(KSFLConstants.FOND, id);
-			ByteArrayInputStream in = new ByteArrayInputStream(fond.data);
-			DataInputStream fondIn = new DataInputStream(in);
-			fondIn.skip(52);
-			int count = fondIn.readShort() + 1;
-			for (int i = 0; i < count; i++) {
-				int fontSize = fondIn.readShort();
-				int fontStyle = fondIn.readShort();
-				short resId = fondIn.readShort();
-				MacResource font = rp.get(KSFLConstants.NFNT, resId);
-				if (font == null) font = rp.get(KSFLConstants.FONT, resId);
-				if (font != null) {
-					BitmapFont f = importFont(font.data, fond.id, fontSize, fontStyle, fond.name);
-					if (f != null) fonts.add(f);
-				}
-			}
-			fondIn.close();
-			in.close();
-		}
-		if (fonts.isEmpty()) {
-			for (short id : rp.getIDs(KSFLConstants.FONT)) {
-				int fontSize = id & 0x7F;
-				if (fontSize != 0) {
-					int fontId = (id & 0xFFFF) >> 7;
-					short fontNameId = (short)(id &~ 0x7F);
-					String fontName = rp.getNameFromID(KSFLConstants.FONT, fontNameId);
-					MacResource font = rp.get(KSFLConstants.FONT, id);
-					BitmapFont f = importFont(font.data, fontId, fontSize, 0, fontName);
-					if (f != null) fonts.add(f);
-				}
+		MoverFile mf = new MoverFile(rp);
+		for (int i = 0, n = mf.size(); i < n; i++) {
+			for (BitmapFont font : importFont(mf.get(i))) {
+				fonts.add(font);
 			}
 		}
-		return fonts.toArray(new BitmapFont[0]);
+		return fonts.toArray(new BitmapFont[fonts.size()]);
+	}
+	
+	public BitmapFont[] importFont(ResourceBundle rb) throws IOException {
+		List<BitmapFont> fonts = new ArrayList<BitmapFont>();
+		if (rb.fond != null) {
+			Map<Short,byte[]> resData = new HashMap<Short,byte[]>();
+			for (MacResource res : rb.resources) {
+				if (
+					res.type == KSFLConstants.NFNT ||
+					(
+						res.type == KSFLConstants.FONT &&
+						!resData.containsKey(res.id)
+					)
+				) {
+					resData.put(res.id, res.data);
+				}
+			}
+			for (FONDEntry e : rb.fond.entries) {
+				if (e.size != 0) {
+					fonts.add(importFont(
+						resData.get((short)e.id), rb.fond.id,
+						e.size, e.style, rb.fond.name
+					));
+				}
+			}
+		}
+		return fonts.toArray(new BitmapFont[fonts.size()]);
 	}
 	
 	private BitmapFont importFont(byte[] data, int fontId, int fontSize, int fontStyle, String fontName) throws IOException {
@@ -92,10 +95,11 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 		int lastChar = nfntIn.readShort();
 		/* int maxWidth = */ nfntIn.readShort();
 		int kerning = nfntIn.readShort();
-		/* int nDescent = */ nfntIn.readShort();
+		int nDescent = nfntIn.readShort();
 		/* int rectWidth = */ nfntIn.readShort();
 		int height = nfntIn.readShort();
 		int wots = nfntIn.readUnsignedShort();
+		if (nDescent > 0) wots |= (nDescent << 16);
 		int ascent = nfntIn.readShort();
 		int descent = nfntIn.readShort();
 		int leading = nfntIn.readShort();
@@ -139,6 +143,7 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 			if (widths[i] != -1) {
 				int xcoord = xcoords[i] & 0xFFFF;
 				int width = (xcoords[i + 1] & 0xFFFF) - xcoord;
+				if (width < 0 || (xcoord + width) > (rowWidth * 16)) continue;
 				byte[][] glyph = new byte[height][width];
 				for (int y = 0; y < height; y++) {
 					for (int gx = 0, bx = xcoord; gx < width; gx++, bx++) {
