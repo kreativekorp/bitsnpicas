@@ -49,14 +49,14 @@ public class GEOSMoverMenuBar extends JMenuBar {
 			add(new PasteMenuItem());
 			add(new ClearMenuItem());
 			addSeparator();
-			add(new ImportMenuItem(table));
+			add(new OpenItemsMenuItem(table));
 		}
 	}
 	
-	public static class ImportMenuItem extends JMenuItem {
+	public static class OpenItemsMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public ImportMenuItem(final GEOSFontPointSizeTable table) {
-			super("Import");
+		public OpenItemsMenuItem(final GEOSFontPointSizeTable table) {
+			super("Open Items");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

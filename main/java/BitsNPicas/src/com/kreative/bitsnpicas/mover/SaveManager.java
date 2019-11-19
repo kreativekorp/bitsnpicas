@@ -18,6 +18,8 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 	private JFrame frame;
 	private File file;
 	private File fork;
+	private String type;
+	private String creator;
 	private MacResourceArray rp;
 	private boolean changed;
 	
@@ -25,6 +27,17 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 		this.frame = frame;
 		this.file = file;
 		this.fork = fork;
+		
+		if (file != null) {
+			this.type = MacUtility.getType(file);
+			this.creator = MacUtility.getCreator(file);
+			if (type == null || type.equals("\0\0\0\0")) type = "FFIL";
+			if (creator == null || creator.equals("\0\0\0\0")) creator = "DMOV";
+		} else {
+			this.type = "FFIL";
+			this.creator = "DMOV";
+		}
+		
 		this.rp = rp;
 		this.changed = false;
 		updateWindow();
@@ -51,7 +64,7 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 			fork = newFile;
 		} else {
 			try { newFile.createNewFile(); } catch (IOException e) {}
-			MacUtility.setTypeAndCreator(newFile, "FFIL", "DMOV");
+			MacUtility.setTypeAndCreator(newFile, type, creator);
 			fork = MacUtility.getResourceFork(newFile);
 		}
 		boolean succeeded = write();
@@ -83,11 +96,13 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 	}
 	
 	private void updateWindow() {
+		String fileName = (file == null) ? "Untitled Suitcase" : file.getName();
 		if (CommonMenuItems.IS_MAC_OS) {
 			frame.getRootPane().putClientProperty("Window.documentFile", file);
 			frame.getRootPane().putClientProperty("Window.documentModified", changed);
+			frame.setTitle(fileName);
 		} else {
-			frame.setTitle(changed ? (file.getName() + " \u2022") : file.getName());
+			frame.setTitle(changed ? (fileName + " \u2022") : fileName);
 		}
 	}
 }

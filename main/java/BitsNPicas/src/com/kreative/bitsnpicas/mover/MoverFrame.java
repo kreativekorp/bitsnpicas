@@ -19,7 +19,7 @@ public class MoverFrame extends JFrame {
 		File file = MacUtility.getDataFork(fork);
 		this.sm = new SaveManager(this, file, fork, rp);
 		this.panel = new MoverPanel(this, file, mf, sm);
-		this.mb = new MoverMenuBar(this, sm);
+		this.mb = new MoverMenuBar(this, sm, panel.getTable());
 		
 		setTitle(file.getName());
 		setJMenuBar(mb);

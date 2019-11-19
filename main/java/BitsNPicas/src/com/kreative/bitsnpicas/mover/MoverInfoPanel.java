@@ -22,9 +22,18 @@ public class MoverInfoPanel extends JPanel {
 	private final JComboBox encoding;
 	
 	public MoverInfoPanel(File file) {
-		ImageIcon icon = MoverIcons.getFileIcon(file);
+		ImageIcon icon;
+		String fileName;
+		if (file == null) {
+			icon = MoverIcons.SUITCASE_FONT_32;
+			fileName = "Untitled Suitcase";
+		} else {
+			icon = MoverIcons.getFileIcon(file);
+			fileName = file.getName();
+		}
+		
 		this.iconLabel = new JLabel(icon);
-		this.fileNameLabel = new JLabel(file.getName());
+		this.fileNameLabel = new JLabel(fileName);
 		this.kindLabel = new JLabel(icon.getDescription());
 		this.encoding = new JComboBox(EncodingList.instance().toArray());
 		encoding.setEditable(false);
@@ -56,9 +65,18 @@ public class MoverInfoPanel extends JPanel {
 	}
 	
 	public void setFile(File file) {
-		ImageIcon icon = MoverIcons.getFileIcon(file);
+		ImageIcon icon;
+		String fileName;
+		if (file == null) {
+			icon = MoverIcons.SUITCASE_FONT_32;
+			fileName = "Untitled Suitcase";
+		} else {
+			icon = MoverIcons.getFileIcon(file);
+			fileName = file.getName();
+		}
+		
 		iconLabel.setIcon(icon);
-		fileNameLabel.setText(file.getName());
+		fileNameLabel.setText(fileName);
 		kindLabel.setText(icon.getDescription());
 	}
 	
