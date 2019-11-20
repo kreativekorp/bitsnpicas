@@ -19,6 +19,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.rsrc.SoundResource;
 
@@ -45,23 +46,29 @@ public class SoundPanel extends JPanel {
 		setLayout(new GridLayout());
 		add(mainPanel);
 		
-		playButton.addActionListener(new ActionListener() {
+		final byte[] aiffData = snd.toAiff();
+		final byte[] wavData = snd.toWav();
+		if (aiffData == null && wavData == null) playButton.setEnabled(false);
+		else playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				byte[] stuff;
-				if ((stuff = snd.toAiff()) != null) {
-					try { playSound(stuff); return; }
+				if (aiffData != null) {
+					try { playSound(aiffData); return; }
 					catch (UnsupportedAudioFileException ex) {}
 				}
-				if ((stuff = snd.toWav()) != null) {
-					try { playSound(stuff); return; }
+				if (wavData != null) {
+					try { playSound(wavData); return; }
 					catch (UnsupportedAudioFileException ex) {}
 				}
+				JOptionPane.showMessageDialog(
+					null, "Could not produce audio in a supported format.",
+					"Play Sound", JOptionPane.ERROR_MESSAGE
+				);
 			}
 		});
 	}
 	
 	private static void playSound(byte[] stuff) throws UnsupportedAudioFileException {
-		if (stuff != null) try {
+		try {
 			AudioInputStream st = AudioSystem.getAudioInputStream(new ByteArrayInputStream(stuff));
 			AudioFormat fm = st.getFormat();
 			DataLine.Info inf = new DataLine.Info(Clip.class, fm, ((int)st.getFrameLength()*fm.getFrameSize()));

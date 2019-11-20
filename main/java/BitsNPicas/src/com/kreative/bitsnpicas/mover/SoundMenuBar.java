@@ -44,13 +44,15 @@ public class SoundMenuBar extends JMenuBar {
 		public SaveWavMenuItem(final SoundResource snd) {
 			super("Save as WAV...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, CommonMenuItems.SHORTCUT_KEY));
-			addActionListener(new ActionListener() {
+			final byte[] wavData = snd.toWav();
+			if (wavData == null) setEnabled(false);
+			else addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File file = Main.getSaveFile(".wav");
 					if (file == null) return;
 					try {
 						FileOutputStream out = new FileOutputStream(file);
-						out.write(snd.toWav());
+						out.write(wavData);
 						out.flush();
 						out.close();
 					} catch (Exception ex) {
@@ -69,13 +71,15 @@ public class SoundMenuBar extends JMenuBar {
 		public SaveAiffMenuItem(final SoundResource snd) {
 			super("Save as AIFF...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
-			addActionListener(new ActionListener() {
+			final byte[] aiffData = snd.toAiff();
+			if (aiffData == null) setEnabled(false);
+			else addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File file = Main.getSaveFile(".aiff");
 					if (file == null) return;
 					try {
 						FileOutputStream out = new FileOutputStream(file);
-						out.write(snd.toAiff());
+						out.write(aiffData);
 						out.flush();
 						out.close();
 					} catch (Exception ex) {
