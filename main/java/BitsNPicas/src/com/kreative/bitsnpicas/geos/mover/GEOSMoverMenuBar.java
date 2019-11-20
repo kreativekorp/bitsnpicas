@@ -26,8 +26,7 @@ public class GEOSMoverMenuBar extends JMenuBar {
 		private static final long serialVersionUID = 1L;
 		public FileMenu(final Window window, final SaveManager sm) {
 			super("File");
-			add(new CommonMenuItems.NewBitmapFontMenuItem());
-			// add(new CommonMenuItems.NewVectorFontMenuItem());
+			add(new CommonMenuItems.NewMenu());
 			add(new CommonMenuItems.OpenMenuItem());
 			add(new CommonMenuItems.CloseMenuItem(window));
 			addSeparator();

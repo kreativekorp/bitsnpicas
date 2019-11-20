@@ -28,6 +28,10 @@ public class GEOSMoverFrame extends JFrame {
 		addWindowListener(sm);
 	}
 	
+	public static GEOSMoverFrame forNewFile() {
+		return new GEOSMoverFrame(null, new GEOSFontFile());
+	}
+	
 	public static GEOSMoverFrame forFile(File file) throws IOException {
 		DataInputStream in =
 			new DataInputStream(

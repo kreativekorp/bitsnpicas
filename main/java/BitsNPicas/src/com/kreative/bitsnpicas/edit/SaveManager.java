@@ -85,6 +85,7 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 		if (CommonMenuItems.IS_MAC_OS) {
 			frame.getRootPane().putClientProperty("Window.documentFile", file);
 			frame.getRootPane().putClientProperty("Window.documentModified", changed);
+			frame.setTitle(font.toString());
 		} else {
 			frame.setTitle(changed ? (font.toString() + " \u2022") : font.toString());
 		}

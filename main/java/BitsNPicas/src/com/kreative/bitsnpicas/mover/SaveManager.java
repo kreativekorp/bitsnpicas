@@ -21,6 +21,7 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 	private String type;
 	private String creator;
 	private MacResourceArray rp;
+	private MoverInfoPanel ip;
 	private boolean changed;
 	
 	public SaveManager(JFrame frame, File file, File fork, MacResourceArray rp) {
@@ -41,6 +42,10 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 		this.rp = rp;
 		this.changed = false;
 		updateWindow();
+	}
+	
+	public void setInfoPanel(MoverInfoPanel ip) {
+		this.ip = ip;
 	}
 	
 	public void setChanged() {
@@ -104,5 +109,6 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 		} else {
 			frame.setTitle(changed ? (fileName + " \u2022") : fileName);
 		}
+		if (ip != null) ip.setFile(file);
 	}
 }

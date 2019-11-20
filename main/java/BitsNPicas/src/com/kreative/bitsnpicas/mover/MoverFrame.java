@@ -16,18 +16,23 @@ public class MoverFrame extends JFrame {
 	private final MoverMenuBar mb;
 	
 	public MoverFrame(File fork, MacResourceArray rp, MoverFile mf) {
-		File file = MacUtility.getDataFork(fork);
+		File file = (fork == null) ? null : MacUtility.getDataFork(fork);
 		this.sm = new SaveManager(this, file, fork, rp);
 		this.panel = new MoverPanel(this, file, mf, sm);
 		this.mb = new MoverMenuBar(this, sm, panel.getTable());
 		
-		setTitle(file.getName());
+		setTitle((file == null) ? "Untitled Suitcase" : file.getName());
 		setJMenuBar(mb);
 		setContentPane(panel);
 		setSize(600, 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(sm);
+	}
+	
+	public static MoverFrame forNewFile() throws IOException {
+		MacResourceArray rp = new MacResourceArray();
+		return new MoverFrame(null, rp, new MoverFile(rp));
 	}
 	
 	public static MoverFrame forFile(File file) throws IOException {

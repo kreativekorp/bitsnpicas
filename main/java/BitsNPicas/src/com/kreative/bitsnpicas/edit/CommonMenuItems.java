@@ -6,9 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
+import com.kreative.bitsnpicas.mover.MoverFrame;
 
 public class CommonMenuItems {
 	public static final int SHORTCUT_KEY = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -19,6 +23,17 @@ public class CommonMenuItems {
 		try { isMacOS = System.getProperty("os.name").toUpperCase().contains("MAC OS"); }
 		catch (Exception e) { isMacOS = false; }
 		IS_MAC_OS = isMacOS;
+	}
+	
+	public static class NewMenu extends JMenu {
+		private static final long serialVersionUID = 1L;
+		public NewMenu() {
+			super("New");
+			add(new NewBitmapFontMenuItem());
+			// add(new NewVectorFontMenuItem());
+			add(new NewFontSuitcaseMenuItem());
+			add(new NewGEOSFontMenuItem());
+		}
 	}
 	
 	public static class NewBitmapFontMenuItem extends JMenuItem {
@@ -42,6 +57,31 @@ public class CommonMenuItems {
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Main.newVectorFont();
+				}
+			});
+		}
+	}
+	
+	public static class NewFontSuitcaseMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public NewFontSuitcaseMenuItem() {
+			super("New Font Suitcase");
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try { MoverFrame.forNewFile().setVisible(true); }
+					catch (IOException ioe) { ioe.printStackTrace(); }
+				}
+			});
+		}
+	}
+	
+	public static class NewGEOSFontMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public NewGEOSFontMenuItem() {
+			super("New GEOS Font");
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GEOSMoverFrame.forNewFile().setVisible(true);
 				}
 			});
 		}

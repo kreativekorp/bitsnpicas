@@ -28,11 +28,13 @@ public class MoverPanel extends JPanel {
 			JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS
 		);
 		
+		sm.setInfoPanel(infoPanel);
+		table.createDropTarget(tablePane);
+		
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		infoPanel.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
 		mainPanel.add(infoPanel, BorderLayout.PAGE_START);
 		mainPanel.add(tablePane);
-		table.createDropTarget(tablePane);
 		
 		setLayout(new BorderLayout());
 		add(mainPanel, BorderLayout.CENTER);
