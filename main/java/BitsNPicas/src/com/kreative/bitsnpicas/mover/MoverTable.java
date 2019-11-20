@@ -2,6 +2,7 @@ package com.kreative.bitsnpicas.mover;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FontFormatException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -42,7 +43,9 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
+import com.kreative.rsrc.MacResource;
 import com.kreative.rsrc.MacResourceFile;
+import com.kreative.rsrc.SoundResource;
 
 public class MoverTable extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -186,6 +189,23 @@ public class MoverTable extends JTable {
 					Main.openFonts(null, null, fonts);
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
+				}
+			}
+			if (rb.moverType.equals("tfil")) {
+				for (MacResource res : rb.resources) {
+					try {
+						new TrueTypeFrame(res.data).setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (FontFormatException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			if (rb.moverType.equals("sfil")) {
+				for (MacResource res : rb.resources) {
+					SoundResource snd = res.shallowRecast(SoundResource.class);
+					new SoundFrame(snd).setVisible(true);
 				}
 			}
 			// TODO others
