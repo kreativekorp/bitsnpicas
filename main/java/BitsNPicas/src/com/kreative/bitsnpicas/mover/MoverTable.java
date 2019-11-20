@@ -43,6 +43,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
+import com.kreative.ksfl.KSFLConstants;
 import com.kreative.rsrc.MacResource;
 import com.kreative.rsrc.MacResourceFile;
 import com.kreative.rsrc.SoundResource;
@@ -208,7 +209,13 @@ public class MoverTable extends JTable {
 					new SoundFrame(snd).setVisible(true);
 				}
 			}
-			// TODO others
+			if (rb.moverType.equals("kfil")) {
+				for (MacResource res : rb.resources) {
+					if (res.type == KSFLConstants.KCHR) {
+						new KeyboardFrame(res, ip.getSelectedEncoding()).setVisible(true);
+					}
+				}
+			}
 		}
 	}
 	
