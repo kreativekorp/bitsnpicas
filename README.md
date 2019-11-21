@@ -22,6 +22,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp` - Create from image (GUI only)
   *  `.bin`, `.rom` - Create from binary file (GUI only)
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
+  *  `.cvt` - GEOS font in Convert wrapper
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
@@ -48,6 +49,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
+  *  `.cvt` - GEOS font in Convert wrapper
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
@@ -63,6 +65,7 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `png` or `sfont` - SDL SFont
   *  `rfont` - RFont, Kreative Software's extension of SFont
   *  `hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
+  *  `cvt` or `geos` - GEOS font in Convert wrapper
   *  `fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
