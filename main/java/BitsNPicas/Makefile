@@ -44,7 +44,7 @@ BitsNPicas.app: dep BitsNPicas.jar
 	cp -f dep/PkgInfo BitsNPicas.app/Contents
 	cp -f dep/Info.plist BitsNPicas.app/Contents
 	cp -f dep/universalJavaApplicationStub BitsNPicas.app/Contents/MacOS/BitsNPicas
-	cp -f dep/kbnp*.icns BitsNPicas.app/Contents/Resources
+	cp -f dep/kbnp*.icns dep/dmov*.icns dep/movr*.icns BitsNPicas.app/Contents/Resources
 	cp -f dep/*.jar BitsNPicas.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas.app/Contents/Resources/Java
 

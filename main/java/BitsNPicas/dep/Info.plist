@@ -21,11 +21,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.4</string>
 	<key>CFBundleSignature</key>
 	<string>KBnP</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.4</string>
 	<key>JavaX</key>
 	<dict>
 		<key>ClassPath</key>
@@ -115,6 +115,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>cvt</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>GEOS Convert File</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>fzx</string>
 			</array>
 			<key>CFBundleTypeName</key>
@@ -185,18 +199,6 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>sfd</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>FontForge Font</string>
-			<key>LSHandlerRank</key>
-			<string>None</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
 				<string>suit</string>
 				<string>dfont</string>
 			</array>
@@ -206,6 +208,132 @@
 			<array>
 				<string>FFIL</string>
 			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>dmov-ffil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Desk Accessory Suitcase</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>DFIL</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>dmov-dfil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Bitmap Font</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>ffil</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>movr-ffil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic TrueType Font</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>tfil</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>movr-tfil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Desk Accessory</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>dfil</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>movr-dfil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Script System</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>ifil</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>movr-ifil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Keyboard Layout</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>kfil</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>movr-kfil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Sound</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>sfil</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>movr-sfil</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Mac OS Classic Function Key</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>fkey</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>movr-fkey</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sfd</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FontForge Font</string>
 			<key>LSHandlerRank</key>
 			<string>None</string>
 			<key>CFBundleTypeRole</key>
