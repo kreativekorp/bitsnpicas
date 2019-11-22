@@ -2,6 +2,8 @@
 
 Bits'N'Picas is a set of tools for creating and converting bitmap and emoji fonts.
 
+Bitmap font functions can be accessed both with a GUI and from a command line. Emoji font functions can only be accessed from a command line.
+
 ## Creating and Editing Bitmap Fonts with a GUI
 
 Launch the Bits'N'Picas JAR without any arguments or with the `edit` command to open the bitmap font editor GUI.
@@ -22,7 +24,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp` - Create from image (GUI only)
   *  `.bin`, `.rom` - Create from binary file (GUI only)
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
-  *  `.cvt` - GEOS font in Convert wrapper
+  *  `.cvt` - GEOS font in Convert format (including MEGA fonts)
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
@@ -31,7 +33,15 @@ The input format is determined by the file extension of the input file. Supporte
 
 On Mac OS X you can also launch or drop a font file onto the Bits'N'Picas application.
 
-![](https://github.com/kreativekorp/bitsnpicas/blob/master/wiki/screenshot.png?raw=true)
+![](wiki/screenshot.png)
+
+Bits'N'Picas can also open font, desk accessory, and system suitcases and move around fonts, desk accessories, scripts, keyboard layouts, and sounds, just like the Finder used to be able to do back in the good old days of System 7.
+
+![](wiki/suitcases.png)
+
+A similar interface also exists for GEOS fonts.
+
+![](wiki/geosfonts.png)
 
 ## Converting Bitmap Fonts
 
@@ -49,7 +59,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
-  *  `.cvt` - GEOS font in Convert wrapper
+  *  `.cvt` - GEOS font in Convert format (including MEGA fonts)
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
@@ -65,7 +75,7 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `png` or `sfont` - SDL SFont
   *  `rfont` - RFont, Kreative Software's extension of SFont
   *  `hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
-  *  `cvt` or `geos` - GEOS font in Convert wrapper
+  *  `cvt` or `geos` - GEOS font in Convert format (with MEGA option)
   *  `fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
@@ -75,7 +85,9 @@ Additional options include:
   *  `-s` *regex* `-r` *replacement* - Perform a search-and-replace on the font name.
   *  `-b` - Apply a faux-bold effect.
   *  `-w` *units* `-h` *units* - Specify the width and height of pixels in em units (for `ttf` format).
-  *  `-i` *fontid* `-z` *size* - Specify the Macintosh font ID and font size (for `nfnt` format).
+  *  `-i` *fontid* `-z` *size* - Specify the font ID and font size (for `nfnt` or `geos` format).
+
+You can see a list of all options using the `--help` option.
 
 ## Extracting Images from Emoji/Color Fonts
 
