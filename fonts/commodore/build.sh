@@ -41,6 +41,6 @@ $BITSNPICAS convertbitmap -o PetMe642Y.ttf -f ttf -p commodore-80col PetMe64.kbi
 $BITSNPICAS convertbitmap -o PetMe128.ttf -f ttf PetMe128.kbits
 $BITSNPICAS convertbitmap -o PetMe1282Y.ttf -f ttf -p commodore-80col PetMe128.kbits
 
-$BITSNPICAS convertbitmap -o Berkelium64.ttf -f ttf Berkelium64.sfd
-$BITSNPICAS convertbitmap -o Berkelium1541.ttf -f ttf Berkelium1541.sfd
-$BITSNPICAS convertbitmap -o Giana.ttf -f ttf Giana.sfd
+$BITSNPICAS convertbitmap -o Berkelium64.ttf -f ttf Berkelium64.kbits
+$BITSNPICAS convertbitmap -o Berkelium1541.ttf -f ttf Berkelium1541.kbits
+$BITSNPICAS convertbitmap -o Giana.ttf -f ttf Giana.kbits
