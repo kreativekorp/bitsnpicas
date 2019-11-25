@@ -95,10 +95,15 @@ public abstract class Font<T extends FontGlyph> {
 	}
 	
 	public int[] codePoints() {
-		Integer[] cp = characters.keySet().toArray(new Integer[0]);
-		int[] cp2 = new int[cp.length];
-		for (int i = 0; i < cp.length; i++) cp2[i] = cp[i];
-		return cp2;
+		int[] arr = new int[characters.size()]; int i = 0;
+		for (int cp : characters.keySet()) arr[i++] = cp;
+		return arr;
+	}
+	
+	public List<Integer> codePointList() {
+		List<Integer> list = new ArrayList<Integer>();
+		for (int cp : characters.keySet()) list.add(cp);
+		return list;
 	}
 	
 	public Iterator<Integer> codePointIterator() {

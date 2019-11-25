@@ -25,7 +25,7 @@ public class GlyphListPanel extends JPanel {
 	private final GlyphListCharacterDataPanel gls;
 	
 	public GlyphListPanel(Font<?> font, final SaveManager sm) {
-		cpllm = new CodePointListListModel();
+		cpllm = new CodePointListListModel(font);
 		cpllv = new JList(cpllm);
 		cpllv.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		cpllp = new JScrollPane(cpllv, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
