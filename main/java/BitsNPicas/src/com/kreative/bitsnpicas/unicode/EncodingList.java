@@ -28,7 +28,8 @@ public class EncodingList extends AbstractList<EncodingTable> {
 		"MacRoman", "MacRomanian", "MacTurkish", "MacVT100",
 		"FZX PUA", "FZX Latin-1", "FZX Latin-5", "FZX Latin-9",
 		"FZX SuperLatin", "FZX Desktop", "FZX KOI-8",
-		"U8/M Apple II", "U8/M PETSCII",
+		"U8/M Apple II", "U8/M Atari ST", "U8/M ATASCII",
+		"U8/M PETSCII", "U8/M RISC OS", "U8/M Spectrum",
 	};
 	
 	private static EncodingList instance = null;
