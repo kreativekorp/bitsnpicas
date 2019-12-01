@@ -115,6 +115,7 @@ public class ConvertBitmap {
 								boolean anyDone = false;
 								for (BitmapFont font : fonts) {
 									transformFont(font, o);
+									font.contractGlyphs();
 									font.autoFillNames();
 									String name = font.getName(format.nameType);
 									boolean done = exportFont(font, name, o);

@@ -42,15 +42,15 @@ public interface BitmapGlyphTransform {
 	
 	public static class Invert implements BitmapGlyphTransform {
 		public void transform(BitmapFont font, BitmapFontGlyph glyph) {
-			BitmapGlyphOps.expand(
-				glyph, 0, -font.getEmAscent(), glyph.getCharacterWidth(),
-				font.getEmAscent() + font.getEmDescent()
+			glyph.expand(
+				0, -font.getLineAscent(), glyph.getCharacterWidth(),
+				font.getLineAscent() + font.getLineDescent()
 			);
-			BitmapGlyphOps.invertRect(
-				glyph, 0, -font.getEmAscent(), glyph.getCharacterWidth(),
-				font.getEmAscent() + font.getEmDescent()
+			glyph.invertRect(
+				0, -font.getLineAscent(), glyph.getCharacterWidth(),
+				font.getLineAscent() + font.getLineDescent()
 			);
-			BitmapGlyphOps.contract(glyph);
+			glyph.contract();
 		}
 	}
 	
@@ -72,7 +72,7 @@ public interface BitmapGlyphTransform {
 	public static class FlipVertical implements BitmapGlyphTransform {
 		public void transform(BitmapFont font, BitmapFontGlyph glyph) {
 			transform(glyph.getGlyph());
-			int y = font.getEmAscent() - font.getEmDescent();
+			int y = font.getLineAscent() - font.getLineDescent();
 			y += glyph.getGlyphHeight() - glyph.getGlyphAscent();
 			glyph.setXY(glyph.getGlyphOffset(), y);
 		}

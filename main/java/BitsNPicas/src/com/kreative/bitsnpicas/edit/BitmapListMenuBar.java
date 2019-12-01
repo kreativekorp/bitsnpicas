@@ -99,7 +99,7 @@ public class BitmapListMenuBar extends JMenuBar {
 									glyph = new BitmapFontGlyph();
 									font.putCharacter(cp, glyph);
 								}
-								BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
+								glyph.setToImage(0, -font.getLineAscent(), image);
 								glyph.setCharacterWidth(image.getWidth());
 							}
 							gl.glyphsChanged();
@@ -215,7 +215,7 @@ public class BitmapListMenuBar extends JMenuBar {
 							if (image != null) {
 								for (int cp : gl.getSelectedCodePoints()) {
 									BitmapFontGlyph glyph = new BitmapFontGlyph();
-									BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
+									glyph.setToImage(0, -font.getLineAscent(), image);
 									glyph.setCharacterWidth(image.getWidth());
 									font.putCharacter(cp, glyph);
 								}

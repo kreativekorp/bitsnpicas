@@ -217,6 +217,7 @@ public class Main {
 		if (font instanceof BitmapFont) {
 			BitmapFontExporter bformat = (BitmapFontExporter)format;
 			BitmapFont bfont = (BitmapFont)font;
+			bfont.contractGlyphs();
 			try {
 				bformat.exportFontToFile(bfont, fontFile);
 				return true;

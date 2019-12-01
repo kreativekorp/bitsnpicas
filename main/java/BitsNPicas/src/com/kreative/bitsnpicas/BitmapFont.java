@@ -146,4 +146,10 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 		}
 		return new Point(cx, cy);
 	}
+	
+	public void contractGlyphs() {
+		for (BitmapFontGlyph glyph : characters.values()) {
+			glyph.contract();
+		}
+	}
 }

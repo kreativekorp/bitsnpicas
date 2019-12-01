@@ -112,53 +112,53 @@ public class BitmapToolHandler implements GlyphComponentListener {
 			case PENCIL:
 				if (pressed) {
 					pushUndoState(inProgressState);
-					byte existing = BitmapGlyphOps.getPixel(glyph, x, y);
+					byte existing = glyph.getPixel(x, y);
 					if (inProgressOpacity == existing) inProgressOpacity = 0;
 				}
-				BitmapGlyphOps.expand(glyph, rx, ry, rw + 1, rh + 1);
-				BitmapGlyphOps.drawLine(glyph, startX, startY, x, y, inProgressOpacity);
+				glyph.expand(rx, ry, rw + 1, rh + 1);
+				glyph.drawLine(startX, startY, x, y, inProgressOpacity);
 				startX = x;
 				startY = y;
-				if (released) BitmapGlyphOps.contract(glyph);
+				if (released) glyph.contract();
 				return true;
 			case ERASER:
 				if (pressed) pushUndoState(inProgressState);
-				BitmapGlyphOps.expand(glyph, rx, ry, rw + 1, rh + 1);
-				BitmapGlyphOps.drawLine(glyph, startX, startY, x, y, (byte)0);
+				glyph.expand(rx, ry, rw + 1, rh + 1);
+				glyph.drawLine(startX, startY, x, y, (byte)0);
 				startX = x;
 				startY = y;
-				if (released) BitmapGlyphOps.contract(glyph);
+				if (released) glyph.contract();
 				return true;
 			case EYEDROPPER:
-				toolPanel.setOpacity(BitmapGlyphOps.getPixel(glyph, x, y) & 0xFF);
+				toolPanel.setOpacity(glyph.getPixel(x, y) & 0xFF);
 				return false;
 			case LINE:
 				if (pressed) pushUndoState(inProgressState);
 				inProgressState.apply(glyph);
-				BitmapGlyphOps.expand(glyph, rx, ry, rw + 1, rh + 1);
-				BitmapGlyphOps.drawLine(glyph, startX, startY, x, y, inProgressOpacity);
-				if (released) BitmapGlyphOps.contract(glyph);
+				glyph.expand(rx, ry, rw + 1, rh + 1);
+				glyph.drawLine(startX, startY, x, y, inProgressOpacity);
+				if (released) glyph.contract();
 				return true;
 			case RECTANGLE:
 				if (pressed) pushUndoState(inProgressState);
 				inProgressState.apply(glyph);
-				BitmapGlyphOps.expand(glyph, rx, ry, rw + 1, rh + 1);
-				BitmapGlyphOps.drawRect(glyph, rx, ry, rw, rh, inProgressOpacity);
-				if (released) BitmapGlyphOps.contract(glyph);
+				glyph.expand(rx, ry, rw + 1, rh + 1);
+				glyph.drawRect(rx, ry, rw, rh, inProgressOpacity);
+				if (released) glyph.contract();
 				return true;
 			case FILLED_RECT:
 				if (pressed) pushUndoState(inProgressState);
 				inProgressState.apply(glyph);
-				BitmapGlyphOps.expand(glyph, rx, ry, rw + 1, rh + 1);
-				BitmapGlyphOps.fillRect(glyph, rx, ry, rw + 1, rh + 1, inProgressOpacity);
-				if (released) BitmapGlyphOps.contract(glyph);
+				glyph.expand(rx, ry, rw + 1, rh + 1);
+				glyph.fillRect(rx, ry, rw + 1, rh + 1, inProgressOpacity);
+				if (released) glyph.contract();
 				return true;
 			case INVERT:
 				if (pressed) pushUndoState(inProgressState);
 				inProgressState.apply(glyph);
-				BitmapGlyphOps.expand(glyph, rx, ry, rw + 1, rh + 1);
-				BitmapGlyphOps.invertRect(glyph, rx, ry, rw + 1, rh + 1);
-				if (released) BitmapGlyphOps.contract(glyph);
+				glyph.expand(rx, ry, rw + 1, rh + 1);
+				glyph.invertRect(rx, ry, rw + 1, rh + 1);
+				if (released) glyph.contract();
 				return true;
 			case MOVE:
 				if (pressed) {

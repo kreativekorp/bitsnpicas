@@ -83,7 +83,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 						BufferedImage image = ImageIO.read(file);
 						if (image != null) {
 							handler.pushUndoState(null);
-							BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
+							glyph.setToImage(0, -font.getLineAscent(), image);
 							glyph.setCharacterWidth(image.getWidth());
 							gc.glyphChanged();
 						} else {
@@ -210,7 +210,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 							BufferedImage image = SwingUtils.toBufferedImage(content);
 							if (image != null) {
 								handler.pushUndoState(null);
-								BitmapGlyphOps.setToImage(glyph, 0, -font.getEmAscent(), image);
+								glyph.setToImage(0, -font.getLineAscent(), image);
 								glyph.setCharacterWidth(image.getWidth());
 								gc.glyphChanged();
 								return;
