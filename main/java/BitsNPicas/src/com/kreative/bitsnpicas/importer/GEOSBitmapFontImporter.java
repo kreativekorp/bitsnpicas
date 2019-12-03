@@ -99,6 +99,7 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 			offset = 0;
 			width = gd[0].length;
 		}
+		if (width == 0 && gd[0].length == 0) return null;
 		return new BitmapFontGlyph(gd, offset, width, gfs.ascent + 1);
 	}
 	

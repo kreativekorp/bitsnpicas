@@ -110,26 +110,37 @@ public class GEOSFontStrike {
 	}
 	
 	public void read(byte[] data, int offset, int length) {
-		ascent = data[offset + 0] & 0xFF;
-		rowWidth = (data[offset + 1] & 0xFF) | ((data[offset + 2] & 0xFF) << 8);
-		height = data[offset + 3] & 0xFF;
-		int xo = (data[offset + 4] & 0xFF) | ((data[offset + 5] & 0xFF) << 8);
-		int bo = (data[offset + 6] & 0xFF) | ((data[offset + 7] & 0xFF) << 8);
-		boolean kerning = (xo >= 10 && bo >= 10);
-		int ko = kerning ? ((data[offset + 8] & 0xFF) | ((data[offset + 9] & 0xFF) << 8)) : length;
-		boolean utf8 = (xo >= 12 && bo >= 12 && ko >= 12);
-		int uo = utf8 ? ((data[offset + 10] & 0xFF) | ((data[offset + 11] & 0xFF) << 8)) : length;
+		// Read header.
+		ascent    =  data[offset + 0] & 0xFF;
+		rowWidth  = (data[offset + 1] & 0xFF) | ((data[offset + 2] & 0xFF) << 8);
+		height    =  data[offset + 3] & 0xFF;
+		int xo    = (data[offset + 4] & 0xFF) | ((data[offset + 5] & 0xFF) << 8);
+		int bo    = (data[offset + 6] & 0xFF) | ((data[offset + 7] & 0xFF) << 8);
+		int flags = (data[offset + 8] & 0xFF) | ((data[offset + 9] & 0xFF) << 8);
+		boolean extended = ((flags & 0x8000) != 0);
+		boolean kerning  = extended && ((flags & 0x2000) != 0);
+		boolean utf8     = extended && ((flags & 0x1000) != 0);
+		int ko = kerning ? ((data[offset + 10] & 0xFF) | ((data[offset + 11] & 0xFF) << 8)) : length;
+		int uo = utf8    ? ((data[offset + 12] & 0xFF) | ((data[offset + 13] & 0xFF) << 8)) : length;
+		
+		// Calculate lengths.
 		int xl = calculateLength(xo, length, bo, ko, uo);
 		int bl = calculateLength(bo, length, xo, ko, uo);
 		int kl = calculateLength(ko, length, xo, bo, uo);
+		
+		// Read x coordinate table.
 		xCoord = new int[xl / 2];
 		for (int a = offset + xo, i = 0; i < xCoord.length; i++, a += 2) {
 			xCoord[i] = (data[a] & 0xFF) | ((data[a+1] & 0xFF) << 8);
 		}
+		
+		// Read bitmap.
 		bitmap = new byte[bl];
 		for (int a = offset + bo, i = 0; i < bitmap.length; i++, a++) {
 			bitmap[i] = data[a];
 		}
+		
+		// Read kerning table.
 		if (kerning) {
 			offsetWidths = new OffsetWidth[kl / 2];
 			for (int a = offset + ko, i = 0; i < offsetWidths.length; i++, a += 2) {
@@ -138,6 +149,8 @@ public class GEOSFontStrike {
 		} else {
 			offsetWidths = null;
 		}
+		
+		// Read UTF-8 table.
 		if (utf8) {
 			utf8Map = new UTF8StrikeMap();
 			utf8Map.read(data, offset + uo);
@@ -148,32 +161,44 @@ public class GEOSFontStrike {
 	
 	public byte[] write() {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		boolean extended = (offsetWidths != null || utf8Map != null);
+		
+		// Calculate offsets.
+		int offset = extended ? 14 : 8;
+		int xo = offset; offset += xCoord.length * 2;
+		int ko = offset; if (offsetWidths != null) offset += offsetWidths.length * 2;
+		int bo = offset; offset += bitmap.length;
+		int uo = offset;
+		
+		// Write header.
 		out.write(ascent);
 		out.write(rowWidth);
 		out.write(rowWidth >> 8);
 		out.write(height);
-		int xo = (utf8Map != null) ? 12 : (offsetWidths != null) ? 10 : 8;
-		int ko = xo + xCoord.length * 2;
-		int bo = (offsetWidths != null) ? (ko + offsetWidths.length * 2) : ko;
-		int uo = bo + bitmap.length;
 		out.write(xo);
 		out.write(xo >> 8);
 		out.write(bo);
 		out.write(bo >> 8);
-		if (offsetWidths != null || utf8Map != null) {
+		if (extended) {
+			int flags = 0x8000;
+			if (xCoord.length <    96) flags |= 0x4000;
+			if (offsetWidths  != null) flags |= 0x2000;
+			if (utf8Map       != null) flags |= 0x1000;
+			out.write(flags);
+			out.write(flags >> 8);
 			out.write(ko);
 			out.write(ko >> 8);
-			if (utf8Map != null) {
-				out.write(uo);
-				out.write(uo >> 8);
-			}
+			out.write(uo);
+			out.write(uo >> 8);
 		}
-		// xo
+		
+		// Write x coordinate table.
 		for (int i = 0; i < xCoord.length; i++) {
 			out.write(xCoord[i]);
 			out.write(xCoord[i] >> 8);
 		}
-		// ko
+		
+		// Write kerning table.
 		if (offsetWidths != null) {
 			for (int i = 0; i < offsetWidths.length; i++) {
 				if (offsetWidths[i] != null) {
@@ -185,17 +210,20 @@ public class GEOSFontStrike {
 				}
 			}
 		}
-		// bo
+		
+		// Write bitmap.
 		for (int i = 0; i < bitmap.length; i++) {
 			out.write(bitmap[i]);
 		}
-		// uo
+		
+		// Write UTF-8 table.
 		if (utf8Map != null) {
 			byte[] utf8Data = utf8Map.write(uo);
 			for (int i = 0; i < utf8Data.length; i++) {
 				out.write(utf8Data[i]);
 			}
 		}
+		
 		return out.toByteArray();
 	}
 	
