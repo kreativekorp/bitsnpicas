@@ -3,6 +3,7 @@ package com.kreative.bitsnpicas.main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +42,20 @@ public class ConvertBitmap {
 						}
 					} else if (arg.equals("-r") && argi < args.length) {
 						o.nameReplacePattern = args[argi++];
+					} else if (arg.equals("-d") && argi < args.length) {
+						String[] a = args[argi++].split("-", 2);
+						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
+						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
+						if (rs != null && re != null) o.glyphsToRemove.set(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.glyphsToRemove.set(rs);
+						else if (re != null) o.glyphsToRemove.set(re);
+					} else if (arg.equals("-D") && argi < args.length) {
+						String[] a = args[argi++].split("-", 2);
+						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
+						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
+						if (rs != null && re != null) o.glyphsToRemove.clear(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.glyphsToRemove.clear(rs);
+						else if (re != null) o.glyphsToRemove.clear(re);
 					} else if (arg.equals("-n")) {
 						o.transform.clear();
 					} else if (arg.equals("-b")) {
@@ -141,6 +156,8 @@ public class ConvertBitmap {
 		System.out.println("Options:");
 		System.out.println("  -s <regexp>   Regular expression to search for in the font name.");
 		System.out.println("  -r <string>   Replacement text for <regexp> in the font name.");
+		System.out.println("  -d <range>    Do not include characters in the specified range.");
+		System.out.println("  -D <range>    Include characters in the specified range.");
 		System.out.println("  -n            Do not transform the font (the default).");
 		System.out.println("  -b            Transform the font using faux bold.");
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
@@ -210,6 +227,7 @@ public class ConvertBitmap {
 		public final BitmapOutputOptions oo = new BitmapOutputOptions();
 		public Pattern nameSearchPattern = null;
 		public String nameReplacePattern = "";
+		public BitSet glyphsToRemove = new BitSet();
 		public List<BitmapFontGlyphTransformer> transform = new ArrayList<BitmapFontGlyphTransformer>();
 		public File dest = null;
 		public String format = "ttf";
@@ -367,6 +385,12 @@ public class ConvertBitmap {
 			for (int key : font.nameTypes()) {
 				Matcher m = o.nameSearchPattern.matcher(font.getName(key));
 				if (m.find()) font.setName(key, m.replaceAll(o.nameReplacePattern));
+			}
+		}
+		BitSet bs = o.glyphsToRemove;
+		if (!bs.isEmpty()) {
+			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
+				font.removeCharacter(i);
 			}
 		}
 		for (BitmapFontGlyphTransformer tx : o.transform) {
