@@ -13,19 +13,44 @@ import java.util.regex.Pattern;
 
 public class Remap {
 	public static void main(String[] args) {
-		boolean processingArgs = true;
-		boolean loadedRemapping = false;
-		Map<Integer,Integer> map = new HashMap<Integer,Integer>();
-		File outputFile = null;
-		File outputDir = null;
-		int argi = 0;
-		while (argi < args.length) {
-			String arg = args[argi++];
-			if (processingArgs && arg.startsWith("-")) {
-				if (arg.equals("--")) {
-					processingArgs = false;
-				} else if (arg.equals("-m") && argi < args.length) {
-					arg = args[argi++];
+		if (args.length == 0) {
+			printHelp();
+		} else {
+			boolean processingArgs = true;
+			boolean loadedRemapping = false;
+			Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+			File outputFile = null;
+			File outputDir = null;
+			int argi = 0;
+			while (argi < args.length) {
+				String arg = args[argi++];
+				if (processingArgs && arg.startsWith("-")) {
+					if (arg.equals("--")) {
+						processingArgs = false;
+					} else if (arg.equals("-m") && argi < args.length) {
+						arg = args[argi++];
+						loadedRemapping = true;
+						try {
+							if (readRemapping(map, arg)) {
+								System.out.println("Loaded " + arg);
+							} else {
+								System.err.println("No mappings found in " + arg);
+							}
+						} catch (IOException e) {
+							System.err.println("Could not read " + arg + ": " + e.getMessage());
+						}
+					} else if (arg.equals("-o") && argi < args.length) {
+						arg = args[argi++];
+						outputFile = new File(arg);
+					} else if (arg.equals("-d") && argi < args.length) {
+						arg = args[argi++];
+						outputDir = new File(arg);
+					} else if (arg.equals("--help")) {
+						printHelp();
+					} else {
+						System.err.println("Unknown option: " + arg);
+					}
+				} else if (!loadedRemapping) {
 					loadedRemapping = true;
 					try {
 						if (readRemapping(map, arg)) {
@@ -36,51 +61,47 @@ public class Remap {
 					} catch (IOException e) {
 						System.err.println("Could not read " + arg + ": " + e.getMessage());
 					}
-				} else if (arg.equals("-o") && argi < args.length) {
-					arg = args[argi++];
-					outputFile = new File(arg);
-				} else if (arg.equals("-d") && argi < args.length) {
-					arg = args[argi++];
-					outputDir = new File(arg);
 				} else {
-					System.err.println("Unknown option: " + arg);
-				}
-			} else if (!loadedRemapping) {
-				loadedRemapping = true;
-				try {
-					if (readRemapping(map, arg)) {
-						System.out.println("Loaded " + arg);
+					File inFile = new File(arg);
+					File outFile;
+					if (outputFile != null) {
+						outFile = outputFile;
+						outputFile = null;
+					} else if (outputDir != null) {
+						String outName = inFile.getName();
+						outFile = new File(outputDir, outName);
 					} else {
-						System.err.println("No mappings found in " + arg);
+						File parent = inFile.getParentFile();
+						String outName = inFile.getName() + ".REMAP.TXT";
+						outFile = new File(parent, outName);
 					}
-				} catch (IOException e) {
-					System.err.println("Could not read " + arg + ": " + e.getMessage());
-				}
-			} else {
-				File inFile = new File(arg);
-				File outFile;
-				if (outputFile != null) {
-					outFile = outputFile;
-					outputFile = null;
-				} else if (outputDir != null) {
-					String outName = inFile.getName();
-					outFile = new File(outputDir, outName);
-				} else {
-					File parent = inFile.getParentFile();
-					String outName = inFile.getName() + ".REMAP.TXT";
-					outFile = new File(parent, outName);
-				}
-				try {
-					if (rewriteMapping(map, inFile, outFile)) {
-						System.out.println("Rewrote " + arg);
-					} else {
-						System.out.println("No changes made to " + arg);
+					try {
+						if (rewriteMapping(map, inFile, outFile)) {
+							System.out.println("Rewrote " + arg);
+						} else {
+							System.out.println("No changes made to " + arg);
+						}
+					} catch (IOException e) {
+						System.err.println("Could not rewrite " + arg + ": " + e.getMessage());
 					}
-				} catch (IOException e) {
-					System.err.println("Could not rewrite " + arg + ": " + e.getMessage());
 				}
 			}
 		}
+	}
+	
+	private static void printHelp() {
+		System.out.println();
+		System.out.println("Options:");
+		System.out.println("  -m <path>     Specify a remapping file. Specify column numbers using colon:");
+		System.out.println("                    map.txt           - remap from column 0 to column 1");
+		System.out.println("                    map.txt:-         - remap from column 1 to column 0");
+		System.out.println("                    map.txt:-<n>      - remap from column 0 to column <n>");
+		System.out.println("                    map.txt:<n>-      - remap from column <n> to column 0");
+		System.out.println("                    map.txt:<n>-<m>   - remap from column <n> to column <m>");
+		System.out.println("  -o <path>     Specify output file.");
+		System.out.println("  -d <path>     Specify output directory.");
+		System.out.println("  --            Process remaining arguments as file names.");
+		System.out.println();
 	}
 	
 	private static final Pattern codePointPattern = Pattern.compile("\\b([0][Xx]|[Uu][+])?([0-9A-Fa-f]{4,8})\\b");
