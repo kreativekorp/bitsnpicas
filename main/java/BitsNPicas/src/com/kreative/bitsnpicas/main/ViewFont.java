@@ -5,6 +5,8 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import com.kreative.bitsnpicas.*;
+import com.kreative.bitsnpicas.edit.GlyphList;
+import com.kreative.bitsnpicas.edit.GlyphListListener;
 
 public class ViewFont extends JFrame {
 	private static final long serialVersionUID = 1;
@@ -25,7 +27,7 @@ public class ViewFont extends JFrame {
 					if (fonts == null || fonts.length == 0) {
 						System.err.println("No fonts found: " + arg);
 					} else {
-						for (BitmapFont font : fonts) new ViewFont(font);
+						for (BitmapFont font : fonts) new ViewFont(font, null);
 					}
 				}
 			} catch (IOException e) {
@@ -39,13 +41,28 @@ public class ViewFont extends JFrame {
 	private JTextArea textArea;
 	private JComponent textPanel;
 
-	public ViewFont(BitmapFont bm) {
+	public ViewFont(BitmapFont bm, GlyphList gl) {
 		myFont = bm;
 		if (bm.getName(BitmapFont.NAME_FAMILY_AND_STYLE) != null) {
 			setTitle(bm.getName(BitmapFont.NAME_FAMILY_AND_STYLE));
 		}
 		else if (bm.getName(BitmapFont.NAME_FAMILY) != null) {
 			setTitle(bm.getName(BitmapFont.NAME_FAMILY));
+		}
+
+		if (gl != null) {
+			gl.addGlyphListListener(new GlyphListListener() {
+				public void codePointsSelected(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) {}
+				public void codePointsOpened(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) { }
+				public void metricsChanged(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) {
+					if (textPanel != null) textPanel.repaint();
+					if (alphaPanel != null) alphaPanel.repaint();
+				}
+				public void glyphsChanged(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) {
+					if (textPanel != null) textPanel.repaint();
+					if (alphaPanel != null) alphaPanel.repaint();
+				}
+			});
 		}
 
 		alphaPanel = new JComponent() {

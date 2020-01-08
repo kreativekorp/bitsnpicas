@@ -33,9 +33,9 @@ public class BitmapEditMenuBar extends JMenuBar {
 	public BitmapEditMenuBar(
 		final Window window, final SaveManager sm, final BitmapFont font,
 		final BitmapToolHandler handler, final GlyphComponent gc,
-		final BitmapFontGlyph glyph, final int codePoint
+		final BitmapFontGlyph glyph, final GlyphList gl, final int codePoint
 	) {
-		add(new FileMenu(window, sm, font, handler, glyph, gc));
+		add(new FileMenu(window, sm, font, handler, glyph, gc, gl));
 		add(new EditMenu(handler, font, glyph, codePoint, gc));
 		add(new GlyphEditMenuBar.ViewMenu(gc));
 		add(new TransformMenu(font, glyph, gc));
@@ -46,7 +46,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 		public FileMenu(
 			final Window window, final SaveManager sm, final BitmapFont font,
 			final BitmapToolHandler handler, final BitmapFontGlyph glyph,
-			final GlyphComponent gc
+			final GlyphComponent gc, final GlyphList gl
 		) {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
@@ -60,7 +60,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			add(new ImportMenuItem(handler, font, glyph, gc));
 			addSeparator();
 			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
-			add(new BitmapListMenuBar.PreviewMenuItem(font));
+			add(new BitmapListMenuBar.PreviewMenuItem(font, gl));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();
 				add(new CommonMenuItems.ExitMenuItem());

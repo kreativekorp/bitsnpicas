@@ -58,7 +58,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new ImportMenuItem(font, gl));
 			addSeparator();
 			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
-			add(new PreviewMenuItem(font));
+			add(new PreviewMenuItem(font, gl));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();
 				add(new CommonMenuItems.ExitMenuItem());
@@ -122,12 +122,12 @@ public class BitmapListMenuBar extends JMenuBar {
 	
 	public static class PreviewMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PreviewMenuItem(final BitmapFont font) {
+		public PreviewMenuItem(final BitmapFont font, final GlyphList gl) {
 			super("Preview");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new ViewFont(font).setVisible(true);
+					new ViewFont(font, gl).setVisible(true);
 				}
 			});
 		}
