@@ -5,8 +5,6 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import com.kreative.bitsnpicas.*;
-import com.kreative.bitsnpicas.edit.GlyphList;
-import com.kreative.bitsnpicas.edit.GlyphListListener;
 
 public class ViewFont extends JFrame {
 	private static final long serialVersionUID = 1;
@@ -27,7 +25,7 @@ public class ViewFont extends JFrame {
 					if (fonts == null || fonts.length == 0) {
 						System.err.println("No fonts found: " + arg);
 					} else {
-						for (BitmapFont font : fonts) new ViewFont(font, null);
+						for (BitmapFont font : fonts) new ViewFont(font);
 					}
 				}
 			} catch (IOException e) {
@@ -41,7 +39,7 @@ public class ViewFont extends JFrame {
 	private JTextArea textArea;
 	private JComponent textPanel;
 
-	public ViewFont(BitmapFont bm, GlyphList gl) {
+	public ViewFont(BitmapFont bm) {
 		myFont = bm;
 		if (bm.getName(BitmapFont.NAME_FAMILY_AND_STYLE) != null) {
 			setTitle(bm.getName(BitmapFont.NAME_FAMILY_AND_STYLE));

@@ -28,7 +28,7 @@ public class ViewFont2 extends JFrame {
 						if (fonts == null || fonts.length == 0) {
 							System.err.println("No fonts found: " + arg);
 						} else {
-							for (BitmapFont font : fonts) new ViewFont(font, null);
+							for (BitmapFont font : fonts) new ViewFont(font);
 						}
 					} else {
 						if (format.macResFork) {
