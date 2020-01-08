@@ -21,12 +21,8 @@ public class GlyphEditPanel<G extends FontGlyph> extends JPanel {
 		setLayout(new BorderLayout());
 		add(glyphComponent, BorderLayout.CENTER);
 		glyphComponent.addGlyphComponentListener(new GlyphComponentListener() {
-			public void metricsChanged(FontGlyph glyph, Font<?> font) {
-				if (glyphList != null) glyphList.metricsChanged();
-			}
-			public void glyphChanged(FontGlyph glyph, Font<?> font) {
-				if (glyphList != null) glyphList.glyphsChanged();
-			}
+			public void metricsChanged(FontGlyph glyph, Font<?> font) {}
+			public void glyphChanged(FontGlyph glyph, Font<?> font) {}
 			public Cursor getCursor(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return null; }
 			public boolean mouseMoved(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }
 			public boolean mousePressed(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }

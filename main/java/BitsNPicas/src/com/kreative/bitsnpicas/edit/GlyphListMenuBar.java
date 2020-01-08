@@ -119,7 +119,7 @@ public class GlyphListMenuBar extends JMenuBar {
 					for (int cp : gl.getSelectedCodePoints()) {
 						font.removeCharacter(cp);
 					}
-					gl.glyphsChanged();
+					font.glyphsChanged();
 				}
 			});
 		}

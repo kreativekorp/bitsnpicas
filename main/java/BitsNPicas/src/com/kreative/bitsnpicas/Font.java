@@ -45,6 +45,8 @@ public abstract class Font<T extends FontGlyph> {
 	
 	protected Map<Integer,String> names = new HashMap<Integer,String>();
 	protected Map<Integer,T> characters = new HashMap<Integer,T>();
+
+	private final List<FontListener> listeners = new ArrayList<FontListener>();
 	
 	public abstract int getEmAscent();
 	public abstract int getEmDescent();
@@ -143,6 +145,26 @@ public abstract class Font<T extends FontGlyph> {
 	
 	public Iterator<Map.Entry<Integer,String>> nameIterator() {
 		return names.entrySet().iterator();
+	}
+
+	public void addFontListener(FontListener l) {
+		this.listeners.add(l);
+	}
+
+	public void removeFontListener(FontListener l) {
+		this.listeners.remove(l);
+	}
+
+	public void metricsChanged() {
+		for (FontListener l : listeners) {
+			l.metricsChanged(this);
+		}
+	}
+
+	public void glyphsChanged() {
+		for (FontListener l : listeners) {
+			l.glyphsChanged(this);
+		}
 	}
 	
 	public boolean isBoldStyle() {

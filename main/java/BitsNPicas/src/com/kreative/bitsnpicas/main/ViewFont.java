@@ -50,20 +50,16 @@ public class ViewFont extends JFrame {
 			setTitle(bm.getName(BitmapFont.NAME_FAMILY));
 		}
 
-		if (gl != null) {
-			gl.addGlyphListListener(new GlyphListListener() {
-				public void codePointsSelected(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) {}
-				public void codePointsOpened(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) { }
-				public void metricsChanged(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) {
-					if (textPanel != null) textPanel.repaint();
-					if (alphaPanel != null) alphaPanel.repaint();
-				}
-				public void glyphsChanged(GlyphList gl, com.kreative.bitsnpicas.Font<?> font) {
-					if (textPanel != null) textPanel.repaint();
-					if (alphaPanel != null) alphaPanel.repaint();
-				}
-			});
-		}
+		bm.addFontListener(new FontListener() {
+			public void metricsChanged(com.kreative.bitsnpicas.Font<?> font) {
+				if (textPanel != null) textPanel.repaint();
+				if (alphaPanel != null) alphaPanel.repaint();
+			}
+			public void glyphsChanged(com.kreative.bitsnpicas.Font<?> font) {
+				if (textPanel != null) textPanel.repaint();
+				if (alphaPanel != null) alphaPanel.repaint();
+			}
+		});
 
 		alphaPanel = new JComponent() {
 			private static final long serialVersionUID = 1L;

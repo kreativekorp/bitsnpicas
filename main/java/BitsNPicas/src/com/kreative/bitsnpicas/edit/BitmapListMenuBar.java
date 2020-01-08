@@ -102,7 +102,7 @@ public class BitmapListMenuBar extends JMenuBar {
 								glyph.setToImage(0, -font.getLineAscent(), image);
 								glyph.setCharacterWidth(image.getWidth());
 							}
-							gl.glyphsChanged();
+							font.glyphsChanged();
 						} else {
 							JOptionPane.showMessageDialog(
 								null, "The selected file was not recognized as an image file.",
@@ -167,7 +167,7 @@ public class BitmapListMenuBar extends JMenuBar {
 					for (int cp : gl.getSelectedCodePoints()) {
 						font.removeCharacter(cp);
 					}
-					gl.glyphsChanged();
+					font.glyphsChanged();
 				}
 			});
 		}
@@ -208,7 +208,7 @@ public class BitmapListMenuBar extends JMenuBar {
 									font.putCharacter(cps.get(i), glyph);
 								}
 							}
-							gl.glyphsChanged();
+							font.glyphsChanged();
 						} else if (cb.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
 							Image content = (Image)cb.getData(DataFlavor.imageFlavor);
 							BufferedImage image = SwingUtils.toBufferedImage(content);
@@ -220,7 +220,7 @@ public class BitmapListMenuBar extends JMenuBar {
 									font.putCharacter(cp, glyph);
 								}
 							}
-							gl.glyphsChanged();
+							font.glyphsChanged();
 						}
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
@@ -241,7 +241,7 @@ public class BitmapListMenuBar extends JMenuBar {
 					for (int cp : gl.getSelectedCodePoints()) {
 						font.removeCharacter(cp);
 					}
-					gl.glyphsChanged();
+					font.glyphsChanged();
 				}
 			});
 		}
@@ -288,7 +288,7 @@ public class BitmapListMenuBar extends JMenuBar {
 							font.putCharacter(cp, glyph);
 							newSel.add(index);
 						}
-						gl.glyphsChanged();
+						font.glyphsChanged();
 						gl.setSelectedIndices(newSel);
 					} else {
 						List<Integer> codePoints = gl.getSelectedCodePoints();
@@ -315,7 +315,7 @@ public class BitmapListMenuBar extends JMenuBar {
 							font.putCharacter(cp, glyph);
 							newSel.add(cp);
 						}
-						gl.glyphsChanged();
+						font.glyphsChanged();
 						gl.setSelectedCodePoints(newSel);
 					}
 				}
@@ -348,7 +348,7 @@ public class BitmapListMenuBar extends JMenuBar {
 						BitmapFontGlyph glyph = font.getCharacter(cp);
 						if (glyph != null) tx.transform(font, glyph);
 					}
-					gl.glyphsChanged();
+					font.glyphsChanged();
 				}
 			});
 		}

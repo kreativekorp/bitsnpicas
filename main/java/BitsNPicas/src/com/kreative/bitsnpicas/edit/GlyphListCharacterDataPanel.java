@@ -43,6 +43,4 @@ public class GlyphListCharacterDataPanel extends JPanel implements GlyphListList
 	}
 	
 	public void codePointsOpened(GlyphList gl, Font<?> font) {}
-	public void metricsChanged(GlyphList gl, Font<?> font) {}
-	public void glyphsChanged(GlyphList gl, Font<?> font) {}
 }

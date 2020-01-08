@@ -186,6 +186,7 @@ public class GlyphComponent extends JComponent {
 		for (GlyphComponentListener l : listeners) {
 			l.metricsChanged(glyph, font);
 		}
+		this.font.metricsChanged();
 		repaint();
 	}
 	
@@ -193,6 +194,7 @@ public class GlyphComponent extends JComponent {
 		for (GlyphComponentListener l : listeners) {
 			l.glyphChanged(glyph, font);
 		}
+		this.font.glyphsChanged();
 		repaint();
 	}
 	

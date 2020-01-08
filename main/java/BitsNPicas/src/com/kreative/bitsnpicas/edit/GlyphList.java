@@ -21,6 +21,7 @@ import java.util.SortedSet;
 import javax.swing.JComponent;
 import javax.swing.Scrollable;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.FontListener;
 import com.kreative.bitsnpicas.FontGlyph;
 import com.kreative.bitsnpicas.unicode.Block;
 import com.kreative.bitsnpicas.unicode.CharacterDatabase;
@@ -63,6 +64,14 @@ public class GlyphList extends JComponent implements Scrollable {
 		this.codePoints = new Block(0, 255, "Latin-1");
 		this.selection = new GlyphListSelection();
 		this.preferredSize = null;
+		font.addFontListener(new FontListener() {
+			public void metricsChanged(Font<?> font) {
+				GlyphList.this.repaint();
+			}
+			public void glyphsChanged(Font<?> font) {
+				GlyphList.this.repaint();
+			}
+		});
 		this.listeners = new ArrayList<GlyphListListener>();
 		MyMouseListener ml = new MyMouseListener();
 		this.addMouseListener(ml);
@@ -201,20 +210,6 @@ public class GlyphList extends JComponent implements Scrollable {
 	
 	public void removeGlyphListListener(GlyphListListener l) {
 		this.listeners.remove(l);
-	}
-	
-	public void metricsChanged() {
-		for (GlyphListListener l : listeners) {
-			l.metricsChanged(this, font);
-		}
-		repaint();
-	}
-	
-	public void glyphsChanged() {
-		for (GlyphListListener l : listeners) {
-			l.glyphsChanged(this, font);
-		}
-		repaint();
 	}
 	
 	protected void paintComponent(Graphics g) {
@@ -421,7 +416,7 @@ public class GlyphList extends JComponent implements Scrollable {
 					for (int cp : getSelectedCodePoints()) {
 						font.removeCharacter(cp);
 					}
-					glyphsChanged();
+					font.glyphsChanged();
 					break;
 			}
 		}

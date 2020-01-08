@@ -12,6 +12,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.FontListener;
 
 public class GlyphListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -57,10 +58,12 @@ public class GlyphListPanel extends JPanel {
 					Main.openGlyph(font, cp, gl, sm);
 				}
 			}
-			public void metricsChanged(GlyphList gl, Font<?> font) {
+		});
+		font.addFontListener(new FontListener() {
+			public void metricsChanged(Font<?> font) {
 				sm.setChanged();
 			}
-			public void glyphsChanged(GlyphList gl, Font<?> font) {
+			public void glyphsChanged(Font<?> font) {
 				sm.setChanged();
 			}
 		});
