@@ -148,7 +148,9 @@ public abstract class Font<T extends FontGlyph> {
 	public boolean isBoldStyle() {
 		if (names.containsKey(NAME_STYLE)) {
 			String s = names.get(NAME_STYLE).toUpperCase();
-			return s.contains("BOLD") || s.contains("BLACK");
+			return s.contains("BOLD")
+			    || s.contains("BLACK")
+			    || s.contains("HEAVY");
 		} else {
 			return false;
 		}
@@ -157,7 +159,9 @@ public abstract class Font<T extends FontGlyph> {
 	public boolean isItalicStyle() {
 		if (names.containsKey(NAME_STYLE)) {
 			String s = names.get(NAME_STYLE).toUpperCase();
-			return s.contains("ITALIC") || s.contains("OBLIQUE") || s.contains("SLANT");
+			return s.contains("ITALIC")
+			    || s.contains("OBLIQUE")
+			    || s.contains("SLANT");
 		} else {
 			return false;
 		}
@@ -166,7 +170,8 @@ public abstract class Font<T extends FontGlyph> {
 	public boolean isUnderlineStyle() {
 		if (names.containsKey(NAME_STYLE)) {
 			String s = names.get(NAME_STYLE).toUpperCase();
-			return s.contains("UNDERLINE");
+			return s.contains("UNDERLINE")
+			    || s.contains("UNDERSCORE");
 		} else {
 			return false;
 		}
@@ -193,7 +198,8 @@ public abstract class Font<T extends FontGlyph> {
 	public boolean isCondensedStyle() {
 		if (names.containsKey(NAME_STYLE)) {
 			String s = names.get(NAME_STYLE).toUpperCase();
-			return s.contains("CONDENSE") || s.contains("NARROW");
+			return s.contains("CONDENSE")
+			    || s.contains("NARROW");
 		} else {
 			return false;
 		}
@@ -202,7 +208,54 @@ public abstract class Font<T extends FontGlyph> {
 	public boolean isExtendedStyle() {
 		if (names.containsKey(NAME_STYLE)) {
 			String s = names.get(NAME_STYLE).toUpperCase();
-			return s.contains("EXTEND") || s.contains("WIDE");
+			return s.contains("EXTEND")
+			    || s.contains("EXPAND")
+			    || s.contains("WIDE");
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isNegativeStyle() {
+		if (names.containsKey(NAME_STYLE)) {
+			String s = names.get(NAME_STYLE).toUpperCase();
+			return s.contains("NEGATIVE")
+			    || s.contains("REVERSE")
+			    || s.contains("INVERSE")
+			    || s.contains("INVERT");
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isStrikeoutStyle() {
+		if (names.containsKey(NAME_STYLE)) {
+			String s = names.get(NAME_STYLE).toUpperCase();
+			return s.contains("STRIKEOUT")
+			    || s.contains("STRIKETHR");
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isRegularStyle() {
+		if (names.containsKey(NAME_STYLE)) {
+			String s = names.get(NAME_STYLE).trim();
+			return s.equalsIgnoreCase("")
+			    || s.equalsIgnoreCase("PLAIN")
+			    || s.equalsIgnoreCase("REGULAR")
+			    || s.equalsIgnoreCase("NORMAL")
+			    || s.equalsIgnoreCase("MEDIUM");
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isObliqueStyle() {
+		if (names.containsKey(NAME_STYLE)) {
+			String s = names.get(NAME_STYLE).toUpperCase();
+			return s.contains("OBLIQUE")
+			    || s.contains("SLANT");
 		} else {
 			return false;
 		}
@@ -210,13 +263,28 @@ public abstract class Font<T extends FontGlyph> {
 	
 	public int getMacStyle() {
 		int s = 0;
-		if (isBoldStyle()) s |= 1;
-		if (isItalicStyle()) s |= 2;
-		if (isUnderlineStyle()) s |= 4;
-		if (isOutlineStyle()) s |= 8;
-		if (isShadowStyle()) s |= 16;
-		if (isCondensedStyle()) s |= 32;
-		if (isExtendedStyle()) s |= 64;
+		if (isBoldStyle())      s |= 0x01;
+		if (isItalicStyle())    s |= 0x02;
+		if (isUnderlineStyle()) s |= 0x04;
+		if (isOutlineStyle())   s |= 0x08;
+		if (isShadowStyle())    s |= 0x10;
+		if (isCondensedStyle()) s |= 0x20;
+		if (isExtendedStyle())  s |= 0x40;
+		return s;
+	}
+	
+	public int getFsSelection() {
+		int s = 0;
+		if (isItalicStyle())    s |= 0x0001;
+		if (isUnderlineStyle()) s |= 0x0002;
+		if (isNegativeStyle())  s |= 0x0004;
+		if (isOutlineStyle())   s |= 0x0008;
+		if (isStrikeoutStyle()) s |= 0x0010;
+		if (isBoldStyle())      s |= 0x0020;
+		if (isRegularStyle())   s |= 0x0040;
+		// useTypoMetrics       s |= 0x0080;
+		// weightWidthSlope     s |= 0x0100;
+		if (isObliqueStyle())   s |= 0x0200;
 		return s;
 	}
 	

@@ -38,34 +38,56 @@ import com.kreative.bitsnpicas.truetype.TrueTypeFile;
 
 public class TTFBitmapFontExporter implements BitmapFontExporter {
 	private int xsize, ysize;
+	private boolean extendWinMetrics;
 	
 	public TTFBitmapFontExporter() {
 		this.xsize = 100;
 		this.ysize = 100;
+		this.extendWinMetrics = false;
 	}
 	
 	public TTFBitmapFontExporter(int size) {
 		this.xsize = size;
 		this.ysize = size;
+		this.extendWinMetrics = false;
 	}
 	
 	public TTFBitmapFontExporter(int xsize, int ysize) {
 		this.xsize = xsize;
 		this.ysize = ysize;
+		this.extendWinMetrics = false;
+	}
+	
+	public TTFBitmapFontExporter(boolean extendWinMetrics) {
+		this.xsize = 100;
+		this.ysize = 100;
+		this.extendWinMetrics = extendWinMetrics;
+	}
+	
+	public TTFBitmapFontExporter(int size, boolean extendWinMetrics) {
+		this.xsize = size;
+		this.ysize = size;
+		this.extendWinMetrics = extendWinMetrics;
+	}
+	
+	public TTFBitmapFontExporter(int xsize, int ysize, boolean extendWinMetrics) {
+		this.xsize = xsize;
+		this.ysize = ysize;
+		this.extendWinMetrics = extendWinMetrics;
 	}
 	
 	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
-		return createTrueTypeTables(font, xsize, ysize).compile();
+		return createTrueTypeTables(font, xsize, ysize, extendWinMetrics).compile();
 	}
 	
 	public void exportFontToFile(BitmapFont font, File file) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
-		fos.write(createTrueTypeTables(font, xsize, ysize).compile());
+		fos.write(createTrueTypeTables(font, xsize, ysize, extendWinMetrics).compile());
 		fos.close();
 	}
 	
 	public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
-		os.write(createTrueTypeTables(font, xsize, ysize).compile());
+		os.write(createTrueTypeTables(font, xsize, ysize, extendWinMetrics).compile());
 	}
 	
 	private static final class ThingsToKeepTrackOf {
@@ -90,7 +112,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		private int currentLocation = 0;
 	}
 	
-	private static final TrueTypeFile createTrueTypeTables(BitmapFont bf, int xsize, int ysize) throws IOException {
+	private static final TrueTypeFile createTrueTypeTables(BitmapFont bf, int xsize, int ysize, boolean extendWinMetrics) throws IOException {
 		ThingsToKeepTrackOf a = new ThingsToKeepTrackOf();
 		bf.autoFillNames();
 		
@@ -128,7 +150,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		ttf.add(makeHeadTable(bf, a, ysize));
 		ttf.add(makeHheaTable(bf, a, ysize));
 		ttf.add(makeMaxpTable(a));
-		ttf.add(makeOs2Table(bf, a, xsize, ysize));
+		ttf.add(makeOs2Table(bf, a, xsize, ysize, extendWinMetrics));
 		ttf.add(hmtxTable);
 		ttf.add(makeCmapTable(bf, a));
 		ttf.add(locaTable);
@@ -280,7 +302,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		return maxpTable;
 	}
 	
-	private static final Os2Table makeOs2Table(BitmapFont bf, ThingsToKeepTrackOf a, int xsize, int ysize) {
+	private static final Os2Table makeOs2Table(BitmapFont bf, ThingsToKeepTrackOf a, int xsize, int ysize, boolean extendWinMetrics) {
 		List<Integer> chars = new ArrayList<Integer>();
 		Iterator<Integer> cpi = bf.codePointIterator();
 		while (cpi.hasNext()) chars.add(cpi.next());
@@ -300,13 +322,17 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		os2Table.strikeoutPosition = bf.getEmAscent() * ysize / 2;
 		os2Table.setUnicodeRanges(chars);
 		os2Table.setVendorIDString("KBnP");
-		os2Table.fsSelection = (bf.isItalicStyle() ? 1 : 0) | (bf.isBoldStyle() ? 32 : 0);
+		os2Table.fsSelection = bf.getFsSelection() | Os2Table.FS_SELECTION_USE_TYPO_METRICS;
 		os2Table.setCharIndices(chars);
 		os2Table.typoAscent = bf.getLineAscent() * ysize;
 		os2Table.typoDescent = -bf.getLineDescent() * ysize;
 		os2Table.typoLineGap = bf.getLineGap() * ysize;
 		os2Table.winAscent = bf.getLineAscent() * ysize;
 		os2Table.winDescent = bf.getLineDescent() * ysize;
+		if (extendWinMetrics) {
+			os2Table.winAscent = Math.max(a.bby2, os2Table.winAscent);
+			os2Table.winDescent = Math.max(-a.bby1, os2Table.winDescent);
+		}
 		os2Table.setCodePages(chars);
 		os2Table.xHeight = a.xHeight;
 		os2Table.capHeight = a.HHeight;

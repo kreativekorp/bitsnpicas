@@ -40,6 +40,8 @@ public class Main {
 				SplitGEOS.main(args);
 			} else if (arg0.equals("mergegeos")) {
 				MergeGEOS.main(args);
+			} else if (arg0.equals("debugttf")) {
+				DebugTTF.main(args);
 			} else {
 				printHelp();
 			}
@@ -63,6 +65,7 @@ public class Main {
 		System.out.println("  java -jar BitsNPicas.jar mergesuit <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar splitgeos <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar mergegeos <options> <files>");
+		System.out.println("  java -jar BitsNPicas.jar debugttf <files>");
 		System.out.println();
 	}
 }

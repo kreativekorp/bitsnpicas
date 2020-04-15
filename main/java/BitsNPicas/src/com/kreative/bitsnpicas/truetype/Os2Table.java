@@ -9,10 +9,13 @@ import java.text.StringCharacterIterator;
 import java.util.Collection;
 
 public class Os2Table extends TrueTypeTable {
-	public static final int VERSION_68_BYTES = 0;
-	public static final int VERSION_78_BYTES = 1;
-	public static final int VERSION_86_BYTES = 2;
-	public static final int VERSION_96_BYTES = 3;
+	public static final int VERSION_TRUETYPE_1_5  = 0; // 68 bytes
+	public static final int VERSION_TRUETYPE_1_66 = 1; // 78 bytes
+	public static final int VERSION_OPENTYPE_1_1  = 2; // 86 bytes
+	public static final int VERSION_OPENTYPE_1_4  = 3; // 96 bytes
+	public static final int VERSION_OPENTYPE_1_5  = 4; // 96 bytes
+	public static final int VERSION_OPENTYPE_1_7  = 5; // 100 bytes
+	public static final int VERSION_MAX = 5;
 	public static final int WEIGHT_CLASS_ULTRA_LIGHT = 100;
 	public static final int WEIGHT_CLASS_EXTRA_LIGHT = 200;
 	public static final int WEIGHT_CLASS_LIGHT = 300;
@@ -31,7 +34,12 @@ public class Os2Table extends TrueTypeTable {
 	public static final int WIDTH_CLASS_EXPANDED = 7;
 	public static final int WIDTH_CLASS_EXTRA_EXPANDED = 8;
 	public static final int WIDTH_CLASS_ULTRA_EXPANDED = 9;
-	public static final int FLAGS_LICENSED = 1;
+	public static final int FLAGS_INSTALLABLE_EMBEDDING = 0;
+	public static final int FLAGS_RESTRICTED_LICENSE_EMBEDDING = 2;
+	public static final int FLAGS_PREVIEW_AND_PRINT_EMBEDDING = 4;
+	public static final int FLAGS_EDITABLE_EMBEDDING = 8;
+	public static final int FLAGS_NO_SUBSETTING = 0x0100;
+	public static final int FLAGS_BITMAP_EMBEDDING_ONLY = 0x0200;
 	public static final int FAMILY_CLASS_NO_CLASSIFICATION = 0;
 	public static final int FAMILY_CLASS_OLDSTYLE_SERIFS = 1;
 	public static final int FAMILY_CLASS_TRANSITIONAL_SERIFS = 2;
@@ -209,9 +217,19 @@ public class Os2Table extends TrueTypeTable {
 	public static final int VENDOR_ID_KBnP = 0x4B426E50;
 	public static final int VENDOR_ID_KrKo = 0x4B724B6F;
 	public static final int VENDOR_ID_ckbt = 0x636B6274;
+	public static final int FS_SELECTION_ITALIC           = 0x0001;
+	public static final int FS_SELECTION_UNDERLINE        = 0x0002;
+	public static final int FS_SELECTION_NEGATIVE         = 0x0004;
+	public static final int FS_SELECTION_OUTLINE          = 0x0008;
+	public static final int FS_SELECTION_STRIKEOUT        = 0x0010;
+	public static final int FS_SELECTION_BOLD             = 0x0020;
+	public static final int FS_SELECTION_REGULAR          = 0x0040;
+	public static final int FS_SELECTION_USE_TYPO_METRICS = 0x0080;
+	public static final int FS_SELECTION_WWS              = 0x0100;
+	public static final int FS_SELECTION_OBLIQUE          = 0x0200;
 	
 	// Version 0 (68-byte) begins
-	public int version = VERSION_96_BYTES;
+	public int version = VERSION_MAX;
 	public int averageCharWidth = 0;
 	public int weightClass = WEIGHT_CLASS_MEDIUM;
 	public int widthClass = WIDTH_CLASS_MEDIUM;
@@ -257,13 +275,18 @@ public class Os2Table extends TrueTypeTable {
 	public final int[] codePages = new int[2];
 	// Version 2 (86-byte) ends
 	
-	// Version 3 (96-byte) begins
+	// Version 3 or 4 (96-byte) begins
 	public int xHeight = 0;
 	public int capHeight = 0;
 	public int defaultChar = 0;
 	public int breakChar = 0x20;
 	public int maxContext = 0;
-	// Version 3 (96-byte) ends
+	// Version 3 or 4 (96-byte) ends
+	
+	// Version 5 (100-byte) begins
+	public int lowerOpticalPointSize = 0;
+	public int upperOpticalPointSize = 0xFFFF;
+	// Version 5 (100-byte) ends
 	
 	@Override
 	public String tableName() {
@@ -290,6 +313,34 @@ public class Os2Table extends TrueTypeTable {
 		         | (((a.length > 1 && a[1] >= 0x20 && a[1] < 0x7F) ? a[1] : 0x20) << 16)
 		         | (((a.length > 2 && a[2] >= 0x20 && a[2] < 0x7F) ? a[2] : 0x20) <<  8)
 		         | (((a.length > 3 && a[3] >= 0x20 && a[3] < 0x7F) ? a[3] : 0x20) <<  0);
+	}
+	
+	public double getLowerOpticalPointSizeDouble() {
+		if (lowerOpticalPointSize >= 0xFFFF) return Double.POSITIVE_INFINITY;
+		if (lowerOpticalPointSize <= 0) return 0.0;
+		return lowerOpticalPointSize / 20.0;
+	}
+	
+	public double getUpperOpticalPointSizeDouble() {
+		if (upperOpticalPointSize >= 0xFFFF) return Double.POSITIVE_INFINITY;
+		if (upperOpticalPointSize <= 0) return 0.0;
+		return upperOpticalPointSize / 20.0;
+	}
+	
+	public void setLowerOpticalPointSizeDouble(double pt) {
+		pt *= 20.0;
+		lowerOpticalPointSize =
+				(pt <= 0) ? 0 :
+				(pt >= 0xFFFF) ? 0xFFFF :
+				(int)Math.round(pt);
+	}
+	
+	public void setUpperOpticalPointSizeDouble(double pt) {
+		pt *= 20.0;
+		upperOpticalPointSize =
+				(pt <= 0) ? 0 :
+				(pt >= 0xFFFF) ? 0xFFFF :
+				(int)Math.round(pt);
 	}
 	
 	@Override
@@ -347,6 +398,10 @@ public class Os2Table extends TrueTypeTable {
 			out.writeShort(breakChar);
 			out.writeShort(maxContext);
 		}
+		if (version >= 5) {
+			out.writeShort(lowerOpticalPointSize);
+			out.writeShort(upperOpticalPointSize);
+		}
 	}
 	
 	@Override
@@ -398,6 +453,8 @@ public class Os2Table extends TrueTypeTable {
 		defaultChar = (version >= 3) ? in.readUnsignedShort() : 0;
 		breakChar = (version >= 3) ? in.readUnsignedShort() : 0x20;
 		maxContext = (version >= 3) ? in.readUnsignedShort() : 0;
+		lowerOpticalPointSize = (version >= 5) ? in.readUnsignedShort() : 0;
+		upperOpticalPointSize = (version >= 5) ? in.readUnsignedShort() : 0xFFFF;
 	}
 	
 	public static final int[][] UNICODE_RANGES = new int[][] {
@@ -491,39 +548,39 @@ public class Os2Table extends TrueTypeTable {
 		new int[] { 0x10400, 0x1044F }, // 87
 		new int[] { 0x1D000, 0x1D24F }, // 88
 		new int[] { 0x1D400, 0x1D7FF }, // 89
-		new int[] { 0xFF000, 0x10FFFD }, // 90
+		new int[] { 0xF0000, 0xFFFFD, 0x100000, 0x10FFFD }, // 90
 		new int[] { 0xFE00, 0xFE0F, 0xE0100, 0xE01EF }, // 91
 		new int[] { 0xE0000, 0xE007F }, // 92
-		null, // 93
-		null, // 94
-		null, // 95
-		null, // 96
-		null, // 97
-		null, // 98
-		null, // 99
-		null, // 100
-		null, // 101
-		null, // 102
-		null, // 103
-		null, // 104
-		null, // 105
-		null, // 106
-		null, // 107
-		null, // 108
-		null, // 109
-		null, // 110
-		null, // 111
-		null, // 112
-		null, // 113
-		null, // 114
-		null, // 115
-		null, // 116
-		null, // 117
-		null, // 118
-		null, // 119
-		null, // 120
-		null, // 121
-		null, // 122
+		new int[] { 0x1900, 0x194F }, // 93
+		new int[] { 0x1950, 0x197F }, // 94
+		new int[] { 0x1980, 0x19DF }, // 95
+		new int[] { 0x1A00, 0x1A1F }, // 96
+		new int[] { 0x2C00, 0x2C5F }, // 97
+		new int[] { 0x2D30, 0x2D7F }, // 98
+		new int[] { 0x4DC0, 0x4DFF }, // 99
+		new int[] { 0xA800, 0xA82F }, // 100
+		new int[] { 0x10000, 0x1013F }, // 101
+		new int[] { 0x10140, 0x1018F }, // 102
+		new int[] { 0x10380, 0x1039F }, // 103
+		new int[] { 0x103A0, 0x103DF }, // 104
+		new int[] { 0x10450, 0x1047F }, // 105
+		new int[] { 0x10480, 0x104AF }, // 106
+		new int[] { 0x10800, 0x1083F }, // 107
+		new int[] { 0x10A00, 0x10A5F }, // 108
+		new int[] { 0x1D300, 0x1D35F }, // 109
+		new int[] { 0x12000, 0x1247F }, // 110
+		new int[] { 0x1D360, 0x1D37F }, // 111
+		new int[] { 0x1B80, 0x1BBF }, // 112
+		new int[] { 0x1C00, 0x1C4F }, // 113
+		new int[] { 0x1C50, 0x1C7F }, // 114
+		new int[] { 0xA880, 0xA8DF }, // 115
+		new int[] { 0xA900, 0xA92F }, // 116
+		new int[] { 0xA930, 0xA95F }, // 117
+		new int[] { 0xAA00, 0xAA5F }, // 118
+		new int[] { 0x10190, 0x101CF }, // 119
+		new int[] { 0x101D0, 0x101FF }, // 120
+		new int[] { 0x10280, 0x102DF, 0x10920, 0x1093F }, // 121
+		new int[] { 0x1F000, 0x1F09F }, // 122
 		null, // 123
 		null, // 124
 		null, // 125
