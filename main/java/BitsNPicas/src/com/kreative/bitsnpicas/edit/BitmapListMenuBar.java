@@ -13,6 +13,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.BitmapGlyphTransform.BitmapGlyphTransformInfo;
 import com.kreative.bitsnpicas.edit.MoveGlyphsDialog.Result;
 import com.kreative.bitsnpicas.main.ViewFont;
@@ -58,7 +61,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new ImportMenuItem(font, gl));
 			addSeparator();
 			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
-			add(new PreviewMenuItem(font));
+			add(new PreviewMenuItem(font, gl));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();
 				add(new CommonMenuItems.ExitMenuItem());
@@ -122,12 +125,29 @@ public class BitmapListMenuBar extends JMenuBar {
 	
 	public static class PreviewMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PreviewMenuItem(final BitmapFont font) {
+		public PreviewMenuItem(final BitmapFont font, final GlyphList gl) {
 			super("Preview");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new ViewFont(font).setVisible(true);
+					final ViewFont vf = new ViewFont(font);
+					final GlyphListListener gll = new GlyphListListener() {
+						public void codePointsSelected(GlyphList gl, Font<?> font) {}
+						public void codePointsOpened(GlyphList gl, Font<?> font) {}
+						public void metricsChanged(GlyphList gl, Font<?> font) {
+							vf.fontChanged();
+						}
+						public void glyphsChanged(GlyphList gl, Font<?> font) {
+							vf.fontChanged();
+						}
+					};
+					vf.setVisible(true);
+					vf.addWindowListener(new WindowAdapter() {
+						public void windowClosed(WindowEvent e) {
+							gl.removeGlyphListListener(gll);
+						}
+					});
+					gl.addGlyphListListener(gll);
 				}
 			});
 		}

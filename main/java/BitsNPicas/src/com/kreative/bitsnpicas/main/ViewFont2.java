@@ -61,12 +61,12 @@ public class ViewFont2 extends JFrame {
 	private static final Color INSIDE = new Color(0xFFFFFFFF);
 	private static final Color OUTSIDE = new Color(0xFF660066);
 	
-	private BitmapFont myFont;
-	private BitmapFont myMaskFont;
-	private JComponent alphaPanel;
-	private JTextArea textArea;
-	private JComponent textPanel;
-
+	private final BitmapFont myFont;
+	private final BitmapFont myMaskFont;
+	private final JComponent alphaPanel;
+	private final JTextArea textArea;
+	private final JComponent textPanel;
+	
 	public ViewFont2(BitmapFont bm, BitmapFont bmmask) {
 		myFont = bm;
 		myMaskFont = bmmask;
@@ -76,7 +76,7 @@ public class ViewFont2 extends JFrame {
 		else if (bm.getName(BitmapFont.NAME_FAMILY) != null) {
 			setTitle(bm.getName(BitmapFont.NAME_FAMILY));
 		}
-
+		
 		alphaPanel = new JComponent() {
 			private static final long serialVersionUID = 1L;
 			protected void paintComponent(Graphics g) {
@@ -87,30 +87,28 @@ public class ViewFont2 extends JFrame {
 				int h = getHeight()-i.top-i.bottom;
 				g.setColor(BACKGROUND);
 				g.fillRect(x, y, w, h);
-				if (myMaskFont != null) {
-					g.setColor(INSIDE);
-					myMaskFont.drawAlphabet(g, x, y+myMaskFont.getLineAscent(), w);
-				}
-				if (myFont != null) {
-					g.setColor(OUTSIDE);
-					myFont.drawAlphabet(g, x, y+myFont.getLineAscent(), w);
-				}
+				g.setColor(INSIDE);
+				myMaskFont.drawAlphabet(g, x, y+myMaskFont.getLineAscent(), w);
+				g.setColor(OUTSIDE);
+				myFont.drawAlphabet(g, x, y+myFont.getLineAscent(), w);
 			}
 		};
+		
 		textArea = new JTextArea("The quick brown fox jumped over the lazy dogs with a razorback-jumping frog that could level six piqued gymnasts who speak Latin: Lorem ipsum dolor sit amet...");
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent arg0) {
-				if (textPanel != null) textPanel.repaint();
+				textPanel.repaint();
 			}
 			public void insertUpdate(DocumentEvent arg0) {
-				if (textPanel != null) textPanel.repaint();
+				textPanel.repaint();
 			}
 			public void removeUpdate(DocumentEvent arg0) {
-				if (textPanel != null) textPanel.repaint();
+				textPanel.repaint();
 			}
 		});
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
+		
 		textPanel = new JComponent() {
 			private static final long serialVersionUID = 1L;
 			protected void paintComponent(Graphics g) {
@@ -121,14 +119,10 @@ public class ViewFont2 extends JFrame {
 				int h = getHeight()-i.top-i.bottom;
 				g.setColor(BACKGROUND);
 				g.fillRect(x, y, w, h);
-				if (myMaskFont != null && textArea != null) {
-					g.setColor(INSIDE);
-					myMaskFont.draw(g, textArea.getText(), x, y+myMaskFont.getLineAscent(), w);
-				}
-				if (myFont != null && textArea != null) {
-					g.setColor(OUTSIDE);
-					myFont.draw(g, textArea.getText(), x, y+myFont.getLineAscent(), w);
-				}
+				g.setColor(INSIDE);
+				myMaskFont.draw(g, textArea.getText(), x, y+myMaskFont.getLineAscent(), w);
+				g.setColor(OUTSIDE);
+				myFont.draw(g, textArea.getText(), x, y+myFont.getLineAscent(), w);
 			}
 		};
 		
@@ -141,9 +135,14 @@ public class ViewFont2 extends JFrame {
 		main2.add(main, BorderLayout.CENTER);
 		main2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		setContentPane(main2);
-
+		
 		setSize(512, 342);
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+	
+	public void fontChanged() {
+		alphaPanel.repaint();
+		textPanel.repaint();
 	}
 }
