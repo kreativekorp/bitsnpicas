@@ -22,7 +22,8 @@ public enum BitmapExportFormat {
 	TTF("TTF (TrueType)", ".ttf", "pixel") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			Dimension d = o.getPixelDimension();
-			return new TTFBitmapFontExporter(d.width, d.height);
+			boolean exWinMtx = o.getExtendWinMetrics();
+			return new TTFBitmapFontExporter(d.width, d.height, exWinMtx);
 		}
 	},
 	BDF("BDF (Bitmap Distribution Format)", ".bdf", "none") {

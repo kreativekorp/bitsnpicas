@@ -136,6 +136,11 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	}
 	
 	@Override
+	public boolean getExtendWinMetrics() {
+		return pixelPanel.getExtendWinMetrics();
+	}
+	
+	@Override
 	public int getSelectedColor() {
 		return colorPanel.getSelectedColor();
 	}
