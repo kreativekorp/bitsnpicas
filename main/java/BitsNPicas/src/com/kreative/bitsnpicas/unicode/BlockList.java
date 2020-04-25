@@ -1,5 +1,9 @@
 package com.kreative.bitsnpicas.unicode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,30 +33,49 @@ public class BlockList extends AbstractList<Block> {
 	private BlockList() {
 		List<Block> blocks = new ArrayList<Block>();
 		for (String fileName : BLOCK_FILES) {
-			Scanner scan = new Scanner(BlockList.class.getResourceAsStream(fileName));
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine().trim();
-				if (line.length() > 0 && line.charAt(0) != '#') {
-					String[] f1 = line.split(";");
-					if (f1.length == 2) {
-						String blockName = f1[1].trim();
-						String[] f2 = f1[0].split("[.]+");
-						if (f2.length == 2) {
-							try {
-								int first = Integer.parseInt(f2[0], 16);
-								int last = Integer.parseInt(f2[1], 16);
-								blocks.add(new Block(first, last, blockName));
-							} catch (NumberFormatException e) {
-								continue;
-							}
+			read(BlockList.class.getResourceAsStream(fileName), blocks);
+		}
+		read(UnicodeUtils.getTableDirectory("Blocks"), blocks);
+		Collections.sort(blocks);
+		this.blocks = Collections.unmodifiableList(blocks);
+	}
+	
+	private static void read(File d, List<Block> blocks) {
+		for (File f : d.listFiles()) {
+			if (f.getName().startsWith(".") || f.getName().endsWith("\r")) {
+				continue;
+			} else if (f.isDirectory()) {
+				read(f, blocks);
+			} else try {
+				read(new FileInputStream(f), blocks);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+	}
+	
+	private static void read(InputStream in, List<Block> blocks) {
+		Scanner scan = new Scanner(in);
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine().trim();
+			if (line.length() > 0 && line.charAt(0) != '#') {
+				String[] f1 = line.split(";");
+				if (f1.length == 2) {
+					String blockName = f1[1].trim();
+					String[] f2 = f1[0].split("[.]+");
+					if (f2.length == 2) {
+						try {
+							int first = Integer.parseInt(f2[0], 16);
+							int last = Integer.parseInt(f2[1], 16);
+							blocks.add(new Block(first, last, blockName));
+						} catch (NumberFormatException e) {
+							continue;
 						}
 					}
 				}
 			}
-			scan.close();
 		}
-		Collections.sort(blocks);
-		this.blocks = Collections.unmodifiableList(blocks);
+		scan.close();
 	}
 	
 	public boolean contains(Object o) {

@@ -1,5 +1,9 @@
 package com.kreative.bitsnpicas.unicode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,27 +30,46 @@ public class CharacterDatabase extends AbstractMap<Integer,CharacterData> {
 	private CharacterDatabase() {
 		Map<Integer,CharacterData> database = new HashMap<Integer,CharacterData>();
 		for (String fileName : DATABASE_FILES) {
-			Scanner scan = new Scanner(CharacterDatabase.class.getResourceAsStream(fileName));
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine().trim();
-				if (line.length() > 0 && line.charAt(0) != '#') {
-					String[] f = line.split(";", -1);
-					if (f.length > 14) {
-						String name = f[1].trim();
-						if (name.endsWith(", First>") || name.endsWith(", Last>")) {
-							continue;
-						} else try {
-							CharacterData cd = new CharacterData(f);
-							database.put(cd.codePoint, cd);
-						} catch (NumberFormatException e) {
-							continue;
-						}
+			read(CharacterDatabase.class.getResourceAsStream(fileName), database);
+		}
+		read(UnicodeUtils.getTableDirectory("UnicodeData"), database);
+		this.database = Collections.unmodifiableMap(database);
+	}
+	
+	private static void read(File d, Map<Integer,CharacterData> database) {
+		for (File f : d.listFiles()) {
+			if (f.getName().startsWith(".") || f.getName().endsWith("\r")) {
+				continue;
+			} else if (f.isDirectory()) {
+				read(f, database);
+			} else try {
+				read(new FileInputStream(f), database);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+	}
+	
+	private static void read(InputStream in, Map<Integer,CharacterData> database) {
+		Scanner scan = new Scanner(in);
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine().trim();
+			if (line.length() > 0 && line.charAt(0) != '#') {
+				String[] f = line.split(";", -1);
+				if (f.length > 14) {
+					String name = f[1].trim();
+					if (name.endsWith(", First>") || name.endsWith(", Last>")) {
+						continue;
+					} else try {
+						CharacterData cd = new CharacterData(f);
+						database.put(cd.codePoint, cd);
+					} catch (NumberFormatException e) {
+						continue;
 					}
 				}
 			}
-			scan.close();
 		}
-		this.database = Collections.unmodifiableMap(database);
+		scan.close();
 	}
 	
 	public boolean containsKey(Object key) {

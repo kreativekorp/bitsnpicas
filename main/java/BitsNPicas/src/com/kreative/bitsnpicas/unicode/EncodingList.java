@@ -1,5 +1,9 @@
 package com.kreative.bitsnpicas.unicode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,39 +50,62 @@ public class EncodingList extends AbstractList<EncodingTable> {
 		List<EncodingTable> encodings = new ArrayList<EncodingTable>();
 		Map<String,EncodingTable> encodingMap = new HashMap<String,EncodingTable>();
 		for (String encName : ENCODING_NAMES) {
-			int[] codePoints = new int[256];
-			for (int i = 0; i < 256; i++) {
-				codePoints[i] = (i < 32 || (i >= 127 && i < 160)) ? i : -1;
-			}
 			String fileName = encName.replaceAll("\\s+", "_").replaceAll("[^A-Za-z0-9_]+", "-") + ".txt";
-			Scanner scan = new Scanner(EncodingList.class.getResourceAsStream(fileName));
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine().trim();
-				if (line.length() > 0 && line.charAt(0) != '#') {
-					String[] f = line.split("\\s+");
-					if (f.length >= 2) {
-						String is = f[0].trim().toLowerCase();
-						String cps = f[1].trim().toLowerCase();
-						if (is.startsWith("0x") && cps.startsWith("0x")) {
-							try {
-								int i = Integer.parseInt(is.substring(2), 16);
-								int cp = Integer.parseInt(cps.substring(2), 16);
-								if (i >= 0 && i < 256) codePoints[i] = cp;
-							} catch (NumberFormatException e) {
-								continue;
-							}
+			EncodingTable e = read(EncodingList.class.getResourceAsStream(fileName), encName);
+			String nn = encName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+			encodings.add(e);
+			encodingMap.put(nn, e);
+		}
+		read(UnicodeUtils.getTableDirectory("Mappings"), encodings, encodingMap);
+		this.encodings = Collections.unmodifiableList(encodings);
+		this.encodingMap = Collections.unmodifiableMap(encodingMap);
+	}
+	
+	private static void read(File d, List<EncodingTable> encodings, Map<String,EncodingTable> encodingMap) {
+		for (File f : d.listFiles()) {
+			if (f.getName().startsWith(".") || f.getName().endsWith("\r")) {
+				continue;
+			} else if (f.isDirectory()) {
+				read(f, encodings, encodingMap);
+			} else try {
+				String encName = UnicodeUtils.stripExtension(f.getName());
+				EncodingTable e = read(new FileInputStream(f), encName);
+				String nn = encName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+				encodings.add(e);
+				encodingMap.put(nn, e);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+	}
+	
+	private static EncodingTable read(InputStream in, String encName) {
+		int[] codePoints = new int[256];
+		for (int i = 0; i < 256; i++) {
+			codePoints[i] = (i < 32 || (i >= 127 && i < 160)) ? i : -1;
+		}
+		Scanner scan = new Scanner(in);
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine().trim();
+			if (line.length() > 0 && line.charAt(0) != '#') {
+				String[] f = line.split("\\s+");
+				if (f.length >= 2) {
+					String is = f[0].trim().toLowerCase();
+					String cps = f[1].trim().toLowerCase();
+					if (is.startsWith("0x") && cps.startsWith("0x")) {
+						try {
+							int i = Integer.parseInt(is.substring(2), 16);
+							int cp = Integer.parseInt(cps.substring(2), 16);
+							if (i >= 0 && i < 256) codePoints[i] = cp;
+						} catch (NumberFormatException e) {
+							continue;
 						}
 					}
 				}
 			}
-			scan.close();
-			EncodingTable e = new EncodingTable(codePoints, encName);
-			encodings.add(e);
-			String nn = encName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
-			encodingMap.put(nn, e);
 		}
-		this.encodings = Collections.unmodifiableList(encodings);
-		this.encodingMap = Collections.unmodifiableMap(encodingMap);
+		scan.close();
+		return new EncodingTable(codePoints, encName);
 	}
 	
 	public boolean contains(String name) {

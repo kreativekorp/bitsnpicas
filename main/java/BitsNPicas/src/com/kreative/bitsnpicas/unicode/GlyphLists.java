@@ -1,5 +1,9 @@
 package com.kreative.bitsnpicas.unicode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,34 +37,57 @@ public class GlyphLists extends AbstractList<GlyphList> {
 		List<GlyphList> glyphLists = new ArrayList<GlyphList>();
 		Map<String,GlyphList> glyphListMap = new HashMap<String,GlyphList>();
 		for (String glName : GLYPH_LIST_NAMES) {
-			SortedSet<Integer> codePoints = new TreeSet<Integer>();
 			String fileName = glName.replaceAll("\\s+", "_").replaceAll("[^A-Za-z0-9_]+", "-") + ".txt";
-			Scanner scan = new Scanner(EncodingList.class.getResourceAsStream(fileName));
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine().trim();
-				if (line.length() > 0 && line.charAt(0) != '#') {
-					String[] f = line.split("\\s+");
-					String cps = f[0].trim().toLowerCase();
-					if (cps.startsWith("0x")) {
-						try {
-							int cp = Integer.parseInt(cps.substring(2), 16);
-							codePoints.add(cp);
-						} catch (NumberFormatException e) {
-							continue;
-						}
+			GlyphList gl = read(EncodingList.class.getResourceAsStream(fileName), glName);
+			String nn = glName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+			glyphLists.add(gl);
+			glyphListMap.put(nn, gl);
+		}
+		read(UnicodeUtils.getTableDirectory("GlyphLists"), glyphLists, glyphListMap);
+		this.glyphLists = Collections.unmodifiableList(glyphLists);
+		this.glyphListMap = Collections.unmodifiableMap(glyphListMap);
+	}
+	
+	private static void read(File d, List<GlyphList> glyphLists, Map<String,GlyphList> glyphListMap) {
+		for (File f : d.listFiles()) {
+			if (f.getName().startsWith(".") || f.getName().endsWith("\r")) {
+				continue;
+			} else if (f.isDirectory()) {
+				read(f, glyphLists, glyphListMap);
+			} else try {
+				String glName = UnicodeUtils.stripExtension(f.getName());
+				GlyphList gl = read(new FileInputStream(f), glName);
+				String nn = glName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+				glyphLists.add(gl);
+				glyphListMap.put(nn, gl);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+	}
+	
+	private static GlyphList read(InputStream in, String glName) {
+		SortedSet<Integer> codePoints = new TreeSet<Integer>();
+		Scanner scan = new Scanner(in);
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine().trim();
+			if (line.length() > 0 && line.charAt(0) != '#') {
+				String[] f = line.split("\\s+");
+				String cps = f[0].trim().toLowerCase();
+				if (cps.startsWith("0x")) {
+					try {
+						int cp = Integer.parseInt(cps.substring(2), 16);
+						codePoints.add(cp);
+					} catch (NumberFormatException e) {
+						continue;
 					}
 				}
 			}
-			scan.close();
-			int[] cpa = new int[codePoints.size()]; int i = 0;
-			for (int cp : codePoints) cpa[i++] = cp;
-			GlyphList gl = new GlyphList(cpa, glName);
-			glyphLists.add(gl);
-			String nn = glName.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
-			glyphListMap.put(nn, gl);
 		}
-		this.glyphLists = Collections.unmodifiableList(glyphLists);
-		this.glyphListMap = Collections.unmodifiableMap(glyphListMap);
+		scan.close();
+		int[] cpa = new int[codePoints.size()]; int i = 0;
+		for (int cp : codePoints) cpa[i++] = cp;
+		return new GlyphList(cpa, glName);
 	}
 	
 	public boolean contains(String name) {
