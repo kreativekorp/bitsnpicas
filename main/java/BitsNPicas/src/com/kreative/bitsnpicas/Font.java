@@ -145,6 +145,40 @@ public abstract class Font<T extends FontGlyph> {
 		return names.entrySet().iterator();
 	}
 	
+	private static final List<Integer> MONOSPACED_CLASSES = Arrays.asList(
+		Integer.valueOf(Character.UPPERCASE_LETTER),
+		Integer.valueOf(Character.LOWERCASE_LETTER),
+		Integer.valueOf(Character.TITLECASE_LETTER),
+		Integer.valueOf(Character.MODIFIER_LETTER),
+		Integer.valueOf(Character.OTHER_LETTER),
+		Integer.valueOf(Character.DECIMAL_DIGIT_NUMBER),
+		Integer.valueOf(Character.LETTER_NUMBER),
+		Integer.valueOf(Character.OTHER_NUMBER),
+		Integer.valueOf(Character.DASH_PUNCTUATION),
+		Integer.valueOf(Character.START_PUNCTUATION),
+		Integer.valueOf(Character.END_PUNCTUATION),
+		Integer.valueOf(Character.CONNECTOR_PUNCTUATION),
+		Integer.valueOf(Character.OTHER_PUNCTUATION),
+		Integer.valueOf(Character.MATH_SYMBOL),
+		Integer.valueOf(Character.CURRENCY_SYMBOL),
+		Integer.valueOf(Character.MODIFIER_SYMBOL),
+		Integer.valueOf(Character.OTHER_SYMBOL),
+		Integer.valueOf(Character.INITIAL_QUOTE_PUNCTUATION),
+		Integer.valueOf(Character.FINAL_QUOTE_PUNCTUATION)
+	);
+	
+	public boolean isMonospaced() {
+		T space = characters.get(32);
+		int monoWidth = (space != null) ? space.getCharacterWidth() : 0;
+		for (Map.Entry<Integer,T> e : characters.entrySet()) {
+			if (e.getValue().getCharacterWidth() != monoWidth) {
+				Integer cc = Integer.valueOf(Character.getType(e.getKey()));
+				if (MONOSPACED_CLASSES.contains(cc)) return false;
+			}
+		}
+		return true;
+	}
+	
 	public boolean isBoldStyle() {
 		if (names.containsKey(NAME_STYLE)) {
 			String s = names.get(NAME_STYLE).toUpperCase();

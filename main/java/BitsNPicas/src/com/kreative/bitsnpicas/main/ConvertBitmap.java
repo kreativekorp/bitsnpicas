@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
+import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
@@ -56,6 +57,10 @@ public class ConvertBitmap {
 						if (rs != null && re != null) o.glyphsToRemove.clear(Math.min(rs,re), Math.max(rs,re)+1);
 						else if (rs != null) o.glyphsToRemove.clear(rs);
 						else if (re != null) o.glyphsToRemove.clear(re);
+					} else if (arg.equals("-c")) {
+						o.strictMonospace = true;
+					} else if (arg.equals("-C")) {
+						o.strictMonospace = false;
 					} else if (arg.equals("-n")) {
 						o.transform.clear();
 					} else if (arg.equals("-b")) {
@@ -162,6 +167,9 @@ public class ConvertBitmap {
 		System.out.println("  -r <string>   Replacement text for <regexp> in the font name.");
 		System.out.println("  -d <range>    Do not include characters in the specified range.");
 		System.out.println("  -D <range>    Include characters in the specified range.");
+		System.out.println("  -c            Strict monospace: remove glyphs not the width of a space.");
+		System.out.println("                (For braindead programs like Windows Command Prompt.)");
+		System.out.println("  -C            Loose monospace or proportional; the opposite of -c.");
 		System.out.println("  -n            Do not transform the font (the default).");
 		System.out.println("  -b            Transform the font using faux bold.");
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
@@ -236,6 +244,7 @@ public class ConvertBitmap {
 		public Pattern nameSearchPattern = null;
 		public String nameReplacePattern = "";
 		public BitSet glyphsToRemove = new BitSet();
+		public boolean strictMonospace = false;
 		public List<BitmapFontGlyphTransformer> transform = new ArrayList<BitmapFontGlyphTransformer>();
 		public File dest = null;
 		public String format = "ttf";
@@ -399,6 +408,15 @@ public class ConvertBitmap {
 		if (!bs.isEmpty()) {
 			for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
 				font.removeCharacter(i);
+			}
+		}
+		if (o.strictMonospace) {
+			BitmapFontGlyph space = font.getCharacter(32);
+			int monoWidth = (space != null) ? space.getCharacterWidth() : 0;
+			for (int cp : font.codePoints()) {
+				if (font.getCharacter(cp).getCharacterWidth() != monoWidth) {
+					font.removeCharacter(cp);
+				}
 			}
 		}
 		for (BitmapFontGlyphTransformer tx : o.transform) {

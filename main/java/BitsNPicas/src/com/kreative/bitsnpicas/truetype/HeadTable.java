@@ -22,6 +22,8 @@ public class HeadTable extends TrueTypeTable {
 	public static final int FLAGS_CONTAINS_INDIC_STYLE_REARRANGEMENT    = 0x0400;
 	public static final int FLAGS_DEFINED_BY_ADOBE_1                    = 0x0800;
 	public static final int FLAGS_DEFINED_BY_ADOBE_2                    = 0x1000;
+	public static final int FLAGS_DEFINED_BY_ADOBE_3                    = 0x2000;
+	public static final int FLAGS_GENERIC_SYMBOLS_FOR_CODE_POINT_RANGES = 0x4000;
 	public static final long DATE_EPOCH = new GregorianCalendar(1904, Calendar.JANUARY, 1, 0, 0, 0).getTimeInMillis();
 	public static final int MAC_STYLE_PLAIN       = 0x00;
 	public static final int MAC_STYLE_BOLD        = 0x01;

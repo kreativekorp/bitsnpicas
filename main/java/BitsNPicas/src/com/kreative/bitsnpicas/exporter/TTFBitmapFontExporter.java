@@ -320,6 +320,8 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		os2Table.superscriptYOffset = (bf.getEmAscent() + bf.getEmDescent()) * ysize / 2;
 		os2Table.strikeoutWidth = ysize;
 		os2Table.strikeoutPosition = bf.getEmAscent() * ysize / 2;
+		os2Table.panoseFamilyType = Os2Table.PANOSE_FAMILY_TYPE_TEXT_AND_DISPLAY;
+		if (bf.isMonospaced()) os2Table.panoseProportion = Os2Table.PANOSE_PROPORTION_MONOSPACED;
 		os2Table.setUnicodeRanges(chars);
 		os2Table.setVendorIDString("KBnP");
 		os2Table.fsSelection = bf.getFsSelection() | Os2Table.FS_SELECTION_USE_TYPO_METRICS;
