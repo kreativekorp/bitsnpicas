@@ -9,16 +9,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOInvalidTreeException;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import org.w3c.dom.Node;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
-import com.sun.imageio.plugins.png.PNGMetadata;
 
 public class RFontBitmapFontExporter implements BitmapFontExporter {
 	private int color;
@@ -37,36 +41,16 @@ public class RFontBitmapFontExporter implements BitmapFontExporter {
 		b.close();
 		return b.toByteArray();
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
 		RFontBean r = exportFontToImage(font);
 		//ImageIO.write(r.img, "png", os);
-		Iterator<ImageWriter> iterator = ImageIO.getImageWritersBySuffix("png");
-		ImageWriter imagewriter = iterator.next();
-		imagewriter.setOutput(ImageIO.createImageOutputStream(os));
-		PNGMetadata metadata = new PNGMetadata();
-		if (r.fname != null) {
-			metadata.tEXt_keyword.add("FontFamily");
-			metadata.tEXt_text.add(r.fname);
-		}
-		if (r.sname != null) {
-			metadata.tEXt_keyword.add("FontStyle");
-			metadata.tEXt_text.add(r.sname);
-		}
-		if (r.copy != null) {
-			metadata.tEXt_keyword.add("Copyright");
-			metadata.tEXt_text.add(r.copy);
-		}
-		metadata.unknownChunkType.add("rfVM");
-		metadata.unknownChunkData.add(r.vmtx);
-		metadata.unknownChunkType.add("rfHM");
-		metadata.unknownChunkData.add(r.hmtx);
-		IIOImage iioImage = new IIOImage(r.img, null, null);
-		iioImage.setMetadata(metadata);
-		imagewriter.write(null, iioImage, null);
+		ImageWriter writer = ImageIO.getImageWritersBySuffix("png").next();
+		writer.setOutput(ImageIO.createImageOutputStream(os));
+		IIOMetadata metadata = createMetadata(writer, r);
+		writer.write(new IIOImage(r.img, null, metadata));
 	}
-
+	
 	public void exportFontToFile(BitmapFont font, File file) throws IOException {
 		FileOutputStream out = new FileOutputStream(file);
 		exportFontToStream(font, out);
@@ -340,5 +324,51 @@ public class RFontBitmapFontExporter implements BitmapFontExporter {
 		for (int lgy = font.getLineGap(); lgy > 0; lgy--) {
 			bi.setRGB(x, vmy++, 0xFF8000FF);
 		}
+	}
+	
+	private static IIOMetadata createMetadata(ImageWriter w, RFontBean r) {
+		ImageTypeSpecifier type = new ImageTypeSpecifier(r.img);
+		ImageWriteParam param = w.getDefaultWriteParam();
+		IIOMetadata metadata = w.getDefaultImageMetadata(type, param);
+		String format = metadata.getNativeMetadataFormatName();
+		Node root = metadata.getAsTree(format);
+		
+		if (r.fname != null || r.sname != null || r.copy != null) {
+			IIOMetadataNode tEXt = new IIOMetadataNode("tEXt");
+			if (r.fname != null) {
+				IIOMetadataNode n = new IIOMetadataNode("tEXtEntry");
+				n.setAttribute("keyword", "FontFamily");
+				n.setAttribute("value", r.fname);
+				tEXt.appendChild(n);
+			}
+			if (r.sname != null) {
+				IIOMetadataNode n = new IIOMetadataNode("tEXtEntry");
+				n.setAttribute("keyword", "FontStyle");
+				n.setAttribute("value", r.sname);
+				tEXt.appendChild(n);
+			}
+			if (r.copy != null) {
+				IIOMetadataNode n = new IIOMetadataNode("tEXtEntry");
+				n.setAttribute("keyword", "Copyright");
+				n.setAttribute("value", r.copy);
+				tEXt.appendChild(n);
+			}
+			root.appendChild(tEXt);
+		}
+		
+		IIOMetadataNode chunks = new IIOMetadataNode("UnknownChunks");
+		IIOMetadataNode rfVM = new IIOMetadataNode("UnknownChunk");
+		rfVM.setAttribute("type", "rfVM");
+		rfVM.setUserObject(r.vmtx);
+		chunks.appendChild(rfVM);
+		IIOMetadataNode rfHM = new IIOMetadataNode("UnknownChunk");
+		rfHM.setAttribute("type", "rfHM");
+		rfHM.setUserObject(r.hmtx);
+		chunks.appendChild(rfHM);
+		root.appendChild(chunks);
+		
+		try { metadata.mergeTree(format, root); }
+		catch (IIOInvalidTreeException e) { e.printStackTrace(); }
+		return metadata;
 	}
 }

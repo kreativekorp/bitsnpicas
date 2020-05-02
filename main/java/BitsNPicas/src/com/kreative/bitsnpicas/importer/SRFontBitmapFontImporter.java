@@ -14,11 +14,13 @@ import java.util.Map;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
+import javax.imageio.metadata.IIOMetadata;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
-import com.sun.imageio.plugins.png.PNGMetadata;
 
 public class SRFontBitmapFontImporter implements BitmapFontImporter {
 	public BitmapFont[] importFont(byte[] data) throws IOException {
@@ -27,7 +29,7 @@ public class SRFontBitmapFontImporter implements BitmapFontImporter {
 		b.close();
 		return f;
 	}
-
+	
 	public BitmapFont[] importFont(InputStream is) throws IOException {
 		//BufferedImage bi = ImageIO.read(is);
 		Iterator<ImageReader> iterator = ImageIO.getImageReadersBySuffix("png");
@@ -37,19 +39,26 @@ public class SRFontBitmapFontImporter implements BitmapFontImporter {
 		BitmapFont f = importFont(bi);
 		if (f == null) return new BitmapFont[0];
 		IIOImage iioImage = imagereader.readAll(0, null);
-		PNGMetadata metadata = (PNGMetadata)iioImage.getMetadata();
-		if (metadata.tEXt_keyword.contains("FontFamily")) {
-			f.setName(Font.NAME_FAMILY, metadata.tEXt_text.get(metadata.tEXt_keyword.indexOf("FontFamily")).toString());
-		}
-		if (metadata.tEXt_keyword.contains("FontStyle")) {
-			f.setName(Font.NAME_STYLE, metadata.tEXt_text.get(metadata.tEXt_keyword.indexOf("FontStyle")).toString());
-		}
-		if (metadata.tEXt_keyword.contains("Copyright")) {
-			f.setName(Font.NAME_COPYRIGHT, metadata.tEXt_text.get(metadata.tEXt_keyword.indexOf("Copyright")).toString());
+		IIOMetadata metadata = iioImage.getMetadata();
+		String format = metadata.getNativeMetadataFormatName();
+		Node root = metadata.getAsTree(format);
+		for (Node n = root.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("tEXt".equals(n.getNodeName())) {
+				for (Node m = n.getFirstChild(); m != null; m = m.getNextSibling()) {
+					if ("tEXtEntry".equals(m.getNodeName())) {
+						NamedNodeMap attr = m.getAttributes();
+						String k = attr.getNamedItem("keyword").getNodeValue();
+						String v = attr.getNamedItem("value").getNodeValue();
+						if ("FontFamily".equals(k)) f.setName(Font.NAME_FAMILY, v);
+						if ("FontStyle".equals(k)) f.setName(Font.NAME_STYLE, v);
+						if ("Copyright".equals(k)) f.setName(Font.NAME_COPYRIGHT, v);
+					}
+				}
+			}
 		}
 		return new BitmapFont[]{f};
 	}
-
+	
 	public BitmapFont[] importFont(File file) throws IOException {
 		FileInputStream in = new FileInputStream(file);
 		BitmapFont[] f = importFont(in);
