@@ -1,8 +1,8 @@
 # Blocks-UCSUR.txt
-# Date: 2019-09-14, 23:32:50 PST
+# Date: 2020-05-05, 01:48:55 
 #
 # Under-ConScript Unicode Registry Character Database
-# Copyright (c) 2009-2017 Kreative Korporation
+# Copyright (c) 2009-2020 Kreative Software
 # For documentation, see http://www.kreativekorp.com/ucsur/
 #
 # Note:   The casing of block names is not normative.
@@ -74,6 +74,9 @@ EA00..EA9F; Lhenazi
 EAA0..EAFF; Wanya
 EB00..EB3F; Orokin
 EB40..EB5F; Standard Galactic
+EB60..EB9F; Braille Extended
+EC00..EC2F; Cylenian
+EC30..EC6F; Syrrin
 ED00..ED3F; Deini
 ED40..ED7F; Niji
 EF80..F89F; Private Use Area
