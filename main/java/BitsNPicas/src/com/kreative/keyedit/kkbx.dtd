@@ -1,0 +1,112 @@
+<!--
+	Date: 2020/08/19 00:32:10 PDT
+	Author: Rebecca Bettencourt <support@kreativekorp.com>
+-->
+
+<!-- Keyboard Mapping -->
+
+<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,icon?,macIconVersion?,keyMappings,macActionIds?)>
+
+<!ELEMENT name (#PCDATA)>
+
+<!ELEMENT winIdentifier (#PCDATA)>
+
+<!ELEMENT winCopyright (#PCDATA)>
+
+<!ELEMENT winCompany (#PCDATA)>
+
+<!ELEMENT winLocale EMPTY>
+<!ATTLIST winLocale tag CDATA #REQUIRED>
+
+<!ELEMENT winAltGrEnable EMPTY>
+<!ATTLIST winAltGrEnable altgr (true|false) #REQUIRED>
+
+<!ELEMENT winShiftLock EMPTY>
+<!ATTLIST winShiftLock shiftlock (true|false) #REQUIRED>
+
+<!ELEMENT winLrmRlm EMPTY>
+<!ATTLIST winLrmRlm lrmrlm (true|false) #REQUIRED>
+
+<!ELEMENT macGroupNumber EMPTY>
+<!ATTLIST macGroupNumber group CDATA #REQUIRED>
+
+<!ELEMENT macIdNumber EMPTY>
+<!ATTLIST macIdNumber id CDATA #REQUIRED>
+
+<!ELEMENT xkbPath (#PCDATA)>
+
+<!ELEMENT xkbLabel (#PCDATA)>
+
+<!ELEMENT xkbComment (#PCDATA)>
+
+<!ELEMENT xkbUseKeySym EMPTY>
+<!ATTLIST xkbUseKeySym for (ascii|unicode) #REQUIRED>
+
+<!ELEMENT xkbAltGrKey EMPTY>
+<!ATTLIST xkbAltGrKey include CDATA #REQUIRED>
+
+<!ELEMENT xkbComposeKey EMPTY>
+<!ATTLIST xkbComposeKey include CDATA #REQUIRED>
+
+<!ELEMENT icon (#PCDATA)>
+
+<!ELEMENT macIconVersion EMPTY>
+<!ATTLIST macIconVersion version CDATA #REQUIRED>
+
+<!ELEMENT keyMappings (keyMapping*)>
+
+<!ELEMENT macActionIds (macActionId*)>
+<!ELEMENT macActionId EMPTY>
+<!ATTLIST macActionId input CDATA #REQUIRED action CDATA #REQUIRED>
+
+<!-- Key Mappings -->
+
+<!ELEMENT keyMapping (unshifted?,shifted?,capsLock?,altUnshifted?,altShifted?,altCapsLock?,ctrl?,command?)>
+<!ATTLIST keyMapping key CDATA #REQUIRED>
+
+<!ELEMENT unshifted (deadKey?)>
+<!ATTLIST unshifted output CDATA #IMPLIED>
+
+<!ELEMENT shifted (deadKey?)>
+<!ATTLIST shifted output CDATA #IMPLIED>
+
+<!ELEMENT capsLock EMPTY>
+<!ATTLIST capsLock mapsTo (unshifted|shifted|auto) #REQUIRED>
+
+<!ELEMENT altUnshifted (deadKey?)>
+<!ATTLIST altUnshifted output CDATA #IMPLIED>
+
+<!ELEMENT altShifted (deadKey?)>
+<!ATTLIST altShifted output CDATA #IMPLIED>
+
+<!ELEMENT altCapsLock EMPTY>
+<!ATTLIST altCapsLock mapsTo (altUnshifted|altShifted|auto) #REQUIRED>
+
+<!ELEMENT ctrl (deadKey?)>
+<!ATTLIST ctrl output CDATA #IMPLIED>
+
+<!ELEMENT command (deadKey?)>
+<!ATTLIST command output CDATA #IMPLIED>
+
+<!-- Dead Keys -->
+
+<!ELEMENT deadKey (winTerminator?,macTerminator?,macStateId?,xkbOutput?,xkbDeadKey?,deadKeyMap)>
+
+<!ELEMENT winTerminator EMPTY>
+<!ATTLIST winTerminator output CDATA #REQUIRED>
+
+<!ELEMENT macTerminator EMPTY>
+<!ATTLIST macTerminator output CDATA #REQUIRED>
+
+<!ELEMENT macStateId EMPTY>
+<!ATTLIST macStateId state CDATA #REQUIRED>
+
+<!ELEMENT xkbOutput EMPTY>
+<!ATTLIST xkbOutput output CDATA #REQUIRED>
+
+<!ELEMENT xkbDeadKey EMPTY>
+<!ATTLIST xkbDeadKey keysym CDATA #REQUIRED>
+
+<!ELEMENT deadKeyMap (deadKeyEntry*)>
+<!ELEMENT deadKeyEntry EMPTY>
+<!ATTLIST deadKeyEntry input CDATA #REQUIRED output CDATA #REQUIRED>
