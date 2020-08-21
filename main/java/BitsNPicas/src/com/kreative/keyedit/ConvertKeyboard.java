@@ -16,9 +16,9 @@ public class ConvertKeyboard {
 				if (arg.equals("--")) {
 					parseOptions = false;
 				} else if (arg.equalsIgnoreCase("-if") && argi < args.length) {
-					inFormat = KeyboardFormat.forFormatName(args[argi++]);
+					inFormat = KeyboardFormat.forInputFormatName(args[argi++]);
 				} else if (arg.equalsIgnoreCase("-of") && argi < args.length) {
-					outFormat = KeyboardFormat.forFormatName(args[argi++]);
+					outFormat = KeyboardFormat.forOutputFormatName(args[argi++]);
 				} else if (arg.equalsIgnoreCase("-i") && argi < args.length) {
 					inFile = new File(args[argi++]);
 				} else if (arg.equalsIgnoreCase("-o") && argi < args.length) {

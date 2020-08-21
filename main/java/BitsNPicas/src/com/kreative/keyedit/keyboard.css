@@ -1,0 +1,45 @@
+/* KEYBOARD */
+table.k {
+	font-family: "Georgia", "Times New Roman", serif;
+	font-size: 16px;
+	border-collapse: collapse;
+	table-layout: fixed;
+	width: 842px;
+}
+table.k td {
+	padding: 2px;
+	text-align: center;
+	vertical-align: middle;
+	height: 23px;
+}
+table.k td.t,
+table.k td.tl,
+table.k td.tr {
+	border-top: solid 2px black;
+}
+table.k td.b,
+table.k td.bl,
+table.k td.br {
+	border-bottom: solid 2px black;
+}
+table.k td.t,
+table.k td.b,
+table.k td.tl,
+table.k td.bl {
+	border-left: solid 2px black;
+}
+table.k td.t,
+table.k td.b,
+table.k td.tr,
+table.k td.br {
+	border-right: solid 2px black;
+}
+table.k td.m {
+	background: #ccc;
+}
+table.k td.d {
+	background: #fd5;
+}
+table.k td.o {
+	background: #ddf;
+}

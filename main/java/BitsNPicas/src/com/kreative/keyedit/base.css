@@ -1,0 +1,74 @@
+/* BASE */
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family: Helvetica, sans-serif;
+	font-size: 11pt;
+	background: white;
+	color: black;
+	margin: 14pt;
+}
+h1, h2, h3, h4, h5, h6 {
+	margin: 14pt 0pt;
+	font-family: Futura, Helvetica, sans-serif;
+	font-weight: bold;
+}
+h1 {
+	font-size: 22pt;
+}
+h2 {
+	font-size: 18pt;
+}
+h3 {
+	font-size: 14pt;
+}
+h4 {
+	font-size: 12pt;
+}
+h5 {
+	font-size: 11pt;
+}
+h6 {
+	font-size: 10pt;
+}
+p, pre, ul, ol, table, blockquote {
+	margin: 12pt 0pt;
+	font-size: 11pt;
+}
+th, td {
+	padding: 1pt 12pt 1pt 0pt;
+	text-align: left;
+}
+a:link {
+	color: #9900cc;
+	text-decoration: none;
+}
+a:visited {
+	color: #cc00ff;
+	text-decoration: none;
+}
+a:active {
+	color: #ff0000;
+	text-decoration: underline;
+}
+a:hover {
+	color: #ff00ff;
+	text-decoration: underline;
+}
+.center {
+	text-align: center;
+}
+.center > * {
+	margin-left: auto;
+	margin-right: auto;
+}
+.hidden {
+	display: none !important;
+}
+code {
+	font-size: 10pt;
+	font-weight: bold;
+	padding: 4px;
+}
