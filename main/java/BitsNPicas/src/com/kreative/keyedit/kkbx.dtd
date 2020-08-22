@@ -5,7 +5,7 @@
 
 <!-- Keyboard Mapping -->
 
-<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,icon?,macIconVersion?,keyMappings,macActionIds?)>
+<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,icon?,macIconVersion?,keyMappings,macActionIds?,html?)>
 
 <!ELEMENT name (#PCDATA)>
 
@@ -110,3 +110,19 @@
 <!ELEMENT deadKeyMap (deadKeyEntry*)>
 <!ELEMENT deadKeyEntry EMPTY>
 <!ATTLIST deadKeyEntry input CDATA #REQUIRED output CDATA #REQUIRED>
+
+<!-- HTML Configuration -->
+
+<!ELEMENT html (title?,style?,h1?,h2?,body1?,body2?,body3?,body4?,square?,outline?)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT style (#PCDATA)>
+<!ELEMENT h1 (#PCDATA)>
+<!ELEMENT h2 (#PCDATA)>
+<!ELEMENT body1 (#PCDATA)>
+<!ELEMENT body2 (#PCDATA)>
+<!ELEMENT body3 (#PCDATA)>
+<!ELEMENT body4 (#PCDATA)>
+<!ELEMENT square EMPTY>
+<!ATTLIST square chars CDATA #REQUIRED>
+<!ELEMENT outline EMPTY>
+<!ATTLIST outline chars CDATA #REQUIRED>

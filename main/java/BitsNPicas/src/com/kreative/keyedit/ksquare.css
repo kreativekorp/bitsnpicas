@@ -1,0 +1,8 @@
+.ksq {
+	font-family: "Kreative Square";
+	font-size: 14px;
+}
+@font-face {
+	font-family: "Kreative Square";
+	src: url(KreativeSquare.ttf) format("truetype");
+}

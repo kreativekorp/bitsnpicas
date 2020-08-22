@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -136,6 +137,8 @@ public class KkbReader {
 							throw new IOException("Unknown element: " + gctype);
 						}
 					}
+				} else if (ctype.equalsIgnoreCase("html")) {
+					parseHTMLConfig(child, km);
 				} else {
 					throw new IOException("Unknown element: " + ctype);
 				}
@@ -244,6 +247,62 @@ public class KkbReader {
 		} else {
 			throw new IOException("Unknown element: " + type);
 		}
+	}
+	
+	private static void parseHTMLConfig(Node node, KeyboardMapping km) throws IOException {
+		String type = node.getNodeName();
+		if (type.equalsIgnoreCase("html")) {
+			for (Node child : getChildren(node)) {
+				String ctype = child.getNodeName();
+				NamedNodeMap cattr = child.getAttributes();
+				if (ctype.equalsIgnoreCase("title")) {
+					km.htmlTitle = textContent(child);
+				} else if (ctype.equalsIgnoreCase("style")) {
+					km.htmlStyle = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("h1")) {
+					km.htmlH1 = textContent(child);
+				} else if (ctype.equalsIgnoreCase("h2")) {
+					km.htmlH2 = textContent(child);
+				} else if (ctype.equalsIgnoreCase("body1")) {
+					km.htmlBody1 = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("body2")) {
+					km.htmlBody2 = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("body3")) {
+					km.htmlBody3 = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("body4")) {
+					km.htmlBody4 = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("square")) {
+					km.htmlSquareChars = parseRanges(parseString(cattr, "chars"));
+				} else if (ctype.equalsIgnoreCase("outline")) {
+					km.htmlOutlineChars = parseRanges(parseString(cattr, "chars"));
+				} else {
+					throw new IOException("Unknown element: " + ctype);
+				}
+			}
+		} else {
+			throw new IOException("Unknown element: " + type);
+		}
+	}
+	
+	public static BitSet parseRanges(String s) {
+		if (s == null || (s = s.trim()).length() == 0) return null;
+		BitSet bs = new BitSet();
+		for (String r : s.split(",")) {
+			try {
+				if (r.contains("-")) {
+					String[] p = r.split("-", 2);
+					int i = Integer.parseInt(p[0].trim(), 16);
+					int j = Integer.parseInt(p[1].trim(), 16);
+					bs.set(i, j + 1);
+				} else {
+					int i = Integer.parseInt(r.trim(), 16);
+					bs.set(i);
+				}
+			} catch (NumberFormatException nfe) {
+				// ignored
+			}
+		}
+		return bs;
 	}
 	
 	private static String stripCommonLeadingWhitespace(String s) {

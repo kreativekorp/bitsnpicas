@@ -1,6 +1,7 @@
 package com.kreative.keyedit;
 
 import java.awt.image.BufferedImage;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Map;
@@ -27,6 +28,16 @@ public class KeyboardMapping {
 	public Integer macIconVersion;
 	public final Map<Key,KeyMapping> map;
 	public final Map<Integer,String> macActionIds;
+	public String htmlTitle;
+	public String htmlStyle;
+	public String htmlH1;
+	public String htmlH2;
+	public String htmlBody1;
+	public String htmlBody2;
+	public String htmlBody3;
+	public String htmlBody4;
+	public BitSet htmlSquareChars;
+	public BitSet htmlOutlineChars;
 	
 	public KeyboardMapping() {
 		TreeMap<Key,KeyMapping> map = new TreeMap<Key,KeyMapping>();

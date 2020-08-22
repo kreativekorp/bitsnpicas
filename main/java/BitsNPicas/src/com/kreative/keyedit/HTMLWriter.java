@@ -3,11 +3,14 @@ package com.kreative.keyedit;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.kreative.bitsnpicas.unicode.CharacterData;
+import com.kreative.bitsnpicas.unicode.CharacterDatabase;
 
 public class HTMLWriter {
 	public static void write(File file, KeyboardMapping km) throws IOException {
@@ -17,6 +20,16 @@ public class HTMLWriter {
 		pw.flush();
 		pw.close();
 		fos.close();
+		if (km.htmlSquareChars != null && !km.htmlSquareChars.isEmpty()) {
+			File fontFile = new File(file.getParentFile(), "KreativeSquare.ttf");
+			FileOutputStream fontOut = new FileOutputStream(fontFile);
+			InputStream fontIn = HTMLWriter.class.getResourceAsStream("ksquare.ttf");
+			int read; byte[] buf = new byte[65536];
+			while ((read = fontIn.read(buf)) >= 0) fontOut.write(buf, 0, read);
+			fontIn.close();
+			fontOut.flush();
+			fontOut.close();
+		}
 	}
 	
 	public static void write(PrintWriter out, KeyboardMapping km) {
@@ -24,22 +37,28 @@ public class HTMLWriter {
 		out.println("<html>");
 		out.println("\t<head>");
 		out.println("\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
-		out.println("\t\t<title>" + htmlSpecialChars(km.name) + " Keyboard Layout</title>");
+		String t = (km.htmlTitle == null || km.htmlTitle.length() == 0) ? (km.name + " Keyboard Layout") : km.htmlTitle;
+		out.println("\t\t<title>" + htmlSpecialChars(t) + "</title>");
 		out.println("\t\t<style>");
 		writeResource(out, "\t\t\t", "base.css", km);
 		writeResource(out, "\t\t\t", "keyboard.css", km);
+		if (km.htmlOutlineChars != null && !km.htmlOutlineChars.isEmpty()) writeResource(out, "\t\t\t", "outline.css", km);
+		if (km.htmlSquareChars != null && !km.htmlSquareChars.isEmpty()) writeResource(out, "\t\t\t", "ksquare.css", km);
+		writeInline(out, "\t\t\t", km.htmlStyle);
 		out.println("\t\t</style>");
 		out.println("\t</head>");
 		out.println("\t<body class=\"center\">");
-		out.println("\t\t<h1>" + htmlSpecialChars(km.name) + " Keyboard Layout</h1>");
-		out.println("\t\t<h2>for Mac OS X, Linux, and Windows</h2>");
+		String h1 = (km.htmlH1 == null || km.htmlH1.length() == 0) ? (km.name + " Keyboard Layout") : km.htmlH1;
+		String h2 = (km.htmlH2 == null || km.htmlH2.length() == 0) ? "for Mac OS X, Linux, and Windows" : km.htmlH2;
+		out.println("\t\t<h1>" + htmlSpecialChars(h1) + "</h1>");
+		out.println("\t\t<h2>" + htmlSpecialChars(h2) + "</h2>");
+		writeInline(out, "\t\t", km.htmlBody1);
 		out.println("\t\t<h3>The Layout</h3>");
+		writeInline(out, "\t\t", km.htmlBody2);
 		writeKeyboard(out, km);
+		writeInline(out, "\t\t", km.htmlBody3);
 		writeResource(out, "\t\t", "install.html", km);
-		if (km.winCopyright != null && km.winCopyright.length() > 0) {
-			String c = htmlSpecialChars(km.winCopyright.replaceAll("[(][Cc][)]", "©"));
-			out.println("\t\t<p>" + c + "</p>");
-		}
+		writeInline(out, "\t\t", km.htmlBody4);
 		out.println("\t\t<script>");
 		writeResource(out, "\t\t\t", "prep.js", km);
 		out.println("\t\t</script>");
@@ -160,6 +179,14 @@ public class HTMLWriter {
 		out.println("\t\t</table>");
 	}
 	
+	private static void writeInline(PrintWriter out, String prefix, String content) {
+		if (content != null) {
+			for (String line : content.split("\r\n|\r|\n")) {
+				out.println(prefix + line);
+			}
+		}
+	}
+	
 	private static void writeResource(PrintWriter out, String prefix, String name, KeyboardMapping km) {
 		Scanner scan = new Scanner(HTMLWriter.class.getResourceAsStream(name), "UTF-8");
 		while (scan.hasNextLine()) out.println(prefix + replaceFields(scan.nextLine(), km));
@@ -207,10 +234,10 @@ public class HTMLWriter {
 	private static void writeRowTop(PrintWriter out, KeyboardMapping km, Key... keys) {
 		for (Key key : keys) {
 			KeyMapping m = km.map.get(key);
-			String l = cpString(m.shiftedOutput,    m.shiftedDeadKey   );
-			String r = cpString(m.altShiftedOutput, m.altShiftedDeadKey);
-			String lc = (m.shiftedDeadKey    == null) ? "\"tl\"" : "\"tl d\"";
-			String rc = (m.altShiftedDeadKey == null) ? "\"tr\"" : "\"tr d\"";
+			String l = olcpString(km, m.shiftedOutput,    m.shiftedDeadKey   );
+			String r = olcpString(km, m.altShiftedOutput, m.altShiftedDeadKey);
+			String lc = classString(km, m.shiftedOutput,    m.shiftedDeadKey,    "tl");
+			String rc = classString(km, m.altShiftedOutput, m.altShiftedDeadKey, "tr");
 			String span = "\"" + ((key == Key.BACKSLASH) ? 3 : 2) + "\"";
 			out.println("\t\t\t\t<td colspan=" + span + " class=" + lc + ">" + l + "</td>");
 			out.println("\t\t\t\t<td colspan=" + span + " class=" + rc + ">" + r + "</td>");
@@ -220,14 +247,44 @@ public class HTMLWriter {
 	private static void writeRowBot(PrintWriter out, KeyboardMapping km, Key... keys) {
 		for (Key key : keys) {
 			KeyMapping m = km.map.get(key);
-			String l = cpString(m.unshiftedOutput,    m.unshiftedDeadKey   );
-			String r = cpString(m.altUnshiftedOutput, m.altUnshiftedDeadKey);
-			String lc = (m.unshiftedDeadKey    == null) ? "\"bl\"" : "\"bl d\"";
-			String rc = (m.altUnshiftedDeadKey == null) ? "\"br\"" : "\"br d\"";
+			String l = olcpString(km, m.unshiftedOutput,    m.unshiftedDeadKey   );
+			String r = olcpString(km, m.altUnshiftedOutput, m.altUnshiftedDeadKey);
+			String lc = classString(km, m.unshiftedOutput,    m.unshiftedDeadKey,    "bl");
+			String rc = classString(km, m.altUnshiftedOutput, m.altUnshiftedDeadKey, "br");
 			String span = "\"" + ((key == Key.BACKSLASH) ? 3 : 2) + "\"";
 			out.println("\t\t\t\t<td colspan=" + span + " class=" + lc + ">" + l + "</td>");
 			out.println("\t\t\t\t<td colspan=" + span + " class=" + rc + ">" + r + "</td>");
 		}
+	}
+	
+	private static String olcpString(KeyboardMapping km, int output, DeadKeyTable dead) {
+		String s = cpString(output, dead);
+		if (km.htmlOutlineChars != null) {
+			if (dead != null) {
+				if      (dead.macTerminator > 0) output = dead.macTerminator;
+				else if (dead.winTerminator > 0) output = dead.winTerminator;
+				else if (dead.xkbOutput     > 0) output = dead.xkbOutput;
+			}
+			if (output > 0 && km.htmlOutlineChars.get(output)) {
+				s = "<span class=\"ol\">" + s + "</span>";
+			}
+		}
+		return s;
+	}
+	
+	private static String classString(KeyboardMapping km, int output, DeadKeyTable dead, String base) {
+		if (dead != null) base += " d";
+		if (km.htmlSquareChars != null) {
+			if (dead != null) {
+				if      (dead.macTerminator > 0) output = dead.macTerminator;
+				else if (dead.winTerminator > 0) output = dead.winTerminator;
+				else if (dead.xkbOutput     > 0) output = dead.xkbOutput;
+			}
+			if (output > 0 && km.htmlSquareChars.get(output)) {
+				base += " ksq";
+			}
+		}
+		return "\"" + base + "\"";
 	}
 	
 	private static String spaceTop(KeyboardMapping km, int span) {
@@ -363,6 +420,7 @@ public class HTMLWriter {
 			case 0x9F: return "apc";
 			case 0xA0: return "nbsp";
 			case 0xAD: return "-";
+			case 0x02DE: return "◌˞";
 			case 0x034F: return "cgj";
 			case 0x061C: return "alm";
 			case 0x070F: return "sam";
@@ -455,8 +513,18 @@ public class HTMLWriter {
 			case 0x1DAAD: return "swr14";
 			case 0x1DAAE: return "swr15";
 			case 0x1DAAF: return "swr16";
-			default: return String.valueOf(Character.toChars(output));
 		}
+		String s = String.valueOf(Character.toChars(output));
+		CharacterData cd = CharacterDatabase.instance().get(output);
+		if (cd != null && cd.category.startsWith("M")) {
+			// Combining Mark
+			s = "◌" + s;
+			if (cd.combiningClass == 233 || cd.combiningClass == 234) {
+				// Double Combining Mark
+				s = s + "◌";
+			}
+		}
+		return s;
 	}
 	
 	private static final Key[] NUMROW = {

@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
 
@@ -88,6 +91,7 @@ public class KkbWriter {
 			out.println("\t</macActionIds>");
 		}
 		
+		writeHTMLConfig(out, km);
 		out.println("</keyboardMapping>");
 	}
 	
@@ -141,6 +145,81 @@ public class KkbWriter {
 			out.println("\t\t\t\t\t</deadKeyMap>");
 		}
 		out.println("\t\t\t\t</deadKey>");
+	}
+	
+	private static void writeHTMLConfig(PrintWriter out, KeyboardMapping km) {
+		boolean wroteHeader = false;
+		if (km.htmlTitle != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			out.println(wrap("\t\t", "title", km.htmlTitle));
+		}
+		if (km.htmlStyle != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			writeCDATA(out, "\t\t", "style", km.htmlStyle);
+		}
+		if (km.htmlH1 != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			out.println(wrap("\t\t", "h1", km.htmlH1));
+		}
+		if (km.htmlH2 != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			out.println(wrap("\t\t", "h2", km.htmlH2));
+		}
+		if (km.htmlBody1 != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			writeCDATA(out, "\t\t", "body1", km.htmlBody1);
+		}
+		if (km.htmlBody2 != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			writeCDATA(out, "\t\t", "body2", km.htmlBody2);
+		}
+		if (km.htmlBody3 != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			writeCDATA(out, "\t\t", "body3", km.htmlBody3);
+		}
+		if (km.htmlBody4 != null) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			writeCDATA(out, "\t\t", "body4", km.htmlBody4);
+		}
+		if (km.htmlSquareChars != null && !km.htmlSquareChars.isEmpty()) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			out.println(wrap("\t\t", "square", "chars", formatRanges(km.htmlSquareChars)));
+		}
+		if (km.htmlOutlineChars != null && !km.htmlOutlineChars.isEmpty()) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			out.println(wrap("\t\t", "outline", "chars", formatRanges(km.htmlOutlineChars)));
+		}
+		if (wroteHeader) out.println("\t</html>");
+	}
+	
+	private static void writeCDATA(PrintWriter out, String prefix, String tag, String content) {
+		out.println(prefix + "<" + tag + "><![CDATA[");
+		for (String line : content.split("\r\n|\r|\n")) {
+			out.println(prefix + "\t" + line);
+		}
+		out.println(prefix + "]]></" + tag + ">");
+	}
+	
+	public static String formatRanges(BitSet bs) {
+		if (bs == null || bs.isEmpty()) return null;
+		int[] lastRange = null;
+		List<int[]> ranges = new ArrayList<int[]>();
+		for (int i = 0; (i = bs.nextSetBit(i)) >= 0; i++) {
+			if (lastRange != null && lastRange[1] == (i - 1)) lastRange[1]++;
+			else ranges.add(lastRange = new int[]{i, i});
+		}
+		boolean first = true;
+		StringBuffer sb = new StringBuffer();
+		for (int[] range : ranges) {
+			if (first) first = false;
+			else sb.append(", ");
+			sb.append(hex(range[0], 4).toUpperCase());
+			if (range[0] != range[1]) {
+				sb.append("-");
+				sb.append(hex(range[1], 4).toUpperCase());
+			}
+		}
+		return sb.toString();
 	}
 	
 	private static String hex(int v, int n) {

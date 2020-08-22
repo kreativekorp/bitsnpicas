@@ -1,0 +1,9 @@
+.ol {
+	border: solid 1px #999;
+	/* Rendering hack - disables hinting??? */
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	transform: scale(1.00001);
+}
