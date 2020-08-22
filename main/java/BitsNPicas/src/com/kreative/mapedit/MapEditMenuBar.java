@@ -16,6 +16,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import com.kreative.fontmap.FontMapController;
 
 public class MapEditMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;

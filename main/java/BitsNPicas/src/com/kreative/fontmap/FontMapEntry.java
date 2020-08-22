@@ -1,4 +1,4 @@
-package com.kreative.mapedit;
+package com.kreative.fontmap;
 
 import java.awt.Font;
 import java.util.ArrayList;

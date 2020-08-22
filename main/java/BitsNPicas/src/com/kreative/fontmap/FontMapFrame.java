@@ -1,4 +1,4 @@
-package com.kreative.mapedit;
+package com.kreative.fontmap;
 
 import java.awt.BorderLayout;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package com.kreative.mapedit;
+package com.kreative.fontmap;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

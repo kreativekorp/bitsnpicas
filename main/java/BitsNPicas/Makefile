@@ -63,7 +63,7 @@ BitsNPicas-src.tgz: src
 MapEdit.jar: bin
 	export COPYFILE_DISABLE=true
 	find bin -name .DS_Store -delete
-	jar cmf dep/MANIFEST-ME.MF MapEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/mapedit
+	jar cmf dep/MANIFEST-ME.MF MapEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/fontmap -C bin com/kreative/mapedit
 
 MapEdit.app: dep MapEdit.jar
 	mkdir -p MapEdit.app/Contents/MacOS
@@ -84,7 +84,7 @@ MapEdit.dmg: MapEdit.app
 MapEdit-src.tgz: src
 	export COPYFILE_DISABLE=true
 	find src -name .DS_Store -delete
-	tar -czf MapEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/mapedit LICENSE
+	tar -czf MapEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/fontmap src/com/kreative/mapedit LICENSE
 
 install: BitsNPicas.jar
 	sudo mkdir -p /usr/local/lib/
