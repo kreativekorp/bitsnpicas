@@ -37,7 +37,7 @@ public class HTMLWriter {
 		out.println("<html>");
 		out.println("\t<head>");
 		out.println("\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
-		String t = (km.htmlTitle == null || km.htmlTitle.length() == 0) ? (km.name + " Keyboard Layout") : km.htmlTitle;
+		String t = (km.htmlTitle == null || km.htmlTitle.length() == 0) ? (km.getNameNotEmpty() + " Keyboard Layout") : km.htmlTitle;
 		out.println("\t\t<title>" + htmlSpecialChars(t) + "</title>");
 		out.println("\t\t<style>");
 		writeResource(out, "\t\t\t", "base.css", km);
@@ -48,7 +48,7 @@ public class HTMLWriter {
 		out.println("\t\t</style>");
 		out.println("\t</head>");
 		out.println("\t<body class=\"center\">");
-		String h1 = (km.htmlH1 == null || km.htmlH1.length() == 0) ? (km.name + " Keyboard Layout") : km.htmlH1;
+		String h1 = (km.htmlH1 == null || km.htmlH1.length() == 0) ? (km.getNameNotEmpty() + " Keyboard Layout") : km.htmlH1;
 		String h2 = (km.htmlH2 == null || km.htmlH2.length() == 0) ? "for Mac OS X, Linux, and Windows" : km.htmlH2;
 		out.println("\t\t<h1>" + htmlSpecialChars(h1) + "</h1>");
 		out.println("\t\t<h2>" + htmlSpecialChars(h2) + "</h2>");
@@ -200,14 +200,14 @@ public class HTMLWriter {
 		while (m.find()) {
 			String field = m.group(1).trim();
 			String repl = m.group();
-			if (field.equalsIgnoreCase("name")) repl = htmlSpecialChars(km.name);
-			if (field.equalsIgnoreCase("shortname")) repl = htmlSpecialChars(km.winIdentifier);
-			if (field.equalsIgnoreCase("copyright")) repl = htmlSpecialChars(km.winCopyright);
-			if (field.equalsIgnoreCase("company")) repl = htmlSpecialChars(km.winCompany);
-			if (field.equalsIgnoreCase("lang")) repl = htmlSpecialChars(km.winLocale.tag);
-			if (field.equalsIgnoreCase("locale")) repl = htmlSpecialChars(km.winLocale.name);
-			if (field.equalsIgnoreCase("path")) repl = htmlSpecialChars(km.xkbPath);
-			if (field.equalsIgnoreCase("label")) repl = htmlSpecialChars(km.xkbLabel);
+			if (field.equalsIgnoreCase("name")) repl = htmlSpecialChars(km.getNameNotEmpty());
+			if (field.equalsIgnoreCase("shortname")) repl = htmlSpecialChars(km.getWinIdentifierNotEmpty());
+			if (field.equalsIgnoreCase("copyright")) repl = htmlSpecialChars(km.getWinCopyrightNotEmpty());
+			if (field.equalsIgnoreCase("company")) repl = htmlSpecialChars(km.getWinCompanyNotEmpty());
+			if (field.equalsIgnoreCase("lang")) repl = htmlSpecialChars(km.getWinLocaleNotNull().tag);
+			if (field.equalsIgnoreCase("locale")) repl = htmlSpecialChars(km.getWinLocaleNotNull().name);
+			if (field.equalsIgnoreCase("path")) repl = htmlSpecialChars(km.getXkbPathNotEmpty());
+			if (field.equalsIgnoreCase("label")) repl = htmlSpecialChars(km.getXkbLabelNotEmpty());
 			if (field.equalsIgnoreCase("comment")) repl = htmlSpecialChars(km.xkbComment);
 			m.appendReplacement(sb, repl);
 		}
@@ -216,6 +216,7 @@ public class HTMLWriter {
 	}
 	
 	private static String htmlSpecialChars(String s) {
+		if (s == null) return "";
 		StringBuffer sb = new StringBuffer();
 		for (char ch : s.toCharArray()) {
 			switch (ch) {

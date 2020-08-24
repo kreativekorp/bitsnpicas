@@ -79,6 +79,15 @@ public class FontMapController {
 		return null;
 	}
 	
+	public FontMapEntry entryForCodePoint(int cp) {
+		for (FontMapEntry e : entries) {
+			if (e.codePoints().get(cp)) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
 	public FontMapFrame getFrame() {
 		if (frame == null) {
 			frame = new FontMapFrame(entries);

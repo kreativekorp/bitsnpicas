@@ -16,10 +16,10 @@ public class XkbWriter {
 		appendEvdev(dir, km);
 		writeSymbols(dir, km);
 		if (km.icon != null) {
-			File icon = unixNewFile(dir, km.xkbPath + ".png");
+			File icon = unixNewFile(dir, km.getXkbPathNotEmpty() + ".png");
 			ImageIO.write(km.icon, "png", icon);
 		}
-		writeInstall(new File(dir, "install.py"), km.xkbPath, km.name);
+		writeInstall(new File(dir, "install.py"), km.getXkbPathNotEmpty(), km.getNameNotEmpty());
 	}
 	
 	public static void appendEvdev(File dir, KeyboardMapping km) throws IOException {
@@ -67,16 +67,16 @@ public class XkbWriter {
 	public static void writeEvdevLayout(PrintWriter out, KeyboardMapping km) {
 		out.print("    <layout>\n");
 		out.print("      <configItem>\n");
-		out.print("        <name>" + xmlEncode(km.xkbPath) + "</name>\n");
-		out.print("        <shortDescription>" + xmlEncode(km.xkbLabel) + "</shortDescription>\n");
-		out.print("        <description>" + xmlEncode(km.name) + "</description>\n");
+		out.print("        <name>" + xmlEncode(km.getXkbPathNotEmpty()) + "</name>\n");
+		out.print("        <shortDescription>" + xmlEncode(km.getXkbLabelNotEmpty()) + "</shortDescription>\n");
+		out.print("        <description>" + xmlEncode(km.getNameNotEmpty()) + "</description>\n");
 		out.print("      </configItem>\n");
 		out.print("      <variantList/>\n");
 		out.print("    </layout>\n");
 	}
 	
 	public static void writeSymbols(File dir, KeyboardMapping km) throws IOException {
-		FileOutputStream fos = new FileOutputStream(unixNewFile(dir, km.xkbPath));
+		FileOutputStream fos = new FileOutputStream(unixNewFile(dir, km.getXkbPathNotEmpty()));
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"), true);
 		writeSymbols(pw, km);
 		pw.flush();
@@ -88,7 +88,7 @@ public class XkbWriter {
 		out.print("default partial alphanumeric_keys modifier_keys\n");
 		out.print("xkb_symbols \"intl\" {\n");
 		out.print("\n");
-		out.print("  name[Group1]=\"" + km.name + "\";\n");
+		out.print("  name[Group1]=\"" + km.getNameNotEmpty() + "\";\n");
 		out.print("\n");
 		
 		if (km.xkbComment != null && km.xkbComment.length() > 0) {

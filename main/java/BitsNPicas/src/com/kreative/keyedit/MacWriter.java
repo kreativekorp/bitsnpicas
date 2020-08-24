@@ -40,7 +40,7 @@ public class MacWriter {
 	}
 	
 	public static MacKeyboard transform(KeyboardMapping km) {
-		MacKeyboard mk = new MacKeyboard(km.macGroupNumber, km.macIdNumber, km.name, 1);
+		MacKeyboard mk = new MacKeyboard(km.macGroupNumber, km.macIdNumber, km.getNameNotEmpty(), 1);
 		
 		// Create actions, terminators, and output map for dead keys.
 		Map<Integer,Map<String,Integer>> dko = new TreeMap<Integer,Map<String,Integer>>();

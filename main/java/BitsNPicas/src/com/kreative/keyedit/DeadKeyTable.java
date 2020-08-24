@@ -28,4 +28,12 @@ public class DeadKeyTable {
 		this.xkbDeadKey = XkbDeadKey.forUnicode(u);
 		this.keyMap = new LinkedHashMap<Integer,Integer>();
 	}
+	
+	public void setTerminator(int u) {
+		this.winTerminator = u;
+		this.macTerminator = u;
+		this.macStateId = XkbKeySym.MAP.getKeySym(u);
+		this.xkbOutput = u;
+		this.xkbDeadKey = XkbDeadKey.forUnicode(u);
+	}
 }

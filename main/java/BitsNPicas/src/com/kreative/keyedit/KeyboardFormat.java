@@ -6,6 +6,14 @@ import java.io.IOException;
 public enum KeyboardFormat {
 	KKB {
 		@Override
+		public String getName() {
+			return "KeyEdit (kkbx)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".kkbx";
+		}
+		@Override
 		public boolean recognizesInputFormatName(String s) {
 			return s.equalsIgnoreCase(".kkb")
 			    || s.equalsIgnoreCase(".kkbx")
@@ -39,6 +47,14 @@ public enum KeyboardFormat {
 		}
 	},
 	MAC {
+		@Override
+		public String getName() {
+			return "Mac OS X (keylayout)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".keylayout";
+		}
 		@Override
 		public boolean recognizesInputFormatName(String s) {
 			return s.equalsIgnoreCase(".keylayout")
@@ -74,6 +90,14 @@ public enum KeyboardFormat {
 	},
 	WIN {
 		@Override
+		public String getName() {
+			return "Microsoft Keyboard Layout Creator (klc)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".klc";
+		}
+		@Override
 		public boolean recognizesInputFormatName(String s) {
 			return s.equalsIgnoreCase(".klc")
 			    || s.equalsIgnoreCase("klc")
@@ -108,6 +132,14 @@ public enum KeyboardFormat {
 	},
 	XKB {
 		@Override
+		public String getName() {
+			return "Linux (xkb)";
+		}
+		@Override
+		public String getSuffix() {
+			return "";
+		}
+		@Override
 		public boolean recognizesInputFormatName(String s) {
 			return s.equalsIgnoreCase("xkb")
 			    || s.equalsIgnoreCase("x11")
@@ -138,6 +170,14 @@ public enum KeyboardFormat {
 	},
 	HTML {
 		@Override
+		public String getName() {
+			return "HTML";
+		}
+		@Override
+		public String getSuffix() {
+			return ".html";
+		}
+		@Override
 		public boolean recognizesInputFormatName(String s) {
 			return false;
 		}
@@ -166,6 +206,8 @@ public enum KeyboardFormat {
 		}
 	};
 	
+	public abstract String getName();
+	public abstract String getSuffix();
 	public abstract boolean recognizesInputFormatName(String s);
 	public abstract boolean recognizesOutputFormatName(String s);
 	public abstract boolean recognizesInputFile(File f);

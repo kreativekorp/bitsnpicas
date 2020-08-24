@@ -22,11 +22,11 @@ public class WinWriter {
 	
 	public static void write(PrintWriter out, KeyboardMapping km) {
 		out.print("\uFEFF");
-		out.print("KBD\t" + km.winIdentifier + "\t\"" + km.name + "\"\r\n\r\n");
-		out.print("COPYRIGHT\t\"" + km.winCopyright + "\"\r\n\r\n");
-		out.print("COMPANY\t\"" + km.winCompany + "\"\r\n\r\n");
-		out.print("LOCALENAME\t\"" + km.winLocale.tag + "\"\r\n\r\n");
-		out.print("LOCALEID\t\"" + hex(km.winLocale.lcid,8) + "\"\r\n\r\n");
+		out.print("KBD\t" + km.getWinIdentifierNotEmpty() + "\t\"" + km.getNameNotEmpty() + "\"\r\n\r\n");
+		out.print("COPYRIGHT\t\"" + km.getWinCopyrightNotEmpty() + "\"\r\n\r\n");
+		out.print("COMPANY\t\"" + km.getWinCompanyNotEmpty() + "\"\r\n\r\n");
+		out.print("LOCALENAME\t\"" + km.getWinLocaleNotNull().tag + "\"\r\n\r\n");
+		out.print("LOCALEID\t\"" + hex(km.getWinLocaleNotNull().lcid,8) + "\"\r\n\r\n");
 		out.print("VERSION\t1.0\r\n\r\n");
 		
 		if (km.winAltGrEnable || km.winShiftLock || km.winLrmRlm) {
@@ -130,11 +130,11 @@ public class WinWriter {
 		out.print("\r\n");
 		out.print("DESCRIPTIONS\r\n");
 		out.print("\r\n");
-		out.print(hex(km.winLocale.lcid,4) + "\t" + km.name + "\r\n");
+		out.print(hex(km.getWinLocaleNotNull().lcid,4) + "\t" + km.getNameNotEmpty() + "\r\n");
 		out.print("\r\n");
 		out.print("LANGUAGENAMES\r\n");
 		out.print("\r\n");
-		out.print(hex(km.winLocale.lcid,4) + "\t" + km.winLocale.name + "\r\n");
+		out.print(hex(km.getWinLocaleNotNull().lcid,4) + "\t" + km.getWinLocaleNotNull().name + "\r\n");
 		out.print("\r\n");
 		out.print("ENDKBD\r\n");
 	}

@@ -21,8 +21,8 @@ public class KeyMapping {
 		this.unshiftedOutput = key.defaultUnshifted;
 		this.shiftedOutput = key.defaultShifted;
 		this.ctrlOutput = key.defaultCtrl;
-		this.altUnshiftedOutput = -1;
-		this.altShiftedOutput = -1;
+		this.altUnshiftedOutput = key.defaultAltUnshifted;
+		this.altShiftedOutput = key.defaultAltShifted;
 		this.capsLockMapping = CapsLockMapping.AUTO;
 		this.altCapsLockMapping = CapsLockMapping.AUTO;
 		this.commandDeadKey = null;

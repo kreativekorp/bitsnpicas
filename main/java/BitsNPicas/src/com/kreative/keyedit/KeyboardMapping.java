@@ -46,35 +46,64 @@ public class KeyboardMapping {
 		this.macActionIds = new TreeMap<Integer,String>();
 	}
 	
+	public String getNameNotEmpty() {
+		if (name != null && name.length() > 0) return name;
+		return "Untitled Layout";
+	}
+	
+	public String getWinIdentifierNotEmpty() {
+		if (winIdentifier != null && winIdentifier.length() > 0) return winIdentifier;
+		String winId = getNameNotEmpty().replaceAll("[^A-Za-z0-9]", "");
+		if (winId.length() > 8) winId = winId.substring(0, 8);
+		return winId;
+	}
+	
+	public String getWinCompanyNotEmpty() {
+		if (winCompany != null && winCompany.length() > 0) return winCompany;
+		return "Anonymous";
+	}
+	
+	public String getWinCopyrightNotEmpty() {
+		if (winCopyright != null && winCopyright.length() > 0) return winCopyright;
+		int year = new GregorianCalendar().get(GregorianCalendar.YEAR);
+		return "(c) " + year + " " + getWinCompanyNotEmpty();
+	}
+	
+	public WinLocale getWinLocaleNotNull() {
+		if (winLocale != null) return winLocale;
+		return WinLocale.EN_US;
+	}
+	
+	public String getXkbPathNotEmpty() {
+		if (xkbPath != null && xkbPath.length() > 0) return xkbPath;
+		return getNameNotEmpty().replaceAll("[^A-Za-z0-9_-]", "").toLowerCase();
+	}
+	
+	public String getXkbLabelNotEmpty() {
+		if (xkbLabel != null && xkbLabel.length() > 0) return xkbLabel;
+		String name = getNameNotEmpty();
+		return (name.length() > 2) ? name.substring(0, 2) : name;
+	}
+	
+	public XkbAltGrKey getXkbAltGrKeyNotNull() {
+		if (xkbAltGrKey != null) return xkbAltGrKey;
+		return XkbAltGrKey.none;
+	}
+	
+	public XkbComposeKey getXkbComposeKeyNotNull() {
+		if (xkbComposeKey != null) return xkbComposeKey;
+		return XkbComposeKey.none;
+	}
+	
 	public void autoFill() {
-		if (name == null || name.length() == 0) {
-			name = "Untitled Layout";
-		}
-		if (winIdentifier == null || winIdentifier.length() == 0) {
-			winIdentifier = name.replaceAll("[^A-Za-z0-9]", "");
-			if (winIdentifier.length() > 8) winIdentifier = winIdentifier.substring(0, 8);
-		}
-		if (winCompany == null || winCompany.length() == 0) {
-			winCompany = "Anonymous";
-		}
-		if (winCopyright == null || winCopyright.length() == 0) {
-			int year = new GregorianCalendar().get(GregorianCalendar.YEAR);
-			winCopyright = "(c) " + year + " " + winCompany;
-		}
-		if (winLocale == null) {
-			winLocale = WinLocale.EN_US;
-		}
-		if (xkbPath == null) {
-			xkbPath = name.replaceAll("[^A-Za-z0-9_-]", "").toLowerCase();
-		}
-		if (xkbLabel == null) {
-			xkbLabel = (name.length() > 2) ? name.substring(0, 2) : name;
-		}
-		if (xkbAltGrKey == null) {
-			xkbAltGrKey = XkbAltGrKey.none;
-		}
-		if (xkbComposeKey == null) {
-			xkbComposeKey = XkbComposeKey.none;
-		}
+		name = getNameNotEmpty();
+		winIdentifier = getWinIdentifierNotEmpty();
+		winCompany = getWinCompanyNotEmpty();
+		winCopyright = getWinCopyrightNotEmpty();
+		winLocale = getWinLocaleNotNull();
+		xkbPath = getXkbPathNotEmpty();
+		xkbLabel = getXkbLabelNotEmpty();
+		xkbAltGrKey = getXkbAltGrKeyNotNull();
+		xkbComposeKey = getXkbComposeKeyNotNull();
 	}
 }

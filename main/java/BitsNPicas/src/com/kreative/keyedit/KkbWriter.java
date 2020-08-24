@@ -29,7 +29,7 @@ public class KkbWriter {
 		out.println(wrap("\t", "winIdentifier", km.winIdentifier));
 		out.println(wrap("\t", "winCopyright", km.winCopyright));
 		out.println(wrap("\t", "winCompany", km.winCompany));
-		out.println(wrap("\t", "winLocale", "tag", km.winLocale.tag));
+		out.println(wrap("\t", "winLocale", "tag", km.getWinLocaleNotNull().tag));
 		out.println(wrap("\t", "winAltGrEnable", "altgr", (km.winAltGrEnable ? "true" : "false")));
 		out.println(wrap("\t", "winShiftLock", "shiftlock", (km.winShiftLock ? "true" : "false")));
 		out.println(wrap("\t", "winLrmRlm", "lrmrlm", (km.winLrmRlm ? "true" : "false")));
