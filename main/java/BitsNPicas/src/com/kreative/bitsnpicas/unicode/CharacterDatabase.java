@@ -26,6 +26,7 @@ public class CharacterDatabase extends AbstractMap<Integer,CharacterData> {
 	}
 	
 	private final Map<Integer,CharacterData> database;
+	private final Map<String,CharacterData> namedb;
 	
 	private CharacterDatabase() {
 		Map<Integer,CharacterData> database = new HashMap<Integer,CharacterData>();
@@ -34,6 +35,10 @@ public class CharacterDatabase extends AbstractMap<Integer,CharacterData> {
 		}
 		read(UnicodeUtils.getTableDirectory("UnicodeData"), database);
 		this.database = Collections.unmodifiableMap(database);
+		
+		Map<String,CharacterData> namedb = new HashMap<String,CharacterData>();
+		for (CharacterData cd : database.values()) namedb.put(cd.toString(), cd);
+		this.namedb = Collections.unmodifiableMap(namedb);
 	}
 	
 	private static void read(File d, Map<Integer,CharacterData> database) {
@@ -105,13 +110,16 @@ public class CharacterDatabase extends AbstractMap<Integer,CharacterData> {
 	}
 	
 	public CharacterData find(String name) {
-		double distance = Double.POSITIVE_INFINITY;
-		CharacterData closest = null;
-		for (CharacterData data : database.values()) {
-			double d = searchDistance(name, data.toString());
-			if (d < distance) {
-				distance = d;
-				closest = data;
+		name = name.trim().toUpperCase();
+		CharacterData closest = namedb.get(name);
+		if (closest == null) {
+			double distance = Double.POSITIVE_INFINITY;
+			for (CharacterData data : database.values()) {
+				double d = searchDistance(name, data.toString());
+				if (d < distance) {
+					distance = d;
+					closest = data;
+				}
 			}
 		}
 		return closest;
@@ -129,8 +137,8 @@ public class CharacterDatabase extends AbstractMap<Integer,CharacterData> {
 				int ci = d[i - 1][j] + 1;
 				int cd = d[i][j - 1] + 1;
 				int cs = d[i - 1][j - 1];
-				int c1 = Character.toUpperCase(s1.charAt(i - 1));
-				int c2 = Character.toUpperCase(s2.charAt(j - 1));
+				int c1 = s1.charAt(i - 1);
+				int c2 = s2.charAt(j - 1);
 				if (c1 != c2) cs++;
 				if (ci <= cd) {
 					if (ci <= cs) d[i][j] = ci;

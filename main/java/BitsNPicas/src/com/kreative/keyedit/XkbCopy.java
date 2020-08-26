@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XkbCopy {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		List<File> files = new ArrayList<File>();
 		boolean useKeySym = false;
 		boolean parsingOptions = true;

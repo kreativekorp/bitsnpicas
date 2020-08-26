@@ -23,17 +23,17 @@ public class DeadKeyTable {
 	public DeadKeyTable(int u) {
 		this.winTerminator = u;
 		this.macTerminator = u;
-		this.macStateId = XkbKeySym.MAP.getKeySym(u);
+		this.macStateId = (u < 0) ? null : XkbKeySym.MAP.getKeySym(u);
 		this.xkbOutput = u;
-		this.xkbDeadKey = XkbDeadKey.forUnicode(u);
+		this.xkbDeadKey = (u < 0) ? XkbDeadKey.none : XkbDeadKey.forUnicode(u);
 		this.keyMap = new LinkedHashMap<Integer,Integer>();
 	}
 	
 	public void setTerminator(int u) {
 		this.winTerminator = u;
 		this.macTerminator = u;
-		this.macStateId = XkbKeySym.MAP.getKeySym(u);
+		this.macStateId = (u < 0) ? null : XkbKeySym.MAP.getKeySym(u);
 		this.xkbOutput = u;
-		this.xkbDeadKey = XkbDeadKey.forUnicode(u);
+		this.xkbDeadKey = (u < 0) ? XkbDeadKey.none : XkbDeadKey.forUnicode(u);
 	}
 }
