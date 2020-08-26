@@ -23,7 +23,7 @@ public class KeyInfoFrame extends JDialog {
 	private final KeyInfoPanel panel;
 	private final List<KeyEditListener> listeners;
 	
-	public KeyInfoFrame(Frame parent, Key key, KeyMapping km, KeyEditController controller) {
+	public KeyInfoFrame(Frame parent, Key key, KeyMapping km, final KeyEditController controller) {
 		super(parent, "Edit Key");
 		this.panel = new KeyInfoPanel(key, km, controller);
 		this.listeners = new ArrayList<KeyEditListener>();

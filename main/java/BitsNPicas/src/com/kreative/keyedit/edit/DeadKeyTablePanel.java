@@ -128,7 +128,7 @@ public class DeadKeyTablePanel extends JPanel {
 	
 	private static <C extends JComponent> C square(C c) {
 		Dimension d = c.getPreferredSize();
-		d.width = d.height = Math.max(d.width, d.height) + 8;
+		d.width = (d.height += 8);
 		c.setMinimumSize(d);
 		c.setPreferredSize(d);
 		c.setMaximumSize(d);

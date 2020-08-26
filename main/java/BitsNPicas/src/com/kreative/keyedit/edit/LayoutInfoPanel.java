@@ -190,14 +190,14 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel htmPanel4 = topSxS(new JLabel("Footer HTML:"), scrollWrap(htmlBody4), 4);
 		
 		JTabbedPane tabs = new JTabbedPane();
-		tabs.add("Windows (MSKLC)", addBorder(winPanel, 12));
-		tabs.add("Mac OS X", addBorder(macPanel, 12));
-		tabs.add("Linux (XKB)", addBorder(xkbPanel, 12));
-		tabs.add("HTML Header", addBorder(htmPanel0, 12));
-		tabs.add("HTML Body 1", addBorder(htmPanel1, 12));
-		tabs.add("HTML Body 2", addBorder(htmPanel2, 12));
-		tabs.add("HTML Body 3", addBorder(htmPanel3, 12));
-		tabs.add("HTML Footer", addBorder(htmPanel4, 12));
+		tabs.add("Windows (MSKLC)", addBorder(winPanel, 20));
+		tabs.add("Mac OS X", addBorder(macPanel, 20));
+		tabs.add("Linux (XKB)", addBorder(xkbPanel, 20));
+		tabs.add("HTML Header", addBorder(htmPanel0, 20));
+		tabs.add("HTML Body 1", addBorder(htmPanel1, 20));
+		tabs.add("HTML Body 2", addBorder(htmPanel2, 20));
+		tabs.add("HTML Body 3", addBorder(htmPanel3, 20));
+		tabs.add("HTML Footer", addBorder(htmPanel4, 20));
 		
 		JPanel mainPanel = topSxS(topPanel, tabs, 16);
 		setLayout(new GridLayout(1,1,0,0));
@@ -285,7 +285,7 @@ public class LayoutInfoPanel extends JPanel {
 	
 	private static <C extends JComponent> C square(C c) {
 		Dimension d = c.getPreferredSize();
-		d.width = d.height = Math.max(d.width, d.height) + 8;
+		d.width = (d.height += 8);
 		c.setMinimumSize(d);
 		c.setPreferredSize(d);
 		c.setMaximumSize(d);
