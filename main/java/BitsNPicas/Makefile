@@ -2,9 +2,9 @@ SRCFILES := $(shell find src -name \*.java)
 RESFILES := $(shell find src -type f \! -name .\* \! -name \*.java | sed s/^src\\///)
 PACKAGES := $(shell find src -name \*.java | sed -E s/^src\\/\|\\/[^\\/]+$$//g | sort | uniq | tr / .)
 
-all: clean bin doc BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz
+all: clean bin doc BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz KeyEdit.jar KeyEdit.app KeyEdit-src.tgz
 
-eclipseall: eclipseclean BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz
+eclipseall: eclipseclean BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz KeyEdit.jar KeyEdit.app KeyEdit-src.tgz
 
 clean:
 	rm -rf bin
@@ -15,6 +15,9 @@ clean:
 	rm -rf MapEdit*.jar
 	rm -rf MapEdit*.tgz
 	rm -rf MapEdit*.app
+	rm -rf KeyEdit*.jar
+	rm -rf KeyEdit*.tgz
+	rm -rf KeyEdit*.app
 
 eclipseclean:
 	rm -rf BitsNPicas*.jar
@@ -23,6 +26,9 @@ eclipseclean:
 	rm -rf MapEdit*.jar
 	rm -rf MapEdit*.tgz
 	rm -rf MapEdit*.app
+	rm -rf KeyEdit*.jar
+	rm -rf KeyEdit*.tgz
+	rm -rf KeyEdit*.app
 
 bin: src
 	mkdir -p bin
@@ -85,6 +91,32 @@ MapEdit-src.tgz: src
 	export COPYFILE_DISABLE=true
 	find src -name .DS_Store -delete
 	tar -czf MapEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/fontmap src/com/kreative/mapedit LICENSE
+
+KeyEdit.jar: bin
+	export COPYFILE_DISABLE=true
+	find bin -name .DS_Store -delete
+	jar cmf dep/MANIFEST-KE.MF KeyEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/fontmap -C bin com/kreative/keyedit
+
+KeyEdit.app: dep KeyEdit.jar
+	mkdir -p KeyEdit.app/Contents/MacOS
+	mkdir -p KeyEdit.app/Contents/Resources/Java
+	cp -f dep/PkgInfo-KE KeyEdit.app/Contents/PkgInfo
+	cp -f dep/Info-KE.plist KeyEdit.app/Contents/Info.plist
+	cp -f dep/universalJavaApplicationStub KeyEdit.app/Contents/MacOS/KeyEdit
+	cp -f dep/keyedit*.icns KeyEdit.app/Contents/Resources
+	cp -f KeyEdit.jar KeyEdit.app/Contents/Resources/Java
+
+KeyEdit.dmg: KeyEdit.app
+	mkdir -p dmgtmp
+	cp -R KeyEdit.app dmgtmp
+	cp KeyEdit.jar dmgtmp
+	hdiutil create -fs HFS+ -volname "KeyEdit" -srcfolder dmgtmp KeyEdit.dmg
+	rm -rf dmgtmp
+
+KeyEdit-src.tgz: src
+	export COPYFILE_DISABLE=true
+	find src -name .DS_Store -delete
+	tar -czf KeyEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/fontmap src/com/kreative/keyedit LICENSE
 
 install: BitsNPicas.jar
 	sudo mkdir -p /usr/local/lib/
