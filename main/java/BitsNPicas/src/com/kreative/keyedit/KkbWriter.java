@@ -134,7 +134,7 @@ public class KkbWriter {
 		if (dkt.xkbOutput > 0) {
 			out.println(wrap("\t\t\t\t\t", "xkbOutput", "output", hex(dkt.xkbOutput,4)));
 		}
-		if (dkt.xkbDeadKey != null) {
+		if (dkt.xkbDeadKey != null && dkt.xkbDeadKey != XkbDeadKey.none) {
 			out.println(wrap("\t\t\t\t\t", "xkbDeadKey", "keysym", dkt.xkbDeadKey.name()));
 		}
 		if (!dkt.keyMap.isEmpty()) {

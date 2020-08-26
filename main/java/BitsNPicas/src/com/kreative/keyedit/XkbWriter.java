@@ -197,7 +197,7 @@ public class XkbWriter {
 	
 	private static String keysym(int output, DeadKeyTable dead, boolean useKeySym, String def) {
 		if (dead != null) {
-			if (dead.xkbDeadKey != null) {
+			if (dead.xkbDeadKey != null && dead.xkbDeadKey != XkbDeadKey.none) {
 				return dead.xkbDeadKey.name();
 			}
 			if (dead.xkbOutput > 0) {

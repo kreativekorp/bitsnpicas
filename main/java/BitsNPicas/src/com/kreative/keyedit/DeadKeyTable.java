@@ -16,7 +16,7 @@ public class DeadKeyTable {
 		this.macTerminator = -1;
 		this.macStateId = null;
 		this.xkbOutput = -1;
-		this.xkbDeadKey = null;
+		this.xkbDeadKey = XkbDeadKey.none;
 		this.keyMap = new LinkedHashMap<Integer,Integer>();
 	}
 	

@@ -239,7 +239,7 @@ public class XkbReader {
 	private static DeadKeyTable keysymDeadKey(String s) {
 		if (s == null || !s.startsWith("dead_")) return null;
 		XkbDeadKey dead = XkbDeadKey.forKeySym(s);
-		if (dead == null) return null;
+		if (dead == null || dead == XkbDeadKey.none) return null;
 		DeadKeyTable dkt = new DeadKeyTable();
 		dkt.xkbDeadKey = dead;
 		return dkt;

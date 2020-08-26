@@ -1,6 +1,7 @@
 package com.kreative.keyedit;
 
 public enum XkbDeadKey {
+	none,
 	dead_grave,
 	dead_acute,
 	dead_circumflex,
@@ -156,7 +157,7 @@ public enum XkbDeadKey {
 			default:
 				if (u >= 0x0390 && u <  0x03CF) return dead_greek;
 				if (u >= 0x20A0 && u <= 0x20CF) return dead_currency;
-				return null;
+				return none;
 		}
 	}
 	
@@ -166,6 +167,6 @@ public enum XkbDeadKey {
 				return key;
 			}
 		}
-		return null;
+		return none;
 	}
 }
