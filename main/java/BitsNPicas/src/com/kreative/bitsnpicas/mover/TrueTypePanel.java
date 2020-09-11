@@ -5,22 +5,19 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class TrueTypePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public TrueTypePanel(Font font) {
-		JLabel l1 = new JLabel("<html>How razorback-jumping frogs can level six piqued gymnasts!</html>");
-		JLabel l2 = new JLabel("<html>Cozy lummox gives smart squid who asks for job pen.</html>");
-		JLabel l3 = new JLabel("<html>The quick brown fox jumps over the lazy dog.</html>");
+		JTextArea l1 = make("How razorback-jumping frogs can level six piqued gymnasts!");
+		JTextArea l2 = make("Cozy lummox gives smart squid who asks for job pen.");
+		JTextArea l3 = make("The quick brown fox jumps over the lazy dog.");
 		l1.setFont(font.deriveFont(9f));
 		l2.setFont(font.deriveFont(12f));
 		l3.setFont(font.deriveFont(18f));
-		l1.setVerticalAlignment(JLabel.TOP);
-		l2.setVerticalAlignment(JLabel.TOP);
-		l3.setVerticalAlignment(JLabel.TOP);
 		l1.setBorder(BorderFactory.createTitledBorder("9 point"));
 		l2.setBorder(BorderFactory.createTitledBorder("12 point"));
 		l3.setBorder(BorderFactory.createTitledBorder("18 point"));
@@ -42,5 +39,16 @@ public class TrueTypePanel extends JPanel {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
 		setLayout(new GridLayout());
 		add(mainPanel);
+	}
+	
+	private static JTextArea make(String s) {
+		JTextArea a = new JTextArea(s);
+		a.setWrapStyleWord(true);
+		a.setLineWrap(true);
+		a.setOpaque(false);
+		a.setEditable(false);
+		a.setFocusable(false);
+		a.setBackground(null);
+		return a;
 	}
 }
