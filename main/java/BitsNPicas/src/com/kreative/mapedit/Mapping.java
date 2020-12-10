@@ -5,6 +5,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.util.Scanner;
 import com.kreative.bitsnpicas.unicode.CharacterData;
 import com.kreative.bitsnpicas.unicode.CharacterDatabase;
@@ -79,6 +84,35 @@ public class Mapping {
 			}
 			MappingTable st = tab.getSubtable(i);
 			if (st != null) write(out, st, pfxi);
+		}
+	}
+	
+	public void decode(Charset cs) {
+		name = cs.displayName();
+		CharsetDecoder decoder = cs.newDecoder();
+		decoder.onMalformedInput(CodingErrorAction.REPLACE);
+		decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+		decoder.replaceWith("\uFFFF");
+		decode(decoder, new byte[256], 0, new char[256]);
+	}
+	
+	private void decode(CharsetDecoder decoder, byte[] in, int pos, char[] out) {
+		for (int ch = 0; ch < 256; ch++) {
+			in[pos] = (byte)ch;
+			ByteBuffer inb = ByteBuffer.wrap(in, 0, pos + 1);
+			CharBuffer outb = CharBuffer.wrap(out);
+			decoder.reset();
+			decoder.decode(inb, outb, false);
+			// Do NOT finish the decode so we can distinguish
+			// incomplete input from invalid input.
+			if (outb.position() > 0) {
+				String s = new String(out, 0, outb.position());
+				if (s.contains("\uFFFF")) continue;
+				CodePointSequence cps = new CodePointSequence(s);
+				root.setSequence(cps, in, 0, pos + 1);
+			} else {
+				decode(decoder, in, pos + 1, out);
+			}
 		}
 	}
 	

@@ -5,6 +5,7 @@ import java.awt.Frame;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -33,6 +34,18 @@ public class Main {
 		MapEditFrame f = new MapEditFrame(null, m);
 		f.setVisible(true);
 		return f;
+	}
+	
+	public static MapEditFrame newMapping(Charset cs) {
+		if (cs == null) {
+			return newMapping();
+		} else {
+			Mapping m = new Mapping();
+			m.decode(cs);
+			MapEditFrame f = new MapEditFrame(null, m);
+			f.setVisible(true);
+			return f;
+		}
 	}
 	
 	public static MapEditFrame openMapping() {

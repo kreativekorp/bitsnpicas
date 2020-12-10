@@ -41,6 +41,7 @@ public class MapEditMenuBar extends JMenuBar {
 		public FileMenu(MapEditFrame f, Window w) {
 			super("File");
 			add(new NewMappingMenuItem());
+			add(new NewMappingFromEncodingMenuItem());
 			add(new OpenMappingMenuItem());
 			add(new CloseMenuItem(w));
 			addSeparator();
@@ -61,6 +62,19 @@ public class MapEditMenuBar extends JMenuBar {
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Main.newMapping();
+				}
+			});
+		}
+	}
+	
+	public static class NewMappingFromEncodingMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public NewMappingFromEncodingMenuItem() {
+			super("New from Encoding...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new NewMappingFrame("New from Encoding").setVisible(true);
 				}
 			});
 		}
