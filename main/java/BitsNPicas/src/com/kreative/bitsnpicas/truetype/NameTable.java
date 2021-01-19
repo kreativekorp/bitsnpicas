@@ -37,6 +37,7 @@ public class NameTable extends ListBasedTable<NameTableEntry> {
 			info.location = currentLocation;
 			entryInfo.add(info);
 			currentLocation += e.nameData.length;
+			if (e.padding > 0) currentLocation += e.padding;
 		}
 		
 		Collections.sort(entryInfo, SORT_BY_NAME_ID);
@@ -52,6 +53,7 @@ public class NameTable extends ListBasedTable<NameTableEntry> {
 		Collections.sort(entryInfo, SORT_BY_LOCATION);
 		for (NameTableEntryInfo info : entryInfo) {
 			out.write(info.entry.nameData);
+			if (info.entry.padding > 0) out.write(new byte[info.entry.padding]);
 		}
 	}
 	
@@ -76,6 +78,13 @@ public class NameTable extends ListBasedTable<NameTableEntry> {
 		
 		this.clear();
 		Collections.sort(entryInfo, SORT_BY_LOCATION);
+		
+		for (int i = 0; i < count; i++) {
+			NameTableEntryInfo info = entryInfo.get(i);
+			int nextLocation = (i+1 < count) ? entryInfo.get(i+1).location : length;
+			info.entry.padding = nextLocation - info.location - info.entry.nameData.length;
+		}
+		
 		for (NameTableEntryInfo info : entryInfo) {
 			in.reset();
 			in.skipBytes(info.location);

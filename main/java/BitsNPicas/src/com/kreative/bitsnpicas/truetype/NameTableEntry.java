@@ -28,6 +28,7 @@ public class NameTableEntry implements Comparable<NameTableEntry> {
 	public int languageID;
 	public int nameID;
 	public byte[] nameData;
+	public int padding;
 	
 	public static NameTableEntry forUnicode(int nameID, String name) {
 		NameTableEntry e = new NameTableEntry();
