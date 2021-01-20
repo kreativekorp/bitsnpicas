@@ -15,6 +15,7 @@ public class SbitLineMetrics {
 	public int minAdvanceSB;
 	public int maxBeforeBL;
 	public int minAfterBL;
+	public int pad;
 	
 	protected void read(DataInputStream in) throws IOException {
 		ascender = in.readByte();
@@ -27,7 +28,7 @@ public class SbitLineMetrics {
 		minAdvanceSB = in.readByte();
 		maxBeforeBL = in.readByte();
 		minAfterBL = in.readByte();
-		/* pad = */ in.readShort();
+		pad = in.readShort();
 	}
 	
 	protected void write(DataOutputStream out) throws IOException {
@@ -41,6 +42,6 @@ public class SbitLineMetrics {
 		out.writeByte(minAdvanceSB);
 		out.writeByte(maxBeforeBL);
 		out.writeByte(minAfterBL);
-		out.writeShort(0);
+		out.writeShort(pad);
 	}
 }

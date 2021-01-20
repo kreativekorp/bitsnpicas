@@ -31,7 +31,7 @@ public class EblcTable extends ListBasedTable<EblcBitmapSize> {
 		int ptr = 8 + (this.size() * 48);
 		for (EblcBitmapSize ebs : this) {
 			ebs.indexSubTableArrayOffset = ptr;
-			ebs.indexTablesSize = 0;
+			ebs.indexTablesSize = ebs.size() * 8;
 			ebs.numberOfIndexSubTables = ebs.size();
 			ptr += ebs.size() * 8;
 			for (EblcIndexSubtable st : ebs) {

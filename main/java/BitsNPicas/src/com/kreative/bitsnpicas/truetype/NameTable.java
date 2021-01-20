@@ -37,7 +37,9 @@ public class NameTable extends ListBasedTable<NameTableEntry> {
 			info.location = currentLocation;
 			entryInfo.add(info);
 			currentLocation += e.nameData.length;
-			if (e.padding > 0) currentLocation += e.padding;
+			if (e.padding > 0 && e.padding <= 4) {
+				currentLocation += e.padding;
+			}
 		}
 		
 		Collections.sort(entryInfo, SORT_BY_NAME_ID);
@@ -53,7 +55,9 @@ public class NameTable extends ListBasedTable<NameTableEntry> {
 		Collections.sort(entryInfo, SORT_BY_LOCATION);
 		for (NameTableEntryInfo info : entryInfo) {
 			out.write(info.entry.nameData);
-			if (info.entry.padding > 0) out.write(new byte[info.entry.padding]);
+			if (info.entry.padding > 0 && info.entry.padding <= 4) {
+				out.write(new byte[info.entry.padding]);
+			}
 		}
 	}
 	
@@ -67,6 +71,7 @@ public class NameTable extends ListBasedTable<NameTableEntry> {
 		for (int i = 0; i < count; i++) {
 			NameTableEntryInfo info = new NameTableEntryInfo();
 			info.entry = new NameTableEntry();
+			info.entry.index = i;
 			info.entry.platformID = in.readUnsignedShort();
 			info.entry.platformSpecificID = in.readUnsignedShort();
 			info.entry.languageID = in.readUnsignedShort();
@@ -76,19 +81,21 @@ public class NameTable extends ListBasedTable<NameTableEntry> {
 			entryInfo.add(info);
 		}
 		
-		this.clear();
-		Collections.sort(entryInfo, SORT_BY_LOCATION);
+		for (NameTableEntryInfo info : entryInfo) {
+			in.reset();
+			in.skipBytes(info.location);
+			in.readFully(info.entry.nameData);
+		}
 		
+		Collections.sort(entryInfo, SORT_BY_LOCATION);
 		for (int i = 0; i < count; i++) {
 			NameTableEntryInfo info = entryInfo.get(i);
 			int nextLocation = (i+1 < count) ? entryInfo.get(i+1).location : length;
 			info.entry.padding = nextLocation - info.location - info.entry.nameData.length;
 		}
 		
+		this.clear();
 		for (NameTableEntryInfo info : entryInfo) {
-			in.reset();
-			in.skipBytes(info.location);
-			in.readFully(info.entry.nameData);
 			this.add(info.entry);
 		}
 	}

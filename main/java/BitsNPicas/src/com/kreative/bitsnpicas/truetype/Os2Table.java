@@ -9,12 +9,20 @@ import java.text.StringCharacterIterator;
 import java.util.Collection;
 
 public class Os2Table extends TrueTypeTable {
-	public static final int VERSION_TRUETYPE_1_5  = 0; // 68 bytes
-	public static final int VERSION_TRUETYPE_1_66 = 1; // 78 bytes
-	public static final int VERSION_OPENTYPE_1_1  = 2; // 86 bytes
-	public static final int VERSION_OPENTYPE_1_4  = 3; // 96 bytes
-	public static final int VERSION_OPENTYPE_1_5  = 4; // 96 bytes
-	public static final int VERSION_OPENTYPE_1_7  = 5; // 100 bytes
+	// Apple and Microsoft disagree about the length of the OS/2 table before version 3.
+	// So we can't depend on the version number to determine which fields to include.
+	public static final int LENGTH_68  =  68; // Apple's version 0
+	public static final int LENGTH_78  =  78; // Apple's version 1, Microsoft's version 0
+	public static final int LENGTH_86  =  86; // Apple's version 2, Microsoft's version 1
+	public static final int LENGTH_96  =  96; // Version 3, 4,      Microsoft's version 2
+	public static final int LENGTH_100 = 100; // Version 5
+	public static final int LENGTH_MAX = 100;
+	public static final int VERSION_TRUETYPE_1_5  = 0;
+	public static final int VERSION_TRUETYPE_1_66 = 1;
+	public static final int VERSION_OPENTYPE_1_1  = 2;
+	public static final int VERSION_OPENTYPE_1_4  = 3;
+	public static final int VERSION_OPENTYPE_1_5  = 4;
+	public static final int VERSION_OPENTYPE_1_7  = 5;
 	public static final int VERSION_MAX = 5;
 	public static final int WEIGHT_CLASS_ULTRA_LIGHT = 100;
 	public static final int WEIGHT_CLASS_EXTRA_LIGHT = 200;
@@ -228,7 +236,8 @@ public class Os2Table extends TrueTypeTable {
 	public static final int FS_SELECTION_WWS              = 0x0100;
 	public static final int FS_SELECTION_OBLIQUE          = 0x0200;
 	
-	// Version 0 (68-byte) begins
+	// Apple version 0 (68-byte) begins
+	public int length = LENGTH_MAX;
 	public int version = VERSION_MAX;
 	public int averageCharWidth = 0;
 	public int weightClass = WEIGHT_CLASS_MEDIUM;
@@ -261,27 +270,27 @@ public class Os2Table extends TrueTypeTable {
 	public int fsSelection = 0;
 	public int fsFirstCharIndex = 0x20;
 	public int fsLastCharIndex = 0x20;
-	// Version 0 (68-byte) ends
+	// Apple version 0 (68-byte) ends
 	
-	// Version 1 (78-byte) begins
+	// Apple version 1, Microsoft version 0 (78-byte) begins
 	public int typoAscent = 0;
 	public int typoDescent = 0;
 	public int typoLineGap = 0;
 	public int winAscent = 0;
 	public int winDescent = 0;
-	// Version 1 (78-byte) ends
+	// Apple version 1, Microsoft version 0 (78-byte) ends
 	
-	// Version 2 (86-byte) begins
+	// Apple version 2, Microsoft version 1 (86-byte) begins
 	public final int[] codePages = new int[2];
-	// Version 2 (86-byte) ends
+	// Apple version 2, Microsoft version 1 (86-byte) ends
 	
-	// Version 3 or 4 (96-byte) begins
+	// Microsoft version 2, version 3 or 4 (96-byte) begins
 	public int xHeight = 0;
 	public int capHeight = 0;
 	public int defaultChar = 0;
 	public int breakChar = 0x20;
 	public int maxContext = 0;
-	// Version 3 or 4 (96-byte) ends
+	// Microsoft version 2, version 3 or 4 (96-byte) ends
 	
 	// Version 5 (100-byte) begins
 	public int lowerOpticalPointSize = 0;
@@ -380,25 +389,25 @@ public class Os2Table extends TrueTypeTable {
 		out.writeShort(fsSelection);
 		out.writeShort(fsFirstCharIndex);
 		out.writeShort(fsLastCharIndex);
-		if (version >= 1) {
+		if (length >= LENGTH_78) {
 			out.writeShort(typoAscent);
 			out.writeShort(typoDescent);
 			out.writeShort(typoLineGap);
 			out.writeShort(winAscent);
 			out.writeShort(winDescent);
 		}
-		if (version >= 2) {
+		if (length >= LENGTH_86) {
 			out.writeInt(codePages[0]);
 			out.writeInt(codePages[1]);
 		}
-		if (version >= 3) {
+		if (length >= LENGTH_96) {
 			out.writeShort(xHeight);
 			out.writeShort(capHeight);
 			out.writeShort(defaultChar);
 			out.writeShort(breakChar);
 			out.writeShort(maxContext);
 		}
-		if (version >= 5) {
+		if (length >= LENGTH_100) {
 			out.writeShort(lowerOpticalPointSize);
 			out.writeShort(upperOpticalPointSize);
 		}
@@ -406,6 +415,7 @@ public class Os2Table extends TrueTypeTable {
 	
 	@Override
 	protected void decompile(DataInputStream in, int length, TrueTypeTable[] dependencies) throws IOException {
+		this.length = length;
 		version = in.readUnsignedShort();
 		averageCharWidth = in.readShort();
 		weightClass = in.readUnsignedShort();
@@ -441,20 +451,20 @@ public class Os2Table extends TrueTypeTable {
 		fsSelection = in.readUnsignedShort();
 		fsFirstCharIndex = in.readUnsignedShort();
 		fsLastCharIndex = in.readUnsignedShort();
-		typoAscent = (version >= 1) ? in.readShort() : 0;
-		typoDescent = (version >= 1) ? in.readShort() : 0;
-		typoLineGap = (version >= 1) ? in.readShort() : 0;
-		winAscent = (version >= 1) ? in.readShort() : 0;
-		winDescent = (version >= 1) ? in.readShort() : 0;
-		codePages[0] = (version >= 2) ? in.readInt() : 0;
-		codePages[1] = (version >= 2) ? in.readInt() : 0;
-		xHeight = (version >= 3) ? in.readShort() : 0;
-		capHeight = (version >= 3) ? in.readShort() : 0;
-		defaultChar = (version >= 3) ? in.readUnsignedShort() : 0;
-		breakChar = (version >= 3) ? in.readUnsignedShort() : 0x20;
-		maxContext = (version >= 3) ? in.readUnsignedShort() : 0;
-		lowerOpticalPointSize = (version >= 5) ? in.readUnsignedShort() : 0;
-		upperOpticalPointSize = (version >= 5) ? in.readUnsignedShort() : 0xFFFF;
+		typoAscent = (length >= LENGTH_78) ? in.readShort() : 0;
+		typoDescent = (length >= LENGTH_78) ? in.readShort() : 0;
+		typoLineGap = (length >= LENGTH_78) ? in.readShort() : 0;
+		winAscent = (length >= LENGTH_78) ? in.readShort() : 0;
+		winDescent = (length >= LENGTH_78) ? in.readShort() : 0;
+		codePages[0] = (length >= LENGTH_86) ? in.readInt() : 0;
+		codePages[1] = (length >= LENGTH_86) ? in.readInt() : 0;
+		xHeight = (length >= LENGTH_96) ? in.readShort() : 0;
+		capHeight = (length >= LENGTH_96) ? in.readShort() : 0;
+		defaultChar = (length >= LENGTH_96) ? in.readUnsignedShort() : 0;
+		breakChar = (length >= LENGTH_96) ? in.readUnsignedShort() : 0x20;
+		maxContext = (length >= LENGTH_96) ? in.readUnsignedShort() : 0;
+		lowerOpticalPointSize = (length >= LENGTH_100) ? in.readUnsignedShort() : 0;
+		upperOpticalPointSize = (length >= LENGTH_100) ? in.readUnsignedShort() : 0xFFFF;
 	}
 	
 	public static final int[][] UNICODE_RANGES = new int[][] {

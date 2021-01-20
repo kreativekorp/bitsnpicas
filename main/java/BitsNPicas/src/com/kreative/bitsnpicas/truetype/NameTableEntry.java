@@ -23,6 +23,7 @@ public class NameTableEntry implements Comparable<NameTableEntry> {
 	public static final int NAME_ID_COMPATIBLE_FULL = 18;
 	public static final int NAME_ID_SAMPLE_TEXT = 19;
 	
+	public int index;
 	public int platformID;
 	public int platformSpecificID;
 	public int languageID;
@@ -62,6 +63,7 @@ public class NameTableEntry implements Comparable<NameTableEntry> {
 	
 	@Override
 	public int compareTo(NameTableEntry other) {
+		if (this.index != other.index) return this.index - other.index;
 		if (this.platformID != other.platformID) return this.platformID - other.platformID;
 		if (this.platformSpecificID != other.platformSpecificID) return this.platformSpecificID - other.platformSpecificID;
 		if (this.languageID != other.languageID) return this.languageID - other.languageID;

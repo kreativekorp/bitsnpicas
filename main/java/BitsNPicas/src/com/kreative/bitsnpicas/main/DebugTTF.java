@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import com.kreative.bitsnpicas.truetype.HeadTable;
 import com.kreative.bitsnpicas.truetype.HheaTable;
 import com.kreative.bitsnpicas.truetype.MaxpTable;
+import com.kreative.bitsnpicas.truetype.NameTable;
+import com.kreative.bitsnpicas.truetype.NameTableEntry;
 import com.kreative.bitsnpicas.truetype.Os2Table;
 import com.kreative.bitsnpicas.truetype.TrueTypeFile;
 
@@ -106,11 +108,32 @@ public class DebugTTF {
 					System.out.println("    maxComponentDepth:     " + maxp.maxComponentDepth);
 				}
 				
+				// Print name
+				System.out.println("  name");
+				NameTable name = (NameTable)ttf.getByTableName("name");
+				if (name == null) System.out.println("    Not present.");
+				else {
+					System.out.println("    Plat  Spec  Lang  Name  Size  String");
+					for (NameTableEntry e : name) {
+						System.out.print("    ");
+						System.out.print(pad(e.platformID, 6));
+						System.out.print(pad(e.platformSpecificID, 6));
+						System.out.print(pad(e.languageID, 6));
+						System.out.print(pad(e.nameID, 6));
+						System.out.print(pad(e.nameData.length, 6));
+						try { System.out.print("\"" + e.getNameString() + "\""); }
+						catch (Exception x) { System.out.print("<" + e.nameData.length + ">"); }
+						if (e.padding != 0) System.out.print(" [" + e.padding + "]");
+						System.out.println();
+					}
+				}
+				
 				// Print OS/2
 				System.out.println("  OS/2");
 				Os2Table os2 = (Os2Table)ttf.getByTableName("OS/2");
 				if (os2 == null) System.out.println("    Not present.");
 				else {
+					System.out.println("    length:                " + os2.length);
 					System.out.println("    version:               " + os2.version);
 					System.out.println("    avgCharWidth:          " + os2.averageCharWidth);
 					System.out.println("    weightClass:           " + os2.weightClass);
@@ -143,21 +166,21 @@ public class DebugTTF {
 					System.out.println("    fsSelection:           " + hex(os2.fsSelection, 4));
 					System.out.println("    fsFirstCharIndex:      " + hex(os2.fsFirstCharIndex, 4));
 					System.out.println("    fsLastCharIndex:       " + hex(os2.fsLastCharIndex, 4));
-					if (os2.version < 1) continue;
+					if (os2.length < Os2Table.LENGTH_78) continue;
 					System.out.println("    typoAscent:            " + os2.typoAscent);
 					System.out.println("    typoDescent:           " + os2.typoDescent);
 					System.out.println("    typoLineGap:           " + os2.typoLineGap);
 					System.out.println("    winAscent:             " + os2.winAscent);
 					System.out.println("    winDescent:            " + os2.winDescent);
-					if (os2.version < 2) continue;
+					if (os2.length < Os2Table.LENGTH_86) continue;
 					System.out.println("    codePages:             " + hex(os2.codePages, 8));
-					if (os2.version < 3) continue;
+					if (os2.length < Os2Table.LENGTH_96) continue;
 					System.out.println("    xHeight:               " + os2.xHeight);
 					System.out.println("    capHeight:             " + os2.capHeight);
 					System.out.println("    defaultChar:           " + hex(os2.defaultChar, 4));
 					System.out.println("    breakChar:             " + hex(os2.breakChar, 4));
 					System.out.println("    maxContext:            " + os2.maxContext);
-					if (os2.version < 5) continue;
+					if (os2.length < Os2Table.LENGTH_100) continue;
 					System.out.println("    lowerOpticalPointSize: " + os2.getLowerOpticalPointSizeDouble());
 					System.out.println("    upperOpticalPointSize: " + os2.getUpperOpticalPointSizeDouble());
 				}
@@ -176,6 +199,13 @@ public class DebugTTF {
 	private static String hex(int[] a, int len) {
 		StringBuffer sb = new StringBuffer();
 		for (int v : a) sb.insert(0, hex(v, len));
+		return sb.toString();
+	}
+	
+	private static String pad(int i, int len) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(i);
+		while (sb.length() < len) sb.append(" ");
 		return sb.toString();
 	}
 }
