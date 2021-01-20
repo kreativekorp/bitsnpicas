@@ -21,9 +21,11 @@ public class TrueTypeFile extends ArrayList<TrueTypeTable> {
 	public static final int SCALER_POSTSCRIPT_GX = 0x74797031;
 	public static final int SCALER_META          = 0x778E7A00;
 	
+	public boolean interpret = true;
 	public int scaler = SCALER_TRUETYPE;
 	
-	private static final TrueTypeTable createTable(int tableId) {
+	private TrueTypeTable createTable(int tableId) {
+		if (!interpret) return new UnknownTable(tableId);
 		switch (tableId) {
 			case 0x43424454: return new EbdtTable(SbitTableType.COLOR);
 			case 0x43424C43: return new EblcTable(SbitTableType.COLOR);
