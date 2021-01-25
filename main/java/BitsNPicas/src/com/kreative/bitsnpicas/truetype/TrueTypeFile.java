@@ -32,6 +32,7 @@ public class TrueTypeFile extends ArrayList<TrueTypeTable> {
 			case 0x45424454: return new EbdtTable(SbitTableType.OPENTYPE);
 			case 0x45424C43: return new EblcTable(SbitTableType.OPENTYPE);
 			case 0x4F532F32: return new Os2Table();
+			case 0x50554141: return new PuaaTable();
 			case 0x53564720: return new SvgTable();
 			case 0x62646174: return new EbdtTable(SbitTableType.TRUETYPE);
 			case 0x626C6F63: return new EblcTable(SbitTableType.TRUETYPE);
