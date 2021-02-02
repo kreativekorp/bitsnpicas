@@ -21,7 +21,8 @@ public class PuaaDecompiler {
 		}
 		
 		List<File> inputFiles = new ArrayList<File>();
-		File outputFile = new File("puaa.d");
+		List<File> outputFiles = new ArrayList<File>();
+		List<File> defaultList = inputFiles;
 		boolean parsingOptions = true;
 		
 		int argi = 0;
@@ -33,23 +34,45 @@ public class PuaaDecompiler {
 				} else if (arg.equals("-i") && argi < args.length) {
 					inputFiles.add(new File(args[argi++]));
 				} else if (arg.equals("-o") && argi < args.length) {
-					outputFile = new File(args[argi++]);
+					outputFiles.add(new File(args[argi++]));
+				} else if (arg.equals("-I")) {
+					defaultList = inputFiles;
+				} else if (arg.equals("-O")) {
+					defaultList = outputFiles;
 				} else if (arg.equals("--help")) {
 					printHelp();
 				} else {
 					System.err.println("Unknown option: " + arg);
 				}
 			} else {
-				inputFiles.add(new File(arg));
+				defaultList.add(new File(arg));
 			}
 		}
 		
 		if (inputFiles.isEmpty()) return;
+		if (outputFiles.isEmpty()) outputFiles.add(new File("puaa.d"));
 		
-		for (File inputFile : inputFiles) {
-			PuaaTable puaa = read(inputFile);
-			if (puaa != null) write(puaa, outputFile);
+		if (inputFiles.size() == 1) {
+			PuaaTable puaa = read(inputFiles.get(0));
+			if (puaa != null) {
+				for (File outputFile : outputFiles) {
+					write(puaa, outputFile);
+				}
+			}
+			return;
 		}
+		if (outputFiles.size() == 1) {
+			for (File inputFile : inputFiles) {
+				PuaaTable puaa = read(inputFile);
+				if (puaa != null) {
+					write(puaa, outputFiles.get(0));
+				}
+			}
+			return;
+		}
+		
+		if (inputFiles.size() > 1) System.err.println("Too many input files.");
+		if (outputFiles.size() > 1) System.err.println("Too many output files.");
 	}
 	
 	private static PuaaTable read(File src) {
@@ -85,7 +108,9 @@ public class PuaaDecompiler {
 		System.out.println();
 		System.out.println("  -i <path>     Specify source TrueType file.");
 		System.out.println("  -o <path>     Specify destination directory.");
-		System.out.println("  --            Process remaining arguments as source files.");
+		System.out.println("  -I            Process arguments as source files.");
+		System.out.println("  -O            Process arguments as destination files.");
+		System.out.println("  --            Process remaining arguments as file names.");
 		System.out.println();
 		System.out.println("Output files will be in the format of the Unicode Character Database");
 		System.out.println("(although without any comments) and will be named accordingly:");

@@ -20,8 +20,9 @@ public class PuaaCompiler {
 		}
 		
 		List<File> dataFiles = new ArrayList<File>();
-		File inputFile = null;
-		File outputFile = null;
+		List<File> inputFiles = new ArrayList<File>();
+		List<File> outputFiles = new ArrayList<File>();
+		List<File> defaultList = dataFiles;
 		boolean parsingOptions = true;
 		
 		int argi = 0;
@@ -30,30 +31,51 @@ public class PuaaCompiler {
 			if (parsingOptions && arg.startsWith("-")) {
 				if (arg.equals("--")) {
 					parsingOptions = false;
+				} else if (arg.equals("-d") && argi < args.length) {
+					dataFiles.add(new File(args[argi++]));
 				} else if (arg.equals("-i") && argi < args.length) {
-					inputFile = new File(args[argi++]);
+					inputFiles.add(new File(args[argi++]));
 				} else if (arg.equals("-o") && argi < args.length) {
-					outputFile = new File(args[argi++]);
+					outputFiles.add(new File(args[argi++]));
+				} else if (arg.equals("-D")) {
+					defaultList = dataFiles;
+				} else if (arg.equals("-I")) {
+					defaultList = inputFiles;
+				} else if (arg.equals("-O")) {
+					defaultList = outputFiles;
 				} else if (arg.equals("--help")) {
 					printHelp();
 				} else {
 					System.err.println("Unknown option: " + arg);
 				}
 			} else {
-				dataFiles.add(new File(arg));
+				defaultList.add(new File(arg));
 			}
 		}
 		
 		if (dataFiles.isEmpty()) return;
+		PuaaTable puaa = read(dataFiles);
 		
-		if (inputFile == null && outputFile == null) {
-			inputFile = outputFile = new File("puaa.out");
-		} else if (inputFile == null) {
-			inputFile = outputFile;
-		} else if (outputFile == null) {
-			outputFile = inputFile;
+		if (inputFiles.isEmpty() && outputFiles.isEmpty()) {
+			File file = new File("puaa.out");
+			write(puaa, file, file);
+			return;
+		}
+		if (inputFiles.isEmpty() || outputFiles.isEmpty()) {
+			for (File file : inputFiles) write(puaa, file, file);
+			for (File file : outputFiles) write(puaa, file, file);
+			return;
+		}
+		if (inputFiles.size() == 1 && outputFiles.size() == 1) {
+			write(puaa, inputFiles.get(0), outputFiles.get(0));
+			return;
 		}
 		
+		if (inputFiles.size() > 1) System.err.println("Too many input files.");
+		if (outputFiles.size() > 1) System.err.println("Too many output files.");
+	}
+	
+	private static PuaaTable read(List<File> dataFiles) {
 		PuaaTable puaa = new PuaaTable();
 		for (File dataFile : dataFiles) {
 			System.out.print("Reading " + dataFile.getName() + "...");
@@ -64,7 +86,10 @@ public class PuaaCompiler {
 				System.out.println(" ERROR: " + e);
 			}
 		}
-		
+		return puaa;
+	}
+	
+	private static void write(PuaaTable puaa, File inputFile, File outputFile) {
 		System.out.print("Writing " + outputFile.getName() + "...");
 		try {
 			inject(puaa, inputFile, outputFile);
@@ -78,9 +103,13 @@ public class PuaaCompiler {
 		System.out.println();
 		System.out.println("PuaaCompiler - Add Unicode Character Database properties to TrueType files.");
 		System.out.println();
+		System.out.println("  -d <path>     Specify UCD data file or directory.");
 		System.out.println("  -i <path>     Specify source TrueType file.");
 		System.out.println("  -o <path>     Specify destination TrueType file.");
-		System.out.println("  --            Process remaining arguments as UCD data files.");
+		System.out.println("  -D            Process arguments as UCD data files.");
+		System.out.println("  -I            Process arguments as source files.");
+		System.out.println("  -O            Process arguments as destination files.");
+		System.out.println("  --            Process remaining arguments as file names.");
 		System.out.println();
 		System.out.println("Source and destination may be the same file.");
 		System.out.println("Other files specified must be in the format of the");
