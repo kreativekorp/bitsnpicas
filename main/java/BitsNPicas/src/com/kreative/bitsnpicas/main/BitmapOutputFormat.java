@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.CybikoBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
@@ -100,6 +101,14 @@ public enum BitmapOutputFormat {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new U8MBitmapFontExporter(
 				o.u8mLoadAddress,
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
+		}
+	},
+	CYBIKO(".fnt", "cybiko") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new CybikoBitmapFontExporter(
 				(o.encodingName == null) ? null :
 				EncodingList.instance().get(o.encodingName)
 			);

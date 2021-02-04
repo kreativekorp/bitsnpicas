@@ -5,6 +5,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
@@ -79,6 +80,14 @@ public enum BitmapInputFormat {
 			return new U8MBitmapFontImporter();
 		}
 	},
+	CYBIKO(".cyf", ".fnt", ".fntz", BitmapFont.NAME_FAMILY) {
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new CybikoBitmapFontImporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
+		}
+	},
 	HMZK(".hmzk", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new HMZKBitmapFontImporter();
@@ -120,6 +129,12 @@ public enum BitmapInputFormat {
 		this.extensions = new String[]{extension};
 		this.nameType = nameType;
 		this.macResFork = macResFork;
+	}
+	
+	private BitmapInputFormat(String ext1, String ext2, String ext3, int nameType) {
+		this.extensions = new String[]{ext1, ext2, ext3};
+		this.nameType = nameType;
+		this.macResFork = false;
 	}
 	
 	public abstract BitmapFontImporter createImporter(BitmapInputOptions o);

@@ -10,6 +10,7 @@ import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
 import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
@@ -84,6 +85,15 @@ public enum ImportFormat {
 	},
 	U8M(".u8m") {
 		public FontImporter<?> createImporter() { return new U8MBitmapFontImporter(); }
+	},
+	CYBIKO(".cyf", ".fnt", ".fntz") {
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("Cybiko", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable encoding) {
+					return new CybikoBitmapFontImporter(encoding);
+				}
+			});
+		}
 	},
 	HMZK(".hmzk") {
 		public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }

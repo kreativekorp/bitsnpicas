@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.CybikoBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
@@ -83,6 +84,11 @@ public enum BitmapExportFormat {
 	U8M("U8/M (UTF-8 for Microcomputers)", ".u8m", "u8m", "U8/M PETSCII") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new U8MBitmapFontExporter(o.getLoadAddress(), o.getSelectedEncoding());
+		}
+	},
+	CYBIKO("Cybiko", ".fnt", "encoding", "Cybiko") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new CybikoBitmapFontExporter(o.getSelectedEncoding());
 		}
 	},
 	HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {

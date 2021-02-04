@@ -34,6 +34,7 @@ public class EncodingList extends AbstractList<EncodingTable> {
 		"FZX SuperLatin", "FZX Desktop", "FZX KOI-8",
 		"U8/M Apple II", "U8/M Atari ST", "U8/M ATASCII",
 		"U8/M PETSCII", "U8/M RISC OS", "U8/M Spectrum",
+		"Cybiko"
 	};
 	
 	private static EncodingList instance = null;
