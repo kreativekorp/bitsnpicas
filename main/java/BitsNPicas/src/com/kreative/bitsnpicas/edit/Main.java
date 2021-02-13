@@ -2,8 +2,10 @@ package com.kreative.bitsnpicas.edit;
 
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -25,6 +27,14 @@ public class Main {
 		try { System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Bits'n'Picas"); } catch (Exception e) {}
 		try { System.setProperty("apple.laf.useScreenMenuBar", "true"); } catch (Exception e) {}
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
+		
+		try {
+			Toolkit tk = Toolkit.getDefaultToolkit();
+			Field aacn = tk.getClass().getDeclaredField("awtAppClassName");
+			aacn.setAccessible(true);
+			aacn.set(tk, "bitsnpicas");
+		} catch (Exception e) {}
+		
 		if (args.length == 0) {
 			newBitmapFont();
 		} else {
@@ -32,6 +42,7 @@ public class Main {
 				openFonts(new File(arg));
 			}
 		}
+		
 		if (CommonMenuItems.IS_MAC_OS) {
 			try { Class.forName("com.kreative.bitsnpicas.edit.mac.MyApplicationListener").newInstance(); }
 			catch (Exception e) { e.printStackTrace(); }
