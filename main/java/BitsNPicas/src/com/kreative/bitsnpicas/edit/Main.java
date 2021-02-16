@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -29,10 +30,19 @@ public class Main {
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
 		
 		try {
+			Method getModule = Class.class.getMethod("getModule");
+			Object javaDesktop = getModule.invoke(Toolkit.getDefaultToolkit().getClass());
+			Object allUnnamed = getModule.invoke(Main.class);
+			Class<?> module = Class.forName("java.lang.Module");
+			Method addOpens = module.getMethod("addOpens", String.class, module);
+			addOpens.invoke(javaDesktop, "sun.awt.X11", allUnnamed);
+		} catch (Exception e) {}
+		
+		try {
 			Toolkit tk = Toolkit.getDefaultToolkit();
 			Field aacn = tk.getClass().getDeclaredField("awtAppClassName");
 			aacn.setAccessible(true);
-			aacn.set(tk, "bitsnpicas");
+			aacn.set(tk, "BitsNPicas");
 		} catch (Exception e) {}
 		
 		if (args.length == 0) {
