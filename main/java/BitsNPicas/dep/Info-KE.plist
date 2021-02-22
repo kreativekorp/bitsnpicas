@@ -26,6 +26,8 @@
 	<string>Bnjo</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 	<key>JavaX</key>
 	<dict>
 		<key>ClassPath</key>
