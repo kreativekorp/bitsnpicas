@@ -32,17 +32,18 @@ eclipseclean:
 
 bin: src
 	mkdir -p bin
-	javac -classpath dep/KSFL.jar:dep/orange-extensions.jar -sourcepath src $(SRCFILES) -d bin
+	javac -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(SRCFILES) -d bin
 	$(foreach res,$(RESFILES),cp src/$(res) bin/$(res);)
 
 doc: src
 	mkdir -p doc
-	javadoc -classpath dep/KSFL.jar:dep/orange-extensions.jar -sourcepath src $(PACKAGES) -d doc
+	javadoc -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(PACKAGES) -d doc
 
 BitsNPicas.jar: bin
 	export COPYFILE_DISABLE=true
 	find bin -name .DS_Store -delete
 	jar cmf dep/MANIFEST.MF BitsNPicas.jar -C bin com/kreative/bitsnpicas
+	chmod +x BitsNPicas.jar
 
 BitsNPicas.app: dep BitsNPicas.jar
 	mkdir -p BitsNPicas.app/Contents/MacOS
@@ -70,6 +71,7 @@ MapEdit.jar: bin
 	export COPYFILE_DISABLE=true
 	find bin -name .DS_Store -delete
 	jar cmf dep/MANIFEST-ME.MF MapEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/fontmap -C bin com/kreative/mapedit
+	chmod +x MapEdit.jar
 
 MapEdit.app: dep MapEdit.jar
 	mkdir -p MapEdit.app/Contents/MacOS
@@ -78,6 +80,7 @@ MapEdit.app: dep MapEdit.jar
 	cp -f dep/Info-ME.plist MapEdit.app/Contents/Info.plist
 	cp -f dep/universalJavaApplicationStub MapEdit.app/Contents/MacOS/MapEdit
 	cp -f dep/mapedit*.icns MapEdit.app/Contents/Resources
+	cp -f dep/ual.jar MapEdit.app/Contents/Resources/Java
 	cp -f MapEdit.jar MapEdit.app/Contents/Resources/Java
 
 MapEdit.dmg: MapEdit.app
@@ -96,6 +99,7 @@ KeyEdit.jar: bin
 	export COPYFILE_DISABLE=true
 	find bin -name .DS_Store -delete
 	jar cmf dep/MANIFEST-KE.MF KeyEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/fontmap -C bin com/kreative/keyedit
+	chmod +x KeyEdit.jar
 
 KeyEdit.app: dep KeyEdit.jar
 	mkdir -p KeyEdit.app/Contents/MacOS
@@ -104,6 +108,7 @@ KeyEdit.app: dep KeyEdit.jar
 	cp -f dep/Info-KE.plist KeyEdit.app/Contents/Info.plist
 	cp -f dep/universalJavaApplicationStub KeyEdit.app/Contents/MacOS/KeyEdit
 	cp -f dep/keyedit*.icns KeyEdit.app/Contents/Resources
+	cp -f dep/ual.jar KeyEdit.app/Contents/Resources/Java
 	cp -f KeyEdit.jar KeyEdit.app/Contents/Resources/Java
 
 KeyEdit.dmg: KeyEdit.app

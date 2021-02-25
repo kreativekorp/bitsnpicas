@@ -31,7 +31,7 @@
 	<key>JavaX</key>
 	<dict>
 		<key>ClassPath</key>
-		<string>$JAVAROOT/KeyEdit.jar</string>
+		<string>$JAVAROOT/KeyEdit.jar:$JAVAROOT/ual.jar</string>
 		<key>JVMVersion</key>
 		<string>1.5+</string>
 		<key>MainClass</key>

@@ -31,7 +31,7 @@
 	<key>JavaX</key>
 	<dict>
 		<key>ClassPath</key>
-		<string>$JAVAROOT/BitsNPicas.jar:$JAVAROOT/KSFL.jar</string>
+		<string>$JAVAROOT/BitsNPicas.jar:$JAVAROOT/ual.jar:$JAVAROOT/KSFL.jar</string>
 		<key>JVMVersion</key>
 		<string>1.5+</string>
 		<key>MainClass</key>
