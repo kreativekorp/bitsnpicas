@@ -605,8 +605,8 @@ public class MacIconSuite extends LinkedHashMap<Integer,byte[]> {
 		for (int pi = 0, y = 0; y < h; y++) {
 			for (int x = 0; x < w; x += 2) {
 				int b = 0;
-				if (pixels[pi] >= 0) b |= closestColorIndex(COLORS_4BIT, pixels[pi]) << 4; pi++;
-				if (pixels[pi] >= 0) b |= closestColorIndex(COLORS_4BIT, pixels[pi]) << 0; pi++;
+				if (pixels[pi] < 0) b |= closestColorIndex(COLORS_4BIT, pixels[pi]) << 4; pi++;
+				if (pixels[pi] < 0) b |= closestColorIndex(COLORS_4BIT, pixels[pi]) << 0; pi++;
 				out.write(b);
 			}
 		}
@@ -621,7 +621,7 @@ public class MacIconSuite extends LinkedHashMap<Integer,byte[]> {
 		for (int pi = 0, y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				int b = 0;
-				if (pixels[pi] >= 0) b = closestColorIndex(COLORS_8BIT, pixels[pi]); pi++;
+				if (pixels[pi] < 0) b = closestColorIndex(COLORS_8BIT, pixels[pi]); pi++;
 				out.write(b);
 			}
 		}
