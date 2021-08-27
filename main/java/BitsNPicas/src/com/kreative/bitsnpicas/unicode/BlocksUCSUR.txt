@@ -1,8 +1,8 @@
 # Blocks-UCSUR.txt
-# Date: 2020-05-05, 01:48:55 
+# Date: 2021-08-26, 02:53:20 
 #
 # Under-ConScript Unicode Registry Character Database
-# Copyright (c) 2009-2020 Kreative Software
+# Copyright (c) 2009-2021 Kreative Software
 # For documentation, see http://www.kreativekorp.com/ucsur/
 #
 # Note:   The casing of block names is not normative.
@@ -75,6 +75,8 @@ EAA0..EAFF; Wanya
 EB00..EB3F; Orokin
 EB40..EB5F; Standard Galactic
 EB60..EB9F; Braille Extended
+EBA0..EBDF; Cistercian Numerals
+EBE0..EBFF; Kaktovik Numerals
 EC00..EC2F; Cylenian
 EC30..EC6F; Syrrin
 ED00..ED3F; Deini
@@ -85,5 +87,6 @@ F8D0..F8FF; Klingon
 F0000..F0E6F; Kinya Syllables
 F0E70..F16AF; Pikto
 F1700..F18FF; Semtog
+F1900..F1AFF; Sitelen Pona
 
 # EOF
