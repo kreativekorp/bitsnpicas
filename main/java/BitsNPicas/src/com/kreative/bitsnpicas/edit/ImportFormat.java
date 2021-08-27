@@ -1,6 +1,7 @@
 package com.kreative.bitsnpicas.edit;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import javax.swing.JFrame;
 import com.kreative.bitsnpicas.FontExporter;
@@ -12,6 +13,7 @@ import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.FONTXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
@@ -86,7 +88,16 @@ public enum ImportFormat {
 	U8M(".u8m") {
 		public FontImporter<?> createImporter() { return new U8MBitmapFontImporter(); }
 	},
-	CYBIKO(".cyf", ".fnt", ".fntz") {
+	FONTX(".ftx") {
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("CP437", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable encoding) {
+					return new FONTXBitmapFontImporter(encoding);
+				}
+			});
+		}
+	},
+	CYBIKO(".cyf", ".fntz") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Cybiko", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(EncodingTable encoding) {
@@ -138,6 +149,25 @@ public enum ImportFormat {
 	
 	public static ImportFormat forFile(File file) {
 		String lname = file.getName().toLowerCase();
+		
+		// Detect the many formats using .fnt magically.
+		if (lname.endsWith(".fnt")) {
+			try {
+				FileInputStream in = new FileInputStream(file);
+				int magic = in.read();
+				in.close();
+				switch (magic) {
+					// case 0: return FNT;
+					case 1: return CYBIKO;
+					case 'F': return FONTX;
+					// case 'R': return ROCKBOX;
+				}
+			} catch (IOException e) {
+				return null;
+			}
+		}
+		
+		// Detect most file formats by file extension.
 		for (ImportFormat format : values()) {
 			for (String ext : format.extensions) {
 				if (lname.endsWith(ext)) {
@@ -145,6 +175,8 @@ public enum ImportFormat {
 				}
 			}
 		}
+		
+		// Detect Mac OS Classic suitcases by file type and creator code.
 		String creator = MacUtility.getCreator(file);
 		if (creator == null) return null;
 		if (creator.equals("DMOV") || creator.equals("movr")) return SUIT;

@@ -1,12 +1,15 @@
 package com.kreative.bitsnpicas.main;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.FONTXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
@@ -44,7 +47,7 @@ public enum BitmapInputFormat {
 			);
 		}
 	},
-	DFONT(".dfont", BitmapFont.NAME_FAMILY_AND_STYLE) {
+	DFONT(".dfont", BitmapFont.NAME_FAMILY_AND_STYLE, false) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new NFNTBitmapFontImporter(
 				(o.encodingName == null) ? null :
@@ -80,7 +83,15 @@ public enum BitmapInputFormat {
 			return new U8MBitmapFontImporter();
 		}
 	},
-	CYBIKO(".cyf", ".fnt", ".fntz", BitmapFont.NAME_FAMILY) {
+	FONTX(".ftx", BitmapFont.NAME_FAMILY) {
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new FONTXBitmapFontImporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
+		}
+	},
+	CYBIKO(".cyf", ".fntz", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new CybikoBitmapFontImporter(
 				(o.encodingName == null) ? null :
@@ -131,8 +142,8 @@ public enum BitmapInputFormat {
 		this.macResFork = macResFork;
 	}
 	
-	private BitmapInputFormat(String ext1, String ext2, String ext3, int nameType) {
-		this.extensions = new String[]{ext1, ext2, ext3};
+	private BitmapInputFormat(String ext1, String ext2, int nameType) {
+		this.extensions = new String[]{ext1, ext2};
 		this.nameType = nameType;
 		this.macResFork = false;
 	}
@@ -141,6 +152,25 @@ public enum BitmapInputFormat {
 	
 	public static BitmapInputFormat forFile(File file) {
 		String lname = file.getName().toLowerCase();
+		
+		// Detect the many formats using .fnt magically.
+		if (lname.endsWith(".fnt")) {
+			try {
+				FileInputStream in = new FileInputStream(file);
+				int magic = in.read();
+				in.close();
+				switch (magic) {
+					// case 0: return FNT;
+					case 1: return CYBIKO;
+					case 'F': return FONTX;
+					// case 'R': return ROCKBOX;
+				}
+			} catch (IOException e) {
+				return null;
+			}
+		}
+		
+		// Detect most file formats by file extension.
 		for (BitmapInputFormat f : values()) {
 			for (String ext : f.extensions) {
 				if (lname.endsWith(ext)) {
@@ -148,6 +178,8 @@ public enum BitmapInputFormat {
 				}
 			}
 		}
+		
+		// Detect Mac OS Classic suitcases by file type and creator code.
 		String creator = MacUtility.getCreator(file);
 		if (creator == null) return null;
 		if (creator.equals("DMOV") || creator.equals("movr")) return SUIT;
