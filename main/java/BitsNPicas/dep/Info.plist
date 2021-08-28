@@ -159,6 +159,49 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>fnt</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Bitmap Font of Indeterminate Format</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ftx</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FONTX Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>cyf</string>
+				<string>fntz</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Cybiko Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>hmzk</string>
 			</array>
 			<key>CFBundleTypeName</key>
