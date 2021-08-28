@@ -13,4 +13,6 @@ public class BitmapOutputOptions {
 	public boolean geosMega = false;
 	public boolean geosKerning = false;
 	public boolean geosUTF8 = false;
+	public boolean fontxDoubleByte = false;
+	public String fontxDoubleByteEncoding = null;
 }

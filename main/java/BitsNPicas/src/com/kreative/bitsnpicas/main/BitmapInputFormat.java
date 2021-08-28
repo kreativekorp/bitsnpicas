@@ -85,10 +85,11 @@ public enum BitmapInputFormat {
 	},
 	FONTX(".ftx", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new FONTXBitmapFontImporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			String sben = o.encodingName;
+			if (sben == null || sben.length() == 0) sben = "CP437";
+			String dben = o.fontxDoubleByteEncoding;
+			if (dben == null || dben.length() == 0) dben = "CP943";
+			return new FONTXBitmapFontImporter(EncodingList.instance().get(sben), dben);
 		}
 	},
 	CYBIKO(".cyf", ".fntz", BitmapFont.NAME_FAMILY) {

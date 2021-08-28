@@ -6,6 +6,7 @@ import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.CybikoBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.FONTXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
@@ -104,6 +105,19 @@ public enum BitmapOutputFormat {
 				(o.encodingName == null) ? null :
 				EncodingList.instance().get(o.encodingName)
 			);
+		}
+	},
+	FONTX(".fnt", "dosv", "fontx", "fontx2") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			if (o.fontxDoubleByte) {
+				String en = o.fontxDoubleByteEncoding;
+				if (en == null || en.length() == 0) en = "CP943";
+				return new FONTXBitmapFontExporter(en);
+			} else {
+				String en = o.encodingName;
+				if (en == null || en.length() == 0) en = "CP437";
+				return new FONTXBitmapFontExporter(EncodingList.instance().get(en));
+			}
 		}
 	},
 	CYBIKO(".fnt", "cybiko") {

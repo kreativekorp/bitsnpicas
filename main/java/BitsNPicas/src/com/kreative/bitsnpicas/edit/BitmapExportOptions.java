@@ -16,4 +16,6 @@ public interface BitmapExportOptions {
 	public boolean getGEOSMega();
 	public boolean getGEOSKerning();
 	public boolean getGEOSUTF8();
+	public boolean getFONTXDoubleByte();
+	public String getFONTXDoubleByteEncoding();
 }

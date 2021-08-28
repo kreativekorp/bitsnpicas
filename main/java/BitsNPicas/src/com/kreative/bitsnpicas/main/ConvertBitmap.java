@@ -97,10 +97,20 @@ public class ConvertBitmap {
 						o.oo.sizegen = new PointSizeGenerator.Standard(9, 10, 12, 14, 18, 24, 36, 48, 72);
 					} else if (arg.equals("-e") && argi < args.length) {
 						o.io.encodingName = o.oo.encodingName = args[argi++];
+						o.oo.fontxDoubleByte = false;
 					} else if (arg.equals("-ie") && argi < args.length) {
 						o.io.encodingName = args[argi++];
 					} else if (arg.equals("-oe") && argi < args.length) {
 						o.oo.encodingName = args[argi++];
+						o.oo.fontxDoubleByte = false;
+					} else if (arg.equals("-ee") && argi < args.length) {
+						o.io.fontxDoubleByteEncoding = o.oo.fontxDoubleByteEncoding = args[argi++];
+						o.oo.fontxDoubleByte = true;
+					} else if (arg.equals("-iee") && argi < args.length) {
+						o.io.fontxDoubleByteEncoding = args[argi++];
+					} else if (arg.equals("-oee") && argi < args.length) {
+						o.oo.fontxDoubleByteEncoding = args[argi++];
+						o.oo.fontxDoubleByte = true;
 					} else if (arg.equals("-a") && argi < args.length) {
 						o.oo.u8mLoadAddress = parseInt16(args[argi++]);
 					} else if (arg.equals("-m")) {
@@ -215,6 +225,9 @@ public class ConvertBitmap {
 			encs.add(e.name);
 		}
 		printHelpList(encs);
+		System.out.println("  -ee <enc>     Use the specified double-byte encoding (for fontx).");
+		System.out.println("  -iee <enc>    Use the specified double-byte encoding for reading only.");
+		System.out.println("  -oee <enc>    Use the specified double-byte encoding for writing only.");
 		System.out.println("  --            Process remaining arguments as file names.");
 		System.out.println();
 	}

@@ -7,6 +7,7 @@ import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.CybikoBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.FONTXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
@@ -18,6 +19,8 @@ import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.U8MBitmapFontExporter;
+import com.kreative.bitsnpicas.unicode.EncodingList;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public enum BitmapExportFormat {
 	TTF("TTF (TrueType)", ".ttf", "pixel") {
@@ -84,6 +87,19 @@ public enum BitmapExportFormat {
 	U8M("U8/M (UTF-8 for Microcomputers)", ".u8m", "u8m", "U8/M PETSCII") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new U8MBitmapFontExporter(o.getLoadAddress(), o.getSelectedEncoding());
+		}
+	},
+	FONTX("FONTX (DOS/V)", ".fnt", "fontx") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			if (o.getFONTXDoubleByte()) {
+				String en = o.getFONTXDoubleByteEncoding();
+				if (en == null || en.length() == 0) en = "CP943";
+				return new FONTXBitmapFontExporter(en);
+			} else {
+				EncodingTable et = o.getSelectedEncoding();
+				if (et == null) et = EncodingList.instance().get("CP437");
+				return new FONTXBitmapFontExporter(et);
+			}
 		}
 	},
 	CYBIKO("Cybiko", ".fnt", "encoding", "Cybiko") {

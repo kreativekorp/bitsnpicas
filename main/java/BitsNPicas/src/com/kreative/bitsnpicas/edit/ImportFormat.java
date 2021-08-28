@@ -3,6 +3,7 @@ package com.kreative.bitsnpicas.edit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import javax.swing.JFrame;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontImporter;
@@ -90,9 +91,10 @@ public enum ImportFormat {
 	},
 	FONTX(".ftx") {
 		public JFrame createOptionFrame(File file) throws IOException {
-			return new EncodingSelectionFrame("CP437", file, new EncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable encoding) {
-					return new FONTXBitmapFontImporter(encoding);
+			String dben = Charset.forName("CP943").displayName();
+			return new DualEncodingSelectionFrame("CP437", dben, file, new DualEncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable sbenc, String dbenc) {
+					return new FONTXBitmapFontImporter(sbenc, dbenc);
 				}
 			});
 		}

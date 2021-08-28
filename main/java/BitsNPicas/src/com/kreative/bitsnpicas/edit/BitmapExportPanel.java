@@ -33,6 +33,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final BitmapExportGEOSPanel geosPanel;
 	private final BitmapExportMacPanel macPanel;
 	private final BitmapExportEncodingPanel encodingPanel;
+	private final BitmapExportFONTXPanel fontxPanel;
 	private final BitmapExportU8MPanel u8mPanel;
 	private final BitmapExportColorPanel colorPanel;
 	private final JButton exportButton;
@@ -44,6 +45,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.geosPanel = new BitmapExportGEOSPanel();
 		this.macPanel = new BitmapExportMacPanel();
 		this.encodingPanel = new BitmapExportEncodingPanel();
+		this.fontxPanel = new BitmapExportFONTXPanel();
 		this.u8mPanel = new BitmapExportU8MPanel();
 		this.colorPanel = new BitmapExportColorPanel();
 		this.exportButton = new JButton("Export");
@@ -59,6 +61,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		formatOptionsPanel.add(geosPanel, "geos");
 		formatOptionsPanel.add(macPanel, "mac");
 		formatOptionsPanel.add(encodingPanel, "encoding");
+		formatOptionsPanel.add(fontxPanel, "fontx");
 		formatOptionsPanel.add(u8mPanel, "u8m");
 		formatOptionsPanel.add(colorPanel, "color");
 		formatOptionsPanel.add(nonePanel, "none");
@@ -155,6 +158,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 		if (f.cardName.equals("mac")) return macPanel.getSelectedEncoding();
 		if (f.cardName.equals("u8m")) return u8mPanel.getSelectedEncoding();
+		if (f.cardName.equals("fontx")) return fontxPanel.getSelectedSingleByteEncoding();
 		return encodingPanel.getSelectedEncoding();
 	}
 	
@@ -172,15 +176,28 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		return macPanel.getPointSizeGenerator();
 	}
 	
+	@Override
 	public boolean getGEOSMega() {
 		return geosPanel.getGEOSMega();
 	}
 	
+	@Override
 	public boolean getGEOSKerning() {
 		return geosPanel.getGEOSKerning();
 	}
 	
+	@Override
 	public boolean getGEOSUTF8() {
 		return geosPanel.getGEOSUTF8();
+	}
+	
+	@Override
+	public boolean getFONTXDoubleByte() {
+		return fontxPanel.getSelectedDoubleByte();
+	}
+	
+	@Override
+	public String getFONTXDoubleByteEncoding() {
+		return fontxPanel.getSelectedDoubleByteEncoding();
 	}
 }
