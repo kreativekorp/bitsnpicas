@@ -16,6 +16,7 @@ import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
@@ -92,6 +93,11 @@ public enum BitmapInputFormat {
 			return new FONTXBitmapFontImporter(EncodingList.instance().get(sben), dben);
 		}
 	},
+	ROCKBOX(".rbf", ".rb11", ".rb12", BitmapFont.NAME_FAMILY) {
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new RockboxBitmapFontImporter();
+		}
+	},
 	CYBIKO(".cyf", ".fntz", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new CybikoBitmapFontImporter(
@@ -149,6 +155,12 @@ public enum BitmapInputFormat {
 		this.macResFork = false;
 	}
 	
+	private BitmapInputFormat(String ext1, String ext2, String ext3, int nameType) {
+		this.extensions = new String[]{ext1, ext2, ext3};
+		this.nameType = nameType;
+		this.macResFork = false;
+	}
+	
 	public abstract BitmapFontImporter createImporter(BitmapInputOptions o);
 	
 	public static BitmapInputFormat forFile(File file) {
@@ -164,7 +176,7 @@ public enum BitmapInputFormat {
 					// case 0: return FNT;
 					case 1: return CYBIKO;
 					case 'F': return FONTX;
-					// case 'R': return ROCKBOX;
+					case 'R': return ROCKBOX;
 				}
 			} catch (IOException e) {
 				return null;

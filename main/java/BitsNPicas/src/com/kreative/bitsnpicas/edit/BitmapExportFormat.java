@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
@@ -100,6 +101,16 @@ public enum BitmapExportFormat {
 				if (et == null) et = EncodingList.instance().get("CP437");
 				return new FONTXBitmapFontExporter(et);
 			}
+		}
+	},
+	RB12("RB12 (Rockbox 2.3 or above)", ".fnt", "none") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new RockboxBitmapFontExporter(RockboxBitmapFontExporter.RB12);
+		}
+	},
+	RB11("RB11 (Rockbox 2.2 or below and iPodLinux)", ".fnt", "none") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new RockboxBitmapFontExporter(RockboxBitmapFontExporter.RB11);
 		}
 	},
 	CYBIKO("Cybiko", ".fnt", "encoding", "Cybiko") {

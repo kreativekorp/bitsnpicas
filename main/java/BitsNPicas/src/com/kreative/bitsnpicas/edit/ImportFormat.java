@@ -20,6 +20,7 @@ import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
+import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
@@ -99,6 +100,9 @@ public enum ImportFormat {
 			});
 		}
 	},
+	ROCKBOX(".rbf", ".rb11", ".rb12") {
+		public FontImporter<?> createImporter() { return new RockboxBitmapFontImporter(); }
+	},
 	CYBIKO(".cyf", ".fntz") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Cybiko", file, new EncodingSelectionImporter() {
@@ -162,7 +166,7 @@ public enum ImportFormat {
 					// case 0: return FNT;
 					case 1: return CYBIKO;
 					case 'F': return FONTX;
-					// case 'R': return ROCKBOX;
+					case 'R': return ROCKBOX;
 				}
 			} catch (IOException e) {
 				return null;

@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
@@ -118,6 +119,16 @@ public enum BitmapOutputFormat {
 				if (en == null || en.length() == 0) en = "CP437";
 				return new FONTXBitmapFontExporter(EncodingList.instance().get(en));
 			}
+		}
+	},
+	RB12(".fnt", "rb12") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new RockboxBitmapFontExporter(RockboxBitmapFontExporter.RB12);
+		}
+	},
+	RB11(".fnt", "rb11") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new RockboxBitmapFontExporter(RockboxBitmapFontExporter.RB11);
 		}
 	},
 	CYBIKO(".fnt", "cybiko") {
