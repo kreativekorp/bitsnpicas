@@ -9,6 +9,7 @@ import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.FNTBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FONTXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
@@ -82,6 +83,14 @@ public enum BitmapInputFormat {
 	U8M(".u8m", BitmapFont.NAME_FAMILY_AND_STYLE) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new U8MBitmapFontImporter();
+		}
+	},
+	FNT(".fnt", BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new FNTBitmapFontImporter(
+				(o.encodingName == null) ? null :
+				EncodingList.instance().get(o.encodingName)
+			);
 		}
 	},
 	FONTX(".ftx", BitmapFont.NAME_FAMILY) {
@@ -173,7 +182,7 @@ public enum BitmapInputFormat {
 				int magic = in.read();
 				in.close();
 				switch (magic) {
-					// case 0: return FNT;
+					case 0: return FNT;
 					case 1: return CYBIKO;
 					case 'F': return FONTX;
 					case 'R': return ROCKBOX;

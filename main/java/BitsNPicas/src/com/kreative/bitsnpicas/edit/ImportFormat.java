@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.FNTBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FONTXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
@@ -90,6 +91,15 @@ public enum ImportFormat {
 	U8M(".u8m") {
 		public FontImporter<?> createImporter() { return new U8MBitmapFontImporter(); }
 	},
+	FNT(".fnt") {
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("CP1252", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable encoding) {
+					return new FNTBitmapFontImporter(encoding);
+				}
+			});
+		}
+	},
 	FONTX(".ftx") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			String dben = Charset.forName("CP943").displayName();
@@ -163,7 +173,7 @@ public enum ImportFormat {
 				int magic = in.read();
 				in.close();
 				switch (magic) {
-					// case 0: return FNT;
+					case 0: return FNT;
 					case 1: return CYBIKO;
 					case 'F': return FONTX;
 					case 'R': return ROCKBOX;
