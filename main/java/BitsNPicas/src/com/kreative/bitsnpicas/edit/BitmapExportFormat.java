@@ -7,6 +7,7 @@ import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.CybikoBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.FNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FONTXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
@@ -88,6 +89,16 @@ public enum BitmapExportFormat {
 	U8M("U8/M (UTF-8 for Microcomputers)", ".u8m", "u8m", "U8/M PETSCII") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new U8MBitmapFontExporter(o.getLoadAddress(), o.getSelectedEncoding());
+		}
+	},
+	FNT3("FNT (Windows 3.x)", ".fnt", "encoding", "CP1252") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new FNTBitmapFontExporter(3, o.getSelectedEncoding());
+		}
+	},
+	FNT2("FNT (Windows 2.x)", ".fnt", "encoding", "CP1252") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new FNTBitmapFontExporter(2, o.getSelectedEncoding());
 		}
 	},
 	FONTX("FONTX (DOS/V)", ".fnt", "fontx") {

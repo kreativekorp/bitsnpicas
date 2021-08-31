@@ -2,6 +2,8 @@ package com.kreative.bitsnpicas.main;
 
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
+import com.kreative.bitsnpicas.unicode.EncodingList;
+import com.kreative.bitsnpicas.unicode.EncodingTable;
 
 public class BitmapOutputOptions {
 	public int xSize = 100, ySize = 100;
@@ -15,4 +17,9 @@ public class BitmapOutputOptions {
 	public boolean geosUTF8 = false;
 	public boolean fontxDoubleByte = false;
 	public String fontxDoubleByteEncoding = null;
+	
+	public EncodingTable getEncoding() {
+		if (encodingName == null) return null;
+		return EncodingList.instance().get(encodingName);
+	}
 }

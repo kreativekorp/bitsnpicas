@@ -169,8 +169,8 @@ public class FNTBitmapFontImporter implements BitmapFontImporter {
 	
 	private static String styleName(int italic, int underline, int strikeOut, int weight) {
 		StringBuffer sb = new StringBuffer();
-		if (weight < 400) sb.append(" Light");
-		if (weight > 400) sb.append(" Bold");
+		if (weight < 400) sb.append((weight < 200) ? " Thin" : " Light");
+		if (weight >= 600) sb.append((weight >= 900) ? " Black" : " Bold");
 		if (italic != 0) sb.append(" Italic");
 		if (underline != 0) sb.append(" Underline");
 		if (strikeOut != 0) sb.append(" Strikeout");
