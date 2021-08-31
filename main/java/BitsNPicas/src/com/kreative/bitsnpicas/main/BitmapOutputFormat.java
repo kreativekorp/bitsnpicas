@@ -44,11 +44,7 @@ public enum BitmapOutputFormat {
 			o.idgen.setRange(128, 32768);
 			o.sizegen.setRange(4, 127);
 			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 72);
-			return new NFNTBitmapFontExporter(
-				o.idgen, o.sizegen,
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new NFNTBitmapFontExporter(o.idgen, o.sizegen, o.getEncoding());
 		}
 		public void postProcess(File file) throws IOException {
 			MacUtility.setTypeAndCreator(file, "FFIL", "DMOV");
@@ -59,11 +55,7 @@ public enum BitmapOutputFormat {
 			o.idgen.setRange(128, 32768);
 			o.sizegen.setRange(4, 127);
 			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 72);
-			return new NFNTBitmapFontExporter(
-				o.idgen, o.sizegen,
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new NFNTBitmapFontExporter(o.idgen, o.sizegen, o.getEncoding());
 		}
 	},
 	SFONT(".png", "png", "sfont") {
@@ -94,19 +86,12 @@ public enum BitmapOutputFormat {
 	},
 	FZX(".fzx", "fzx") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new FZXBitmapFontExporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new FZXBitmapFontExporter(o.getEncoding());
 		}
 	},
 	U8M(".u8m", "u8m") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new U8MBitmapFontExporter(
-				o.u8mLoadAddress,
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new U8MBitmapFontExporter(o.u8mLoadAddress, o.getEncoding());
 		}
 	},
 	FNT3(".fnt", "fnt", "fnt3") {
@@ -144,10 +129,7 @@ public enum BitmapOutputFormat {
 	},
 	CYBIKO(".fnt", "cybiko") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new CybikoBitmapFontExporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new CybikoBitmapFontExporter(o.getEncoding());
 		}
 	},
 	HMZK(".hmzk", "hmzk") {
@@ -160,10 +142,7 @@ public enum BitmapOutputFormat {
 	
 	SBF(".sbf", "sbf") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new SBFBitmapFontExporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new SBFBitmapFontExporter(o.getEncoding());
 		}
 	},
 	TOS(".ft", "tos", "ft") {
