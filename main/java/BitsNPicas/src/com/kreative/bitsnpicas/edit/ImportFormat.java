@@ -113,7 +113,7 @@ public enum ImportFormat {
 	ROCKBOX(".rbf", ".rb11", ".rb12") {
 		public FontImporter<?> createImporter() { return new RockboxBitmapFontImporter(); }
 	},
-	CYBIKO(".cyf", ".fntz") {
+	CYBIKO(".cyf", ".fntz", ".fnty") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Cybiko", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(EncodingTable encoding) {

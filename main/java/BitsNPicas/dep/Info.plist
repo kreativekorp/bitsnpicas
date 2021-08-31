@@ -187,8 +187,25 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>rbf</string>
+				<string>rb11</string>
+				<string>rb12</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Rockbox Font</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>kbnp-doc-bitmap</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>cyf</string>
 				<string>fntz</string>
+				<string>fnty</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Cybiko Font</string>

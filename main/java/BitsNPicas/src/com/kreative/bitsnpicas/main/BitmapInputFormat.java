@@ -95,7 +95,7 @@ public enum BitmapInputFormat {
 			return new RockboxBitmapFontImporter();
 		}
 	},
-	CYBIKO(".cyf", ".fntz", BitmapFont.NAME_FAMILY) {
+	CYBIKO(".cyf", ".fntz", ".fnty", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new CybikoBitmapFontImporter(o.getEncoding());
 		}
@@ -138,12 +138,6 @@ public enum BitmapInputFormat {
 		this.extensions = new String[]{extension};
 		this.nameType = nameType;
 		this.macResFork = macResFork;
-	}
-	
-	private BitmapInputFormat(String ext1, String ext2, int nameType) {
-		this.extensions = new String[]{ext1, ext2};
-		this.nameType = nameType;
-		this.macResFork = false;
 	}
 	
 	private BitmapInputFormat(String ext1, String ext2, String ext3, int nameType) {

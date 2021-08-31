@@ -50,6 +50,8 @@ public class CybikoBitmapFontImporter implements BitmapFontImporter {
 			name = name.substring(0, name.length() - 4);
 		} else if (name.toLowerCase().endsWith(".fntz")) {
 			name = name.substring(0, name.length() - 5);
+		} else if (name.toLowerCase().endsWith(".fnty")) {
+			name = name.substring(0, name.length() - 5);
 		}
 		f.setName(Font.NAME_FAMILY, name);
 		
