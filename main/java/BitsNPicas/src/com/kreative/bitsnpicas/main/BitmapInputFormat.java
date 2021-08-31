@@ -43,18 +43,12 @@ public enum BitmapInputFormat {
 	},
 	SUIT(".suit", BitmapFont.NAME_FAMILY_AND_STYLE, true) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new NFNTBitmapFontImporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new NFNTBitmapFontImporter(o.getEncoding());
 		}
 	},
 	DFONT(".dfont", BitmapFont.NAME_FAMILY_AND_STYLE, false) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new NFNTBitmapFontImporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new NFNTBitmapFontImporter(o.getEncoding());
 		}
 	},
 	PNG(".png", BitmapFont.NAME_FAMILY_AND_STYLE) {
@@ -74,10 +68,7 @@ public enum BitmapInputFormat {
 	},
 	FZX(".fzx", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new FZXBitmapFontImporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new FZXBitmapFontImporter(o.getEncoding());
 		}
 	},
 	U8M(".u8m", BitmapFont.NAME_FAMILY_AND_STYLE) {
@@ -87,10 +78,7 @@ public enum BitmapInputFormat {
 	},
 	FNT(".fnt", BitmapFont.NAME_FAMILY_AND_STYLE) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new FNTBitmapFontImporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new FNTBitmapFontImporter(o.getEncoding());
 		}
 	},
 	FONTX(".ftx", BitmapFont.NAME_FAMILY) {
@@ -109,10 +97,7 @@ public enum BitmapInputFormat {
 	},
 	CYBIKO(".cyf", ".fntz", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new CybikoBitmapFontImporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new CybikoBitmapFontImporter(o.getEncoding());
 		}
 	},
 	HMZK(".hmzk", BitmapFont.NAME_FAMILY) {
@@ -130,10 +115,7 @@ public enum BitmapInputFormat {
 	},
 	SBF(".sbf", BitmapFont.NAME_FAMILY) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new SBFBitmapFontImporter(
-				(o.encodingName == null) ? null :
-				EncodingList.instance().get(o.encodingName)
-			);
+			return new SBFBitmapFontImporter(o.getEncoding());
 		}
 	},
 	S10(".s10", BitmapFont.NAME_FAMILY_AND_STYLE) {
