@@ -32,12 +32,12 @@ eclipseclean:
 
 bin: src
 	mkdir -p bin
-	javac -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(SRCFILES) -d bin
+	javac $(JAVACFLAGS) -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(SRCFILES) -d bin
 	$(foreach res,$(RESFILES),cp src/$(res) bin/$(res);)
 
 doc: src
 	mkdir -p doc
-	javadoc -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(PACKAGES) -d doc
+	javadoc $(JAVADOCFLAGS) -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(PACKAGES) -d doc
 
 BitsNPicas.jar: bin
 	export COPYFILE_DISABLE=true
