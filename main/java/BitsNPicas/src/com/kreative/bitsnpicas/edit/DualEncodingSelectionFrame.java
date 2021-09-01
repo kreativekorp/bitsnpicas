@@ -10,7 +10,7 @@ public class DualEncodingSelectionFrame extends JFrame {
 	
 	public DualEncodingSelectionFrame(String sben, String dben, File file, DualEncodingSelectionImporter importer) {
 		this.panel = new DualEncodingSelectionPanel(sben, dben, file, importer);
-		setTitle("Open");
+		setTitle("Open " + file.getName());
 		setContentPane(panel);
 		setResizable(false);
 		pack();

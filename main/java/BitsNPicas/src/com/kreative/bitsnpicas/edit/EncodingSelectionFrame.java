@@ -10,7 +10,7 @@ public class EncodingSelectionFrame extends JFrame {
 	
 	public EncodingSelectionFrame(String encodingName, File file, EncodingSelectionImporter importer) {
 		this.panel = new EncodingSelectionPanel(encodingName, file, importer);
-		setTitle("Open");
+		setTitle("Open " + file.getName());
 		setContentPane(panel);
 		setResizable(false);
 		pack();

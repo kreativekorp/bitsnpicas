@@ -25,8 +25,8 @@ public class EncodingSelectionPanel extends JPanel {
 		encoding.setEditable(false);
 		encoding.setSelectedItem(EncodingList.instance().get(encodingName));
 		
-		final JPanel encodingPanel = new JPanel(new BorderLayout(4, 4));
-		encodingPanel.add(new JLabel("Select an encoding for import."), BorderLayout.PAGE_START);
+		final JPanel encodingPanel = new JPanel(new BorderLayout(12, 12));
+		encodingPanel.add(new JLabel("Select an encoding for " + file.getName() + "."), BorderLayout.PAGE_START);
 		encodingPanel.add(encoding, BorderLayout.CENTER);
 		
 		final JButton openButton = new JButton("Open");

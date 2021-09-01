@@ -43,7 +43,7 @@ public class DualEncodingSelectionPanel extends JPanel {
 		formPanel.add(controlPanel, BorderLayout.CENTER);
 		
 		final JPanel contentPanel = new JPanel(new BorderLayout(12, 12));
-		contentPanel.add(new JLabel("Select an encoding for import."), BorderLayout.PAGE_START);
+		contentPanel.add(new JLabel("Select an encoding for " + file.getName() + "."), BorderLayout.PAGE_START);
 		contentPanel.add(formPanel, BorderLayout.CENTER);
 		
 		final JButton openButton = new JButton("Open");
