@@ -1,6 +1,7 @@
 package com.kreative.bitsnpicas;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
 
 public class BitmapFont extends Font<BitmapFontGlyph> {
 	protected int ascent, descent, typoascent, typodescent, xheight, linegap;
@@ -56,27 +57,11 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 		}
 	}
 	
-	public Point draw(Graphics g, String s, Point b) {
-		return draw(g, s, b.x, b.y, Integer.MAX_VALUE, typoascent+typodescent+linegap);
+	public Point draw(Graphics g, String s, int bx, int by, int scale, int w) {
+		return draw(g, s, bx, by, scale, w, (typoascent + typodescent + linegap) * scale);
 	}
 	
-	public Point draw(Graphics g, String s, Point b, int w) {
-		return draw(g, s, b.x, b.y, w, typoascent+typodescent+linegap);
-	}
-	
-	public Point draw(Graphics g, String s, Point b, int w, int lh) {
-		return draw(g, s, b.x, b.y, w, lh);
-	}
-	
-	public Point draw(Graphics g, String s, int bx, int by) {
-		return draw(g, s, bx, by, Integer.MAX_VALUE, typoascent+typodescent+linegap);
-	}
-
-	public Point draw(Graphics g, String s, int bx, int by, int w) {
-		return draw(g, s, bx, by, w, typoascent+typodescent+linegap);
-	}
-	
-	public Point draw(Graphics g, String s, int bx, int by, int w, int lh) {
+	public Point draw(Graphics g, String s, int bx, int by, int scale, int w, int lh) {
 		int cx = bx, cy = by;
 		int i = 0;
 		while (i < s.length()) {
@@ -92,19 +77,19 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 			default:
 				if (characters.containsKey(ch)) {
 					BitmapFontGlyph bm = characters.get(ch);
-					if (cx - bx + bm.getCharacterWidth() >= w) {
+					if (cx - bx + (bm.getCharacterWidth() * scale) >= w) {
 						cx = bx;
 						cy += lh;
 					}
-					cx += bm.paint(g, cx, cy, 1);
+					cx += bm.paint(g, cx, cy, scale);
 				}
 				else if (characters.containsKey(-1)) {
 					BitmapFontGlyph bm = characters.get(-1);
-					if (cx - bx + bm.getCharacterWidth() >= w) {
+					if (cx - bx + (bm.getCharacterWidth() * scale) >= w) {
 						cx = bx;
 						cy += lh;
 					}
-					cx += bm.paint(g, cx, cy, 1);
+					cx += bm.paint(g, cx, cy, scale);
 				}
 				break;
 			}
@@ -112,36 +97,20 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 		return new Point(cx, cy);
 	}
 	
-	public Point drawAlphabet(Graphics g, Point b) {
-		return drawAlphabet(g, b.x, b.y, Integer.MAX_VALUE, typoascent+typodescent+linegap);
+	public Point drawAlphabet(Graphics g, int bx, int by, int scale, int w) {
+		return drawAlphabet(g, bx, by, scale, w, (typoascent + typodescent + linegap) * scale);
 	}
 	
-	public Point drawAlphabet(Graphics g, Point b, int w) {
-		return drawAlphabet(g, b.x, b.y, w, typoascent+typodescent+linegap);
-	}
-	
-	public Point drawAlphabet(Graphics g, Point b, int w, int lh) {
-		return drawAlphabet(g, b.x, b.y, w, lh);
-	}
-	
-	public Point drawAlphabet(Graphics g, int bx, int by) {
-		return drawAlphabet(g, bx, by, Integer.MAX_VALUE, typoascent+typodescent+linegap);
-	}
-
-	public Point drawAlphabet(Graphics g, int bx, int by, int w) {
-		return drawAlphabet(g, bx, by, w, typoascent+typodescent+linegap);
-	}
-	
-	public Point drawAlphabet(Graphics g, int bx, int by, int w, int lh) {
+	public Point drawAlphabet(Graphics g, int bx, int by, int scale, int w, int lh) {
 		int cx = bx, cy = by;
-		for (int ch=0; ch<0x110000; ch++) {
+		for (int ch = 0; ch < 0x110000; ch++) {
 			if (characters.containsKey(ch)) {
 				BitmapFontGlyph bm = characters.get(ch);
-				if (cx - bx + bm.getCharacterWidth() >= w) {
+				if (cx - bx + (bm.getCharacterWidth() * scale) >= w) {
 					cx = bx;
 					cy += lh;
 				}
-				cx += bm.paint(g, cx, cy, 1);
+				cx += bm.paint(g, cx, cy, scale);
 			}
 		}
 		return new Point(cx, cy);

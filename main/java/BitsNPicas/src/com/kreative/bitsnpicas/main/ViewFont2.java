@@ -63,6 +63,7 @@ public class ViewFont2 extends JFrame {
 	
 	private final BitmapFont myFont;
 	private final BitmapFont myMaskFont;
+	private final SpinnerNumberModel scale;
 	private final JComponent alphaPanel;
 	private final JTextArea textArea;
 	private final JComponent textPanel;
@@ -77,6 +78,14 @@ public class ViewFont2 extends JFrame {
 			setTitle(bm.getName(BitmapFont.NAME_FAMILY));
 		}
 		
+		scale = new SpinnerNumberModel(1, 1, 16, 1);
+		scale.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				alphaPanel.repaint();
+				textPanel.repaint();
+			}
+		});
+		
 		alphaPanel = new JComponent() {
 			private static final long serialVersionUID = 1L;
 			protected void paintComponent(Graphics g) {
@@ -85,12 +94,13 @@ public class ViewFont2 extends JFrame {
 				int y = i.top;
 				int w = getWidth()-i.left-i.right;
 				int h = getHeight()-i.top-i.bottom;
+				int s = scale.getNumber().intValue();
 				g.setColor(BACKGROUND);
 				g.fillRect(x, y, w, h);
 				g.setColor(INSIDE);
-				myMaskFont.drawAlphabet(g, x, y+myMaskFont.getLineAscent(), w);
+				myMaskFont.drawAlphabet(g, x, y + myMaskFont.getLineAscent() * s, s, w);
 				g.setColor(OUTSIDE);
-				myFont.drawAlphabet(g, x, y+myFont.getLineAscent(), w);
+				myFont.drawAlphabet(g, x, y + myFont.getLineAscent() * s, s, w);
 			}
 		};
 		
@@ -117,14 +127,22 @@ public class ViewFont2 extends JFrame {
 				int y = i.top;
 				int w = getWidth()-i.left-i.right;
 				int h = getHeight()-i.top-i.bottom;
+				int s = scale.getNumber().intValue();
 				g.setColor(BACKGROUND);
 				g.fillRect(x, y, w, h);
 				g.setColor(INSIDE);
-				myMaskFont.draw(g, textArea.getText(), x, y+myMaskFont.getLineAscent(), w);
+				myMaskFont.draw(g, textArea.getText(), x, y + myMaskFont.getLineAscent() * s, s, w);
 				g.setColor(OUTSIDE);
-				myFont.draw(g, textArea.getText(), x, y+myFont.getLineAscent(), w);
+				myFont.draw(g, textArea.getText(), x, y + myFont.getLineAscent() * s, s, w);
 			}
 		};
+		
+		JPanel top = new JPanel(new BorderLayout(4,4));
+		top.add(new JLabel("Scale:"), BorderLayout.LINE_START);
+		top.add(new JSpinner(scale), BorderLayout.CENTER);
+		
+		JPanel top2 = new JPanel(new BorderLayout());
+		top2.add(top, BorderLayout.LINE_END);
 		
 		JPanel main = new JPanel(new GridLayout(3,1,10,10));
 		main.add(alphaPanel);
@@ -133,10 +151,11 @@ public class ViewFont2 extends JFrame {
 		
 		JPanel main2 = new JPanel(new BorderLayout(10,10));
 		main2.add(main, BorderLayout.CENTER);
+		main2.add(top2, BorderLayout.PAGE_END);
 		main2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		setContentPane(main2);
 		
-		setSize(512, 342);
+		setSize(512, 456);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
