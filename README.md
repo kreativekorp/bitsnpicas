@@ -27,6 +27,10 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.cvt` - GEOS font in Convert format (including MEGA fonts)
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
+  *  `.fnt` - Windows `.fnt` format (not the same as `.fon`; vector fonts not supported)
+  *  `.fnt`, `.ftx` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
+  *  `.fnt`, `.rbf`, `.rb11`, `.rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat)
+  *  `.fnt`, `.fntz`, `.fnty`, `.cyf` - [Cybiko Font Format](https://web.archive.org/web/20010701031854/http://groups.yahoo.com/group/CybikoDev/files/Pazera/font.txt)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
   *  `.sbf` - Sabriel Bitmap Font
@@ -62,6 +66,10 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.cvt` - GEOS font in Convert format (including MEGA fonts)
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
+  *  `.fnt` - Windows `.fnt` format (not the same as `.fon`; vector fonts not supported)
+  *  `.fnt`, `.ftx` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
+  *  `.fnt`, `.rbf`, `.rb11`, `.rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat)
+  *  `.fnt`, `.fntz`, `.fnty`, `.cyf` - [Cybiko Font Format](https://web.archive.org/web/20010701031854/http://groups.yahoo.com/group/CybikoDev/files/Pazera/font.txt)
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
   *  `.sbf` - Sabriel Bitmap Font
@@ -78,6 +86,12 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `cvt` or `geos` - GEOS font in Convert format (with MEGA option)
   *  `fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
+  *  `fnt`, `fnt3` - Windows 3.x `.fnt` format (not the same as `.fon`)
+  *  `fnt2` - Windows 2.x `.fnt` format (also not the same as `.fon`)
+  *  `fontx2`, `fontx`, or `dosv` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
+  *  `rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat) for Rockbox 2.3 or above
+  *  `rb11` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat) for Rockbox 2.2 or below and iPodLinux
+  *  `cybiko` - [Cybiko Font Format](https://web.archive.org/web/20010701031854/http://groups.yahoo.com/group/CybikoDev/files/Pazera/font.txt)
   *  `hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `sbf` - Sabriel Bitmap Font
 
