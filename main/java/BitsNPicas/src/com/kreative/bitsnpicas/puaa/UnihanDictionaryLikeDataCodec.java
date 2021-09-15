@@ -17,6 +17,7 @@ public class UnihanDictionaryLikeDataCodec extends AbstractUnihanCodec {
 				"kHDZRadBreak",
 				"kHKGlyph",
 				"kPhonetic",
+				"kStrange",
 				"kUnihanCore2020"
 			)
 		);
