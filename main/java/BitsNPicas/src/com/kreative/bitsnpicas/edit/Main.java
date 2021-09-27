@@ -60,13 +60,13 @@ public class Main {
 	}
 	
 	public static JFrame newBitmapFont() {
-		BitmapFont bfont = new BitmapFont();
+		BitmapFont bfont = new BitmapFont(14, 2, 14, 2, 0, 0);
 		bfont.autoFillNames();
 		return openFont(null, new KBnPBitmapFontExporter(), bfont);
 	}
 	
 	public static JFrame newVectorFont() {
-		VectorFont vfont = new VectorFont();
+		VectorFont vfont = new VectorFont(800, 200, 800, 200, 0, 0);
 		vfont.autoFillNames();
 		return openFont(null, new KBnPVectorFontExporter(), vfont);
 	}

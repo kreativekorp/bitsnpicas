@@ -170,6 +170,8 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new MoveMenuItem(window, font, gl, true));
 			add(new GlyphListMenuBar.EditMenuItem(font, gl, sm));
 			add(new GlyphListMenuBar.DeleteMenuItem(font, gl));
+			addSeparator();
+			add(new GenerateUnifontHexGlyphMenuItem(font, gl));
 		}
 	}
 	
@@ -338,6 +340,21 @@ public class BitmapListMenuBar extends JMenuBar {
 						gl.glyphsChanged();
 						gl.setSelectedCodePoints(newSel);
 					}
+				}
+			});
+		}
+	}
+	
+	public static class GenerateUnifontHexGlyphMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public GenerateUnifontHexGlyphMenuItem(final BitmapFont font, final GlyphList gl) {
+			super("Generate Unifont Hex Glyph");
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					for (int cp : gl.getSelectedCodePoints()) {
+						font.putCharacter(cp, UnifontHexGlyphGenerator.createGlyph(cp));
+					}
+					gl.glyphsChanged();
 				}
 			});
 		}
