@@ -50,9 +50,25 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 	public void setLineGap(int v) { linegap = v; }
 	public void setLineGap2D(double v) { linegap = (int)Math.ceil(v); }
 	
+	public void setAscentDescent() {
+		if (characters.containsKey((int)'x')) {
+			BitmapFontGlyph g = characters.get((int)'x');
+			g.contract();
+			int adjust = g.getGlyphAscent() - g.getGlyphHeight();
+			ascent -= adjust;
+			descent += adjust;
+			typoascent -= adjust;
+			typodescent += adjust;
+			for (BitmapFontGlyph glyph : characters.values()) {
+				glyph.setXY(glyph.getX(), glyph.getY() - adjust);
+			}
+		}
+	}
+	
 	public void setXHeight() {
 		if (characters.containsKey((int)'x')) {
 			BitmapFontGlyph g = characters.get((int)'x');
+			g.contract();
 			xheight = g.getGlyphAscent();
 		}
 	}

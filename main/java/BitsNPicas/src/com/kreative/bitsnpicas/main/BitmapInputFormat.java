@@ -17,6 +17,7 @@ import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
@@ -39,6 +40,24 @@ public enum BitmapInputFormat {
 	BDF(".bdf", BitmapFont.NAME_FAMILY_AND_STYLE) {
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new BDFBitmapFontImporter();
+		}
+	},
+	PSF(".psf", ".psfu", BitmapFont.NAME_FAMILY) {
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new PSFBitmapFontImporter(
+				o.getPsfLowEncoding(),
+				o.getPsfHighEncoding(),
+				o.psfPuaBase, false
+			);
+		}
+	},
+	PSFGZ(".psf.gz", ".psfu.gz", BitmapFont.NAME_FAMILY) {
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new PSFBitmapFontImporter(
+				o.getPsfLowEncoding(),
+				o.getPsfHighEncoding(),
+				o.psfPuaBase, true
+			);
 		}
 	},
 	SUIT(".suit", BitmapFont.NAME_FAMILY_AND_STYLE, true) {
@@ -138,6 +157,12 @@ public enum BitmapInputFormat {
 		this.extensions = new String[]{extension};
 		this.nameType = nameType;
 		this.macResFork = macResFork;
+	}
+	
+	private BitmapInputFormat(String ext1, String ext2, int nameType) {
+		this.extensions = new String[]{ext1, ext2};
+		this.nameType = nameType;
+		this.macResFork = false;
 	}
 	
 	private BitmapInputFormat(String ext1, String ext2, String ext3, int nameType) {

@@ -111,6 +111,18 @@ public class ConvertBitmap {
 					} else if (arg.equals("-oee") && argi < args.length) {
 						o.oo.fontxDoubleByteEncoding = args[argi++];
 						o.oo.fontxDoubleByte = true;
+					} else if (arg.equals("-le") && argi < args.length) {
+						o.io.psfLowEncoding = args[argi++];
+					} else if (arg.equals("-he") && argi < args.length) {
+						o.io.psfHighEncoding = args[argi++];
+					} else if (arg.equals("-se") && argi < args.length) {
+						o.io.psfPuaBase = parseInt16(args[argi++]);
+					} else if (arg.equals("-ile") && argi < args.length) {
+						o.io.psfLowEncoding = args[argi++];
+					} else if (arg.equals("-ihe") && argi < args.length) {
+						o.io.psfHighEncoding = args[argi++];
+					} else if (arg.equals("-ise") && argi < args.length) {
+						o.io.psfPuaBase = parseInt16(args[argi++]);
 					} else if (arg.equals("-a") && argi < args.length) {
 						o.oo.u8mLoadAddress = parseInt16(args[argi++]);
 					} else if (arg.equals("-m")) {

@@ -21,6 +21,7 @@ import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
+import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
@@ -44,6 +45,24 @@ public enum ImportFormat {
 	},
 	BDF(".bdf") {
 		public FontImporter<?> createImporter() { return new BDFBitmapFontImporter(); }
+	},
+	PSF(".psf", ".psfu") {
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable low, EncodingTable high, int puaBase) {
+					return new PSFBitmapFontImporter(low, high, puaBase, false);
+				}
+			});
+		}
+	},
+	PSFGZ(".psf.gz", ".psfu.gz") {
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
+				public FontImporter<?> createImporter(EncodingTable low, EncodingTable high, int puaBase) {
+					return new PSFBitmapFontImporter(low, high, puaBase, true);
+				}
+			});
+		}
 	},
 	SUIT(".suit", true) {
 		public JFrame createOptionFrame(File file) throws IOException {
