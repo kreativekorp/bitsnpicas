@@ -17,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import com.kreative.fontmap.FontMapController;
 import com.kreative.keyedit.Key;
+import com.kreative.keyedit.KeyBlock;
 import com.kreative.keyedit.KeyboardFormat;
 
 public class KeyEditMenuBar extends JMenuBar {
@@ -184,6 +185,8 @@ public class KeyEditMenuBar extends JMenuBar {
 			add(new EditDeadKeyMenuItem(ctrl));
 			add(new DeleteDeadKeyMenuItem(ctrl));
 			addSeparator();
+			add(new BulkActionMenu(ctrl));
+			addSeparator();
 			add(new FontMapMenuItem());
 		}
 	}
@@ -326,6 +329,130 @@ public class KeyEditMenuBar extends JMenuBar {
 					ctrl.setDeadKey(key, alt, shift, null);
 				}
 			});
+		}
+	}
+	
+	public static class BulkActionMenu extends JMenu {
+		private static final long serialVersionUID = 1L;
+		public BulkActionMenu(KeyEditController ctrl) {
+			super("Bulk Actions");
+			add(new CopyUnshiftedToShiftedMenuItem(ctrl));
+			add(new CopyShiftedToUnshiftedMenuItem(ctrl));
+			add(new CopyNormalToAltMenuItem(ctrl));
+			add(new CopyAltToNormalMenuItem(ctrl));
+			add(new ClearNormalMenuItem(ctrl));
+			add(new ClearAltMenuItem(ctrl));
+			add(new SwapNormalAndAltMenuItem(ctrl));
+		}
+	}
+	
+	public static abstract class BulkActionMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public BulkActionMenuItem(final String title, final KeyEditController ctrl) {
+			super(title);
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					boolean shiftDown = ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0);
+					for (Key key : Key.values()) {
+						if (shiftDown || key.keyBlock == KeyBlock.ALPHA) {
+							BulkActionMenuItem.this.actionPerformed(e, ctrl, key);
+						}
+					}
+				}
+			});
+		}
+		public abstract void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key);
+	}
+	
+	public static class CopyUnshiftedToShiftedMenuItem extends BulkActionMenuItem {
+		private static final long serialVersionUID = 1L;
+		public CopyUnshiftedToShiftedMenuItem(KeyEditController ctrl) {
+			super("Copy Unshifted to Shifted", ctrl);
+		}
+		public void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key) {
+			int nu = ctrl.getOutput(key, false, false);
+			int ns = ctrl.getOutput(key, false, true);
+			if (ns <= 0) ctrl.setOutput(key, false, true, Character.toUpperCase(nu));
+			int au = ctrl.getOutput(key, true, false);
+			int as = ctrl.getOutput(key, true, true);
+			if (as <= 0) ctrl.setOutput(key, true, true, Character.toUpperCase(au));
+		}
+	}
+	
+	public static class CopyShiftedToUnshiftedMenuItem extends BulkActionMenuItem {
+		private static final long serialVersionUID = 1L;
+		public CopyShiftedToUnshiftedMenuItem(KeyEditController ctrl) {
+			super("Copy Shifted to Unshifted", ctrl);
+		}
+		public void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key) {
+			int ns = ctrl.getOutput(key, false, true);
+			int nu = ctrl.getOutput(key, false, false);
+			if (nu <= 0) ctrl.setOutput(key, false, false, Character.toLowerCase(ns));
+			int as = ctrl.getOutput(key, true, true);
+			int au = ctrl.getOutput(key, true, false);
+			if (au <= 0) ctrl.setOutput(key, true, false, Character.toLowerCase(as));
+		}
+	}
+	
+	public static class CopyNormalToAltMenuItem extends BulkActionMenuItem {
+		private static final long serialVersionUID = 1L;
+		public CopyNormalToAltMenuItem(KeyEditController ctrl) {
+			super("Copy Normal to Alt", ctrl);
+		}
+		public void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key) {
+			int nu = ctrl.getOutput(key, false, false);
+			int au = ctrl.getOutput(key, true, false);
+			if (au <= 0) ctrl.setOutput(key, true, false, nu);
+			int ns = ctrl.getOutput(key, false, true);
+			int as = ctrl.getOutput(key, true, true);
+			if (as <= 0) ctrl.setOutput(key, true, true, ns);
+		}
+	}
+	
+	public static class CopyAltToNormalMenuItem extends BulkActionMenuItem {
+		private static final long serialVersionUID = 1L;
+		public CopyAltToNormalMenuItem(KeyEditController ctrl) {
+			super("Copy Alt to Normal", ctrl);
+		}
+		public void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key) {
+			int au = ctrl.getOutput(key, true, false);
+			int nu = ctrl.getOutput(key, false, false);
+			if (nu <= 0) ctrl.setOutput(key, false, false, au);
+			int as = ctrl.getOutput(key, true, true);
+			int ns = ctrl.getOutput(key, false, true);
+			if (ns <= 0) ctrl.setOutput(key, false, true, as);
+		}
+	}
+	
+	public static class ClearNormalMenuItem extends BulkActionMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ClearNormalMenuItem(KeyEditController ctrl) {
+			super("Clear Normal", ctrl);
+		}
+		public void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key) {
+			ctrl.setOutput(key, false, false, -1);
+			ctrl.setOutput(key, false, true, -1);
+		}
+	}
+	
+	public static class ClearAltMenuItem extends BulkActionMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ClearAltMenuItem(KeyEditController ctrl) {
+			super("Clear Alt", ctrl);
+		}
+		public void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key) {
+			ctrl.setOutput(key, true, false, -1);
+			ctrl.setOutput(key, true, true, -1);
+		}
+	}
+	
+	public static class SwapNormalAndAltMenuItem extends BulkActionMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SwapNormalAndAltMenuItem(KeyEditController ctrl) {
+			super("Swap Normal and Alt", ctrl);
+		}
+		public void actionPerformed(ActionEvent e, KeyEditController ctrl, Key key) {
+			ctrl.swapAlt(key);
 		}
 	}
 	

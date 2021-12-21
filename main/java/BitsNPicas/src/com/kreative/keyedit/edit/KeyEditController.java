@@ -104,6 +104,11 @@ public class KeyEditController {
 		return f;
 	}
 	
+	public void swapAlt(Key key) {
+		kmp.getKeyMappingPanel(key).getKeyMapping().swapAlt();
+		for (KeyEditListener l : listeners) l.keyMappingChanged();
+	}
+	
 	public LayoutInfoFrame getKeyboardMappingInfoFrame() {
 		KeyboardMapping km = kmp.getKeyboardMapping();
 		LayoutInfoFrame f = new LayoutInfoFrame(parent, km);

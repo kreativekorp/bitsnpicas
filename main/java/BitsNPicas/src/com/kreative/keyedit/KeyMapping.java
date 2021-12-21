@@ -32,4 +32,13 @@ public class KeyMapping {
 		this.altUnshiftedDeadKey = null;
 		this.altShiftedDeadKey = null;
 	}
+	
+	public void swapAlt() {
+		int o; CapsLockMapping m; DeadKeyTable d;
+		o = unshiftedOutput  ; unshiftedOutput  = altUnshiftedOutput  ; altUnshiftedOutput  = o;
+		o = shiftedOutput    ; shiftedOutput    = altShiftedOutput    ; altShiftedOutput    = o;
+		m = capsLockMapping  ; capsLockMapping  = altCapsLockMapping  ; altCapsLockMapping  = m;
+		d = unshiftedDeadKey ; unshiftedDeadKey = altUnshiftedDeadKey ; altUnshiftedDeadKey = d;
+		d = shiftedDeadKey   ; shiftedDeadKey   = altShiftedDeadKey   ; altShiftedDeadKey   = d;
+	}
 }
