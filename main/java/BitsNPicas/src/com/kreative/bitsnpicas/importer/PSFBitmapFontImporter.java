@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import com.kreative.bitsnpicas.BitmapFont;
@@ -185,30 +185,16 @@ public class PSFBitmapFontImporter implements BitmapFontImporter {
 			StringBuffer sb = new StringBuffer();
 			while (true) {
 				char ch = Character.reverseBytes(in.readChar());
-				if (ch == (char)0xFFFF) return splitUnicodeEntry(sb);
-				if (ch == (char)0xFFFE) break;
-				sb.append(ch);
-				sb.append('\uFFFE');
-			}
-			while (true) {
-				char ch = Character.reverseBytes(in.readChar());
-				if (ch == (char)0xFFFF) return splitUnicodeEntry(sb);
+				if (ch == (char)0xFFFF) break;
 				sb.append(ch);
 			}
+			String s = sb.toString();
+			return splitUnicodeEntry(s);
 		} else {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			while (true) {
 				int b = in.readUnsignedByte();
-				if (b == 0xFF) return splitUnicodeEntry(out);
-				if (b == 0xFE) break;
-				out.write(b);
-				out.write(0xEF);
-				out.write(0xBF);
-				out.write(0xBE);
-			}
-			while (true) {
-				int b = in.readUnsignedByte();
-				if (b == 0xFF) return splitUnicodeEntry(out);
+				if (b == 0xFF) break;
 				if (b == 0xFE) {
 					out.write(0xEF);
 					out.write(0xBF);
@@ -217,17 +203,23 @@ public class PSFBitmapFontImporter implements BitmapFontImporter {
 					out.write(b);
 				}
 			}
+			byte[] b = out.toByteArray();
+			String s = new String(b, "UTF-8");
+			return splitUnicodeEntry(s);
 		}
 	}
 	
-	private String[] splitUnicodeEntry(StringBuffer sb) {
-		if (sb.length() == 0) return new String[0];
-		return sb.toString().split("\uFFFE+");
-	}
-	
-	private String[] splitUnicodeEntry(ByteArrayOutputStream out) {
-		if (out.size() == 0) return new String[0];
-		try { return new String(out.toByteArray(), "UTF-8").split("\uFFFE+"); }
-		catch (UnsupportedEncodingException e) { throw new IllegalStateException(e); }
+	private String[] splitUnicodeEntry(String s) {
+		ArrayList<String> a = new ArrayList<String>();
+		String[] pieces = s.split("\uFFFE+");
+		for (int i = 0, n = pieces[0].length(); i < n;) {
+			int cp = pieces[0].codePointAt(i);
+			a.add(String.valueOf(Character.toChars(cp)));
+			i += Character.charCount(cp);
+		}
+		for (int i = 1, n = pieces.length; i < n; i++) {
+			a.add(pieces[i]);
+		}
+		return a.toArray(new String[a.size()]);
 	}
 }

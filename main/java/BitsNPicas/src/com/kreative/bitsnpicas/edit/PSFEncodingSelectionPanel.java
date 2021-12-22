@@ -23,12 +23,12 @@ public class PSFEncodingSelectionPanel extends JPanel {
 	
 	public PSFEncodingSelectionPanel(final File file, final PSFEncodingSelectionImporter importer) {
 		final ArrayList<Object> lea = new ArrayList<Object>();
-		lea.add("Auto"); lea.addAll(EncodingList.instance());
+		lea.add("None"); lea.addAll(EncodingList.instance());
 		final JComboBox le = new JComboBox(lea.toArray());
 		le.setEditable(false);
 		
 		final ArrayList<Object> hea = new ArrayList<Object>();
-		hea.add("Auto"); hea.addAll(EncodingList.instance());
+		hea.add("None"); hea.addAll(EncodingList.instance());
 		final JComboBox he = new JComboBox(hea.toArray());
 		he.setEditable(false);
 		

@@ -92,6 +92,8 @@ public class FONTXBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		
+		f.setAscentDescent();
+		f.setXHeight();
 		return f;
 	}
 	
