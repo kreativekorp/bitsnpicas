@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.PSFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
@@ -35,6 +36,24 @@ public enum BitmapExportFormat {
 	BDF("BDF (Bitmap Distribution Format)", ".bdf", "none") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new BDFBitmapFontExporter();
+		}
+	},
+	PSF("PSF (PC Screen Font) (Uncompressed)", ".psf", "psf") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new PSFBitmapFontExporter(
+				o.getPSFVersion(), o.getPSFLowEncoding(), o.getPSFHighEncoding(),
+				o.getPSFUseLowEncoding(), o.getPSFUseHighEncoding(),
+				o.getPSFUseAllGlyphs(), o.getPSFUnicodeTable(), false
+			);
+		}
+	},
+	PSFGZ("PSF (PC Screen Font) (Gzip Compressed)", ".psf.gz", "psf") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new PSFBitmapFontExporter(
+				o.getPSFVersion(), o.getPSFLowEncoding(), o.getPSFHighEncoding(),
+				o.getPSFUseLowEncoding(), o.getPSFUseHighEncoding(),
+				o.getPSFUseAllGlyphs(), o.getPSFUnicodeTable(), true
+			);
 		}
 	},
 	SUIT("Mac OS Classic Font Suitcase (Resource Fork)", ".suit", "mac", "MacRoman", true) {

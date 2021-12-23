@@ -17,9 +17,25 @@ public class BitmapOutputOptions {
 	public boolean geosUTF8 = false;
 	public boolean fontxDoubleByte = false;
 	public String fontxDoubleByteEncoding = null;
+	public String psfLowEncoding = null;
+	public String psfHighEncoding = null;
+	public boolean psfUseLowEncoding = true;
+	public boolean psfUseHighEncoding = false;
+	public boolean psfUseAllGlyphs = true;
+	public boolean psfUnicodeTable = true;
 	
 	public EncodingTable getEncoding() {
 		if (encodingName == null) return null;
 		return EncodingList.instance().get(encodingName);
+	}
+	
+	public EncodingTable getPsfLowEncoding() {
+		if (psfLowEncoding == null) return null;
+		return EncodingList.instance().get(psfLowEncoding);
+	}
+	
+	public EncodingTable getPsfHighEncoding() {
+		if (psfHighEncoding == null) return null;
+		return EncodingList.instance().get(psfHighEncoding);
 	}
 }

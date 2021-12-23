@@ -112,16 +112,22 @@ public class ConvertBitmap {
 						o.oo.fontxDoubleByteEncoding = args[argi++];
 						o.oo.fontxDoubleByte = true;
 					} else if (arg.equals("-le") && argi < args.length) {
-						o.io.psfLowEncoding = args[argi++];
+						o.io.psfLowEncoding = o.oo.psfLowEncoding = args[argi++];
+						o.oo.psfUseLowEncoding = (o.oo.psfLowEncoding.length() > 0);
 					} else if (arg.equals("-he") && argi < args.length) {
-						o.io.psfHighEncoding = args[argi++];
-					} else if (arg.equals("-se") && argi < args.length) {
-						o.io.psfPuaBase = parseInt16(args[argi++]);
+						o.io.psfHighEncoding = o.oo.psfHighEncoding = args[argi++];
+						o.oo.psfUseHighEncoding = (o.oo.psfHighEncoding.length() > 0);
 					} else if (arg.equals("-ile") && argi < args.length) {
 						o.io.psfLowEncoding = args[argi++];
 					} else if (arg.equals("-ihe") && argi < args.length) {
 						o.io.psfHighEncoding = args[argi++];
-					} else if (arg.equals("-ise") && argi < args.length) {
+					} else if (arg.equals("-ole") && argi < args.length) {
+						o.oo.psfLowEncoding = args[argi++];
+						o.oo.psfUseLowEncoding = (o.oo.psfLowEncoding.length() > 0);
+					} else if (arg.equals("-ohe") && argi < args.length) {
+						o.oo.psfHighEncoding = args[argi++];
+						o.oo.psfUseHighEncoding = (o.oo.psfHighEncoding.length() > 0);
+					} else if (arg.equals("-pb") && argi < args.length) {
 						o.io.psfPuaBase = parseInt16(args[argi++]);
 					} else if (arg.equals("-a") && argi < args.length) {
 						o.oo.u8mLoadAddress = parseInt16(args[argi++]);
@@ -137,6 +143,14 @@ public class ConvertBitmap {
 						o.oo.geosUTF8 = true;
 					} else if (arg.equals("-U")) {
 						o.oo.geosUTF8 = false;
+					} else if (arg.equals("-pa")) {
+						o.oo.psfUseAllGlyphs = true;
+					} else if (arg.equals("-PA")) {
+						o.oo.psfUseAllGlyphs = false;
+					} else if (arg.equals("-pu")) {
+						o.oo.psfUnicodeTable = true;
+					} else if (arg.equals("-PU")) {
+						o.oo.psfUnicodeTable = false;
 					} else if (arg.equals("--help")) {
 						printHelp();
 					} else {
@@ -190,7 +204,6 @@ public class ConvertBitmap {
 		System.out.println("  -d <range>    Do not include characters in the specified range.");
 		System.out.println("  -D <range>    Include characters in the specified range.");
 		System.out.println("  -c            Strict monospace: remove glyphs not the width of a space.");
-		System.out.println("                (For braindead programs like Windows Command Prompt.)");
 		System.out.println("  -C            Loose monospace or proportional; the opposite of -c.");
 		System.out.println("  -n            Do not transform the font (the default).");
 		System.out.println("  -b            Transform the font using faux bold.");
@@ -240,6 +253,15 @@ public class ConvertBitmap {
 		System.out.println("  -ee <enc>     Use the specified double-byte encoding (for fontx).");
 		System.out.println("  -iee <enc>    Use the specified double-byte encoding for reading only.");
 		System.out.println("  -oee <enc>    Use the specified double-byte encoding for writing only.");
+		System.out.println("  -le <enc>     Use the specified encoding for chars 000-0FF (for psf).");
+		System.out.println("  -he <enc>     Use the specified encoding for chars 100-1FF (for psf).");
+		System.out.println("  -ile <enc>    Use the specified encoding for chars 000-0FF for reading.");
+		System.out.println("  -ihe <enc>    Use the specified encoding for chars 100-1FF for reading.");
+		System.out.println("  -ole <enc>    Use the specified encoding for chars 000-0FF for writing.");
+		System.out.println("  -ohe <enc>    Use the specified encoding for chars 100-1FF for writing.");
+		System.out.println("  -pb <cp>      Read all glyphs in order starting at code point (for psf).");
+		System.out.println("  -pa / -PA     Write / don't write other characters (for psf).");
+		System.out.println("  -pu / -PU     Write / don't write Unicode mapping table (for psf).");
 		System.out.println("  --            Process remaining arguments as file names.");
 		System.out.println();
 	}

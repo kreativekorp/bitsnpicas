@@ -18,4 +18,11 @@ public interface BitmapExportOptions {
 	public boolean getGEOSUTF8();
 	public boolean getFONTXDoubleByte();
 	public String getFONTXDoubleByteEncoding();
+	public int getPSFVersion();
+	public EncodingTable getPSFLowEncoding();
+	public EncodingTable getPSFHighEncoding();
+	public boolean getPSFUseLowEncoding();
+	public boolean getPSFUseHighEncoding();
+	public boolean getPSFUseAllGlyphs();
+	public boolean getPSFUnicodeTable();
 }

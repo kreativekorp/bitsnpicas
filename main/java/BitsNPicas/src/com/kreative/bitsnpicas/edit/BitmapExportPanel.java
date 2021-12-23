@@ -36,6 +36,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final BitmapExportFONTXPanel fontxPanel;
 	private final BitmapExportU8MPanel u8mPanel;
 	private final BitmapExportColorPanel colorPanel;
+	private final BitmapExportPSFPanel psfPanel;
 	private final JButton exportButton;
 	
 	public BitmapExportPanel(BitmapFont font) {
@@ -48,6 +49,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.fontxPanel = new BitmapExportFONTXPanel();
 		this.u8mPanel = new BitmapExportU8MPanel();
 		this.colorPanel = new BitmapExportColorPanel();
+		this.psfPanel = new BitmapExportPSFPanel();
 		this.exportButton = new JButton("Export");
 		
 		JLabel noneLabel = new JLabel("This format has no options.");
@@ -64,6 +66,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		formatOptionsPanel.add(fontxPanel, "fontx");
 		formatOptionsPanel.add(u8mPanel, "u8m");
 		formatOptionsPanel.add(colorPanel, "color");
+		formatOptionsPanel.add(psfPanel, "psf");
 		formatOptionsPanel.add(nonePanel, "none");
 		
 		format.setEditable(false);
@@ -199,5 +202,40 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	@Override
 	public String getFONTXDoubleByteEncoding() {
 		return fontxPanel.getSelectedDoubleByteEncoding();
+	}
+	
+	@Override
+	public int getPSFVersion() {
+		return psfPanel.getVersion();
+	}
+	
+	@Override
+	public EncodingTable getPSFLowEncoding() {
+		return psfPanel.getLowEncoding();
+	}
+	
+	@Override
+	public EncodingTable getPSFHighEncoding() {
+		return psfPanel.getHighEncoding();
+	}
+	
+	@Override
+	public boolean getPSFUseLowEncoding() {
+		return psfPanel.getUseLowEncoding();
+	}
+	
+	@Override
+	public boolean getPSFUseHighEncoding() {
+		return psfPanel.getUseHighEncoding();
+	}
+	
+	@Override
+	public boolean getPSFUseAllGlyphs() {
+		return psfPanel.getUseAllGlyphs();
+	}
+	
+	@Override
+	public boolean getPSFUnicodeTable() {
+		return psfPanel.getUnicodeTable();
 	}
 }

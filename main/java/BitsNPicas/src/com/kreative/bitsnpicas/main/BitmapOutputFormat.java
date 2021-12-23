@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.PSFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
@@ -37,6 +38,42 @@ public enum BitmapOutputFormat {
 	BDF(".bdf", "bdf") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new BDFBitmapFontExporter();
+		}
+	},
+	PSF2(".psf", "psf", "psf2") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new PSFBitmapFontExporter(
+				2, o.getPsfLowEncoding(), o.getPsfHighEncoding(),
+				o.psfUseLowEncoding, o.psfUseHighEncoding,
+				o.psfUseAllGlyphs, o.psfUnicodeTable, false
+			);
+		}
+	},
+	PSF1(".psf", "psf1") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new PSFBitmapFontExporter(
+				1, o.getPsfLowEncoding(), o.getPsfHighEncoding(),
+				o.psfUseLowEncoding, o.psfUseHighEncoding,
+				o.psfUseAllGlyphs, o.psfUnicodeTable, false
+			);
+		}
+	},
+	PSF2GZ(".psf.gz", "psfgz", "psf2gz") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new PSFBitmapFontExporter(
+				2, o.getPsfLowEncoding(), o.getPsfHighEncoding(),
+				o.psfUseLowEncoding, o.psfUseHighEncoding,
+				o.psfUseAllGlyphs, o.psfUnicodeTable, true
+			);
+		}
+	},
+	PSF1GZ(".psf.gz", "psf1gz") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new PSFBitmapFontExporter(
+				1, o.getPsfLowEncoding(), o.getPsfHighEncoding(),
+				o.psfUseLowEncoding, o.psfUseHighEncoding,
+				o.psfUseAllGlyphs, o.psfUnicodeTable, true
+			);
 		}
 	},
 	SUIT(".suit", "nfnt", "suit", true) {
