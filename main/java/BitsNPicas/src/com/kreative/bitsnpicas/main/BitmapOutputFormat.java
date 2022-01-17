@@ -14,6 +14,7 @@ import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.OTBBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.PSFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
@@ -33,6 +34,11 @@ public enum BitmapOutputFormat {
 	TTF(".ttf", "ttf", "truetype") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new TTFBitmapFontExporter(o.xSize, o.ySize, o.extendWinMetrics);
+		}
+	},
+	OTB(".otb", "otb") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new OTBBitmapFontExporter(o.extendWinMetrics);
 		}
 	},
 	BDF(".bdf", "bdf") {
