@@ -29,6 +29,8 @@ public class TrueTypeFile extends ArrayList<TrueTypeTable> {
 		switch (tableId) {
 			case 0x43424454: return new EbdtTable(SbitTableType.COLOR);
 			case 0x43424C43: return new EblcTable(SbitTableType.COLOR);
+			case 0x434F4C52: return new ColrTable();
+			case 0x4350414C: return new CpalTable();
 			case 0x45424454: return new EbdtTable(SbitTableType.OPENTYPE);
 			case 0x45424C43: return new EblcTable(SbitTableType.OPENTYPE);
 			case 0x4F532F32: return new Os2Table();

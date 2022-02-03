@@ -5,7 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-
+import com.kreative.bitsnpicas.truetype.ColrTable;
+import com.kreative.bitsnpicas.truetype.CpalTable;
 import com.kreative.bitsnpicas.truetype.HeadTable;
 import com.kreative.bitsnpicas.truetype.HheaTable;
 import com.kreative.bitsnpicas.truetype.MaxpTable;
@@ -16,7 +17,22 @@ import com.kreative.bitsnpicas.truetype.TrueTypeFile;
 
 public class DebugTTF {
 	public static void main(String[] args) {
+		boolean parseOptions = true;
+		boolean includeCOLR = false;
 		for (String arg : args) {
+			if (parseOptions && arg.startsWith("-")) {
+				if (arg.equals("--")) {
+					parseOptions = false;
+				} else if (arg.equals("-c")) {
+					includeCOLR = true;
+				} else if (arg.equals("-C")) {
+					includeCOLR = false;
+				} else {
+					System.err.println("Unknown option: " + arg);
+				}
+				continue;
+			}
+			
 			System.out.println(arg);
 			try {
 				// Open file
@@ -132,7 +148,7 @@ public class DebugTTF {
 				System.out.println("  OS/2");
 				Os2Table os2 = (Os2Table)ttf.getByTableName("OS/2");
 				if (os2 == null) System.out.println("    Not present.");
-				else {
+				else do {
 					System.out.println("    length:                " + os2.length);
 					System.out.println("    version:               " + os2.version);
 					System.out.println("    avgCharWidth:          " + os2.averageCharWidth);
@@ -183,11 +199,58 @@ public class DebugTTF {
 					if (os2.length < Os2Table.LENGTH_100) continue;
 					System.out.println("    lowerOpticalPointSize: " + os2.getLowerOpticalPointSizeDouble());
 					System.out.println("    upperOpticalPointSize: " + os2.getUpperOpticalPointSizeDouble());
+				} while (false);
+				
+				if (includeCOLR) {
+					// Print CPAL
+					System.out.println("  CPAL");
+					CpalTable cpal = (CpalTable)ttf.getByTableName("CPAL");
+					if (cpal == null) System.out.println("    Not present.");
+					else {
+						System.out.println("    version:               " + cpal.version);
+						System.out.println("    numPaletteEntries:     " + cpal.numPaletteEntries);
+						System.out.println("    numPalettes:           " + cpal.colorRecordIndices.length);
+						System.out.println("    numColorRecords:       " + cpal.colorRecordsArray.length);
+						System.out.println("    colorRecordsArray:");
+						for (int color : cpal.colorRecordsArray) System.out.print(color(color));
+						System.out.println();
+						for (int j = 0; j < cpal.colorRecordIndices.length; j++) {
+							System.out.println("    palette #" + j + ":");
+							int offset = cpal.colorRecordIndices[j];
+							for (int i = 0; i < cpal.numPaletteEntries; i++) {
+								System.out.print(color(cpal.colorRecordsArray[offset++]));
+							}
+							System.out.println();
+						}
+					}
+					
+					// Print COLR
+					System.out.println("  COLR");
+					ColrTable colr = (ColrTable)ttf.getByTableName("COLR");
+					if (colr == null) System.out.println("    Not present.");
+					else {
+						System.out.println("    version:               " + colr.version);
+						System.out.println("    numBaseGlyphRecords:   " + colr.baseGlyphRecords.length);
+						System.out.println("    numLayerRecords:       " + colr.layerRecords.length);
+					}
 				}
 			} catch (IOException e) {
 				System.out.println("  Could not read.");
 			}
 		}
+	}
+	
+	private static String color(int color) {
+		int r = ((color >> 16) & 0xFF);
+		int g = ((color >>  8) & 0xFF);
+		int b = ((color >>  0) & 0xFF);
+		int k = (r*30 + g*59 + b*11);
+		StringBuffer sb = new StringBuffer();
+		sb.append("\u001B[48;2;" + r + ";" + g + ";" + b + "m");
+		sb.append((k < 12750) ? "\u001B[97m" : "\u001B[30m");
+		sb.append(" " + Integer.toHexString(color).toUpperCase() + " ");
+		sb.append("\u001B[0m");
+		return sb.toString();
 	}
 	
 	private static String hex(int v, int len) {
