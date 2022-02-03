@@ -1,8 +1,8 @@
 # Blocks-UCSUR.txt
-# Date: 2021-08-26, 02:53:20 
+# Date: 2022-02-02, 00:29:37 
 #
 # Under-ConScript Unicode Registry Character Database
-# Copyright (c) 2009-2021 Kreative Software
+# Copyright (c) 2009-2022 Kreative Software
 # For documentation, see http://www.kreativekorp.com/ucsur/
 #
 # Note:   The casing of block names is not normative.
@@ -87,6 +87,7 @@ F8D0..F8FF; Klingon
 F0000..F0E6F; Kinya Syllables
 F0E70..F16AF; Pikto
 F1700..F18FF; Semtog
-F1900..F1AFF; Sitelen Pona
+F1900..F19FF; Sitelen Pona
+F1B00..F1C3F; Shidinn
 
 # EOF
