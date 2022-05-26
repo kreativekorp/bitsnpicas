@@ -126,18 +126,38 @@ KeyEdit-src.tgz: src
 	find src -name .DS_Store -delete
 	tar -czf KeyEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/fontmap src/com/kreative/keyedit LICENSE
 
-install: BitsNPicas.jar
+install: BitsNPicas.jar MapEdit.jar KeyEdit.jar
 	sudo mkdir -p /usr/local/lib/
 	sudo cp -f BitsNPicas.jar /usr/local/lib/bitsnpicas.jar
+	sudo cp -f MapEdit.jar /usr/local/lib/mapedit.jar
+	sudo cp -f KeyEdit.jar /usr/local/lib/keyedit.jar
 	sudo chmod -f 644 /usr/local/lib/bitsnpicas.jar
+	sudo chmod -f 644 /usr/local/lib/mapedit.jar
+	sudo chmod -f 644 /usr/local/lib/keyedit.jar
 	sudo mkdir -p /usr/local/bin/
 	sudo cp -f dep/bitsnpicas /usr/local/bin/bitsnpicas
+	sudo cp -f dep/mapedit /usr/local/bin/mapedit
+	sudo cp -f dep/keyedit /usr/local/bin/keyedit
 	sudo chmod -f 755 /usr/local/bin/bitsnpicas
+	sudo chmod -f 755 /usr/local/bin/mapedit
+	sudo chmod -f 755 /usr/local/bin/keyedit
 	sudo mkdir -p /usr/share/icons/hicolor/128x128/apps/
+	sudo mkdir -p /usr/share/icons/hicolor/256x256/apps/
+	sudo mkdir -p /usr/share/icons/hicolor/512x512/apps/
 	sudo cp -f dep/bitsnpicas.png /usr/share/icons/hicolor/128x128/apps/bitsnpicas.png
+	sudo cp -f dep/kbnp-icon.png /usr/share/icons/hicolor/512x512/apps/bitsnpicas.png
+	sudo cp -f dep/mapedit-icon.png /usr/share/icons/hicolor/512x512/apps/mapedit.png
+	sudo cp -f dep/keyedit-icon.png /usr/share/icons/hicolor/256x256/apps/keyedit.png
 	sudo chmod -f 644 /usr/share/icons/hicolor/128x128/apps/bitsnpicas.png
+	sudo chmod -f 644 /usr/share/icons/hicolor/512x512/apps/bitsnpicas.png
+	sudo chmod -f 644 /usr/share/icons/hicolor/512x512/apps/mapedit.png
+	sudo chmod -f 644 /usr/share/icons/hicolor/256x256/apps/keyedit.png
 	sudo mkdir -p /usr/share/applications/
 	sudo cp -f dep/bitsnpicas.desktop /usr/share/applications/bitsnpicas.desktop
+	sudo cp -f dep/mapedit.desktop /usr/share/applications/mapedit.desktop
+	sudo cp -f dep/keyedit.desktop /usr/share/applications/keyedit.desktop
 	sudo chmod -f 644 /usr/share/applications/bitsnpicas.desktop
+	sudo chmod -f 644 /usr/share/applications/mapedit.desktop
+	sudo chmod -f 644 /usr/share/applications/keyedit.desktop
 
 .PHONY: all eclipseall clean eclipseclean install

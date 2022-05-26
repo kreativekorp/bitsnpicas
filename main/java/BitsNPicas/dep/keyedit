@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+java -Xmx1024M -jar /usr/local/lib/keyedit.jar "$@"
