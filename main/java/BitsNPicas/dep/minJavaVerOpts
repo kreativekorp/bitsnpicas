@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+echo -n 'Determining minimum version javac can compile... ' 1>&2
+echo 'public class tmp {}' > tmp.java
+for v in {5..100}; do
+	if javac -source $v -target $v tmp.java > /dev/null 2>&1; then
+		rm -f tmp.java tmp.class
+		echo "$v" 1>&2
+		echo "-source $v -target $v"
+		exit 0
+	fi
+done
+rm -f tmp.java tmp.class
+echo 'Unknown' 1>&2
+echo ''
+exit 1

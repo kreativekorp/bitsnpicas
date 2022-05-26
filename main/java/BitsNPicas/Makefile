@@ -32,6 +32,9 @@ eclipseclean:
 
 bin: src
 	mkdir -p bin
+ifeq ($(origin JAVACFLAGS), undefined)
+	$(eval JAVACFLAGS = $(shell dep/minJavaVerOpts))
+endif
 	javac $(JAVACFLAGS) -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(SRCFILES) -d bin
 	$(foreach res,$(RESFILES),cp src/$(res) bin/$(res);)
 
