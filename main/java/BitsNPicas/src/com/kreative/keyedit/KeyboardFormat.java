@@ -130,6 +130,42 @@ public enum KeyboardFormat {
 			WinWriter.write(f, km);
 		}
 	},
+	KEYMAN{
+		@Override
+		public String getName() {
+			return "Keyman Developer (kmn)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".kmn";
+		}
+		@Override
+		public boolean recognizesInputFormatName(String s) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFormatName(String s) {
+			return s.equalsIgnoreCase(".kmn")
+			    || s.equalsIgnoreCase("kmn")
+			    || s.equalsIgnoreCase("keyman");
+		}
+		@Override
+		public boolean recognizesInputFile(File f) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFile(File f) {
+			return f.getName().toLowerCase().endsWith(".kmn");
+		}
+		@Override
+		public KeyboardMapping read(File f) throws IOException {
+			throw new IOException("Keyman import unsupported.");
+		}
+		@Override
+		public void write(File f, KeyboardMapping km) throws IOException {
+			KeyManWriter.write(f, km);
+		}
+	},
 	XKB {
 		@Override
 		public String getName() {
