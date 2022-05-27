@@ -52,7 +52,7 @@ public class LayoutInfoFrame extends JDialog {
 			}
 		});
 		
-		setSize(900, 600);
+		setSize(1200, 600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}

@@ -11,7 +11,10 @@ import com.kreative.bitsnpicas.unicode.CharacterData;
 import com.kreative.bitsnpicas.unicode.CharacterDatabase;
 
 public class WinWriter {
+	private static final String NONBMP_WARNING = "WARNING: Supplemental characters are assigned to altgr or dead keys.\nThese won't work natively on Windows. A third-party input method must be used.";
+	
 	public static void write(File file, KeyboardMapping km) throws IOException {
+		if (!km.isWindowsNativeCompatible()) System.err.println(NONBMP_WARNING);
 		FileOutputStream fos = new FileOutputStream(file);
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(fos, "UTF-16LE"), true);
 		write(pw, km);

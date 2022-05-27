@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.BitSet;
+import java.util.Scanner;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,6 +33,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import com.kreative.keyedit.HTMLWriterUtility;
 import com.kreative.keyedit.KeyboardMapping;
 import com.kreative.keyedit.KkbReader;
 import com.kreative.keyedit.KkbWriter;
@@ -61,7 +64,7 @@ public class LayoutInfoPanel extends JPanel {
 	private final JComboBox xkbComposeKey;
 	private final BufferedImageWell icon;
 	private final JTextField macIconVersion;
-	private final MacActionIdTableModel macActionIdsModel;
+	private final CodePointLabelTableModel macActionIdsModel;
 	private final JTable macActionIdsTable;
 	private final JScrollPane macActionIdsPane;
 	private final JButton macActionIdsAdd;
@@ -74,8 +77,25 @@ public class LayoutInfoPanel extends JPanel {
 	private final JTextArea htmlBody2;
 	private final JTextArea htmlBody3;
 	private final JTextArea htmlBody4;
+	private final JTextArea htmlInstall;
+	private final JButton htmlInstallDefault;
 	private final JTextField htmlSquareChars;
 	private final JTextField htmlOutlineChars;
+	private final CodePointClassTableModel htmlTdClassesModel;
+	private final JTable htmlTdClassesTable;
+	private final JScrollPane htmlTdClassesPane;
+	private final JButton htmlTdClassesAdd;
+	private final JButton htmlTdClassesDelete;
+	private final CodePointClassTableModel htmlSpanClassesModel;
+	private final JTable htmlSpanClassesTable;
+	private final JScrollPane htmlSpanClassesPane;
+	private final JButton htmlSpanClassesAdd;
+	private final JButton htmlSpanClassesDelete;
+	private final CodePointLabelTableModel htmlCpLabelsModel;
+	private final JTable htmlCpLabelsTable;
+	private final JScrollPane htmlCpLabelsPane;
+	private final JButton htmlCpLabelsAdd;
+	private final JButton htmlCpLabelsDelete;
 	
 	public LayoutInfoPanel(KeyboardMapping km) {
 		this.km = km;
@@ -136,13 +156,13 @@ public class LayoutInfoPanel extends JPanel {
 		}
 		this.macIconVersion = new JTextField(miv, 8);
 		
-		this.macActionIdsModel = new MacActionIdTableModel(km.macActionIds);
+		this.macActionIdsModel = new CodePointLabelTableModel(km.macActionIds, "Action ID");
 		this.macActionIdsTable = new JTable(this.macActionIdsModel);
 		this.macActionIdsPane = scrollWrap(this.macActionIdsTable);
 		this.macActionIdsAdd = square(new JButton("+"));
-		this.macActionIdsAdd.addActionListener(new AddActionIdActionListener());
+		this.macActionIdsAdd.addActionListener(new AddCodePointLabelActionListener(macActionIdsModel, macActionIdsTable, macActionIdsPane));
 		this.macActionIdsDelete = square(new JButton("\u2212"));
-		this.macActionIdsDelete.addActionListener(new DeleteActionIdActionListener());
+		this.macActionIdsDelete.addActionListener(new DeleteCodePointLabelActionListener(macActionIdsModel, macActionIdsTable));
 		setColumnWidth(macActionIdsTable, 0, 80);
 		setColumnWidth(macActionIdsTable, 1, 80);
 		
@@ -154,8 +174,39 @@ public class LayoutInfoPanel extends JPanel {
 		this.htmlBody2 = mono(new JTextArea(km.htmlBody2));
 		this.htmlBody3 = mono(new JTextArea(km.htmlBody3));
 		this.htmlBody4 = mono(new JTextArea(km.htmlBody4));
+		this.htmlInstall = mono(new JTextArea(km.htmlInstall));
+		this.htmlInstallDefault = new JButton("Generate Default Instructions");
+		this.htmlInstallDefault.addActionListener(new HTMLInstallDefaultActionListener());
 		this.htmlSquareChars = new JTextField(KkbWriter.formatRanges(km.htmlSquareChars));
 		this.htmlOutlineChars = new JTextField(KkbWriter.formatRanges(km.htmlOutlineChars));
+		
+		this.htmlTdClassesModel = new CodePointClassTableModel(km.htmlTdClasses);
+		this.htmlTdClassesTable = new JTable(this.htmlTdClassesModel);
+		this.htmlTdClassesPane = scrollWrap(this.htmlTdClassesTable);
+		this.htmlTdClassesAdd = square(new JButton("+"));
+		this.htmlTdClassesAdd.addActionListener(new AddCodePointClassActionListener(htmlTdClassesModel, htmlTdClassesTable, htmlTdClassesPane));
+		this.htmlTdClassesDelete = square(new JButton("\u2212"));
+		this.htmlTdClassesDelete.addActionListener(new DeleteCodePointClassActionListener(htmlTdClassesModel, htmlTdClassesTable));
+		setColumnWidth(htmlTdClassesTable, 0, 80);
+		
+		this.htmlSpanClassesModel = new CodePointClassTableModel(km.htmlSpanClasses);
+		this.htmlSpanClassesTable = new JTable(this.htmlSpanClassesModel);
+		this.htmlSpanClassesPane = scrollWrap(this.htmlSpanClassesTable);
+		this.htmlSpanClassesAdd = square(new JButton("+"));
+		this.htmlSpanClassesAdd.addActionListener(new AddCodePointClassActionListener(htmlSpanClassesModel, htmlSpanClassesTable, htmlSpanClassesPane));
+		this.htmlSpanClassesDelete = square(new JButton("\u2212"));
+		this.htmlSpanClassesDelete.addActionListener(new DeleteCodePointClassActionListener(htmlSpanClassesModel, htmlSpanClassesTable));
+		setColumnWidth(htmlSpanClassesTable, 0, 80);
+		
+		this.htmlCpLabelsModel = new CodePointLabelTableModel(km.htmlCpLabels, "Label");
+		this.htmlCpLabelsTable = new JTable(this.htmlCpLabelsModel);
+		this.htmlCpLabelsPane = scrollWrap(this.htmlCpLabelsTable);
+		this.htmlCpLabelsAdd = square(new JButton("+"));
+		this.htmlCpLabelsAdd.addActionListener(new AddCodePointLabelActionListener(htmlCpLabelsModel, htmlCpLabelsTable, htmlCpLabelsPane));
+		this.htmlCpLabelsDelete = square(new JButton("\u2212"));
+		this.htmlCpLabelsDelete.addActionListener(new DeleteCodePointLabelActionListener(htmlCpLabelsModel, htmlCpLabelsTable));
+		setColumnWidth(htmlCpLabelsTable, 0, 80);
+		setColumnWidth(htmlCpLabelsTable, 1, 80);
 		
 		JPanel iconPanel = leftSxS(new JLabel("Icon:"), icon, 8);
 		JPanel namePanel = leftSxS(new JLabel("Name:"), name, 8);
@@ -180,23 +231,37 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel xkbField2 = leftAlign(verticalStack(xkbAltGrKey, xkbComposeKey));
 		JPanel xkbPanel = verticalSxS(leftSxS(xkbLabel1, xkbField1, 8), xkbCommnt, leftSxS(xkbLabel2, xkbField2, 8), 8);
 		
-		JPanel htmLabels = verticalStack("Title:", "H1:", "H2:", "Square Chars:", "Outline Chars:");
-		JPanel htmFields = verticalStack(htmlTitle, htmlH1, htmlH2, htmlSquareChars, htmlOutlineChars);
+		JPanel htmHLabel = verticalStack("Title:", "H1:", "H2:");
+		JPanel htmHField = verticalStack(htmlTitle, htmlH1, htmlH2);
 		JPanel htmStyles = topSxS(new JLabel("Stylesheet:"), scrollWrap(htmlStyle), 4);
-		JPanel htmPanel0 = topSxS(leftSxS(htmLabels, htmFields, 8), htmStyles, 8);
+		JPanel htmLLabel = verticalStack("Square Chars:", "Outline Chars:");
+		JPanel htmLField = verticalStack(htmlSquareChars, htmlOutlineChars);
+		JPanel htmTcLabs = topSxS(new JLabel("Cell Classes:"), htmlTdClassesPane, 4);
+		JPanel htmTcBtns = leftAlign(horizontalStack(htmlTdClassesAdd, htmlTdClassesDelete));
+		JPanel htmScLabs = topSxS(new JLabel("Span Classes:"), htmlSpanClassesPane, 4);
+		JPanel htmScBtns = leftAlign(horizontalStack(htmlSpanClassesAdd, htmlSpanClassesDelete));
+		JPanel htmCpLabs = topSxS(new JLabel("Code Point Labels:"), htmlCpLabelsPane, 4);
+		JPanel htmCpBtns = leftAlign(horizontalStack(htmlCpLabelsAdd, htmlCpLabelsDelete));
+		JPanel htmXxLabs = horizontalStack(htmTcLabs, htmScLabs, htmCpLabs);
+		JPanel htmXxBtns = horizontalStack(htmTcBtns, htmScBtns, htmCpBtns);
+		JPanel htmPanelH = topSxS(leftSxS(htmHLabel, htmHField, 8), htmStyles, 8);
+		JPanel htmPanelL = verticalSxS(leftSxS(htmLLabel, htmLField, 8), htmXxLabs, htmXxBtns, 8);
 		JPanel htmPanel1 = topSxS(new JLabel("Body HTML below header:"), scrollWrap(htmlBody1), 4);
 		JPanel htmPanel2 = topSxS(new JLabel("Body HTML above layout:"), scrollWrap(htmlBody2), 4);
 		JPanel htmPanel3 = topSxS(new JLabel("Body HTML below layout:"), scrollWrap(htmlBody3), 4);
+		JPanel htmPanelI = verticalSxS(new JLabel("Installation instructions HTML:"), scrollWrap(htmlInstall), leftAlign(htmlInstallDefault), 4);
 		JPanel htmPanel4 = topSxS(new JLabel("Footer HTML:"), scrollWrap(htmlBody4), 4);
 		
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.add("Windows (MSKLC)", addBorder(winPanel, 20));
 		tabs.add("Mac OS X", addBorder(macPanel, 20));
 		tabs.add("Linux (XKB)", addBorder(xkbPanel, 20));
-		tabs.add("HTML Header", addBorder(htmPanel0, 20));
+		tabs.add("HTML Header", addBorder(htmPanelH, 20));
+		tabs.add("HTML Layout", addBorder(htmPanelL, 20));
 		tabs.add("HTML Body 1", addBorder(htmPanel1, 20));
 		tabs.add("HTML Body 2", addBorder(htmPanel2, 20));
 		tabs.add("HTML Body 3", addBorder(htmPanel3, 20));
+		tabs.add("HTML Install", addBorder(htmPanelI, 20));
 		tabs.add("HTML Footer", addBorder(htmPanel4, 20));
 		
 		JPanel mainPanel = topSxS(topPanel, tabs, 16);
@@ -336,8 +401,12 @@ public class LayoutInfoPanel extends JPanel {
 		km.htmlBody2 = this.htmlBody2.getText();
 		km.htmlBody3 = this.htmlBody3.getText();
 		km.htmlBody4 = this.htmlBody4.getText();
+		km.htmlInstall = this.htmlInstall.getText();
 		km.htmlSquareChars = KkbReader.parseRanges(this.htmlSquareChars.getText());
 		km.htmlOutlineChars = KkbReader.parseRanges(this.htmlOutlineChars.getText());
+		this.htmlTdClassesModel.toMap(km.htmlTdClasses);
+		this.htmlSpanClassesModel.toMap(km.htmlSpanClasses);
+		this.htmlCpLabelsModel.toMap(km.htmlCpLabels);
 	}
 	
 	private class LimitingDocumentFilter extends DocumentFilter {
@@ -359,25 +428,90 @@ public class LayoutInfoPanel extends JPanel {
         }
 	}
 	
-	private class AddActionIdActionListener implements ActionListener {
+	private class HTMLInstallDefaultActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			final int i = macActionIdsModel.getRowCount();
-			macActionIdsModel.addEntry(32, "space");
+			StringBuffer sb = new StringBuffer();
+			String rn = km.isWindowsNativeCompatible() ? "install.html" : "install-nonbmp.html";
+			Scanner scan = HTMLWriterUtility.getTemplate(rn);
+			while (scan.hasNextLine()) {
+				if (sb.length() > 0) sb.append("\n");
+				sb.append(HTMLWriterUtility.replaceFields(scan.nextLine(), km));
+			}
+			scan.close();
+			htmlInstall.setText(sb.toString());
+		}
+	}
+	
+	private static class AddCodePointLabelActionListener implements ActionListener {
+		private final CodePointLabelTableModel model;
+		private final JTable table;
+		private final JScrollPane pane;
+		private AddCodePointLabelActionListener(CodePointLabelTableModel model, JTable table, JScrollPane pane) {
+			this.model = model;
+			this.table = table;
+			this.pane = pane;
+		}
+		public void actionPerformed(ActionEvent e) {
+			final int i = model.getRowCount();
+			model.addEntry(32, "space");
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					macActionIdsTable.getSelectionModel().setSelectionInterval(i, i);
-					JScrollBar vsb = macActionIdsPane.getVerticalScrollBar();
+					table.getSelectionModel().setSelectionInterval(i, i);
+					JScrollBar vsb = pane.getVerticalScrollBar();
 					vsb.setValue(vsb.getMaximum());
 				}
 			});
 		}
 	}
 	
-	private class DeleteActionIdActionListener implements ActionListener {
+	private static class DeleteCodePointLabelActionListener implements ActionListener {
+		private final CodePointLabelTableModel model;
+		private final JTable table;
+		private DeleteCodePointLabelActionListener(CodePointLabelTableModel model, JTable table) {
+			this.model = model;
+			this.table = table;
+		}
 		public void actionPerformed(ActionEvent e) {
-			int[] rows = macActionIdsTable.getSelectedRows();
+			int[] rows = table.getSelectedRows();
 			for (int i = rows.length - 1; i >= 0; i--) {
-				macActionIdsModel.deleteEntry(rows[i]);
+				model.deleteEntry(rows[i]);
+			}
+		}
+	}
+	
+	private static class AddCodePointClassActionListener implements ActionListener {
+		private final CodePointClassTableModel model;
+		private final JTable table;
+		private final JScrollPane pane;
+		private AddCodePointClassActionListener(CodePointClassTableModel model, JTable table, JScrollPane pane) {
+			this.model = model;
+			this.table = table;
+			this.pane = pane;
+		}
+		public void actionPerformed(ActionEvent e) {
+			final int i = model.getRowCount();
+			model.addEntry("", new BitSet());
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					table.getSelectionModel().setSelectionInterval(i, i);
+					JScrollBar vsb = pane.getVerticalScrollBar();
+					vsb.setValue(vsb.getMaximum());
+				}
+			});
+		}
+	}
+	
+	private static class DeleteCodePointClassActionListener implements ActionListener {
+		private final CodePointClassTableModel model;
+		private final JTable table;
+		private DeleteCodePointClassActionListener(CodePointClassTableModel model, JTable table) {
+			this.model = model;
+			this.table = table;
+		}
+		public void actionPerformed(ActionEvent e) {
+			int[] rows = table.getSelectedRows();
+			for (int i = rows.length - 1; i >= 0; i--) {
+				model.deleteEntry(rows[i]);
 			}
 		}
 	}

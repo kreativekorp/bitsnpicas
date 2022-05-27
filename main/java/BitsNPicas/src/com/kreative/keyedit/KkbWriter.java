@@ -149,37 +149,41 @@ public class KkbWriter {
 	
 	private static void writeHTMLConfig(PrintWriter out, KeyboardMapping km) {
 		boolean wroteHeader = false;
-		if (km.htmlTitle != null) {
+		if (km.htmlTitle != null && km.htmlTitle.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			out.println(wrap("\t\t", "title", km.htmlTitle));
 		}
-		if (km.htmlStyle != null) {
+		if (km.htmlStyle != null && km.htmlStyle.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			writeCDATA(out, "\t\t", "style", km.htmlStyle);
 		}
-		if (km.htmlH1 != null) {
+		if (km.htmlH1 != null && km.htmlH1.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			out.println(wrap("\t\t", "h1", km.htmlH1));
 		}
-		if (km.htmlH2 != null) {
+		if (km.htmlH2 != null && km.htmlH2.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			out.println(wrap("\t\t", "h2", km.htmlH2));
 		}
-		if (km.htmlBody1 != null) {
+		if (km.htmlBody1 != null && km.htmlBody1.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			writeCDATA(out, "\t\t", "body1", km.htmlBody1);
 		}
-		if (km.htmlBody2 != null) {
+		if (km.htmlBody2 != null && km.htmlBody2.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			writeCDATA(out, "\t\t", "body2", km.htmlBody2);
 		}
-		if (km.htmlBody3 != null) {
+		if (km.htmlBody3 != null && km.htmlBody3.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			writeCDATA(out, "\t\t", "body3", km.htmlBody3);
 		}
-		if (km.htmlBody4 != null) {
+		if (km.htmlBody4 != null && km.htmlBody4.length() > 0) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			writeCDATA(out, "\t\t", "body4", km.htmlBody4);
+		}
+		if (km.htmlInstall != null && km.htmlInstall.length() > 0) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			writeCDATA(out, "\t\t", "install", km.htmlInstall);
 		}
 		if (km.htmlSquareChars != null && !km.htmlSquareChars.isEmpty()) {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
@@ -189,6 +193,34 @@ public class KkbWriter {
 			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
 			out.println(wrap("\t\t", "outline", "chars", formatRanges(km.htmlOutlineChars)));
 		}
+		
+		boolean hasTdClasses = (km.htmlTdClasses != null && !km.htmlTdClasses.isEmpty());
+		boolean hasSpanClasses = (km.htmlSpanClasses != null && !km.htmlSpanClasses.isEmpty());
+		if (hasTdClasses || hasSpanClasses) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			out.println("\t\t<cpClasses>");
+			if (hasTdClasses) {
+				for (Map.Entry<String,BitSet> e : km.htmlTdClasses.entrySet()) {
+					out.println(wrap("\t\t\t", "td", "class", e.getKey(), "chars", formatRanges(e.getValue())));
+				}
+			}
+			if (hasSpanClasses) {
+				for (Map.Entry<String,BitSet> e : km.htmlSpanClasses.entrySet()) {
+					out.println(wrap("\t\t\t", "span", "class", e.getKey(), "chars", formatRanges(e.getValue())));
+				}
+			}
+			out.println("\t\t</cpClasses>");
+		}
+		
+		if (km.htmlCpLabels != null && !km.htmlCpLabels.isEmpty()) {
+			if (!wroteHeader) { out.println("\t<html>"); wroteHeader = true; }
+			out.println("\t\t<cpLabels>");
+			for (Map.Entry<Integer,String> e : km.htmlCpLabels.entrySet()) {
+				out.println(wrap("\t\t\t", "cpLabel", "cp", hex(e.getKey(),4), "label", e.getValue()));
+			}
+			out.println("\t\t</cpLabels>");
+		}
+		
 		if (wroteHeader) out.println("\t</html>");
 	}
 	

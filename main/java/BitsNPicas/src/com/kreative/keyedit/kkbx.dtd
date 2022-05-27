@@ -113,7 +113,7 @@
 
 <!-- HTML Configuration -->
 
-<!ELEMENT html (title?,style?,h1?,h2?,body1?,body2?,body3?,body4?,square?,outline?)>
+<!ELEMENT html (title?,style?,h1?,h2?,body1?,body2?,body3?,body4?,install?,square?,outline?,cpClasses?,cpLabels?)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT style (#PCDATA)>
 <!ELEMENT h1 (#PCDATA)>
@@ -122,7 +122,16 @@
 <!ELEMENT body2 (#PCDATA)>
 <!ELEMENT body3 (#PCDATA)>
 <!ELEMENT body4 (#PCDATA)>
+<!ELEMENT install (#PCDATA)>
 <!ELEMENT square EMPTY>
 <!ATTLIST square chars CDATA #REQUIRED>
 <!ELEMENT outline EMPTY>
 <!ATTLIST outline chars CDATA #REQUIRED>
+<!ELEMENT cpClasses (td|span)*>
+<!ELEMENT td EMPTY>
+<!ATTLIST td class CDATA #REQUIRED chars CDATA #REQUIRED>
+<!ELEMENT span EMPTY>
+<!ATTLIST span class CDATA #REQUIRED chars CDATA #REQUIRED>
+<!ELEMENT cpLabels (cpLabel*)>
+<!ELEMENT cpLabel EMPTY>
+<!ATTLIST cpLabel cp CDATA #REQUIRED label CDATA #REQUIRED>

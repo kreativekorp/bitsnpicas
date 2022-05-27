@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
@@ -271,10 +272,46 @@ public class KkbReader {
 					km.htmlBody3 = stripCommonLeadingWhitespace(textContent(child));
 				} else if (ctype.equalsIgnoreCase("body4")) {
 					km.htmlBody4 = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("install")) {
+					km.htmlInstall = stripCommonLeadingWhitespace(textContent(child));
 				} else if (ctype.equalsIgnoreCase("square")) {
 					km.htmlSquareChars = parseRanges(parseString(cattr, "chars"));
 				} else if (ctype.equalsIgnoreCase("outline")) {
 					km.htmlOutlineChars = parseRanges(parseString(cattr, "chars"));
+				} else if (ctype.equalsIgnoreCase("cpClasses")) {
+					for (Node gchild : getChildren(child)) {
+						String gctype = gchild.getNodeName();
+						Map<String,BitSet> classes;
+						if (gctype.equalsIgnoreCase("td")) {
+							classes = km.htmlTdClasses;
+						} else if (gctype.equalsIgnoreCase("span")) {
+							classes = km.htmlSpanClasses;
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
+						NamedNodeMap gcattr = gchild.getAttributes();
+						String className = parseString(gcattr, "class");
+						BitSet chars = parseRanges(parseString(gcattr, "chars"));
+						if (className != null && chars != null) {
+							BitSet bs = classes.get(className);
+							if (bs != null) bs.or(chars);
+							else classes.put(className, chars);
+						}
+					}
+				} else if (ctype.equalsIgnoreCase("cpLabels")) {
+					for (Node gchild : getChildren(child)) {
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("cpLabel")) {
+							NamedNodeMap gcattr = gchild.getAttributes();
+							Integer cp = parseHex(gcattr, "cp", null);
+							String label = parseString(gcattr, "label");
+							if (cp != null && label != null) {
+								km.htmlCpLabels.put(cp, label);
+							}
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
+					}
 				} else {
 					throw new IOException("Unknown element: " + ctype);
 				}

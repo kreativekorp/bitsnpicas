@@ -36,14 +36,21 @@ public class KeyboardMapping {
 	public String htmlBody2;
 	public String htmlBody3;
 	public String htmlBody4;
+	public String htmlInstall;
 	public BitSet htmlSquareChars;
 	public BitSet htmlOutlineChars;
+	public final Map<String,BitSet> htmlTdClasses;
+	public final Map<String,BitSet> htmlSpanClasses;
+	public final Map<Integer,String> htmlCpLabels;
 	
 	public KeyboardMapping() {
 		TreeMap<Key,KeyMapping> map = new TreeMap<Key,KeyMapping>();
 		for (Key key : Key.values()) map.put(key, new KeyMapping(key));
 		this.map = Collections.unmodifiableMap(map);
 		this.macActionIds = new TreeMap<Integer,String>();
+		this.htmlTdClasses = new TreeMap<String,BitSet>();
+		this.htmlSpanClasses = new TreeMap<String,BitSet>();
+		this.htmlCpLabels = new TreeMap<Integer,String>();
 	}
 	
 	public String getNameNotEmpty() {
@@ -105,5 +112,28 @@ public class KeyboardMapping {
 		xkbLabel = getXkbLabelNotEmpty();
 		xkbAltGrKey = getXkbAltGrKeyNotNull();
 		xkbComposeKey = getXkbComposeKeyNotNull();
+	}
+	
+	public boolean isWindowsNativeCompatible() {
+		// Windows doesn't like non-BMP characters on altgr.
+		// Trying to type them just makes it beep at you.
+		// But MSKLC doesn't even issue a warning about this.
+		// A third-party input method has to be used for these layouts.
+		for (KeyMapping km : map.values()) {
+			if (km.altUnshiftedOutput > 0xFFFF) return false;
+			if (km.altShiftedOutput > 0xFFFF) return false;
+			for (DeadKeyTable dead : new DeadKeyTable[] {
+				km.unshiftedDeadKey, km.shiftedDeadKey, km.ctrlDeadKey,
+				km.altUnshiftedDeadKey, km.altShiftedDeadKey
+			}) {
+				if (dead != null) {
+					if (dead.winTerminator > 0xFFFF) return false;
+					for (int output : dead.keyMap.values()) {
+						if (output > 0xFFFF) return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 }
