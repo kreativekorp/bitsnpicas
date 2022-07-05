@@ -3,7 +3,7 @@
 Encoding=UTF-8
 Name=Kreative Bits'n'Picas
 Comment=Create, edit, and convert bitmap fonts
-Exec=java -jar /usr/local/lib/bitsnpicas.jar %F
+Exec=java -jar /usr/local/lib/bitsnpicas.jar edit %F
 Icon=/usr/share/icons/hicolor/512x512/apps/bitsnpicas.png
 Terminal=false
 Type=Application

@@ -325,6 +325,37 @@ public class BitmapFontGlyph extends FontGlyph {
 		}
 	}
 	
+	public static BitmapFontGlyph compose(BitmapFontGlyph... glyphs) {
+		int x0 = Integer.MAX_VALUE, y0 = Integer.MAX_VALUE;
+		int x1 = Integer.MIN_VALUE, y1 = Integer.MIN_VALUE;
+		int advance = Integer.MIN_VALUE;
+		for (BitmapFontGlyph glyph : glyphs) {
+			if (glyph == null) continue;
+			if (glyph.x < x0) x0 = glyph.x;
+			if (-glyph.y < y0) y0 = -glyph.y;
+			if (glyph.advance > advance) advance = glyph.advance;
+			if (-glyph.y + glyph.glyph.length > y1) y1 = -glyph.y + glyph.glyph.length;
+			for (byte[] row : glyph.glyph) {
+				if (glyph.x + row.length > x1) x1 = glyph.x + row.length;
+			}
+		}
+		if (y1 < y0 || x1 < x0) return null;
+		byte[][] g = new byte[y1 - y0][x1 - x0];
+		for (BitmapFontGlyph glyph : glyphs) {
+			if (glyph == null) continue;
+			int bx = glyph.x - x0;
+			int by = -glyph.y - y0;
+			for (int y = 0; y < glyph.glyph.length; y++) {
+				for (int x = 0; x < glyph.glyph[y].length; x++) {
+					if ((glyph.glyph[y][x] & 0xFF) > (g[by + y][bx + x] & 0xFF)) {
+						g[by + y][bx + x] = glyph.glyph[y][x];
+					}
+				}
+			}
+		}
+		return new BitmapFontGlyph(g, x0, advance, -y0);
+	}
+	
 	private static boolean rowEmpty(byte[][] a, int row) {
 		for (byte b : a[row]) if (b != 0) return false;
 		return true;

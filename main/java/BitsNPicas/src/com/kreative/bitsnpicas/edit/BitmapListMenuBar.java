@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
@@ -172,6 +173,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new GlyphListMenuBar.DeleteMenuItem(font, gl));
 			addSeparator();
 			add(new GenerateUnifontHexGlyphMenuItem(font, gl));
+			add(new GenerateTimestampGlyphMenuItem(font, gl));
 		}
 	}
 	
@@ -355,6 +357,41 @@ public class BitmapListMenuBar extends JMenuBar {
 						font.putCharacter(cp, UnifontHexGlyphGenerator.createGlyph(cp));
 					}
 					gl.glyphsChanged();
+				}
+			});
+		}
+	}
+	
+	public static class GenerateTimestampGlyphMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public GenerateTimestampGlyphMenuItem(final BitmapFont font, final GlyphList gl) {
+			super("Generate Timestamp Glyph");
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GregorianCalendar now = new GregorianCalendar();
+					int y = now.get(GregorianCalendar.YEAR);
+					int m = now.get(GregorianCalendar.MONTH) + 1;
+					int d = now.get(GregorianCalendar.DAY_OF_MONTH);
+					BitmapFontGlyph[] glyphs = {
+						font.getCharacter(0x10FF40 + ((y / 1000) % 10)),
+						font.getCharacter(0x10FF50 + ((y /  100) % 10)),
+						font.getCharacter(0x10FF60 + ((y /   10) % 10)),
+						font.getCharacter(0x10FF70 + ((y /    1) % 10)),
+						font.getCharacter(0x10FF80 + ((m /   10) % 10)),
+						font.getCharacter(0x10FF90 + ((m /    1) % 10)),
+						font.getCharacter(0x10FFA0 + ((d /   10) % 10)),
+						font.getCharacter(0x10FFB0 + ((d /    1) % 10)),
+						font.getCharacter(0x10FFC0)
+					};
+					for (BitmapFontGlyph g : glyphs) {
+						if (g != null) {
+							for (int cp : gl.getSelectedCodePoints()) {
+								font.putCharacter(cp, BitmapFontGlyph.compose(glyphs));
+							}
+							gl.glyphsChanged();
+							return;
+						}
+					}
 				}
 			});
 		}

@@ -369,6 +369,15 @@ public abstract class Font<T extends FontGlyph> {
 		}
 	}
 	
+	public void subsetRemap(Map<Integer,Integer> sr) {
+		Map<Integer,T> oldChars = this.characters;
+		this.characters = new HashMap<Integer,T>();
+		Map<Integer,T> newChars = this.characters;
+		for (Map.Entry<Integer,Integer> e : sr.entrySet()) {
+			newChars.put(e.getValue(), oldChars.get(e.getKey()));
+		}
+	}
+	
 	public void transform(FontGlyphTransformer<T> tx) {
 		List<Integer> v = new Vector<Integer>();
 		v.addAll(characters.keySet());
