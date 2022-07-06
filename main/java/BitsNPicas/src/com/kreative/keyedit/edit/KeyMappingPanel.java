@@ -17,10 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.unicode.CharacterData;
 import com.kreative.bitsnpicas.unicode.CharacterDatabase;
-import com.kreative.fontmap.FontMapController;
-import com.kreative.fontmap.FontMapEntry;
 import com.kreative.keyedit.DeadKeyTable;
 import com.kreative.keyedit.KeyMapping;
+import com.kreative.unicode.fontmap.FontMapController;
+import com.kreative.unicode.fontmap.FontMapEntry;
 
 public class KeyMappingPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

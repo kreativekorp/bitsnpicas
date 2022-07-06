@@ -45,7 +45,8 @@ doc: src
 BitsNPicas.jar: bin
 	export COPYFILE_DISABLE=true
 	find bin -name .DS_Store -delete
-	jar cmf dep/MANIFEST.MF BitsNPicas.jar -C bin com/kreative/bitsnpicas
+	jar cmf dep/MANIFEST.MF BitsNPicas.jar  \
+		-C bin com/kreative/bitsnpicas
 	chmod +x BitsNPicas.jar
 
 BitsNPicas.app: dep BitsNPicas.jar
@@ -68,12 +69,16 @@ BitsNPicas.dmg: BitsNPicas.app
 BitsNPicas-src.tgz: src
 	export COPYFILE_DISABLE=true
 	find src -name .DS_Store -delete
-	tar -czf BitsNPicas-src.tgz src/com/kreative/bitsnpicas LICENSE
+	tar -czf BitsNPicas-src.tgz LICENSE  \
+		src/com/kreative/bitsnpicas
 
 MapEdit.jar: bin
 	export COPYFILE_DISABLE=true
 	find bin -name .DS_Store -delete
-	jar cmf dep/MANIFEST-ME.MF MapEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/fontmap -C bin com/kreative/mapedit
+	jar cmf dep/MANIFEST-ME.MF MapEdit.jar      \
+		-C bin com/kreative/bitsnpicas/unicode  \
+		-C bin com/kreative/unicode/fontmap     \
+		-C bin com/kreative/mapedit
 	chmod +x MapEdit.jar
 
 MapEdit.app: dep MapEdit.jar
@@ -96,12 +101,18 @@ MapEdit.dmg: MapEdit.app
 MapEdit-src.tgz: src
 	export COPYFILE_DISABLE=true
 	find src -name .DS_Store -delete
-	tar -czf MapEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/fontmap src/com/kreative/mapedit LICENSE
+	tar -czf MapEdit-src.tgz LICENSE         \
+		src/com/kreative/bitsnpicas/unicode  \
+		src/com/kreative/unicode/fontmap     \
+		src/com/kreative/mapedit
 
 KeyEdit.jar: bin
 	export COPYFILE_DISABLE=true
 	find bin -name .DS_Store -delete
-	jar cmf dep/MANIFEST-KE.MF KeyEdit.jar -C bin com/kreative/bitsnpicas/unicode -C bin com/kreative/fontmap -C bin com/kreative/keyedit
+	jar cmf dep/MANIFEST-KE.MF KeyEdit.jar      \
+		-C bin com/kreative/bitsnpicas/unicode  \
+		-C bin com/kreative/unicode/fontmap     \
+		-C bin com/kreative/keyedit
 	chmod +x KeyEdit.jar
 
 KeyEdit.app: dep KeyEdit.jar
@@ -124,7 +135,10 @@ KeyEdit.dmg: KeyEdit.app
 KeyEdit-src.tgz: src
 	export COPYFILE_DISABLE=true
 	find src -name .DS_Store -delete
-	tar -czf KeyEdit-src.tgz src/com/kreative/bitsnpicas/unicode src/com/kreative/fontmap src/com/kreative/keyedit LICENSE
+	tar -czf KeyEdit-src.tgz LICENSE         \
+		src/com/kreative/bitsnpicas/unicode  \
+		src/com/kreative/unicode/fontmap     \
+		src/com/kreative/keyedit
 
 install: BitsNPicas.jar MapEdit.jar KeyEdit.jar
 	sudo mkdir -p /usr/local/lib/

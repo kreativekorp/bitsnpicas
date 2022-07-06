@@ -15,8 +15,8 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import com.kreative.fontmap.FontMapController;
-import com.kreative.fontmap.FontMapEntry;
+import com.kreative.unicode.fontmap.FontMapController;
+import com.kreative.unicode.fontmap.FontMapEntry;
 
 public class MappingTablePanel extends JPanel {
 	private static final long serialVersionUID = 1L;

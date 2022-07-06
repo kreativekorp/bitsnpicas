@@ -1,4 +1,4 @@
-package com.kreative.fontmap;
+package com.kreative.unicode.fontmap;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -15,10 +15,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import com.kreative.fontmap.FontMapController;
 import com.kreative.keyedit.Key;
 import com.kreative.keyedit.KeyBlock;
 import com.kreative.keyedit.KeyboardFormat;
+import com.kreative.unicode.fontmap.FontMapController;
 
 public class KeyEditMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;

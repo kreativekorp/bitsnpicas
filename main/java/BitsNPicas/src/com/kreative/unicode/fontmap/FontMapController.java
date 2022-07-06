@@ -1,4 +1,4 @@
-package com.kreative.fontmap;
+package com.kreative.unicode.fontmap;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
