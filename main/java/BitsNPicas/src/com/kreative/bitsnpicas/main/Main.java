@@ -2,16 +2,12 @@ package com.kreative.bitsnpicas.main;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-
 import com.kreative.bitsnpicas.puaa.PuaaCompiler;
 import com.kreative.bitsnpicas.puaa.PuaaDecompiler;
 import com.kreative.bitsnpicas.puaa.PuaaLookup;
 
 public class Main {
 	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
-		while (scan.hasNextLine()) if (scan.nextLine().equalsIgnoreCase("ok")) break;
 		if (args.length == 0) {
 			com.kreative.bitsnpicas.edit.Main.main(args);
 		} else {
