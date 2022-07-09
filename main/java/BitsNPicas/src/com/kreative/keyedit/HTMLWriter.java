@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Map;
 import java.util.Scanner;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class HTMLWriter {
 	public static void write(File file, KeyboardMapping km) throws IOException {
@@ -517,11 +516,12 @@ public class HTMLWriter {
 			case 0x1DAAF: return "swr16";
 		}
 		String s = String.valueOf(Character.toChars(output));
-		CharacterData cd = CharacterDatabase.instance().get(output);
-		if (cd != null && cd.category.startsWith("M")) {
+		NameResolver r = NameResolver.instance(output);
+		if (r.getCategory(output).startsWith("M")) {
 			// Combining Mark
 			s = "◌" + s;
-			if (cd.combiningClass == 233 || cd.combiningClass == 234) {
+			String ccc = r.getCombiningClass(output);
+			if (ccc.equals("233") || ccc.equals("234")) {
 				// Double Combining Mark
 				s = s + "◌";
 			}

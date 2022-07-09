@@ -30,8 +30,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import com.kreative.bitsnpicas.importer.BinaryBitmapFontImporter;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class BinaryBitmapFontImporterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 	private List<BufferedImage> previewImages;
 	private final EncodingTableModel eTableModel = new EncodingTableModel();
 	private final JTable eTable = new JTable(eTableModel);
-	private final CharacterDatabase cdb = CharacterDatabase.instance();
+	private final NameDatabase ndb = NameDatabase.instance();
 	
 	public BinaryBitmapFontImporterPanel(File file) throws IOException {
 		FileInputStream in = new FileInputStream(file);
@@ -260,9 +260,7 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 					if (row < importer.encoding.size()) {
 						Integer e = importer.encoding.get(row);
 						if (e == null || e.intValue() < 0) return null;
-						CharacterData cd = cdb.get(e);
-						if (cd == null) return null;
-						return cd.toString();
+						return NameResolver.instance(e).getName(e);
 					}
 					return null;
 				default:
@@ -304,13 +302,14 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 						if (val == null || val.toString().length() == 0) {
 							importer.encoding.set(row, -1);
 						} else {
-							CharacterData cd = cdb.find(val.toString());
-							if (cd == null) importer.encoding.set(row, -1);
-							else importer.encoding.set(row, cd.codePoint);
+							NameDatabase.NameEntry ne = ndb.find(val.toString());
+							if (ne == null) importer.encoding.set(row, -1);
+							else importer.encoding.set(row, ne.codePoint);
 						}
 					}
 					return;
 			}
+			fireTableRowsUpdated(row, row);
 		}
 	}
 	

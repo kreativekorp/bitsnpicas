@@ -15,10 +15,9 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
 import com.kreative.keyedit.DeadKeyTable;
 import com.kreative.keyedit.KeyMapping;
+import com.kreative.unicode.data.NameResolver;
 import com.kreative.unicode.fontmap.FontMapController;
 import com.kreative.unicode.fontmap.FontMapEntry;
 
@@ -376,11 +375,12 @@ public class KeyMappingPanel extends JPanel {
 			case 0x1DAAF: return "swr16";
 		}
 		String s = String.valueOf(Character.toChars(output));
-		CharacterData cd = CharacterDatabase.instance().get(output);
-		if (cd != null && cd.category.startsWith("M")) {
+		NameResolver r = NameResolver.instance(output);
+		if (r.getCategory(output).startsWith("M")) {
 			// Combining Mark
 			s = "◌" + s;
-			if (cd.combiningClass == 233 || cd.combiningClass == 234) {
+			String ccc = r.getCombiningClass(output);
+			if (ccc.equals("233") || ccc.equals("234")) {
 				// Double Combining Mark
 				s = s + "◌";
 			}

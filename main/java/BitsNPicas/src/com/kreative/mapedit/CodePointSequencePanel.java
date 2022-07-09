@@ -18,8 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class CodePointSequencePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +33,7 @@ public class CodePointSequencePanel extends JPanel {
 	private final JButton removeButton;
 	private final JButton upButton;
 	private final JButton downButton;
-	private final CharacterDatabase cdb;
+	private final NameDatabase ndb;
 	private final List<CodePointSequencePanelListener> listeners;
 	
 	public CodePointSequencePanel(String encodingPrefix) {
@@ -50,7 +50,7 @@ public class CodePointSequencePanel extends JPanel {
 		squareOff(this.removeButton = new JButton("\u2212"));
 		squareOff(this.upButton = new JButton("\u2191"));
 		squareOff(this.downButton = new JButton("\u2193"));
-		this.cdb = CharacterDatabase.instance();
+		this.ndb = NameDatabase.instance();
 		this.listeners = new ArrayList<CodePointSequencePanelListener>();
 		
 		JPanel topPanel = new JPanel(new BorderLayout(8, 8));
@@ -203,9 +203,7 @@ public class CodePointSequencePanel extends JPanel {
 					}
 				case 2:
 					if (Character.isValidCodePoint(e)) {
-						CharacterData cd = cdb.get(e);
-						if (cd != null) return cd.toString();
-						else return null;
+						return NameResolver.instance(e).getName(e);
 					} else {
 						MappingTag tag = MappingTag.forIntValue(e);
 						if (tag != null) return tag.description;
@@ -236,10 +234,11 @@ public class CodePointSequencePanel extends JPanel {
 				case 2:
 					MappingTag tag = MappingTag.forDescription(val);
 					if (tag != null) { sequenceData.set(row, tag.intValue); break; }
-					CharacterData cd = cdb.find(val);
-					if (cd != null) sequenceData.set(row, cd.codePoint);
+					NameDatabase.NameEntry ne = ndb.find(val);
+					if (ne != null) sequenceData.set(row, ne.codePoint);
 					break;
 			}
+			fireTableRowsUpdated(row, row);
 			fireListeners();
 		}
 	}

@@ -3,14 +3,14 @@ package com.kreative.bitsnpicas.edit;
 import java.awt.Dimension;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public interface BitmapExportOptions {
 	public Dimension getPixelDimension();
 	public boolean getExtendWinMetrics();
 	public int getSelectedColor();
 	public Integer getLoadAddress();
-	public EncodingTable getSelectedEncoding();
+	public GlyphList getSelectedEncoding();
 	public IDGenerator getIDGenerator();
 	public PointSizeGenerator getPointSizeGenerator();
 	public boolean getGEOSMega();
@@ -19,8 +19,8 @@ public interface BitmapExportOptions {
 	public boolean getFONTXDoubleByte();
 	public String getFONTXDoubleByteEncoding();
 	public int getPSFVersion();
-	public EncodingTable getPSFLowEncoding();
-	public EncodingTable getPSFHighEncoding();
+	public GlyphList getPSFLowEncoding();
+	public GlyphList getPSFHighEncoding();
 	public boolean getPSFUseLowEncoding();
 	public boolean getPSFUseHighEncoding();
 	public boolean getPSFUseAllGlyphs();

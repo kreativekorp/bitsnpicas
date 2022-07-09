@@ -13,8 +13,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class BitmapExportPSFPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -44,13 +44,13 @@ public class BitmapExportPSFPanel extends JPanel {
 		
 		ArrayList<Object> lea = new ArrayList<Object>();
 		lea.add("U+0000 - U+00FF");
-		lea.addAll(EncodingList.instance());
+		lea.addAll(EncodingList.instance().glyphLists());
 		this.lowEncoding = new JComboBox(lea.toArray());
 		this.lowEncoding.setEditable(false);
 		
 		ArrayList<Object> hea = new ArrayList<Object>();
 		hea.add("U+0100 - U+01FF");
-		hea.addAll(EncodingList.instance());
+		hea.addAll(EncodingList.instance().glyphLists());
 		this.highEncoding = new JComboBox(hea.toArray());
 		this.highEncoding.setEditable(false);
 		
@@ -117,14 +117,14 @@ public class BitmapExportPSFPanel extends JPanel {
 		return version1.isSelected() ? 1 : 2;
 	}
 	
-	public EncodingTable getLowEncoding() {
+	public GlyphList getLowEncoding() {
 		if (lowEncoding.getSelectedIndex() <= 0) return null;
-		return (EncodingTable)lowEncoding.getSelectedItem();
+		return (GlyphList)lowEncoding.getSelectedItem();
 	}
 	
-	public EncodingTable getHighEncoding() {
+	public GlyphList getHighEncoding() {
 		if (highEncoding.getSelectedIndex() <= 0) return null;
-		return (EncodingTable)highEncoding.getSelectedItem();
+		return (GlyphList)highEncoding.getSelectedItem();
 	}
 	
 	public boolean getUseLowEncoding() {

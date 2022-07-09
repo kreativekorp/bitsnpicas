@@ -10,8 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class MoverInfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -35,9 +35,9 @@ public class MoverInfoPanel extends JPanel {
 		this.iconLabel = new JLabel(icon);
 		this.fileNameLabel = new JLabel(fileName);
 		this.kindLabel = new JLabel(icon.getDescription());
-		this.encoding = new JComboBox(EncodingList.instance().toArray());
+		this.encoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		encoding.setEditable(false);
-		encoding.setSelectedItem(EncodingList.instance().get("MacRoman"));
+		encoding.setSelectedItem(EncodingList.instance().getGlyphList("MacRoman"));
 		kindLabel.setFont(kindLabel.getFont().deriveFont(Font.PLAIN));
 		fileNameLabel.setFont(fileNameLabel.getFont().deriveFont(Font.BOLD));
 		
@@ -80,11 +80,11 @@ public class MoverInfoPanel extends JPanel {
 		kindLabel.setText(icon.getDescription());
 	}
 	
-	public EncodingTable getSelectedEncoding() {
-		return (EncodingTable)(encoding.getSelectedItem());
+	public GlyphList getSelectedEncoding() {
+		return (GlyphList)(encoding.getSelectedItem());
 	}
 	
-	public void setSelectedEncoding(EncodingTable enc) {
+	public void setSelectedEncoding(GlyphList enc) {
 		encoding.setSelectedItem(enc);
 	}
 	

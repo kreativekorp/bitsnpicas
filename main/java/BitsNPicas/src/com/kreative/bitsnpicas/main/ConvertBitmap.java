@@ -18,8 +18,8 @@ import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class ConvertBitmap {
 	public static void main(String[] args) {
@@ -276,8 +276,8 @@ public class ConvertBitmap {
 		System.out.println("  -ie <enc>     Use the specified encoding for reading only. One of:");
 		System.out.println("  -oe <enc>     Use the specified encoding for writing only. One of:");
 		List<String> encs = new ArrayList<String>();
-		for (EncodingTable e : EncodingList.instance()) {
-			encs.add(e.name);
+		for (GlyphList e : EncodingList.instance().glyphLists()) {
+			encs.add(e.getName());
 		}
 		printHelpList(encs);
 		System.out.println("  -ee <enc>     Use the specified double-byte encoding (for fontx).");

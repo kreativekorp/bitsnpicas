@@ -10,7 +10,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import com.kreative.bitsnpicas.unicode.Block;
+import com.kreative.unicode.data.Block;
 
 public class CodePointListListURLPanel extends JPanel implements ListSelectionListener {
 	private static final long serialVersionUID = 1L;

@@ -9,18 +9,18 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class FZXBitmapFontImporter implements BitmapFontImporter {
 	private static final char[] X_HEIGHT_CHARS = new char[]{'x', 'X', '0', '!'};
 	
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public FZXBitmapFontImporter() {
 		this.encoding = null;
 	}
 	
-	public FZXBitmapFontImporter(EncodingTable encoding) {
+	public FZXBitmapFontImporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

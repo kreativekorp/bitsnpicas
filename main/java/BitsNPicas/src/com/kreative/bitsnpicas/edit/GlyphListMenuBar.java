@@ -52,6 +52,8 @@ public class GlyphListMenuBar extends JMenuBar {
 			addSeparator();
 			add(new EditMenuItem(font, gl, sm));
 			add(new DeleteMenuItem(font, gl));
+			addSeparator();
+			add(new CommonMenuItems.FontMapMenuItem());
 		}
 	}
 	

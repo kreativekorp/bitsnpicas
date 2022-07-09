@@ -9,16 +9,16 @@ import java.io.OutputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class SBFBitmapFontExporter implements BitmapFontExporter {
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public SBFBitmapFontExporter() {
 		this.encoding = null;
 	}
 	
-	public SBFBitmapFontExporter(EncodingTable encoding) {
+	public SBFBitmapFontExporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

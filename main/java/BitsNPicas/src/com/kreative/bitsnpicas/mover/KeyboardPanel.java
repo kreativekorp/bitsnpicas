@@ -9,16 +9,16 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class KeyboardPanel extends JPanel implements KeyListener {
 	private static final long serialVersionUID = 1L;
 	
 	private final byte[] kchr;
 	private final JLabel[][] labels;
-	private final EncodingTable encoding;
+	private final GlyphList encoding;
 	
-	public KeyboardPanel(byte[] kchr, EncodingTable encoding) {
+	public KeyboardPanel(byte[] kchr, GlyphList encoding) {
 		this.kchr = kchr;
 		this.labels = new JLabel[4][];
 		this.encoding = encoding;

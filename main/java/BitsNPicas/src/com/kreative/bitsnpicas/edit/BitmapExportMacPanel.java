@@ -11,8 +11,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class BitmapExportMacPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public class BitmapExportMacPanel extends JPanel {
 		this.macFontSizeAutoStandard = new JRadioButton("Auto (Standard Sizes)");
 		this.macFontSizeManual = new JRadioButton("Manual:");
 		this.macFontSize = new SpinnerNumberModel(12, 1, 127, 1);
-		this.macEncoding = new JComboBox(EncodingList.instance().toArray());
+		this.macEncoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		
 		macFontIdAuto.setSelected(true);
 		macFontSizeAutoAny.setSelected(true);
@@ -76,11 +76,11 @@ public class BitmapExportMacPanel extends JPanel {
 		this.add(macOuterPanel, BorderLayout.PAGE_START);
 	}
 	
-	public EncodingTable getSelectedEncoding() {
-		return (EncodingTable)(macEncoding.getSelectedItem());
+	public GlyphList getSelectedEncoding() {
+		return (GlyphList)(macEncoding.getSelectedItem());
 	}
 	
-	public void setSelectedEncoding(EncodingTable enc) {
+	public void setSelectedEncoding(GlyphList enc) {
 		macEncoding.setSelectedItem(enc);
 	}
 	

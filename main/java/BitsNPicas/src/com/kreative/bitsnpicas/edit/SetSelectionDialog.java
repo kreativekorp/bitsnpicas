@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import com.kreative.bitsnpicas.unicode.Block;
+import com.kreative.unicode.data.Block;
 
 public class SetSelectionDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

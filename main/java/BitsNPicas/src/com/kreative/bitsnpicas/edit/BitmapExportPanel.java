@@ -21,8 +21,8 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private static final long serialVersionUID = 1L;
@@ -87,9 +87,9 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 			public void itemStateChanged(ItemEvent e) {
 				BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 				formatOptionsLayout.show(formatOptionsPanel, f.cardName);
-				EncodingTable enc = (
+				GlyphList enc = (
 					(f.defaultEncodingName == null) ? null :
-					EncodingList.instance().get(f.defaultEncodingName)
+					EncodingList.instance().getGlyphList(f.defaultEncodingName)
 				);
 				macPanel.setSelectedEncoding(enc);
 				encodingPanel.setSelectedEncoding(enc);
@@ -157,7 +157,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	}
 	
 	@Override
-	public EncodingTable getSelectedEncoding() {
+	public GlyphList getSelectedEncoding() {
 		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 		if (f.cardName.equals("mac")) return macPanel.getSelectedEncoding();
 		if (f.cardName.equals("u8m")) return u8mPanel.getSelectedEncoding();
@@ -210,12 +210,12 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	}
 	
 	@Override
-	public EncodingTable getPSFLowEncoding() {
+	public GlyphList getPSFLowEncoding() {
 		return psfPanel.getLowEncoding();
 	}
 	
 	@Override
-	public EncodingTable getPSFHighEncoding() {
+	public GlyphList getPSFHighEncoding() {
 		return psfPanel.getHighEncoding();
 	}
 	

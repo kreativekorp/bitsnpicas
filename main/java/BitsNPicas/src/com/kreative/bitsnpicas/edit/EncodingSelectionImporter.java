@@ -1,8 +1,8 @@
 package com.kreative.bitsnpicas.edit;
 
 import com.kreative.bitsnpicas.FontImporter;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public interface EncodingSelectionImporter {
-	public FontImporter<?> createImporter(EncodingTable encoding);
+	public FontImporter<?> createImporter(GlyphList encoding);
 }

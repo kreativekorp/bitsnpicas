@@ -9,8 +9,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class BitmapExportFONTXPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +23,7 @@ public class BitmapExportFONTXPanel extends JPanel {
 	public BitmapExportFONTXPanel() {
 		this.singleByte = new JRadioButton("Single-Byte Encoding:");
 		this.doubleByte = new JRadioButton("Double-Byte Encoding:");
-		this.singleByteEncoding = new JComboBox(EncodingList.instance().toArray());
+		this.singleByteEncoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		this.doubleByteEncoding = new JComboBox(Charset.availableCharsets().keySet().toArray());
 		
 		singleByte.setSelected(true);
@@ -37,7 +37,7 @@ public class BitmapExportFONTXPanel extends JPanel {
 		
 		singleByteEncoding.setEditable(false);
 		doubleByteEncoding.setEditable(false);
-		singleByteEncoding.setSelectedItem(EncodingList.instance().get("CP437"));
+		singleByteEncoding.setSelectedItem(EncodingList.instance().getGlyphList("CP437"));
 		doubleByteEncoding.setSelectedItem(Charset.forName("CP943").displayName());
 		JPanel ep = new JPanel(new GridLayout(0, 1, 4, 4));
 		ep.add(singleByteEncoding);
@@ -70,8 +70,8 @@ public class BitmapExportFONTXPanel extends JPanel {
 		return doubleByte.isSelected();
 	}
 	
-	public EncodingTable getSelectedSingleByteEncoding() {
-		return (EncodingTable)(singleByteEncoding.getSelectedItem());
+	public GlyphList getSelectedSingleByteEncoding() {
+		return (GlyphList)(singleByteEncoding.getSelectedItem());
 	}
 	
 	public String getSelectedDoubleByteEncoding() {

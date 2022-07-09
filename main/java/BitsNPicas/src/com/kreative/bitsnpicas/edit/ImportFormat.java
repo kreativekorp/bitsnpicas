@@ -29,7 +29,7 @@ import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.U8MBitmapFontImporter;
 import com.kreative.bitsnpicas.mover.MoverFrame;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public enum ImportFormat {
 	KBITS(".kbits") {
@@ -49,7 +49,7 @@ public enum ImportFormat {
 	PSF(".psf", ".psfu") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable low, EncodingTable high, int puaBase) {
+				public FontImporter<?> createImporter(GlyphList low, GlyphList high, int puaBase) {
 					return new PSFBitmapFontImporter(low, high, puaBase, false);
 				}
 			});
@@ -58,7 +58,7 @@ public enum ImportFormat {
 	PSFGZ(".psf.gz", ".psfu.gz") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable low, EncodingTable high, int puaBase) {
+				public FontImporter<?> createImporter(GlyphList low, GlyphList high, int puaBase) {
 					return new PSFBitmapFontImporter(low, high, puaBase, true);
 				}
 			});
@@ -101,7 +101,7 @@ public enum ImportFormat {
 	FZX(".fzx") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("FZX PUA", file, new EncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable encoding) {
+				public FontImporter<?> createImporter(GlyphList encoding) {
 					return new FZXBitmapFontImporter(encoding);
 				}
 			});
@@ -113,7 +113,7 @@ public enum ImportFormat {
 	FNT(".fnt") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("CP1252", file, new EncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable encoding) {
+				public FontImporter<?> createImporter(GlyphList encoding) {
 					return new FNTBitmapFontImporter(encoding);
 				}
 			});
@@ -123,7 +123,7 @@ public enum ImportFormat {
 		public JFrame createOptionFrame(File file) throws IOException {
 			String dben = Charset.forName("CP943").displayName();
 			return new DualEncodingSelectionFrame("CP437", dben, file, new DualEncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable sbenc, String dbenc) {
+				public FontImporter<?> createImporter(GlyphList sbenc, String dbenc) {
 					return new FONTXBitmapFontImporter(sbenc, dbenc);
 				}
 			});
@@ -135,7 +135,7 @@ public enum ImportFormat {
 	CYBIKO(".cyf", ".fntz", ".fnty") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Cybiko", file, new EncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable encoding) {
+				public FontImporter<?> createImporter(GlyphList encoding) {
 					return new CybikoBitmapFontImporter(encoding);
 				}
 			});
@@ -153,7 +153,7 @@ public enum ImportFormat {
 	SBF(".sbf") {
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Kreative SuperLatin", file, new EncodingSelectionImporter() {
-				public FontImporter<?> createImporter(EncodingTable encoding) {
+				public FontImporter<?> createImporter(GlyphList encoding) {
 					return new SBFBitmapFontImporter(encoding);
 				}
 			});

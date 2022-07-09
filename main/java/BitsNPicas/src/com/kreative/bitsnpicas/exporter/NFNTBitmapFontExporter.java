@@ -9,14 +9,14 @@ import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.mover.FONDEntry;
 import com.kreative.bitsnpicas.mover.FONDResource;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
 import com.kreative.ksfl.*;
 import com.kreative.rsrc.*;
+import com.kreative.unicode.data.GlyphList;
 
 public class NFNTBitmapFontExporter implements BitmapFontExporter {
 	private IDGenerator idgen;
 	private PointSizeGenerator sizegen;
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public NFNTBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen) {
 		this.idgen = idgen;
@@ -24,7 +24,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		this.encoding = null;
 	}
 	
-	public NFNTBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen, EncodingTable enc) {
+	public NFNTBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen, GlyphList enc) {
 		this.idgen = idgen;
 		this.sizegen = sizegen;
 		this.encoding = enc;

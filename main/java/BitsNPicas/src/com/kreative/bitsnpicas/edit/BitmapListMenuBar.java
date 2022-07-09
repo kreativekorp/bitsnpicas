@@ -35,7 +35,7 @@ import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.BitmapGlyphTransform.BitmapGlyphTransformInfo;
 import com.kreative.bitsnpicas.edit.MoveGlyphsDialog.Result;
 import com.kreative.bitsnpicas.main.ViewFont;
-import com.kreative.bitsnpicas.unicode.Block;
+import com.kreative.unicode.data.Block;
 
 public class BitmapListMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
@@ -174,6 +174,8 @@ public class BitmapListMenuBar extends JMenuBar {
 			addSeparator();
 			add(new GenerateUnifontHexGlyphMenuItem(font, gl));
 			add(new GenerateTimestampGlyphMenuItem(font, gl));
+			addSeparator();
+			add(new CommonMenuItems.FontMapMenuItem());
 		}
 	}
 	

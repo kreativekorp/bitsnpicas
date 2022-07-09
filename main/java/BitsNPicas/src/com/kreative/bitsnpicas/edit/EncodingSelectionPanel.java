@@ -14,16 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class EncodingSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public EncodingSelectionPanel(final String encodingName, final File file, final EncodingSelectionImporter importer) {
-		final JComboBox encoding = new JComboBox(EncodingList.instance().toArray());
+		final JComboBox encoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		encoding.setEditable(false);
-		encoding.setSelectedItem(EncodingList.instance().get(encodingName));
+		encoding.setSelectedItem(EncodingList.instance().getGlyphList(encodingName));
 		
 		final JPanel encodingPanel = new JPanel(new BorderLayout(12, 12));
 		encodingPanel.add(new JLabel("Select an encoding for " + file.getName() + "."), BorderLayout.PAGE_START);
@@ -43,7 +43,7 @@ public class EncodingSelectionPanel extends JPanel {
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					EncodingTable enc = (EncodingTable)(encoding.getSelectedItem());
+					GlyphList enc = (GlyphList)(encoding.getSelectedItem());
 					Font<?>[] fonts = importer.createImporter(enc).importFont(file);
 					if (fonts != null && fonts.length > 0) {
 						Main.openFonts(file, null, fonts);

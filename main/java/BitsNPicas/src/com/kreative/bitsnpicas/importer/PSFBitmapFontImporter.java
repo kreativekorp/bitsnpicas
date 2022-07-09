@@ -14,11 +14,11 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class PSFBitmapFontImporter implements BitmapFontImporter {
-	private EncodingTable lowEncoding;
-	private EncodingTable highEncoding;
+	private GlyphList lowEncoding;
+	private GlyphList highEncoding;
 	private int puaBase;
 	private boolean gzip;
 	
@@ -36,14 +36,14 @@ public class PSFBitmapFontImporter implements BitmapFontImporter {
 		this.gzip = gzip;
 	}
 	
-	public PSFBitmapFontImporter(EncodingTable low, EncodingTable high, int puaBase) {
+	public PSFBitmapFontImporter(GlyphList low, GlyphList high, int puaBase) {
 		this.lowEncoding = low;
 		this.highEncoding = high;
 		this.puaBase = puaBase;
 		this.gzip = false;
 	}
 	
-	public PSFBitmapFontImporter(EncodingTable low, EncodingTable high, int puaBase, boolean gzip) {
+	public PSFBitmapFontImporter(GlyphList low, GlyphList high, int puaBase, boolean gzip) {
 		this.lowEncoding = low;
 		this.highEncoding = high;
 		this.puaBase = puaBase;

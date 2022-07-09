@@ -1,7 +1,7 @@
 package com.kreative.bitsnpicas.main;
 
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class BitmapInputOptions {
 	public String encodingName = null;
@@ -10,18 +10,18 @@ public class BitmapInputOptions {
 	public String psfHighEncoding = null;
 	public int psfPuaBase = -1;
 	
-	public EncodingTable getEncoding() {
+	public GlyphList getEncoding() {
 		if (encodingName == null) return null;
-		return EncodingList.instance().get(encodingName);
+		return EncodingList.instance().getGlyphList(encodingName);
 	}
 	
-	public EncodingTable getPsfLowEncoding() {
+	public GlyphList getPsfLowEncoding() {
 		if (psfLowEncoding == null) return null;
-		return EncodingList.instance().get(psfLowEncoding);
+		return EncodingList.instance().getGlyphList(psfLowEncoding);
 	}
 	
-	public EncodingTable getPsfHighEncoding() {
+	public GlyphList getPsfHighEncoding() {
 		if (psfHighEncoding == null) return null;
-		return EncodingList.instance().get(psfHighEncoding);
+		return EncodingList.instance().getGlyphList(psfHighEncoding);
 	}
 }

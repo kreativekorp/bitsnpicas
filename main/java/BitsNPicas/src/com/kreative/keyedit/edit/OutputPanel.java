@@ -10,12 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class OutputPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
+	private final NameDatabase ndb;
 	private final List<OutputPanelListener> listeners;
 	private final JTextField codeField;
 	private final JTextField charField;
@@ -24,6 +25,7 @@ public class OutputPanel extends JPanel {
 	private int output = -1;
 	
 	public OutputPanel(int output) {
+		this.ndb = NameDatabase.instance();
 		this.listeners = new ArrayList<OutputPanelListener>();
 		this.codeField = new JTextField(8);
 		this.charField = new JTextField(4);
@@ -84,10 +86,7 @@ public class OutputPanel extends JPanel {
 		}
 		if (src != nameField) {
 			if (output < 0) nameField.setText(null);
-			else {
-				CharacterData cd = CharacterDatabase.instance().get(output);
-				nameField.setText((cd != null) ? cd.toString() : null);
-			}
+			else nameField.setText(NameResolver.instance(output).getName(output));
 		}
 		this.lock = false;
 		if (this.output != output) {
@@ -151,8 +150,8 @@ public class OutputPanel extends JPanel {
 			if (s.length() == 0) {
 				internalSetOutput(c, -1);
 			} else {
-				CharacterData cd = CharacterDatabase.instance().find(s);
-				if (cd != null) internalSetOutput(c, cd.codePoint);
+				NameDatabase.NameEntry ne = ndb.find(s);
+				if (ne != null) internalSetOutput(c, ne.codePoint);
 			}
 		}
 		public void on(JTextField f) {

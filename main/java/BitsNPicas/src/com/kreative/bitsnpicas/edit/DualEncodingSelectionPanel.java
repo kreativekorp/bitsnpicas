@@ -15,16 +15,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class DualEncodingSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public DualEncodingSelectionPanel(final String sben, final String dben, final File file, final DualEncodingSelectionImporter importer) {
-		final JComboBox sbe = new JComboBox(EncodingList.instance().toArray());
+		final JComboBox sbe = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		sbe.setEditable(false);
-		sbe.setSelectedItem(EncodingList.instance().get(sben));
+		sbe.setSelectedItem(EncodingList.instance().getGlyphList(sben));
 		
 		final JComboBox dbe = new JComboBox(Charset.availableCharsets().keySet().toArray());
 		dbe.setEditable(false);
@@ -60,7 +60,7 @@ public class DualEncodingSelectionPanel extends JPanel {
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					EncodingTable sbenc = (EncodingTable)(sbe.getSelectedItem());
+					GlyphList sbenc = (GlyphList)(sbe.getSelectedItem());
 					String dbenc = (String)(dbe.getSelectedItem());
 					Font<?>[] fonts = importer.createImporter(sbenc, dbenc).importFont(file);
 					if (fonts != null && fonts.length > 0) {

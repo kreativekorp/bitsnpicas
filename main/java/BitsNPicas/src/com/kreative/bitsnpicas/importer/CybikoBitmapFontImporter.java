@@ -10,16 +10,16 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class CybikoBitmapFontImporter implements BitmapFontImporter {
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public CybikoBitmapFontImporter() {
 		this.encoding = null;
 	}
 	
-	public CybikoBitmapFontImporter(EncodingTable encoding) {
+	public CybikoBitmapFontImporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

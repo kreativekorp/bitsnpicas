@@ -3,8 +3,7 @@ package com.kreative.bitsnpicas.edit;
 import javax.swing.JFrame;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontGlyph;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class GlyphEditFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -28,12 +27,10 @@ public class GlyphEditFrame extends JFrame {
 		return characterName(codePoint) + " from " + font.toString();
 	}
 	
-	private static String characterName(int codePoint) {
-		CharacterDatabase cdb = CharacterDatabase.instance();
-		String h = Integer.toHexString(codePoint).toUpperCase();
+	private static String characterName(int cp) {
+		String h = Integer.toHexString(cp).toUpperCase();
 		while (h.length() < 4) h = "0" + h;
-		CharacterData cd = cdb.get(codePoint);
-		if (cd != null) h += " " + cd.toString();
-		return "U+" + h;
+		String n = NameResolver.instance(cp).getName(cp);
+		return "U+" + h + " " + n;
 	}
 }

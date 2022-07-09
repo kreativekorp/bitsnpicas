@@ -23,8 +23,8 @@ import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.U8MBitmapFontExporter;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public enum BitmapExportFormat {
 	TTF("TTF (TrueType)", ".ttf", "pixel") {
@@ -134,8 +134,8 @@ public enum BitmapExportFormat {
 				if (en == null || en.length() == 0) en = "CP943";
 				return new FONTXBitmapFontExporter(en);
 			} else {
-				EncodingTable et = o.getSelectedEncoding();
-				if (et == null) et = EncodingList.instance().get("CP437");
+				GlyphList et = o.getSelectedEncoding();
+				if (et == null) et = EncodingList.instance().getGlyphList("CP437");
 				return new FONTXBitmapFontExporter(et);
 			}
 		}

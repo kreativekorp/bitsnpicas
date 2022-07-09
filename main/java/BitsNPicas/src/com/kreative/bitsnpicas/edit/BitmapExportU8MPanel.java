@@ -9,8 +9,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class BitmapExportU8MPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +20,7 @@ public class BitmapExportU8MPanel extends JPanel {
 	private final JTextField u8mLoadAddress;
 	
 	public BitmapExportU8MPanel() {
-		this.u8mEncoding = new JComboBox(EncodingList.instance().toArray());
+		this.u8mEncoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		this.u8mHasLoadAddress = new JCheckBox("Load Address:");
 		this.u8mLoadAddress = new JTextField("$A000");
 		
@@ -61,11 +61,11 @@ public class BitmapExportU8MPanel extends JPanel {
 		return null;
 	}
 	
-	public EncodingTable getSelectedEncoding() {
-		return (EncodingTable)(u8mEncoding.getSelectedItem());
+	public GlyphList getSelectedEncoding() {
+		return (GlyphList)(u8mEncoding.getSelectedItem());
 	}
 	
-	public void setSelectedEncoding(EncodingTable enc) {
+	public void setSelectedEncoding(GlyphList enc) {
 		u8mEncoding.setSelectedItem(enc);
 	}
 }

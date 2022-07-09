@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.AbstractListModel;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.BlockList;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.GlyphLists;
+import com.kreative.unicode.data.BlockList;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphLists;
 
 public class CodePointListListModel extends AbstractListModel {
 	private static final long serialVersionUID = 1L;
@@ -19,7 +19,7 @@ public class CodePointListListModel extends AbstractListModel {
 			Arrays.asList(new FontCodePointList(font)),
 			BlockList.instance(),
 			GlyphLists.instance(),
-			EncodingList.instance()
+			EncodingList.instance().glyphLists()
 		);
 	}
 	

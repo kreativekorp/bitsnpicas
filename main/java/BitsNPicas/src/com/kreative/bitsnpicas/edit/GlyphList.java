@@ -22,8 +22,10 @@ import javax.swing.JComponent;
 import javax.swing.Scrollable;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontGlyph;
-import com.kreative.bitsnpicas.unicode.Block;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.Block;
+import com.kreative.unicode.data.NameResolver;
+import com.kreative.unicode.fontmap.FontMapController;
+import com.kreative.unicode.fontmap.FontMapEntry;
 
 public class GlyphList extends JComponent implements Scrollable {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +46,7 @@ public class GlyphList extends JComponent implements Scrollable {
 		HEX_FONT = hexFont;
 	}
 	
-	private final CharacterDatabase cdb;
+	private final FontMapController fontMap;
 	private final Font<?> font;
 	private int cellSize;
 	private int columnCount;
@@ -55,7 +57,7 @@ public class GlyphList extends JComponent implements Scrollable {
 	private final List<GlyphListListener> listeners;
 	
 	public GlyphList(Font<?> font) {
-		this.cdb = CharacterDatabase.instance();
+		this.fontMap = FontMapController.getInstance();
 		this.font = font;
 		this.cellSize = 36;
 		this.columnCount = 16;
@@ -246,10 +248,21 @@ public class GlyphList extends JComponent implements Scrollable {
 				g.setColor(SystemColor.textText);
 				String cps = getCharacterLabel(cp);
 				if (HEX_FONT == null || cps.length() < 4) {
-					FontMetrics fm = g.getFontMetrics();
-					int cpsx = (x1 + x2 - fm.stringWidth(cps) + 1) / 2;
-					int cpsy = y + (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
-					g.drawString(cps, cpsx, cpsy);
+					FontMapEntry e = fontMap.entryForCodePoint(cp);
+					if (e == null) {
+						FontMetrics fm = g.getFontMetrics();
+						int cpsx = (x1 + x2 - fm.stringWidth(cps) + 1) / 2;
+						int cpsy = y + (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
+						g.drawString(cps, cpsx, cpsy);
+					} else {
+						java.awt.Font sf = g.getFont();
+						g.setFont(e.getFont());
+						FontMetrics fm = g.getFontMetrics();
+						int cpsx = (x1 + x2 - fm.stringWidth(cps) + 1) / 2;
+						int cpsy = y + (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
+						g.drawString(cps, cpsx, cpsy);
+						g.setFont(sf);
+					}
 				} else {
 					java.awt.Font sf = g.getFont();
 					g.setFont(HEX_FONT);
@@ -301,19 +314,14 @@ public class GlyphList extends JComponent implements Scrollable {
 	}
 	
 	private String getCharacterLabel(int cp) {
-		if (cdb.containsKey(cp)) {
-			String c = cdb.get(cp).category;
-			if (!(
-				c.equals("Zs") || c.equals("Zl") || c.equals("Zp") ||
-				c.equals("Cc") || c.equals("Cf") || c.equals("Cs") ||
-				c.equals("Cn")
-			)) {
-				return String.valueOf(Character.toChars(cp));
-			}
+		String c = NameResolver.instance(cp).getCategory(cp);
+		if ("Zs Zl Zp Cc Cf Cs Cn".contains(c)) {
+			String h = Integer.toHexString(cp).toUpperCase();
+			while (h.length() < 4) h = "0" + h;
+			return h;
+		} else {
+			return String.valueOf(Character.toChars(cp));
 		}
-		String h = Integer.toHexString(cp).toUpperCase();
-		while (h.length() < 4) h = "0" + h;
-		return h;
 	}
 	
 	private void startSelection(InputEvent e, int i) {

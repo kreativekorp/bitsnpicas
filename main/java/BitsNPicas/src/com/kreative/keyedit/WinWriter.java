@@ -7,8 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class WinWriter {
 	private static final String NONBMP_WARNING = "WARNING: Supplemental characters are assigned to altgr or dead keys.\nThese won't work natively on Windows. A third-party input method must be used.";
@@ -185,9 +184,7 @@ public class WinWriter {
 		if (cp <= 0) return "<none>";
 		if (cp >= 0xE000 && cp < 0xF900) return "Private Use";
 		if (cp >= 0xF0000) return "Private Use";
-		CharacterData cd = CharacterDatabase.instance().get(cp);
-		if (cd == null) return "<null>";
-		return cd.toString();
+		return NameResolver.instance().getName(cp);
 	}
 	
 	private static final String[] KEYNAME = {

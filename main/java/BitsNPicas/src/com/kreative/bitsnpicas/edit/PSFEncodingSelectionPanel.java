@@ -15,20 +15,20 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class PSFEncodingSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public PSFEncodingSelectionPanel(final File file, final PSFEncodingSelectionImporter importer) {
 		final ArrayList<Object> lea = new ArrayList<Object>();
-		lea.add("None"); lea.addAll(EncodingList.instance());
+		lea.add("None"); lea.addAll(EncodingList.instance().glyphLists());
 		final JComboBox le = new JComboBox(lea.toArray());
 		le.setEditable(false);
 		
 		final ArrayList<Object> hea = new ArrayList<Object>();
-		hea.add("None"); hea.addAll(EncodingList.instance());
+		hea.add("None"); hea.addAll(EncodingList.instance().glyphLists());
 		final JComboBox he = new JComboBox(hea.toArray());
 		he.setEditable(false);
 		
@@ -78,8 +78,8 @@ public class PSFEncodingSelectionPanel extends JPanel {
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					EncodingTable lenc = (le.getSelectedIndex() > 0) ? (EncodingTable)le.getSelectedItem() : null;
-					EncodingTable henc = (he.getSelectedIndex() > 0) ? (EncodingTable)he.getSelectedItem() : null;
+					GlyphList lenc = (le.getSelectedIndex() > 0) ? (GlyphList)le.getSelectedItem() : null;
+					GlyphList henc = (he.getSelectedIndex() > 0) ? (GlyphList)he.getSelectedItem() : null;
 					int puaBase = (se.getSelectedIndex() > 0) ? ((PuaBaseOption)se.getSelectedItem()).value : -1;
 					Font<?>[] fonts = importer.createImporter(lenc, henc, puaBase).importFont(file);
 					if (fonts != null && fonts.length > 0) {

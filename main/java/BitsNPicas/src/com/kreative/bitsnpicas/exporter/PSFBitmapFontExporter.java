@@ -12,12 +12,12 @@ import java.util.zip.GZIPOutputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class PSFBitmapFontExporter implements BitmapFontExporter {
 	private int version;
-	private EncodingTable lowEncoding;
-	private EncodingTable highEncoding;
+	private GlyphList lowEncoding;
+	private GlyphList highEncoding;
 	private boolean useLowEncoding;
 	private boolean useHighEncoding;
 	private boolean useAllGlyphs;
@@ -48,8 +48,8 @@ public class PSFBitmapFontExporter implements BitmapFontExporter {
 	
 	public PSFBitmapFontExporter(
 		int version,
-		EncodingTable lowEncoding,
-		EncodingTable highEncoding,
+		GlyphList lowEncoding,
+		GlyphList highEncoding,
 		boolean useLowEncoding,
 		boolean useHighEncoding,
 		boolean useAllGlyphs,
@@ -67,8 +67,8 @@ public class PSFBitmapFontExporter implements BitmapFontExporter {
 	
 	public PSFBitmapFontExporter(
 		int version,
-		EncodingTable lowEncoding,
-		EncodingTable highEncoding,
+		GlyphList lowEncoding,
+		GlyphList highEncoding,
 		boolean useLowEncoding,
 		boolean useHighEncoding,
 		boolean useAllGlyphs,

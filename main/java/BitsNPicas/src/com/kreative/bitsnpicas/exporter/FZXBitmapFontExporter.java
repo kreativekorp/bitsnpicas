@@ -8,16 +8,16 @@ import java.io.OutputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class FZXBitmapFontExporter implements BitmapFontExporter {
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public FZXBitmapFontExporter() {
 		this.encoding = null;
 	}
 	
-	public FZXBitmapFontExporter(EncodingTable encoding) {
+	public FZXBitmapFontExporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

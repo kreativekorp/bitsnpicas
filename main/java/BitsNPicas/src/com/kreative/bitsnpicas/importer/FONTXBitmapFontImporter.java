@@ -9,10 +9,10 @@ import java.io.InputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class FONTXBitmapFontImporter implements BitmapFontImporter {
-	private EncodingTable singleByteEncoding;
+	private GlyphList singleByteEncoding;
 	private String doubleByteEncoding;
 	
 	public FONTXBitmapFontImporter() {
@@ -20,12 +20,12 @@ public class FONTXBitmapFontImporter implements BitmapFontImporter {
 		this.doubleByteEncoding = "CP943"; // IBM's version of Shift-JIS
 	}
 	
-	public FONTXBitmapFontImporter(EncodingTable singleByteEncoding) {
+	public FONTXBitmapFontImporter(GlyphList singleByteEncoding) {
 		this.singleByteEncoding = singleByteEncoding;
 		this.doubleByteEncoding = "CP943"; // IBM's version of Shift-JIS
 	}
 	
-	public FONTXBitmapFontImporter(EncodingTable singleByteEncoding, String doubleByteEncoding) {
+	public FONTXBitmapFontImporter(GlyphList singleByteEncoding, String doubleByteEncoding) {
 		this.singleByteEncoding = singleByteEncoding;
 		this.doubleByteEncoding = doubleByteEncoding;
 	}

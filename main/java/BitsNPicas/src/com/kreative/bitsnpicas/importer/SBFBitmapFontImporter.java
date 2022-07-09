@@ -11,16 +11,16 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class SBFBitmapFontImporter implements BitmapFontImporter {
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public SBFBitmapFontImporter() {
 		this.encoding = null;
 	}
 	
-	public SBFBitmapFontImporter(EncodingTable encoding) {
+	public SBFBitmapFontImporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

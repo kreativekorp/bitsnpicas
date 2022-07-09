@@ -24,7 +24,7 @@ import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.U8MBitmapFontImporter;
-import com.kreative.bitsnpicas.unicode.EncodingList;
+import com.kreative.unicode.data.EncodingList;
 
 public enum BitmapInputFormat {
 	KBITS(".kbits", BitmapFont.NAME_FAMILY_AND_STYLE) {
@@ -106,7 +106,7 @@ public enum BitmapInputFormat {
 			if (sben == null || sben.length() == 0) sben = "CP437";
 			String dben = o.fontxDoubleByteEncoding;
 			if (dben == null || dben.length() == 0) dben = "CP943";
-			return new FONTXBitmapFontImporter(EncodingList.instance().get(sben), dben);
+			return new FONTXBitmapFontImporter(EncodingList.instance().getGlyphList(sben), dben);
 		}
 	},
 	ROCKBOX(".rbf", ".rb11", ".rb12", BitmapFont.NAME_FAMILY) {

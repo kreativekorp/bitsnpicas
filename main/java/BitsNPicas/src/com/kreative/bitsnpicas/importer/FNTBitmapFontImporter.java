@@ -9,16 +9,16 @@ import java.io.InputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class FNTBitmapFontImporter implements BitmapFontImporter {
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public FNTBitmapFontImporter() {
 		this.encoding = null;
 	}
 	
-	public FNTBitmapFontImporter(EncodingTable encoding) {
+	public FNTBitmapFontImporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

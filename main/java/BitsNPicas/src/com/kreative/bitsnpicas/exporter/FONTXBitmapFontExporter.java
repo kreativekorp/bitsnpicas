@@ -10,11 +10,11 @@ import java.util.LinkedList;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class FONTXBitmapFontExporter implements BitmapFontExporter {
 	private int flag;
-	private EncodingTable singleByteEncoding;
+	private GlyphList singleByteEncoding;
 	private String doubleByteEncoding;
 	
 	public FONTXBitmapFontExporter(boolean isDoubleByte) {
@@ -23,7 +23,7 @@ public class FONTXBitmapFontExporter implements BitmapFontExporter {
 		this.doubleByteEncoding = "CP943"; // IBM's version of Shift-JIS
 	}
 	
-	public FONTXBitmapFontExporter(EncodingTable singleByteEncoding) {
+	public FONTXBitmapFontExporter(GlyphList singleByteEncoding) {
 		this.flag = 0;
 		this.singleByteEncoding = singleByteEncoding;
 		this.doubleByteEncoding = "CP943"; // IBM's version of Shift-JIS

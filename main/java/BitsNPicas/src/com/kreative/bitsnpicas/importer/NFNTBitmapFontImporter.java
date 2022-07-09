@@ -9,18 +9,18 @@ import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.mover.FONDEntry;
 import com.kreative.bitsnpicas.mover.MoverFile;
 import com.kreative.bitsnpicas.mover.ResourceBundle;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
 import com.kreative.ksfl.*;
 import com.kreative.rsrc.*;
+import com.kreative.unicode.data.GlyphList;
 
 public class NFNTBitmapFontImporter implements BitmapFontImporter {
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public NFNTBitmapFontImporter() {
 		this.encoding = null;
 	}
 	
-	public NFNTBitmapFontImporter(EncodingTable encoding) {
+	public NFNTBitmapFontImporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

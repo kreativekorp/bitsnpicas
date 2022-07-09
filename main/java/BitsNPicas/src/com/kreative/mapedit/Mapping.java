@@ -11,8 +11,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import java.util.Scanner;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class Mapping {
 	public String name = null;
@@ -71,13 +70,15 @@ public class Mapping {
 			if (cs != null) {
 				String csc = CodePointSequence.format(cs);
 				if (cs.length() == 1) {
-					CharacterData data = CharacterDatabase.instance().get(cs.get(0));
-					if (data != null) csc += "\t# " + data.toString();
+					int cp = cs.get(0);
+					String n = NameResolver.instance(cp).getName(cp);
+					csc += "\t# " + n;
 				} else if (cs.length() == 2) {
 					MappingTag tag = MappingTag.forIntValue(cs.get(0));
 					if (tag != null) {
-						CharacterData data = CharacterDatabase.instance().get(cs.get(1));
-						if (data != null) csc += "\t# " + data.toString() + ", " + tag.description;
+						int cp = cs.get(1);
+						String n = NameResolver.instance(cp).getName(cp);
+						csc += "\t# " + n + ", " + tag.description;
 					}
 				}
 				out.println(pfxi + "\t" + csc);

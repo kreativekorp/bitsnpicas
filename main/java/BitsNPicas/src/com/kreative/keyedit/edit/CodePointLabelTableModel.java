@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.AbstractTableModel;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class CodePointLabelTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
+	private final NameDatabase ndb;
 	private final String labelType;
 	private final List<Entry> entries;
 	
 	public CodePointLabelTableModel(Map<Integer,String> map, String labelType) {
+		this.ndb = NameDatabase.instance();
 		this.labelType = labelType;
 		this.entries = new ArrayList<Entry>();
 		for (Map.Entry<Integer,String> e : map.entrySet()) {
@@ -84,8 +86,7 @@ public class CodePointLabelTableModel extends AbstractTableModel {
 				return String.valueOf(Character.toChars(e.codepoint));
 			case 2:
 				if (e.codepoint < 0) return null;
-				CharacterData cd = CharacterDatabase.instance().get(e.codepoint);
-				return (cd == null) ? null : cd.toString();
+				return NameResolver.instance(e.codepoint).getName(e.codepoint);
 			case 3:
 				return e.label;
 			default:
@@ -115,8 +116,8 @@ public class CodePointLabelTableModel extends AbstractTableModel {
 				if (s.length() > 0) e.codepoint = s.codePointAt(0);
 				break;
 			case 2:
-				CharacterData cd = CharacterDatabase.instance().find(value.toString().trim());
-				if (cd != null) e.codepoint = cd.codePoint;
+				NameDatabase.NameEntry ne = ndb.find(value.toString().trim());
+				if (ne != null) e.codepoint = ne.codePoint;
 				break;
 			case 3:
 				String a = value.toString().trim();
@@ -125,6 +126,7 @@ public class CodePointLabelTableModel extends AbstractTableModel {
 			default:
 				break;
 		}
+		fireTableRowsUpdated(row, row);
 	}
 	
 	private static class Entry {

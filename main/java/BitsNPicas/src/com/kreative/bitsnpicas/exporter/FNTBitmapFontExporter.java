@@ -10,18 +10,18 @@ import java.util.HashMap;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class FNTBitmapFontExporter implements BitmapFontExporter {
 	private int magic;
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public FNTBitmapFontExporter() {
 		this.magic = 3;
 		this.encoding = null;
 	}
 	
-	public FNTBitmapFontExporter(EncodingTable encoding) {
+	public FNTBitmapFontExporter(GlyphList encoding) {
 		this.magic = 3;
 		this.encoding = encoding;
 	}
@@ -32,7 +32,7 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		this.encoding = null;
 	}
 	
-	public FNTBitmapFontExporter(int magic, EncodingTable encoding) {
+	public FNTBitmapFontExporter(int magic, GlyphList encoding) {
 		if (magic < 1 || magic > 3) throw new IllegalArgumentException("bad magic number");
 		this.magic = magic;
 		this.encoding = encoding;
@@ -78,17 +78,39 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		);
 		
 		// Character set.
-		String encName = (encoding != null) ? encoding.name.toUpperCase() : "CP1252";
+		String encName = (encoding != null) ? encoding.getName().toUpperCase() : "WINDOWS-1252";
 		int charSet = (
-			encName.equals("CP1252") ? 0 : encName.equals("MACROMAN") ? 77 :
-			encName.equals("CP932") ? 128 : encName.equals("CP949") ? 129 :
-			encName.equals("CP1361") ? 130 : encName.equals("CP936") ? 134 :
-			encName.equals("CP950") ? 136 : encName.equals("CP1253") ? 161 :
-			encName.equals("CP1254") ? 162 : encName.equals("CP1258") ? 163 :
-			encName.equals("CP1255") ? 177 : encName.equals("CP1256") ? 178 :
-			encName.equals("CP1257") ? 186 : encName.equals("CP1251") ? 204 :
-			encName.equals("CP874") ? 222 : encName.equals("CP1250") ? 238 :
-			encName.equals("CP437") ? 255 : 2
+			encName.equals("WINDOWS-1252") ? 0 :
+			encName.equals("X-MACROMAN") ? 77 :
+			encName.equals("SHIFT_JIS") ? 128 :
+			encName.equals("X-MS932_0213") ? 128 :
+			encName.equals("X-SJIS_0213") ? 128 :
+			encName.equals("X-IBM949") ? 129 :
+			encName.equals("X-IBM949C") ? 129 :
+			encName.equals("X-WINDOWS-949") ? 129 :
+			encName.equals("X-JOHAB") ? 130 :
+			encName.equals("GB2312") ? 134 :
+			encName.equals("X-MSWIN-936") ? 134 :
+			encName.equals("BIG5") ? 136 :
+			encName.equals("BIG5-HKSCS") ? 136 :
+			encName.equals("X-BIG5-HKSCS-2001") ? 136 :
+			encName.equals("X-BIG5-SOLARIS") ? 136 :
+			encName.equals("X-IBM950") ? 136 :
+			encName.equals("X-MS950-HKSCS") ? 136 :
+			encName.equals("X-MS950-HKSCS-XP") ? 136 :
+			encName.equals("X-WINDOWS-950") ? 136 :
+			encName.equals("WINDOWS-1253") ? 161 :
+			encName.equals("WINDOWS-1254") ? 162 :
+			encName.equals("WINDOWS-1258") ? 163 :
+			encName.equals("WINDOWS-1255") ? 177 :
+			encName.equals("WINDOWS-1256") ? 178 :
+			encName.equals("WINDOWS-1257") ? 186 :
+			encName.equals("WINDOWS-1251") ? 204 :
+			encName.equals("X-IBM874") ? 222 :
+			encName.equals("X-WINDOWS-874") ? 222 :
+			encName.equals("WINDOWS-1250") ? 238 :
+			encName.equals("IBM437") ? 255 :
+			2
 		);
 		
 		// Horizontal metrics and bitmaps.

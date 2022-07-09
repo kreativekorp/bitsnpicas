@@ -12,11 +12,11 @@ import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.u8m.U8MFile;
 import com.kreative.bitsnpicas.u8m.U8MGlyph;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class U8MBitmapFontExporter implements BitmapFontExporter {
 	private Integer loadAddress;
-	private EncodingTable nativeEncoding;
+	private GlyphList nativeEncoding;
 	
 	public U8MBitmapFontExporter() {
 		this.loadAddress = null;
@@ -28,12 +28,12 @@ public class U8MBitmapFontExporter implements BitmapFontExporter {
 		this.nativeEncoding = null;
 	}
 	
-	public U8MBitmapFontExporter(EncodingTable nativeEncoding) {
+	public U8MBitmapFontExporter(GlyphList nativeEncoding) {
 		this.loadAddress = null;
 		this.nativeEncoding = nativeEncoding;
 	}
 	
-	public U8MBitmapFontExporter(Integer loadAddress, EncodingTable nativeEncoding) {
+	public U8MBitmapFontExporter(Integer loadAddress, GlyphList nativeEncoding) {
 		this.loadAddress = loadAddress;
 		this.nativeEncoding = nativeEncoding;
 	}

@@ -9,16 +9,16 @@ import java.io.OutputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.GlyphList;
 
 public class CybikoBitmapFontExporter implements BitmapFontExporter {
-	private EncodingTable encoding;
+	private GlyphList encoding;
 	
 	public CybikoBitmapFontExporter() {
 		this.encoding = null;
 	}
 	
-	public CybikoBitmapFontExporter(EncodingTable encoding) {
+	public CybikoBitmapFontExporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

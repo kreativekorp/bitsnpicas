@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.mover.MoverFrame;
+import com.kreative.unicode.fontmap.FontMapController;
 
 public class CommonMenuItems {
 	public static final int SHORTCUT_KEY = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -167,6 +168,19 @@ public class CommonMenuItems {
 						}
 					}
 					System.exit(0);
+				}
+			});
+		}
+	}
+	
+	public static class FontMapMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public FontMapMenuItem() {
+			super("Font Map");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					FontMapController.getInstance().getFrame().setVisible(true);
 				}
 			});
 		}

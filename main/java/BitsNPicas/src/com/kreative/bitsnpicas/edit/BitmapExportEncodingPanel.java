@@ -4,8 +4,8 @@ import java.awt.BorderLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import com.kreative.bitsnpicas.unicode.EncodingList;
-import com.kreative.bitsnpicas.unicode.EncodingTable;
+import com.kreative.unicode.data.EncodingList;
+import com.kreative.unicode.data.GlyphList;
 
 public class BitmapExportEncodingPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -13,7 +13,7 @@ public class BitmapExportEncodingPanel extends JPanel {
 	private final JComboBox generalEncoding;
 	
 	public BitmapExportEncodingPanel() {
-		this.generalEncoding = new JComboBox(EncodingList.instance().toArray());
+		this.generalEncoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		
 		generalEncoding.setEditable(false);
 		JPanel encodingInnerPanel = new JPanel(new BorderLayout(8, 8));
@@ -24,11 +24,11 @@ public class BitmapExportEncodingPanel extends JPanel {
 		this.add(encodingInnerPanel, BorderLayout.PAGE_START);
 	}
 	
-	public EncodingTable getSelectedEncoding() {
-		return (EncodingTable)(generalEncoding.getSelectedItem());
+	public GlyphList getSelectedEncoding() {
+		return (GlyphList)(generalEncoding.getSelectedItem());
 	}
 	
-	public void setSelectedEncoding(EncodingTable enc) {
+	public void setSelectedEncoding(GlyphList enc) {
 		generalEncoding.setSelectedItem(enc);
 	}
 }

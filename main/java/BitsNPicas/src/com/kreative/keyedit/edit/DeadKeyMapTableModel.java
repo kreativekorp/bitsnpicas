@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.AbstractTableModel;
-import com.kreative.bitsnpicas.unicode.CharacterData;
-import com.kreative.bitsnpicas.unicode.CharacterDatabase;
+import com.kreative.unicode.data.NameDatabase;
+import com.kreative.unicode.data.NameResolver;
 
 public class DeadKeyMapTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
+	private final NameDatabase ndb;
 	private final List<Entry> entries;
 	
 	public DeadKeyMapTableModel(Map<Integer,Integer> map) {
+		this.ndb = NameDatabase.instance();
 		this.entries = new ArrayList<Entry>();
 		for (Map.Entry<Integer,Integer> e : map.entrySet()) {
 			Entry entry = new Entry();
@@ -99,8 +101,7 @@ public class DeadKeyMapTableModel extends AbstractTableModel {
 				return String.valueOf(Character.toChars(e.input));
 			case 2:
 				if (e.input < 0) return null;
-				CharacterData icd = CharacterDatabase.instance().get(e.input);
-				return (icd == null) ? null : icd.toString();
+				return NameResolver.instance(e.input).getName(e.input);
 			case 3:
 				if (e.output < 0) return null;
 				String oh = Integer.toHexString(e.output);
@@ -111,8 +112,7 @@ public class DeadKeyMapTableModel extends AbstractTableModel {
 				return String.valueOf(Character.toChars(e.output));
 			case 5:
 				if (e.output < 0) return null;
-				CharacterData ocd = CharacterDatabase.instance().get(e.output);
-				return (ocd == null) ? null : ocd.toString();
+				return NameResolver.instance(e.output).getName(e.output);
 			default:
 				return null;
 		}
@@ -140,8 +140,8 @@ public class DeadKeyMapTableModel extends AbstractTableModel {
 				if (is.length() > 0) e.input = is.codePointAt(0);
 				break;
 			case 2:
-				CharacterData icd = CharacterDatabase.instance().find(value.toString().trim());
-				if (icd != null) e.input = icd.codePoint;
+				NameDatabase.NameEntry ine = ndb.find(value.toString().trim());
+				if (ine != null) e.input = ine.codePoint;
 				break;
 			case 3:
 				try {
@@ -156,12 +156,13 @@ public class DeadKeyMapTableModel extends AbstractTableModel {
 				if (os.length() > 0) e.output = os.codePointAt(0);
 				break;
 			case 5:
-				CharacterData ocd = CharacterDatabase.instance().find(value.toString().trim());
-				if (ocd != null) e.output = ocd.codePoint;
+				NameDatabase.NameEntry one = ndb.find(value.toString().trim());
+				if (one != null) e.output = one.codePoint;
 				break;
 			default:
 				break;
 		}
+		fireTableRowsUpdated(row, row);
 	}
 	
 	private static class Entry {

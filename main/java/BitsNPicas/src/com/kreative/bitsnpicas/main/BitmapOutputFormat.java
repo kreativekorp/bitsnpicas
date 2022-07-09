@@ -23,7 +23,7 @@ import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.U8MBitmapFontExporter;
-import com.kreative.bitsnpicas.unicode.EncodingList;
+import com.kreative.unicode.data.EncodingList;
 
 public enum BitmapOutputFormat {
 	KBITS(".kbits", "kbits", "kbnp") {
@@ -156,7 +156,7 @@ public enum BitmapOutputFormat {
 			} else {
 				String en = o.encodingName;
 				if (en == null || en.length() == 0) en = "CP437";
-				return new FONTXBitmapFontExporter(EncodingList.instance().get(en));
+				return new FONTXBitmapFontExporter(EncodingList.instance().getGlyphList(en));
 			}
 		}
 	},
