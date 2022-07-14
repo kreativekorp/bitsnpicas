@@ -1,13 +1,12 @@
 package com.kreative.bitsnpicas.edit;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import javax.swing.JFrame;
+import com.kreative.bitsnpicas.FileProxy;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontImporter;
-import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
 import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
@@ -32,21 +31,26 @@ import com.kreative.bitsnpicas.mover.MoverFrame;
 import com.kreative.unicode.data.GlyphList;
 
 public enum ImportFormat {
-	KBITS(".kbits") {
+	KBITS {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbits"); }
 		public FontImporter<?> createImporter() { return new KBnPBitmapFontImporter(); }
 		public FontExporter<?> createExporter() { return new KBnPBitmapFontExporter(); }
 	},
-	KPCAS(".kpcas") {
+	KPCAS {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kpcas"); }
 		public FontImporter<?> createImporter() { return new KBnPVectorFontImporter(); }
 		public FontExporter<?> createExporter() { return new KBnPVectorFontExporter(); }
 	},
-	SFD(".sfd") {
+	SFD {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".sfd"); }
 		public FontImporter<?> createImporter() { return new SFDBitmapFontImporter(); }
 	},
-	BDF(".bdf") {
+	BDF {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".bdf"); }
 		public FontImporter<?> createImporter() { return new BDFBitmapFontImporter(); }
 	},
-	PSF(".psf", ".psfu") {
+	PSF {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".psf", ".psfu"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList low, GlyphList high, int puaBase) {
@@ -55,7 +59,8 @@ public enum ImportFormat {
 			});
 		}
 	},
-	PSFGZ(".psf.gz", ".psfu.gz") {
+	PSFGZ {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".psf.gz", ".psfu.gz"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList low, GlyphList high, int puaBase) {
@@ -64,41 +69,41 @@ public enum ImportFormat {
 			});
 		}
 	},
-	SUIT(".suit", true) {
+	SUIT(true) {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".suit"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return MoverFrame.forFile(file);
 		}
 	},
-	DFONT(".dfont", false) {
+	DFONT(false) {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".dfont"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return MoverFrame.forFile(file);
 		}
 	},
-	PNG(".png") {
-		public FontImporter<?> createImporter() { return new SRFontBitmapFontImporter(); }
-		public JFrame createOptionFrame(File file) throws IOException {
-			return new ImageBitmapFontImporterFrame(file);
+	SRFONT {
+		public boolean recognize(FileProxy fp) {
+			return (
+				fp.hasExtension(".png") && fp.isImage() &&
+				new SRFontBitmapFontImporter().canImportFont(fp.getImage())
+			);
+		}
+		public FontImporter<?> createImporter() {
+			return new SRFontBitmapFontImporter();
 		}
 	},
-	IMAGE(".jpg", ".jpeg", ".gif", ".bmp") {
-		public JFrame createOptionFrame(File file) throws IOException {
-			return new ImageBitmapFontImporterFrame(file);
-		}
-	},
-	BINARY(".bin", ".rom") {
-		public JFrame createOptionFrame(File file) throws IOException {
-			return new BinaryBitmapFontImporterFrame(file);
-		}
-	},
-	HEX(".hex") {
+	HEX {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".hex"); }
 		public FontImporter<?> createImporter() { return new HexBitmapFontImporter(); }
 	},
-	CVT(".cvt") {
+	CVT {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".cvt"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return GEOSMoverFrame.forFile(file);
 		}
 	},
-	FZX(".fzx") {
+	FZX {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".fzx"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("FZX PUA", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
@@ -107,10 +112,14 @@ public enum ImportFormat {
 			});
 		}
 	},
-	U8M(".u8m") {
+	U8M {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".u8m"); }
 		public FontImporter<?> createImporter() { return new U8MBitmapFontImporter(); }
 	},
-	FNT(".fnt") {
+	FNT {
+		public boolean recognize(FileProxy fp) {
+			return fp.hasExtension(".fnt") && fp.startsWith(0);
+		}
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("CP1252", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
@@ -119,7 +128,10 @@ public enum ImportFormat {
 			});
 		}
 	},
-	FONTX(".ftx") {
+	FONTX {
+		public boolean recognize(FileProxy fp) {
+			return fp.hasExtension(".ftx", ".fnt") && fp.startsWith('F');
+		}
 		public JFrame createOptionFrame(File file) throws IOException {
 			String dben = Charset.forName("CP943").displayName();
 			return new DualEncodingSelectionFrame("CP437", dben, file, new DualEncodingSelectionImporter() {
@@ -129,10 +141,18 @@ public enum ImportFormat {
 			});
 		}
 	},
-	ROCKBOX(".rbf", ".rb11", ".rb12") {
-		public FontImporter<?> createImporter() { return new RockboxBitmapFontImporter(); }
+	ROCKBOX {
+		public boolean recognize(FileProxy fp) {
+			return fp.hasExtension(".rbf", ".rb11", ".rb12", ".fnt") && fp.startsWith('R');
+		}
+		public FontImporter<?> createImporter() {
+			return new RockboxBitmapFontImporter();
+		}
 	},
-	CYBIKO(".cyf", ".fntz", ".fnty") {
+	CYBIKO {
+		public boolean recognize(FileProxy fp) {
+			return fp.hasExtension(".cyf", ".fntz", ".fnty", ".fnt") && fp.startsWith(1);
+		}
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Cybiko", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
@@ -141,16 +161,19 @@ public enum ImportFormat {
 			});
 		}
 	},
-	HMZK(".hmzk") {
+	HMZK {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".hmzk"); }
 		public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
 	},
 	
 	// **** Add new formats above this line. ****
 	
-	DSF(".dsf") {
+	DSF {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".dsf"); }
 		public FontImporter<?> createImporter() { return new DSFBitmapFontImporter(); }
 	},
-	SBF(".sbf") {
+	SBF {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".sbf"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Kreative SuperLatin", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
@@ -159,23 +182,49 @@ public enum ImportFormat {
 			});
 		}
 	},
-	S10(".s10") {
+	S10 {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".s10"); }
 		public FontImporter<?> createImporter() { return new S10BitmapFontImporter(); }
+	},
+	DMOV(true) {
+		public boolean recognize(FileProxy fp) {
+			return (
+				fp.hasMacCreator("DMOV") ||
+				fp.hasMacCreator("movr") ||
+				(
+					(fp.hasMacCreator("MACS") || fp.hasMacCreator("macs")) &&
+					(fp.hasMacType("ZSYS") || fp.hasMacType("zsys"))
+				)
+			);
+		}
+		public JFrame createOptionFrame(File file) throws IOException {
+			return MoverFrame.forFile(file);
+		}
+	},
+	BINARY {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".bin", ".rom"); }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new BinaryBitmapFontImporterFrame(file);
+		}
+	},
+	IMAGE {
+		public boolean recognize(FileProxy fp) { return fp.isImage(); }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new ImageBitmapFontImporterFrame(file);
+		}
 	};
 	
-	public final String[] extensions;
 	public final boolean macResFork;
 	
-	private ImportFormat(String... extensions) {
-		this.extensions = extensions;
+	private ImportFormat() {
 		this.macResFork = false;
 	}
 	
-	private ImportFormat(String extension, boolean macResFork) {
-		this.extensions = new String[]{extension};
+	private ImportFormat(boolean macResFork) {
 		this.macResFork = macResFork;
 	}
 	
+	public abstract boolean recognize(FileProxy fp);
 	public FontImporter<?> createImporter() { return null; }
 	public FontExporter<?> createExporter() { return null; }
 	public JFrame createOptionFrame(File file) throws IOException {
@@ -183,42 +232,11 @@ public enum ImportFormat {
 	}
 	
 	public static ImportFormat forFile(File file) {
-		String lname = file.getName().toLowerCase();
-		
-		// Detect the many formats using .fnt magically.
-		if (lname.endsWith(".fnt")) {
-			try {
-				FileInputStream in = new FileInputStream(file);
-				int magic = in.read();
-				in.close();
-				switch (magic) {
-					case 0: return FNT;
-					case 1: return CYBIKO;
-					case 'F': return FONTX;
-					case 'R': return ROCKBOX;
-				}
-			} catch (IOException e) {
-				return null;
+		FileProxy fp = new FileProxy(file);
+		for (ImportFormat f : values()) {
+			if (f.recognize(fp)) {
+				return f;
 			}
-		}
-		
-		// Detect most file formats by file extension.
-		for (ImportFormat format : values()) {
-			for (String ext : format.extensions) {
-				if (lname.endsWith(ext)) {
-					return format;
-				}
-			}
-		}
-		
-		// Detect Mac OS Classic suitcases by file type and creator code.
-		String creator = MacUtility.getCreator(file);
-		if (creator == null) return null;
-		if (creator.equals("DMOV") || creator.equals("movr")) return SUIT;
-		if (creator.equals("MACS") || creator.equals("macs")) {
-			String type = MacUtility.getType(file);
-			if (type == null) return null;
-			if (type.equals("ZSYS") || type.equals("zsys")) return SUIT;
 		}
 		return null;
 	}

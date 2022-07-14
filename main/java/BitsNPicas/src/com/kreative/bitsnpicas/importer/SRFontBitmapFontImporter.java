@@ -66,6 +66,10 @@ public class SRFontBitmapFontImporter implements BitmapFontImporter {
 		return f;
 	}
 	
+	public boolean canImportFont(BufferedImage bi) {
+		return bi != null && decodeVM(bi, 0, 0, bi.getHeight()) != null;
+	}
+	
 	public BitmapFont importFont(BufferedImage bi) {
 		int[] mtx = decodeVM(bi, 0, 0, bi.getHeight());
 		if (mtx == null) return null;

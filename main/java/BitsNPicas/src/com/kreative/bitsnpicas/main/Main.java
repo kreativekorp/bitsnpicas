@@ -20,7 +20,7 @@ public class Main {
 			} else if (arg0.equals("convertbitmap")) {
 				ConvertBitmap.main(args);
 			} else if (arg0.equals("viewbitmap")) {
-				ViewFont2.main(args);
+				ViewFont.main(args);
 			} else if (arg0.equals("extractcbdt")) {
 				ExtractCbdt.main(args);
 			} else if (arg0.equals("injectcbdt")) {
