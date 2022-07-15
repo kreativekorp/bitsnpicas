@@ -129,4 +129,8 @@ public class FileProxy {
 			return null;
 		}
 	}
+	
+	public File getFile() {
+		return file;
+	}
 }

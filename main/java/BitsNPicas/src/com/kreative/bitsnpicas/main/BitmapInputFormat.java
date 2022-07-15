@@ -16,6 +16,7 @@ import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.PlaydateBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
@@ -144,6 +145,14 @@ public enum BitmapInputFormat {
 		}
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new CybikoBitmapFontImporter(o.getEncoding());
+		}
+	},
+	PLAYDATE(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) {
+			return PlaydateBitmapFontImporter.canImportFont(fp);
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new PlaydateBitmapFontImporter();
 		}
 	},
 	HMZK(BitmapFont.NAME_FAMILY) {

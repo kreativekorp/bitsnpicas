@@ -21,6 +21,7 @@ import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
 import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.PlaydateBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
 import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
@@ -159,6 +160,14 @@ public enum ImportFormat {
 					return new CybikoBitmapFontImporter(encoding);
 				}
 			});
+		}
+	},
+	PLAYDATE {
+		public boolean recognize(FileProxy fp) {
+			return PlaydateBitmapFontImporter.canImportFont(fp);
+		}
+		public FontImporter<?> createImporter() {
+			return new PlaydateBitmapFontImporter();
 		}
 	},
 	HMZK {
