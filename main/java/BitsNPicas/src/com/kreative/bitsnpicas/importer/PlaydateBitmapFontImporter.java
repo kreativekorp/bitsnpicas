@@ -104,12 +104,12 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	private static final Pattern PROPERTY_LINE = Pattern.compile("^(--\\s*)?(\\w+)\\s*=\\s*(.+)$");
-	private static final Pattern METRICS_LINE = Pattern.compile("\"(\\w+)\"\\s*:\\s*(\\d+)");
+	private static final Pattern METRICS_LINE = Pattern.compile("\"(\\w+)\"\\s*:\\s*(-?\\d+)");
 	
 	private BitmapFont importFont(Scanner scan, String name, BufferedImage img, int cw, int ch) throws IOException {
-		int baseline = -1;
-		int xHeight = -1;
-		int capHeight = -1;
+		Integer baseline = null;
+		Integer xHeight = null;
+		Integer capHeight = null;
 		int tracking = 1;
 		ArrayList<Integer> codePoints = new ArrayList<Integer>();
 		ArrayList<Integer> charWidths = new ArrayList<Integer>();
@@ -211,13 +211,13 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 		BitmapFontGlyph Xg = (codePoints.contains(0x58)) ? glyphs.get(codePoints.indexOf(0x58)) : null;
 		BitmapFontGlyph xg = (codePoints.contains(0x78)) ? glyphs.get(codePoints.indexOf(0x78)) : null;
 		int ascent = (
-			(baseline >= 0) ? baseline :
+			(baseline != null) ? ((baseline > 0) ? baseline : (ch + baseline)) :
 			(Xg != null) ? (Xg.getGlyphHeight() - Xg.getY()) :
 			(xg != null) ? (xg.getGlyphHeight() - xg.getY()) :
 			ch
 		);
-		if (xHeight < 0) xHeight = (xg != null) ? xg.getGlyphHeight() : 0;
-		if (capHeight < 0) capHeight = (Xg != null) ? Xg.getGlyphHeight() : 0;
+		if (xHeight == null) xHeight = (xg != null) ? xg.getGlyphHeight() : 0;
+		if (capHeight == null) capHeight = (Xg != null) ? Xg.getGlyphHeight() : 0;
 		for (BitmapFontGlyph g : glyphs) g.setXY(g.getX(), g.getY() + ascent);
 		
 		// Create the font.
