@@ -16,6 +16,7 @@ import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.OTBBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.PSFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.PlaydateBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
@@ -173,6 +174,16 @@ public enum BitmapOutputFormat {
 	CYBIKO(".fnt", "cybiko") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new CybikoBitmapFontExporter(o.getEncoding());
+		}
+	},
+	PLAYDATE_FNT(".fnt", "playdate", "playdate-allinone", "playdate-fnt") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new PlaydateBitmapFontExporter(false);
+		}
+	},
+	PLAYDATE_FNT_PNG(".fnt", "playdate-separate", "playdate-fnt+png") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new PlaydateBitmapFontExporter(true);
 		}
 	},
 	HMZK(".hmzk", "hmzk") {

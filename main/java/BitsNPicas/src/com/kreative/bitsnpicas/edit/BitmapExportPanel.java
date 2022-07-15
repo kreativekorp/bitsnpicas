@@ -37,6 +37,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final BitmapExportU8MPanel u8mPanel;
 	private final BitmapExportColorPanel colorPanel;
 	private final BitmapExportPSFPanel psfPanel;
+	private final BitmapExportPlaydatePanel playdatePanel;
 	private final JButton exportButton;
 	
 	public BitmapExportPanel(BitmapFont font) {
@@ -50,6 +51,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.u8mPanel = new BitmapExportU8MPanel();
 		this.colorPanel = new BitmapExportColorPanel();
 		this.psfPanel = new BitmapExportPSFPanel();
+		this.playdatePanel = new BitmapExportPlaydatePanel();
 		this.exportButton = new JButton("Export");
 		
 		JLabel noneLabel = new JLabel("This format has no options.");
@@ -67,6 +69,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		formatOptionsPanel.add(u8mPanel, "u8m");
 		formatOptionsPanel.add(colorPanel, "color");
 		formatOptionsPanel.add(psfPanel, "psf");
+		formatOptionsPanel.add(playdatePanel, "playdate");
 		formatOptionsPanel.add(nonePanel, "none");
 		
 		format.setEditable(false);
@@ -237,5 +240,10 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	@Override
 	public boolean getPSFUnicodeTable() {
 		return psfPanel.getUnicodeTable();
+	}
+	
+	@Override
+	public boolean getPlaydateSeparate() {
+		return playdatePanel.getSeparate();
 	}
 }

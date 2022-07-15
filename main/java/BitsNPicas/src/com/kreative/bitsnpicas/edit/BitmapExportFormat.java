@@ -16,6 +16,7 @@ import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.OTBBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.PSFBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.PlaydateBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
@@ -153,6 +154,11 @@ public enum BitmapExportFormat {
 	CYBIKO("Cybiko", ".fnt", "encoding", "Cybiko") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new CybikoBitmapFontExporter(o.getSelectedEncoding());
+		}
+	},
+	PLAYDATE("Playdate", ".fnt", "playdate") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new PlaydateBitmapFontExporter(o.getPlaydateSeparate());
 		}
 	},
 	HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {

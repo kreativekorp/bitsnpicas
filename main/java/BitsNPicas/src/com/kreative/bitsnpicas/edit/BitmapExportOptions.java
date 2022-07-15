@@ -25,4 +25,5 @@ public interface BitmapExportOptions {
 	public boolean getPSFUseHighEncoding();
 	public boolean getPSFUseAllGlyphs();
 	public boolean getPSFUnicodeTable();
+	public boolean getPlaydateSeparate();
 }
