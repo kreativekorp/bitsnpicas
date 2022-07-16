@@ -21,8 +21,8 @@ import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
-import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
+import com.kreative.bitsnpicas.exporter.KbitsBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.KpcasVectorFontExporter;
 
 public class Main {
 	public static void main(String[] args) {
@@ -63,13 +63,13 @@ public class Main {
 	public static JFrame newBitmapFont() {
 		BitmapFont bfont = new BitmapFont(14, 2, 14, 2, 0, 0, 0);
 		bfont.autoFillNames();
-		return openFont(null, new KBnPBitmapFontExporter(), bfont);
+		return openFont(null, new KbitsBitmapFontExporter(), bfont);
 	}
 	
 	public static JFrame newVectorFont() {
 		VectorFont vfont = new VectorFont(800, 200, 800, 200, 0, 0, 0);
 		vfont.autoFillNames();
-		return openFont(null, new KBnPVectorFontExporter(), vfont);
+		return openFont(null, new KpcasVectorFontExporter(), vfont);
 	}
 	
 	public static JFrame openFonts() {
@@ -227,8 +227,8 @@ public class Main {
 	}
 	
 	public static FontExporter<?> getSaveFormat(Font<?> font) {
-		if (font instanceof BitmapFont) return new KBnPBitmapFontExporter();
-		if (font instanceof VectorFont) return new KBnPVectorFontExporter();
+		if (font instanceof BitmapFont) return new KbitsBitmapFontExporter();
+		if (font instanceof VectorFont) return new KpcasVectorFontExporter();
 		return null;
 	}
 	

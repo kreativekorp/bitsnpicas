@@ -12,7 +12,7 @@ import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.KbitsBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.OTBBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.PSFBitmapFontExporter;
@@ -29,7 +29,7 @@ import com.kreative.unicode.data.EncodingList;
 public enum BitmapOutputFormat {
 	KBITS(".kbits", "kbits", "kbnp") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new KBnPBitmapFontExporter();
+			return new KbitsBitmapFontExporter();
 		}
 	},
 	TTF(".ttf", "ttf", "truetype") {

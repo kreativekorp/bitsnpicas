@@ -7,8 +7,8 @@ import javax.swing.JFrame;
 import com.kreative.bitsnpicas.FileProxy;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontImporter;
-import com.kreative.bitsnpicas.exporter.KBnPBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.KBnPVectorFontExporter;
+import com.kreative.bitsnpicas.exporter.KbitsBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.KpcasVectorFontExporter;
 import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
@@ -18,8 +18,8 @@ import com.kreative.bitsnpicas.importer.FONTXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.KBnPVectorFontImporter;
+import com.kreative.bitsnpicas.importer.KbitsBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.KpcasVectorFontImporter;
 import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.PlaydateBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
@@ -34,13 +34,13 @@ import com.kreative.unicode.data.GlyphList;
 public enum ImportFormat {
 	KBITS {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbits"); }
-		public FontImporter<?> createImporter() { return new KBnPBitmapFontImporter(); }
-		public FontExporter<?> createExporter() { return new KBnPBitmapFontExporter(); }
+		public FontImporter<?> createImporter() { return new KbitsBitmapFontImporter(); }
+		public FontExporter<?> createExporter() { return new KbitsBitmapFontExporter(); }
 	},
 	KPCAS {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kpcas"); }
-		public FontImporter<?> createImporter() { return new KBnPVectorFontImporter(); }
-		public FontExporter<?> createExporter() { return new KBnPVectorFontExporter(); }
+		public FontImporter<?> createImporter() { return new KpcasVectorFontImporter(); }
+		public FontExporter<?> createExporter() { return new KpcasVectorFontExporter(); }
 	},
 	SFD {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".sfd"); }

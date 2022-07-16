@@ -13,7 +13,7 @@ import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.KBnPBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.KbitsBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
 import com.kreative.bitsnpicas.importer.PlaydateBitmapFontImporter;
@@ -29,7 +29,7 @@ public enum BitmapInputFormat {
 	KBITS(BitmapFont.NAME_FAMILY_AND_STYLE) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbits"); }
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new KBnPBitmapFontImporter();
+			return new KbitsBitmapFontImporter();
 		}
 	},
 	SFD(BitmapFont.NAME_POSTSCRIPT) {
