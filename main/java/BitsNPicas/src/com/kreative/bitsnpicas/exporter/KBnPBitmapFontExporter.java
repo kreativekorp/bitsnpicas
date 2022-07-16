@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
@@ -45,17 +46,17 @@ public class KBnPBitmapFontExporter implements BitmapFontExporter {
 		out.writeInt(font.getLineDescent());
 		out.writeInt(font.getLineGap());
 		out.writeInt(font.getXHeight());
-		for (int nameType : font.nameTypes()) {
+		for (Map.Entry<Integer,String> e : font.names(false).entrySet()) {
 			out.writeInt(0x6E616D65); // name
 			out.writeInt(1); // version
-			out.writeInt(nameType);
-			out.writeUTF(font.getName(nameType));
+			out.writeInt(e.getKey());
+			out.writeUTF(e.getValue());
 		}
-		for (int codePoint : font.codePoints()) {
+		for (Map.Entry<Integer,BitmapFontGlyph> e : font.characters(false).entrySet()) {
 			out.writeInt(0x63686172); // char
 			out.writeInt(1); // version
-			out.writeInt(codePoint);
-			BitmapFontGlyph g = font.getCharacter(codePoint);
+			out.writeInt(e.getKey());
+			BitmapFontGlyph g = e.getValue();
 			out.writeInt(g.getCharacterWidth());
 			out.writeInt(g.getGlyphOffset());
 			out.writeInt(g.getGlyphAscent());

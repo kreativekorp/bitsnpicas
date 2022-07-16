@@ -133,24 +133,28 @@ public class NamesPanel extends JPanel implements Scrollable {
 		public int getLineAscent() { return 0; }
 		public int getLineDescent() { return 0; }
 		public int getXHeight() { return 0; }
+		public int getCapHeight() { return 0; }
 		public int getLineGap() { return 0; }
 		public double getEmAscent2D() { return 0; }
 		public double getEmDescent2D() { return 0; }
 		public double getLineAscent2D() { return 0; }
 		public double getLineDescent2D() { return 0; }
 		public double getXHeight2D() { return 0; }
+		public double getCapHeight2D() { return 0; }
 		public double getLineGap2D() { return 0; }
 		public void setEmAscent(int v) {}
 		public void setEmDescent(int v) {}
 		public void setLineAscent(int v) {}
 		public void setLineDescent(int v) {}
 		public void setXHeight(int v) {}
+		public void setCapHeight(int v) {}
 		public void setLineGap(int v) {}
 		public void setEmAscent2D(double v) {}
 		public void setEmDescent2D(double v) {}
 		public void setLineAscent2D(double v) {}
 		public void setLineDescent2D(double v) {}
 		public void setXHeight2D(double v) {}
+		public void setCapHeight2D(double v) {}
 		public void setLineGap2D(double v) {}
 	}
 	

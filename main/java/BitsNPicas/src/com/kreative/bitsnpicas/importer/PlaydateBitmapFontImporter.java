@@ -16,6 +16,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.FileProxy;
+import com.kreative.bitsnpicas.GlyphPair;
 
 public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 	private static final Pattern FNT_FILE_PATTERN = Pattern.compile("^(.+)\\.fnt$", Pattern.CASE_INSENSITIVE);
@@ -184,6 +185,7 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 		int cols = img.getWidth() / cw;
 		int rows = img.getHeight() / ch;
 		if (cols < 1 || rows < 1) throw new IOException("invalid cell count: " + cols + ", " + rows);
+		int ascent = (baseline == null) ? ch : (baseline > 0) ? baseline : (ch + baseline);
 		
 		// Create the glyphs.
 		ArrayList<BitmapFontGlyph> glyphs = new ArrayList<BitmapFontGlyph>();
@@ -194,7 +196,7 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 			tmpImg.setRGB(0, 0, cw, ch, tmpRgb, 0, cw);
 			BitmapFontGlyph g = new BitmapFontGlyph();
 			g.setCharacterWidth(charWidths.get(i) + tracking);
-			g.setToImage(0, 0, tmpImg);
+			g.setToImage(0, -ascent, tmpImg);
 			g.contract();
 			glyphs.add(g);
 			col++;
@@ -207,26 +209,19 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		
-		// Calculate ascent/descent/xheight and adjust glyphs.
-		BitmapFontGlyph Xg = (codePoints.contains(0x58)) ? glyphs.get(codePoints.indexOf(0x58)) : null;
-		BitmapFontGlyph xg = (codePoints.contains(0x78)) ? glyphs.get(codePoints.indexOf(0x78)) : null;
-		int ascent = (
-			(baseline != null) ? ((baseline > 0) ? baseline : (ch + baseline)) :
-			(Xg != null) ? (Xg.getGlyphHeight() - Xg.getY()) :
-			(xg != null) ? (xg.getGlyphHeight() - xg.getY()) :
-			ch
-		);
-		if (xHeight == null) xHeight = (xg != null) ? xg.getGlyphHeight() : 0;
-		if (capHeight == null) capHeight = (Xg != null) ? Xg.getGlyphHeight() : 0;
-		for (BitmapFontGlyph g : glyphs) g.setXY(g.getX(), g.getY() + ascent);
-		
 		// Create the font.
-		BitmapFont f = new BitmapFont(ascent, ch - ascent, ascent, ch - ascent, xHeight, 0);
+		BitmapFont f = new BitmapFont(ascent, ch - ascent, ascent, ch - ascent, 0, 0, 0);
 		f.setName(BitmapFont.NAME_FAMILY, name);
 		f.setName(BitmapFont.NAME_FAMILY_AND_STYLE, name);
 		for (int i = 0, n = codePoints.size(); i < n; i++) {
 			f.putCharacter(codePoints.get(i), glyphs.get(i));
 		}
+		for (int i = 0, n = kernPairWidths.size(); i < n; i++) {
+			f.setKernPair(new GlyphPair(kernPairLeft.get(i), kernPairRight.get(i)), kernPairWidths.get(i));
+		}
+		if (baseline == null) f.setAscentDescent();
+		if (xHeight == null) f.setXHeight(); else f.setXHeight(xHeight);
+		if (capHeight == null) f.setCapHeight(); else f.setCapHeight(capHeight);
 		return f;
 	}
 	

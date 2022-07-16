@@ -10,17 +10,20 @@ public class BitmapFontGlyph extends FontGlyph {
 	
 	public BitmapFontGlyph() {
 		glyph = new byte[0][0];
-		x = 0; y = 0; advance = 0;
+		x = 0; y = 0;
+		advance = 0;
 	}
 	
 	public BitmapFontGlyph(byte[][] glyph) {
 		this.glyph = glyph;
-		x = 0; y = glyph.length; advance = (glyph.length < 1) ? 0 : (glyph[0].length);
+		x = 0; y = glyph.length;
+		advance = (glyph.length < 1) ? 0 : (glyph[0].length);
 	}
 	
 	public BitmapFontGlyph(byte[][] glyph, int offset, int width, int ascent) {
 		this.glyph = glyph;
-		x = offset; y = ascent; advance = width;
+		x = offset; y = ascent;
+		advance = width;
 	}
 	
 	public byte[][] getGlyph() {
@@ -77,11 +80,11 @@ public class BitmapFontGlyph extends FontGlyph {
 	}
 	
 	public int getGlyphDescent() {
-		return glyph.length-y;
+		return glyph.length - y;
 	}
 	
 	public double getGlyphDescent2D() {
-		return glyph.length-y;
+		return glyph.length - y;
 	}
 	
 	public int getCharacterWidth() {

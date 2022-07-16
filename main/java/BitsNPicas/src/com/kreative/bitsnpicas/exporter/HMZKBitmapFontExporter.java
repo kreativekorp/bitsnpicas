@@ -1,9 +1,7 @@
 package com.kreative.bitsnpicas.exporter;
 
 import java.io.*;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
@@ -44,20 +42,8 @@ public class HMZKBitmapFontExporter implements BitmapFontExporter {
 
         ByteArrayOutputStream chbuf = new ByteArrayOutputStream();
         ByteArrayOutputStream glbuf = new ByteArrayOutputStream();
-        // HashMap is not totally sorted, so we build a TreeMap from it
-        // There are probably more efficient ways to do this, but it's only for export anyway
-        TreeMap<Integer, BitmapFontGlyph> charmap = new TreeMap<Integer, BitmapFontGlyph>();
-        Iterator<Map.Entry<Integer, BitmapFontGlyph>> fit = font.characterIterator();
-        while (fit.hasNext()) {
-            Map.Entry<Integer, BitmapFontGlyph> entry = fit.next();
-            charmap.put(entry.getKey(), entry.getValue());
-        }
-        for (Map.Entry<Integer, BitmapFontGlyph> entry : charmap.entrySet()) {
+        for (Map.Entry<Integer,BitmapFontGlyph> entry : font.characters(false).entrySet()) {
             len++;
-            if (2 * len > 0x3874) {
-                System.out.println("Probably too many characters, not all were written to the file.");
-                break;
-            }
             int ch = entry.getKey();
             BitmapFontGlyph glyph = entry.getValue();
             int gx = glyph.getX();

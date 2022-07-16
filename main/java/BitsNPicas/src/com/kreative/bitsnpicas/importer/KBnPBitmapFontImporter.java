@@ -47,7 +47,7 @@ public class KBnPBitmapFontImporter implements BitmapFontImporter {
 		int ld = in.readInt();
 		int lg = in.readInt();
 		int xh = in.readInt();
-		BitmapFont font = new BitmapFont(ma, md, la, ld, xh, lg);
+		BitmapFont font = new BitmapFont(ma, md, la, ld, xh, xh, lg);
 		while (true) {
 			int blockType = in.readInt();
 			switch (blockType) {
@@ -74,6 +74,7 @@ public class KBnPBitmapFontImporter implements BitmapFontImporter {
 					font.putCharacter(codePoint, glyph);
 					break;
 				case 0x66696E2E: // fin.
+					font.setCapHeight();
 					return font;
 				default:
 					throw new IOException("bad magic number");

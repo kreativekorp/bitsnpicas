@@ -5,36 +5,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
+import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.PathGraph;
-import com.kreative.bitsnpicas.truetype.CmapSubtableFormat12;
-import com.kreative.bitsnpicas.truetype.CmapSubtableFormat4;
-import com.kreative.bitsnpicas.truetype.CmapSubtableSequentialEntry;
-import com.kreative.bitsnpicas.truetype.CmapTable;
-import com.kreative.bitsnpicas.truetype.CmapTableEntry;
-import com.kreative.bitsnpicas.truetype.GlyfTable;
-import com.kreative.bitsnpicas.truetype.HeadTable;
-import com.kreative.bitsnpicas.truetype.HheaTable;
-import com.kreative.bitsnpicas.truetype.HmtxTable;
-import com.kreative.bitsnpicas.truetype.HmtxTableEntry;
-import com.kreative.bitsnpicas.truetype.LocaTable;
-import com.kreative.bitsnpicas.truetype.MaxpTable;
-import com.kreative.bitsnpicas.truetype.NameTable;
-import com.kreative.bitsnpicas.truetype.NameTableEntry;
-import com.kreative.bitsnpicas.truetype.Os2Table;
-import com.kreative.bitsnpicas.truetype.PostTable;
-import com.kreative.bitsnpicas.truetype.PostTableEntry;
-import com.kreative.bitsnpicas.truetype.TrueTypeFile;
+import com.kreative.bitsnpicas.truetype.*;
 
 public class TTFBitmapFontExporter implements BitmapFontExporter {
 	private int xsize, ysize;
@@ -124,25 +105,17 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		postTable.underlinePosition = -ysize;
 		postTable.underlineThickness = ysize;
 		
-		int[] predefChars = new int[]{ -1, 0x00, 0x0D, 0x20 };
-		List<Integer> chars = new ArrayList<Integer>();
-		Iterator<Integer> cpi = bf.codePointIterator();
-		while (cpi.hasNext()) chars.add(cpi.next());
-		Collections.sort(chars);
-		for (int ch : predefChars) {
-			if (bf.containsCharacter(ch)) {
-				makeCharacterGlyph(bf, ch, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
-				chars.remove((Integer)ch);
-			} else {
-				a.charToGlyfMap.put(ch, a.numGlyphs);
-				locaTable.add(a.currentLocation);
-				hmtxTable.add(new HmtxTableEntry());
-				postTable.add(PostTableEntry.forCharacter(ch));
-				a.numGlyphs++;
-			}
+		makeCharacterGlyph(bf, bf.getNamedGlyph(".notdef"), ".notdef", a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+		makeCharacterGlyph(bf, bf.getCharacter(0x00), 0x00, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+		makeCharacterGlyph(bf, bf.getCharacter(0x0D), 0x0D, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+		makeCharacterGlyph(bf, bf.getCharacter(0x20), 0x20, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+		for (Map.Entry<Integer,BitmapFontGlyph> e : bf.characters(false).entrySet()) {
+			int cp = e.getKey(); if (cp == 0x00 || cp == 0x0D || cp == 0x20) continue;
+			makeCharacterGlyph(bf, e.getValue(), e.getKey(), a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
 		}
-		for (int ch : chars) {
-			makeCharacterGlyph(bf, ch, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+		for (Map.Entry<String,BitmapFontGlyph> e : bf.namedGlyphs(false).entrySet()) {
+			if (e.getKey().toString().equals(".notdef")) continue;
+			makeCharacterGlyph(bf, e.getValue(), e.getKey(), a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
 		}
 		locaTable.add(a.currentLocation);
 		
@@ -161,51 +134,56 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 	}
 	
 	private static final void makeCharacterGlyph(
-		BitmapFont bf, int ch, ThingsToKeepTrackOf a, int xsize, int ysize,
+		BitmapFont bf, BitmapFontGlyph g, Object id,
+		ThingsToKeepTrackOf a, int xsize, int ysize,
 		GlyfTable glyfTable, LocaTable locaTable, HmtxTable hmtxTable, PostTable postTable
 	) {
-		PathGraph pg = bf.getCharacter(ch).convertToPathGraph(xsize, ysize);
-		pg.removeOverlap(); pg.simplifyPaths();
-		PathGraph.ImmutablePoint[][] contours = pg.getContours();
-		int pc = 0; for (PathGraph.ImmutablePoint[] contour : contours) pc += contour.length - 1;
-		Rectangle r = pg.getBoundingRect();
-		int advance = bf.getCharacter(ch).getCharacterWidth() * xsize;
-		if (a.maxContours < contours.length) a.maxContours = contours.length;
-		if (a.maxPoints < pc) a.maxPoints = pc;
-		if (!a.maxBoundingBox) {
-			a.maxBoundingBox = true;
-			a.bbx1 = r.x; a.bby1 = r.y; a.bbx2 = r.x+r.width; a.bby2 = r.y+r.height;
-			a.minLSB = r.x; a.minRSB = advance-r.x-r.width; a.maxAdvance = advance;
-			a.maxExtent = r.x+r.width;
+		if (id instanceof Integer) a.charToGlyfMap.put((Integer)id, a.numGlyphs);
+		if (g == null) {
+			locaTable.add(a.currentLocation);
+			hmtxTable.add(new HmtxTableEntry());
 		} else {
-			if (r.x < a.bbx1) a.bbx1 = r.x;
-			if (r.y < a.bby1) a.bby1 = r.y;
-			if (r.x+r.width > a.bbx2) a.bbx2 = r.x+r.width;
-			if (r.y+r.height > a.bby2) a.bby2 = r.y+r.height;
-			if (r.x < a.minLSB) a.minLSB = r.x;
-			if (advance-r.x-r.width < a.minRSB) a.minRSB = advance-r.x-r.width;
-			if (advance > a.maxAdvance) a.maxAdvance = advance;
-			if (r.x+r.width > a.maxExtent) a.maxExtent = r.x+r.width;
+			PathGraph pg = g.convertToPathGraph(xsize, ysize);
+			pg.removeOverlap(); pg.simplifyPaths();
+			PathGraph.ImmutablePoint[][] contours = pg.getContours();
+			int pc = 0; for (PathGraph.ImmutablePoint[] contour : contours) pc += contour.length - 1;
+			Rectangle r = pg.getBoundingRect();
+			int advance = g.getCharacterWidth() * xsize;
+			if (a.maxContours < contours.length) a.maxContours = contours.length;
+			if (a.maxPoints < pc) a.maxPoints = pc;
+			if (!a.maxBoundingBox) {
+				a.maxBoundingBox = true;
+				a.bbx1 = r.x; a.bby1 = r.y; a.bbx2 = r.x+r.width; a.bby2 = r.y+r.height;
+				a.minLSB = r.x; a.minRSB = advance-r.x-r.width; a.maxAdvance = advance;
+				a.maxExtent = r.x+r.width;
+			} else {
+				if (r.x < a.bbx1) a.bbx1 = r.x;
+				if (r.y < a.bby1) a.bby1 = r.y;
+				if (r.x+r.width > a.bbx2) a.bbx2 = r.x+r.width;
+				if (r.y+r.height > a.bby2) a.bby2 = r.y+r.height;
+				if (r.x < a.minLSB) a.minLSB = r.x;
+				if (advance-r.x-r.width < a.minRSB) a.minRSB = advance-r.x-r.width;
+				if (advance > a.maxAdvance) a.maxAdvance = advance;
+				if (r.x+r.width > a.maxExtent) a.maxExtent = r.x+r.width;
+			}
+			if (advance > 0) { a.averageWidth += advance; a.numAverages++; }
+			if (id instanceof Integer && (Integer)id == 'x') a.xHeight = r.y+r.height;
+			if (id instanceof Integer && (Integer)id == 'H') a.HHeight = r.y+r.height;
+			if (id instanceof Integer && (Integer)id >= 0x10000) a.highUnicode = true;
+			if (id instanceof Integer) a.charToGlyfMap.put((Integer)id, a.numGlyphs);
+			byte[] glyf = ((contours.length == 0) ? new byte[0] : pg.getGlyfData());
+			glyfTable.add(glyf);
+			locaTable.add(a.currentLocation);
+			hmtxTable.add(new HmtxTableEntry(advance, r.x));
+			a.currentLocation += glyf.length;
 		}
-		if (advance > 0) { a.averageWidth += advance; a.numAverages++; }
-		if (ch == 'x') a.xHeight = r.y+r.height;
-		if (ch == 'H') a.HHeight = r.y+r.height;
-		if (ch >= 0x10000) a.highUnicode = true;
-		a.charToGlyfMap.put(ch, a.numGlyphs);
-		byte[] glyf = ((contours.length == 0) ? new byte[0] : pg.getGlyfData());
-		glyfTable.add(glyf);
-		locaTable.add(a.currentLocation);
-		hmtxTable.add(new HmtxTableEntry(advance, r.x));
-		postTable.add(PostTableEntry.forCharacter(ch));
-		a.currentLocation += glyf.length;
+		if (id instanceof Integer) postTable.add(PostTableEntry.forCharacter((Integer)id));
+		if (id instanceof String) postTable.add(PostTableEntry.forCharacterName(id.toString()));
 		a.numGlyphs++;
 	}
 	
 	private static final CmapTable makeCmapTable(BitmapFont bf, ThingsToKeepTrackOf a) {
-		List<Integer> chars = new ArrayList<Integer>();
-		Iterator<Integer> cpi = bf.codePointIterator();
-		while (cpi.hasNext()) chars.add(cpi.next());
-		Collections.sort(chars);
+		Collection<Integer> chars = bf.characters(false).keySet();
 		CmapSubtableFormat4 lowTable = new CmapSubtableFormat4();
 		CmapSubtableFormat12 highTable = new CmapSubtableFormat12();
 		CmapSubtableSequentialEntry currentGroup = null;
@@ -303,9 +281,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 	}
 	
 	private static final Os2Table makeOs2Table(BitmapFont bf, ThingsToKeepTrackOf a, int xsize, int ysize, boolean extendWinMetrics) {
-		List<Integer> chars = new ArrayList<Integer>();
-		Iterator<Integer> cpi = bf.codePointIterator();
-		while (cpi.hasNext()) chars.add(cpi.next());
+		Collection<Integer> chars = bf.characters(false).keySet();
 		Os2Table os2Table = new Os2Table();
 		os2Table.averageCharWidth = a.averageWidth / a.numAverages;
 		os2Table.weightClass = bf.isBoldStyle() ? Os2Table.WEIGHT_CLASS_BOLD : Os2Table.WEIGHT_CLASS_MEDIUM;
@@ -342,13 +318,16 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 	}
 	
 	private static final NameTable makeNameTable(BitmapFont bf) {
-		List<Integer> nameTypes = new ArrayList<Integer>();
-		for (int i : bf.nameTypes()) nameTypes.add(i);
-		Collections.sort(nameTypes);
 		NameTable nameTable = new NameTable();
-		for (int nameID : nameTypes) nameTable.add(NameTableEntry.forUnicode(nameID, bf.getName(nameID)));
-		for (int nameID : nameTypes) nameTable.add(NameTableEntry.forMacintosh(nameID, bf.getName(nameID)));
-		for (int nameID : nameTypes) nameTable.add(NameTableEntry.forWindows(nameID, bf.getName(nameID)));
+		for (Map.Entry<Integer,String> e : bf.names(false).entrySet()) {
+			nameTable.add(NameTableEntry.forUnicode(e.getKey(), e.getValue()));
+		}
+		for (Map.Entry<Integer,String> e : bf.names(false).entrySet()) {
+			nameTable.add(NameTableEntry.forMacintosh(e.getKey(), e.getValue()));
+		}
+		for (Map.Entry<Integer,String> e : bf.names(false).entrySet()) {
+			nameTable.add(NameTableEntry.forWindows(e.getKey(), e.getValue()));
+		}
 		return nameTable;
 	}
 }

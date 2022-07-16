@@ -79,6 +79,8 @@ public class U8MBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		
+		b.setXHeight();
+		b.setCapHeight();
 		return new BitmapFont[]{b};
 	}
 	

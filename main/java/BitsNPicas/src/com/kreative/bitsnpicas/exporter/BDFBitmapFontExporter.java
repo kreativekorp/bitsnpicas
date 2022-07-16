@@ -74,9 +74,9 @@ public class BDFBitmapFontExporter implements BitmapFontExporter {
 		if (font.containsName(Font.NAME_MANUFACTURER)) props.put("FOUNDRY", font.getName(Font.NAME_MANUFACTURER));
 		props.put("FONT_ASCENT", Integer.toString(font.getLineAscent()));
 		props.put("FONT_DESCENT", Integer.toString(font.getLineDescent()));
-		props.put("CAP_HEIGHT", Integer.toString(font.getEmAscent()));
 		props.put("POINT_SIZE", Integer.toString(font.getEmAscent() + font.getEmDescent()));
 		props.put("X_HEIGHT", Integer.toString(font.getXHeight()));
+		props.put("CAP_HEIGHT", Integer.toString(font.getCapHeight()));
 		
 		pw.println("STARTFONT 2.1");
 		pw.println("FONT -" + font.getName(Font.NAME_FAMILY) + "-" + font.getName(Font.NAME_STYLE) + "-" + (font.isItalicStyle() ? "I" : "R") + "-" + font.getName(Font.NAME_STYLE) + "--" + (font.getLineAscent() + font.getLineDescent()) + "-" + (font.getLineAscent() + font.getLineDescent()) + "-75-75-c-80-iso10646-1");

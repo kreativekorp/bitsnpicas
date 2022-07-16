@@ -43,14 +43,17 @@ public abstract class Font<T extends FontGlyph> {
 	public static final int NAME_WWS_FAMILY = 21;
 	public static final int NAME_WWS_STYLE = 22;
 	
-	protected Map<Integer,String> names = new HashMap<Integer,String>();
-	protected Map<Integer,T> characters = new HashMap<Integer,T>();
+	protected SortedMap<Integer,String> names = new TreeMap<Integer,String>();
+	protected SortedMap<Integer,T> characters = new TreeMap<Integer,T>();
+	protected SortedMap<String,T> namedGlyphs = new TreeMap<String,T>();
+	protected SortedMap<GlyphPair,Integer> kernPairs = new TreeMap<GlyphPair,Integer>();
 	
 	public abstract int getEmAscent();
 	public abstract int getEmDescent();
 	public abstract int getLineAscent();
 	public abstract int getLineDescent();
 	public abstract int getXHeight();
+	public abstract int getCapHeight();
 	public abstract int getLineGap();
 	
 	public abstract double getEmAscent2D();
@@ -58,6 +61,7 @@ public abstract class Font<T extends FontGlyph> {
 	public abstract double getLineAscent2D();
 	public abstract double getLineDescent2D();
 	public abstract double getXHeight2D();
+	public abstract double getCapHeight2D();
 	public abstract double getLineGap2D();
 	
 	public abstract void setEmAscent(int v);
@@ -65,6 +69,7 @@ public abstract class Font<T extends FontGlyph> {
 	public abstract void setLineAscent(int v);
 	public abstract void setLineDescent(int v);
 	public abstract void setXHeight(int v);
+	public abstract void setCapHeight(int v);
 	public abstract void setLineGap(int v);
 	
 	public abstract void setEmAscent2D(double v);
@@ -72,10 +77,11 @@ public abstract class Font<T extends FontGlyph> {
 	public abstract void setLineAscent2D(double v);
 	public abstract void setLineDescent2D(double v);
 	public abstract void setXHeight2D(double v);
+	public abstract void setCapHeight2D(double v);
 	public abstract void setLineGap2D(double v);
 	
 	public boolean isEmpty() {
-		return characters.isEmpty();
+		return characters.isEmpty() && namedGlyphs.isEmpty();
 	}
 	
 	public boolean containsCharacter(int ch) {
@@ -87,6 +93,7 @@ public abstract class Font<T extends FontGlyph> {
 	}
 	
 	public T putCharacter(int ch, T fc) {
+		if (fc == null) return characters.remove(ch);
 		return characters.put(ch, fc);
 	}
 	
@@ -94,24 +101,35 @@ public abstract class Font<T extends FontGlyph> {
 		return characters.remove(ch);
 	}
 	
-	public int[] codePoints() {
-		int[] arr = new int[characters.size()]; int i = 0;
-		for (int cp : characters.keySet()) arr[i++] = cp;
-		return arr;
+	public SortedMap<Integer,T> characters(boolean copy) {
+		if (copy) return new TreeMap<Integer,T>(characters);
+		return Collections.unmodifiableSortedMap(characters);
 	}
 	
-	public List<Integer> codePointList() {
-		List<Integer> list = new ArrayList<Integer>();
-		for (int cp : characters.keySet()) list.add(cp);
-		return list;
+	public boolean containsNamedGlyph(String name) {
+		if (name == null) return false;
+		return namedGlyphs.containsKey(name);
 	}
 	
-	public Iterator<Integer> codePointIterator() {
-		return characters.keySet().iterator();
+	public T getNamedGlyph(String name) {
+		if (name == null) return null;
+		return namedGlyphs.get(name);
 	}
 	
-	public Iterator<Map.Entry<Integer,T>> characterIterator() {
-		return characters.entrySet().iterator();
+	public T putNamedGlyph(String name, T fc) {
+		if (name == null) return null;
+		if (fc == null) return namedGlyphs.remove(name);
+		return namedGlyphs.put(name, fc);
+	}
+	
+	public T removeNamedGlyph(String name) {
+		if (name == null) return null;
+		return namedGlyphs.remove(name);
+	}
+	
+	public SortedMap<String,T> namedGlyphs(boolean copy) {
+		if (copy) return new TreeMap<String,T>(namedGlyphs);
+		return Collections.unmodifiableSortedMap(namedGlyphs);
 	}
 	
 	public boolean containsName(int nametype) {
@@ -122,27 +140,98 @@ public abstract class Font<T extends FontGlyph> {
 		return names.get(nametype);
 	}
 	
-	public void setName(int nametype, String name) {
-		names.put(nametype, name);
+	public String setName(int nametype, String name) {
+		if (name == null) return names.remove(nametype);
+		return names.put(nametype, name);
 	}
 	
-	public void removeName(int nametype) {
-		names.remove(nametype);
+	public String removeName(int nametype) {
+		return names.remove(nametype);
 	}
 	
-	public int[] nameTypes() {
-		Integer[] nt = names.keySet().toArray(new Integer[0]);
-		int[] nt2 = new int[nt.length];
-		for (int i = 0; i < nt.length; i++) nt2[i] = nt[i];
-		return nt2;
+	public SortedMap<Integer,String> names(boolean copy) {
+		if (copy) return new TreeMap<Integer,String>(names);
+		return Collections.unmodifiableSortedMap(names);
 	}
 	
-	public Iterator<Integer> nameTypeIterator() {
-		return names.keySet().iterator();
+	public boolean containsKernPair(GlyphPair gp) {
+		if (gp == null) return false;
+		return kernPairs.containsKey(gp);
 	}
 	
-	public Iterator<Map.Entry<Integer,String>> nameIterator() {
-		return names.entrySet().iterator();
+	public int getKernPair(GlyphPair gp) {
+		if (gp == null) return 0;
+		Integer o = kernPairs.get(gp);
+		return (o != null) ? o.intValue() : 0;
+	}
+	
+	public int setKernPair(GlyphPair gp, int offset) {
+		if (gp == null) return 0;
+		Integer o = kernPairs.put(gp, offset);
+		return (o != null) ? o.intValue() : 0;
+	}
+	
+	public int removeKernPair(GlyphPair gp) {
+		if (gp == null) return 0;
+		Integer o = kernPairs.remove(gp);
+		return (o != null) ? o.intValue() : 0;
+	}
+	
+	public SortedMap<GlyphPair,Integer> kernPairs(boolean copy) {
+		if (copy) return new TreeMap<GlyphPair,Integer>(kernPairs);
+		return Collections.unmodifiableSortedMap(kernPairs);
+	}
+	
+	private static final char[] BASELINE_CHARS = "HXxZzAMNTYilmnEFIKLPRhkrvwVWBDbduftCGJOSUaceos2147035689ÞÆæÐØø¥£ß&!?.%@±".toCharArray();
+	private static final char[] CAP_HEIGHT_CHARS = "HXTZAMNUVWYEFIJKLBDPRCGOQS5714023689ÞÆÐØbdhklþft¥!?&£ß%@".toCharArray();
+	private static final char[] X_HEIGHT_CHARS = "xzuvwymnracegopqsµæø".toCharArray();
+	
+	public int guessBaselineAdjustment() {
+		for (int ch : BASELINE_CHARS) {
+			T fc = characters.get(ch);
+			if (fc != null) return fc.getGlyphHeight() - fc.getGlyphAscent();
+		}
+		return 0;
+	}
+	
+	public double guessBaselineAdjustment2D() {
+		for (int ch : BASELINE_CHARS) {
+			T fc = characters.get(ch);
+			if (fc != null) return fc.getGlyphHeight2D() - fc.getGlyphAscent2D();
+		}
+		return 0;
+	}
+	
+	public int guessCapHeight() {
+		for (int ch : CAP_HEIGHT_CHARS) {
+			T fc = characters.get(ch);
+			if (fc != null) return fc.getGlyphAscent();
+		}
+		return 0;
+	}
+	
+	public double guessCapHeight2D() {
+		for (int ch : CAP_HEIGHT_CHARS) {
+			T fc = characters.get(ch);
+			if (fc != null) return fc.getGlyphAscent2D();
+		}
+		return 0;
+	}
+	
+	public int guessXHeight() {
+		for (int ch : X_HEIGHT_CHARS) {
+			T fc = characters.get(ch);
+			if (fc != null) return fc.getGlyphAscent();
+		}
+		return 0;
+	}
+	
+	public double guessXHeight2D() {
+		for (int ch : X_HEIGHT_CHARS) {
+			T fc = characters.get(ch);
+			if (fc != null) return fc.getGlyphAscent2D();
+		}
+		return 0;
 	}
 	
 	private static final List<Integer> MONOSPACED_CLASSES = Arrays.asList(
@@ -195,7 +284,8 @@ public abstract class Font<T extends FontGlyph> {
 			String s = names.get(NAME_STYLE).toUpperCase();
 			return s.contains("ITALIC")
 			    || s.contains("OBLIQUE")
-			    || s.contains("SLANT");
+			    || s.contains("SLANT")
+			    || s.contains("ROTALIC");
 		} else {
 			return false;
 		}
@@ -369,23 +459,39 @@ public abstract class Font<T extends FontGlyph> {
 		}
 	}
 	
-	public void subsetRemap(Map<Integer,Integer> sr) {
+	public void subsetRemap(Collection<GlyphPair> sr) {
 		Map<Integer,T> oldChars = this.characters;
-		this.characters = new HashMap<Integer,T>();
+		Map<String,T> oldGlyphs = this.namedGlyphs;
+		this.characters = new TreeMap<Integer,T>();
+		this.namedGlyphs = new TreeMap<String,T>();
 		Map<Integer,T> newChars = this.characters;
-		for (Map.Entry<Integer,Integer> e : sr.entrySet()) {
-			newChars.put(e.getValue(), oldChars.get(e.getKey()));
+		Map<String,T> newGlyphs = this.namedGlyphs;
+		for (GlyphPair gp : sr) {
+			Object oldKey = gp.getLeft();
+			Object newKey = gp.getRight();
+			if (oldKey instanceof Integer) {
+				T glyph = oldChars.get(oldKey);
+				if (glyph == null) continue;
+				if (newKey instanceof Integer) newChars.put((Integer)newKey, glyph);
+				if (newKey instanceof String) newGlyphs.put((String)newKey, glyph);
+			}
+			if (oldKey instanceof String) {
+				T glyph = oldGlyphs.get(oldKey);
+				if (glyph == null) continue;
+				if (newKey instanceof Integer) newChars.put((Integer)newKey, glyph);
+				if (newKey instanceof String) newGlyphs.put((String)newKey, glyph);
+			}
 		}
 	}
 	
 	public void transform(FontGlyphTransformer<T> tx) {
-		List<Integer> v = new Vector<Integer>();
-		v.addAll(characters.keySet());
-		for (int ch : v) {
-			T glyph = characters.get(ch);
-			glyph = tx.transformGlyph(glyph);
-			if (glyph != null)
-				characters.put(ch, glyph);
+		for (Map.Entry<Integer,T> e : characters(true).entrySet()) {
+			T glyph = tx.transformGlyph(e.getValue());
+			if (glyph != null) characters.put(e.getKey(), glyph);
+		}
+		for (Map.Entry<String,T> e : namedGlyphs(true).entrySet()) {
+			T glyph = tx.transformGlyph(e.getValue());
+			if (glyph != null) namedGlyphs.put(e.getKey(), glyph);
 		}
 	}
 	

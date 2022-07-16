@@ -12,8 +12,6 @@ import com.kreative.bitsnpicas.Font;
 import com.kreative.unicode.data.GlyphList;
 
 public class FZXBitmapFontImporter implements BitmapFontImporter {
-	private static final char[] X_HEIGHT_CHARS = new char[]{'x', 'X', '0', '!'};
-	
 	private GlyphList encoding;
 	
 	public FZXBitmapFontImporter() {
@@ -66,31 +64,21 @@ public class FZXBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		
-		int ascent = height;
-		int descent = 0;
-		int xheight = 0;
-		for (char x : X_HEIGHT_CHARS) {
-			if (lastchar >= x) {
-				byte[][] gdx = gd[x - 32];
-				xheight = gdx.length;
-				ascent = shift[x - 32] + xheight;
-				descent = height - ascent;
-				break;
-			}
-		}
-		
-		BitmapFont f = new BitmapFont(ascent, descent, ascent, descent, xheight, 0);
+		BitmapFont f = new BitmapFont(height, 0, height, 0, height, height, 0);
 		for (int i = 0, ch = 32; ch <= lastchar; ch++, i++) {
 			int cp = zxcp(ch);
 			if (cp >= 0) {
 				BitmapFontGlyph g = new BitmapFontGlyph(
 					gd[i], -kern[i],
 					width[i] - kern[i] + tracking,
-					ascent - shift[i]
+					height - shift[i]
 				);
 				f.putCharacter(cp, g);
 			}
 		}
+		f.setAscentDescent();
+		f.setXHeight();
+		f.setCapHeight();
 		return new BitmapFont[]{f};
 	}
 	

@@ -138,7 +138,7 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 			if (emAscent + emDescent > fontSize) emDescent--;
 		}
 		
-		BitmapFont font = new BitmapFont(emAscent, emDescent, ascent, descent, 0, leading);
+		BitmapFont font = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0, leading);
 		for (int i = 0, ch = firstChar; ch <= lastChar; i++, ch++) {
 			if (widths[i] != -1) {
 				int xcoord = xcoords[i] & 0xFFFF;
@@ -160,6 +160,7 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 		font.setName(Font.NAME_FAMILY, fontName);
 		font.setName(Font.NAME_STYLE, fontStyleToString(fontStyle));
 		font.setXHeight();
+		font.setCapHeight();
 		return font;
 	}
 	

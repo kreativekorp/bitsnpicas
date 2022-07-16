@@ -41,7 +41,7 @@ public class BinaryBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	public BitmapFont[] importFont(byte[] b) {
-		BitmapFont bm = new BitmapFont(ascent, cellHeight - ascent, ascent, cellHeight - ascent, 0, 0);
+		BitmapFont bm = new BitmapFont(ascent, cellHeight - ascent, ascent, cellHeight - ascent, 0, 0, 0);
 		for (int off = offset, i = 0; i < cellCount; i++, off += bytesPerChar) {
 			byte[][] gd = new byte[cellHeight][];
 			for (int yo = off, y = 0; y < cellHeight; y++, yo += bytesPerRow) {
@@ -60,6 +60,7 @@ public class BinaryBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		bm.setXHeight();
+		bm.setCapHeight();
 		return new BitmapFont[]{bm};
 	}
 	

@@ -17,6 +17,7 @@ import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontGlyph;
 import com.kreative.bitsnpicas.FontImporter;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
@@ -60,13 +61,13 @@ public class Main {
 	}
 	
 	public static JFrame newBitmapFont() {
-		BitmapFont bfont = new BitmapFont(14, 2, 14, 2, 0, 0);
+		BitmapFont bfont = new BitmapFont(14, 2, 14, 2, 0, 0, 0);
 		bfont.autoFillNames();
 		return openFont(null, new KBnPBitmapFontExporter(), bfont);
 	}
 	
 	public static JFrame newVectorFont() {
-		VectorFont vfont = new VectorFont(800, 200, 800, 200, 0, 0);
+		VectorFont vfont = new VectorFont(800, 200, 800, 200, 0, 0, 0);
 		vfont.autoFillNames();
 		return openFont(null, new KBnPVectorFontExporter(), vfont);
 	}
@@ -83,10 +84,7 @@ public class Main {
 		try {
 			ImportFormat format = ImportFormat.forFile(file);
 			if (format != null) {
-				if (format.macResFork) {
-					file = new File(file, "..namedfork");
-					file = new File(file, "rsrc");
-				}
+				if (format.macResFork) file = MacUtility.getResourceFork(file);
 				FontImporter<?> importer = format.createImporter();
 				if (importer != null) {
 					Font<?>[] fonts = importer.importFont(file);

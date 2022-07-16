@@ -111,7 +111,7 @@ public class RockboxBitmapFontImporter implements BitmapFontImporter {
 			widths[i] = in.readUnsignedByte();
 		}
 		
-		BitmapFont f = new BitmapFont(ascent, height-ascent, ascent, height-ascent, 0, 0);
+		BitmapFont f = new BitmapFont(ascent, height-ascent, ascent, height-ascent, 0, 0, 0);
 		if (name != null) f.setName(BitmapFont.NAME_FAMILY, name);
 		if (copyright != null) f.setName(BitmapFont.NAME_COPYRIGHT, copyright);
 		
@@ -144,6 +144,7 @@ public class RockboxBitmapFontImporter implements BitmapFontImporter {
 		}
 		
 		f.setXHeight();
+		f.setCapHeight();
 		return f;
 	}
 	

@@ -1,10 +1,9 @@
 package com.kreative.bitsnpicas.edit;
 
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
 import com.kreative.bitsnpicas.Font;
 
@@ -15,70 +14,64 @@ public class FontCodePointList extends AbstractList<Integer> {
 		this.font = font;
 	}
 	
-	private List<Integer> codePoints() {
-		List<Integer> arr = font.codePointList();
-		Collections.sort(arr);
-		return arr;
-	}
-	
 	@Override
 	public boolean contains(Object e) {
-		return codePoints().contains(e);
+		return font.characters(false).keySet().contains(e);
 	}
 	
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		return codePoints().containsAll(c);
+		return font.characters(false).keySet().containsAll(c);
 	}
 	
 	@Override
 	public Integer get(int i) {
-		return codePoints().get(i);
+		return new ArrayList<Integer>(font.characters(false).keySet()).get(i);
 	}
 	
 	@Override
 	public int indexOf(Object e) {
-		return codePoints().indexOf(e);
+		return new ArrayList<Integer>(font.characters(false).keySet()).indexOf(e);
 	}
 	
 	@Override
 	public boolean isEmpty() {
-		return font.isEmpty();
+		return font.characters(false).keySet().isEmpty();
 	}
 	
 	@Override
 	public Iterator<Integer> iterator() {
-		return codePoints().iterator();
+		return font.characters(false).keySet().iterator();
 	}
 	
 	@Override
 	public int lastIndexOf(Object e) {
-		return codePoints().lastIndexOf(e);
+		return new ArrayList<Integer>(font.characters(false).keySet()).lastIndexOf(e);
 	}
 	
 	@Override
 	public ListIterator<Integer> listIterator() {
-		return codePoints().listIterator();
+		return new ArrayList<Integer>(font.characters(false).keySet()).listIterator();
 	}
 	
 	@Override
 	public ListIterator<Integer> listIterator(int i) {
-		return codePoints().listIterator(i);
+		return new ArrayList<Integer>(font.characters(false).keySet()).listIterator(i);
 	}
 	
 	@Override
 	public int size() {
-		return codePoints().size();
+		return font.characters(false).keySet().size();
 	}
 	
 	@Override
 	public Object[] toArray() {
-		return codePoints().toArray();
+		return font.characters(false).keySet().toArray();
 	}
 	
 	@Override
 	public <T> T[] toArray(T[] a) {
-		return codePoints().toArray(a);
+		return font.characters(false).keySet().toArray(a);
 	}
 	
 	@Override

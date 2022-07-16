@@ -19,6 +19,7 @@ public class MetricsPanel extends JPanel {
 	private final SpinnerNumberModel lineDescent;
 	private final SpinnerNumberModel lineGap;
 	private final SpinnerNumberModel xHeight;
+	private final SpinnerNumberModel capHeight;
 	
 	public MetricsPanel() {
 		JPanel labelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
@@ -28,6 +29,7 @@ public class MetricsPanel extends JPanel {
 		labelPanel.add(new JLabel("Line Descent"));
 		labelPanel.add(new JLabel("Line Gap"));
 		labelPanel.add(new JLabel("X Height"));
+		labelPanel.add(new JLabel("Cap Height"));
 		
 		JPanel spinnerPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		spinnerPanel.add(new JSpinner(emAscent = new SpinnerNumberModel()));
@@ -36,6 +38,7 @@ public class MetricsPanel extends JPanel {
 		spinnerPanel.add(new JSpinner(lineDescent = new SpinnerNumberModel()));
 		spinnerPanel.add(new JSpinner(lineGap = new SpinnerNumberModel()));
 		spinnerPanel.add(new JSpinner(xHeight = new SpinnerNumberModel()));
+		spinnerPanel.add(new JSpinner(capHeight = new SpinnerNumberModel()));
 		Dimension d = new Dimension(80, spinnerPanel.getPreferredSize().height);
 		spinnerPanel.setMinimumSize(d);
 		spinnerPanel.setPreferredSize(d);
@@ -57,6 +60,7 @@ public class MetricsPanel extends JPanel {
 		lineDescent.setValue(font.getLineDescent());
 		lineGap.setValue(font.getLineGap());
 		xHeight.setValue(font.getXHeight());
+		capHeight.setValue(font.getCapHeight());
 	}
 	
 	public void writeTo(Font<?> font) {
@@ -66,5 +70,6 @@ public class MetricsPanel extends JPanel {
 		font.setLineDescent(lineDescent.getNumber().intValue());
 		font.setLineGap(lineGap.getNumber().intValue());
 		font.setXHeight(xHeight.getNumber().intValue());
+		font.setCapHeight(capHeight.getNumber().intValue());
 	}
 }

@@ -113,8 +113,8 @@ public class CybikoBitmapFontExporter implements BitmapFontExporter {
 			case 0x81: return 0x25CF; // black circle
 			case 0x82: return 0x25B6; // black right-pointing triangle
 			case 0x83: return 0x25B7; // white right-pointing triangle
-			case 0x84: return 0xF084; // white right-pointing triangle, duplicate?
-			case 0x85: return 0xF085; // cy-sign
+			case 0x84: return 0xFFC22; // white right-pointing triangle, duplicate?
+			case 0x85: return 0xFFC23; // cy-sign
 			// Windows CP-1252
 			case 0x86: return 0x2020; // dagger
 			case 0x87: return 0x2021; // double dagger

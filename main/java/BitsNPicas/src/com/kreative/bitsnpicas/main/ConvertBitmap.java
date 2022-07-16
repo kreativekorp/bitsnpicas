@@ -5,17 +5,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
+import com.kreative.bitsnpicas.GlyphPair;
 import com.kreative.bitsnpicas.IDGenerator;
+import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 import com.kreative.unicode.data.EncodingList;
@@ -62,29 +65,32 @@ public class ConvertBitmap {
 								int offset = line.indexOf('#');
 								if (offset >= 0) line = line.substring(0, offset).trim();
 								if (line.length() == 0) continue;
-								String[] a = line.split("\\s+");
-								Integer ocp = (a.length > 0) ? parseInt16(a[0]) : null;
-								Integer ncp = (a.length > 1) ? parseInt16(a[1]) : null;
-								if (ocp != null) o.subsetRemap.put(ocp, ((ncp == null) ? ocp : ncp));
+								GlyphPair gp = parseGlyphPair(line);
+								if (gp == null) continue;
+								o.subsetRemap.add(gp);
 							}
 							scan.close();
 						} catch (IOException e) {
 							System.err.println("Failed to read subsetRemap: " + srFile.getName());
 						}
 					} else if (arg.equals("-d") && argi < args.length) {
-						String[] a = args[argi++].split("-", 2);
+						String s = args[argi++];
+						String[] a = s.split("-", 2);
 						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
 						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
-						if (rs != null && re != null) o.glyphsToRemove.set(Math.min(rs,re), Math.max(rs,re)+1);
-						else if (rs != null) o.glyphsToRemove.set(rs);
-						else if (re != null) o.glyphsToRemove.set(re);
+						if (rs != null && re != null) o.codePointsToRemove.set(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.codePointsToRemove.set(rs);
+						else if (re != null) o.codePointsToRemove.set(re);
+						else if (s.length() > 0) o.glyphNamesToRemove.add(s);
 					} else if (arg.equals("-D") && argi < args.length) {
-						String[] a = args[argi++].split("-", 2);
+						String s = args[argi++];
+						String[] a = s.split("-", 2);
 						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
 						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
-						if (rs != null && re != null) o.glyphsToRemove.clear(Math.min(rs,re), Math.max(rs,re)+1);
-						else if (rs != null) o.glyphsToRemove.clear(rs);
-						else if (re != null) o.glyphsToRemove.clear(re);
+						if (rs != null && re != null) o.codePointsToRemove.clear(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.codePointsToRemove.clear(rs);
+						else if (re != null) o.codePointsToRemove.clear(re);
+						else if (s.length() > 0) o.glyphNamesToRemove.remove(s);
 					} else if (arg.equals("-c")) {
 						o.strictMonospace = true;
 					} else if (arg.equals("-C")) {
@@ -192,10 +198,7 @@ public class ConvertBitmap {
 						if (format == null) {
 							System.out.println(" FAILED: Unknown input format.");
 						} else {
-							if (format.macResFork) {
-								file = new File(file, "..namedfork");
-								file = new File(file, "rsrc");
-							}
+							if (format.macResFork) file = MacUtility.getResourceFork(file);
 							BitmapFont[] fonts = format.createImporter(o.io).importFont(file);
 							if (fonts == null || fonts.length == 0) {
 								System.out.println(" FAILED: No fonts found.");
@@ -320,8 +323,9 @@ public class ConvertBitmap {
 		public final BitmapOutputOptions oo = new BitmapOutputOptions();
 		public List<SearchReplacePattern> nameSearchReplace = new ArrayList<SearchReplacePattern>();
 		public Integer timestampCodepoint = null;
-		public Map<Integer,Integer> subsetRemap = new HashMap<Integer,Integer>();
-		public BitSet glyphsToRemove = new BitSet();
+		public Set<GlyphPair> subsetRemap = new HashSet<GlyphPair>();
+		public BitSet codePointsToRemove = new BitSet();
+		public Set<String> glyphNamesToRemove = new HashSet<String>();
 		public boolean strictMonospace = false;
 		public List<BitmapFontGlyphTransformer> transform = new ArrayList<BitmapFontGlyphTransformer>();
 		public File dest = null;
@@ -360,6 +364,28 @@ public class ConvertBitmap {
 		} catch (NumberFormatException e) {
 			return null;
 		}
+	}
+	
+	private static GlyphPair parseGlyphPair(String s) {
+		String[] a = s.trim().split("\\s+");
+		Integer ocp = parseInt16(a[0]);
+		if (ocp != null) {
+			if (a.length > 1) {
+				Integer ncp = parseInt16(a[1]);
+				if (ncp != null) return new GlyphPair(ocp, ncp);
+				if (a[1].length() > 0) return new GlyphPair(ocp, a[1]);
+			}
+			return new GlyphPair(ocp, ocp);
+		}
+		if (a[0].length() > 0) {
+			if (a.length > 1) {
+				Integer ncp = parseInt16(a[1]);
+				if (ncp != null) return new GlyphPair(a[0], ncp);
+				if (a[1].length() > 0) return new GlyphPair(a[0], a[1]);
+			}
+			return new GlyphPair(a[0], a[0]);
+		}
+		return null;
 	}
 	
 	private static boolean loadPreset(Options o, String name) {
@@ -494,12 +520,12 @@ public class ConvertBitmap {
 	
 	private static void transformFont(BitmapFont font, Options o) {
 		if (!o.nameSearchReplace.isEmpty()) {
-			for (int key : font.nameTypes()) {
-				String s = font.getName(key);
+			for (Map.Entry<Integer,String> e : font.names(true).entrySet()) {
+				String s = e.getValue();
 				for (SearchReplacePattern p : o.nameSearchReplace) {
 					s = p.replaceAll(s);
 				}
-				font.setName(key, s);
+				font.setName(e.getKey(), s);
 			}
 		}
 		if (o.timestampCodepoint != null) {
@@ -524,21 +550,31 @@ public class ConvertBitmap {
 		if (!o.subsetRemap.isEmpty()) {
 			font.subsetRemap(o.subsetRemap);
 		}
-		if (!o.glyphsToRemove.isEmpty()) {
+		if (!o.codePointsToRemove.isEmpty()) {
 			for (
-				int i = o.glyphsToRemove.nextSetBit(0);
+				int i = o.codePointsToRemove.nextSetBit(0);
 				i >= 0;
-				i = o.glyphsToRemove.nextSetBit(i + 1)
+				i = o.codePointsToRemove.nextSetBit(i + 1)
 			) {
 				font.removeCharacter(i);
+			}
+		}
+		if (!o.glyphNamesToRemove.isEmpty()) {
+			for (String name : o.glyphNamesToRemove) {
+				font.removeNamedGlyph(name);
 			}
 		}
 		if (o.strictMonospace) {
 			BitmapFontGlyph space = font.getCharacter(32);
 			int monoWidth = (space != null) ? space.getCharacterWidth() : 0;
-			for (int cp : font.codePoints()) {
-				if (font.getCharacter(cp).getCharacterWidth() != monoWidth) {
-					font.removeCharacter(cp);
+			for (Map.Entry<Integer,BitmapFontGlyph> e : font.characters(true).entrySet()) {
+				if (e.getValue().getCharacterWidth() != monoWidth) {
+					font.removeCharacter(e.getKey());
+				}
+			}
+			for (Map.Entry<String,BitmapFontGlyph> e : font.namedGlyphs(true).entrySet()) {
+				if (e.getValue().getCharacterWidth() != monoWidth) {
+					font.removeNamedGlyph(e.getKey());
 				}
 			}
 		}
@@ -553,14 +589,14 @@ public class ConvertBitmap {
 			for (String id : f.ids) {
 				if (format.equals(id)) {
 					File out = getOutputFile(o.dest, name, f.suffix);
+					BitmapFontExporter exporter = f.createExporter(o.oo);
 					if (f.macResFork) {
 						out.createNewFile();
-						out = new File(out, "..namedfork");
-						out = new File(out, "rsrc");
+						File rf = MacUtility.getResourceFork(out);
+						exporter.exportFontToFile(font, rf);
+					} else {
+						exporter.exportFontToFile(font, out);
 					}
-					BitmapFontExporter exporter = f.createExporter(o.oo);
-					exporter.exportFontToFile(font, out);
-					if (f.macResFork) out = out.getParentFile().getParentFile();
 					f.postProcess(out);
 					return true;
 				}

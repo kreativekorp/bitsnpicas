@@ -50,7 +50,7 @@ public class KBnPVectorFontImporter implements VectorFontImporter {
 		double ld = in.readDouble();
 		double lg = in.readDouble();
 		double xh = in.readDouble();
-		VectorFont font = new VectorFont(ma, md, la, ld, xh, lg);
+		VectorFont font = new VectorFont(ma, md, la, ld, xh, xh, lg);
 		while (true) {
 			int blockType = in.readInt();
 			switch (blockType) {
@@ -106,6 +106,7 @@ public class KBnPVectorFontImporter implements VectorFontImporter {
 					font.putCharacter(codePoint, glyph);
 					break;
 				case 0x66696E2E: // fin.
+					font.setCapHeight2D();
 					return font;
 				default:
 					throw new IOException("bad magic number");

@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Map;
 import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
@@ -48,17 +49,17 @@ public class KBnPVectorFontExporter implements VectorFontExporter {
 		out.writeDouble(font.getLineDescent2D());
 		out.writeDouble(font.getLineGap2D());
 		out.writeDouble(font.getXHeight2D());
-		for (int nameType : font.nameTypes()) {
+		for (Map.Entry<Integer,String> e : font.names(false).entrySet()) {
 			out.writeInt(0x6E616D65); // name
 			out.writeInt(1); // version
-			out.writeInt(nameType);
-			out.writeUTF(font.getName(nameType));
+			out.writeInt(e.getKey());
+			out.writeUTF(e.getValue());
 		}
-		for (int codePoint : font.codePoints()) {
+		for (Map.Entry<Integer,VectorFontGlyph> e : font.characters(false).entrySet()) {
 			out.writeInt(0x63686172); // char
 			out.writeInt(1); // version
-			out.writeInt(codePoint);
-			VectorFontGlyph g = font.getCharacter(codePoint);
+			out.writeInt(e.getKey());
+			VectorFontGlyph g = e.getValue();
 			out.writeDouble(g.getCharacterWidth2D());
 			Collection<? extends GeneralPath> paths = g.getContours();
 			out.writeInt(paths.size());

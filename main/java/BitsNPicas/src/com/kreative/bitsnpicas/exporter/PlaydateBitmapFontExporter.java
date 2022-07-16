@@ -19,6 +19,7 @@ import com.kreative.bitsnpicas.Base64OutputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.GlyphPair;
 
 public class PlaydateBitmapFontExporter implements BitmapFontExporter {
 	private static final int MIN_CODE_POINT = 0x20;
@@ -130,9 +131,7 @@ public class PlaydateBitmapFontExporter implements BitmapFontExporter {
 		
 		int baseline = font.getLineAscent() - ch;
 		int xHeight = font.getXHeight();
-		int capHeight = 0;
-		BitmapFontGlyph Xg = font.getCharacter(0x58);
-		if (Xg != null) capHeight = Xg.getGlyphHeight();
+		int capHeight = font.getCapHeight();
 		out.println("--metrics={\"baseline\":"+baseline+",\"xHeight\":"+xHeight+",\"capHeight\":"+capHeight+"}");
 		
 		if (png != null) {
@@ -151,6 +150,20 @@ public class PlaydateBitmapFontExporter implements BitmapFontExporter {
 		out.println("tracking=" + tracking);
 		for (Map.Entry<Integer,Integer> e : charWidths.entrySet()) {
 			out.println(joinCodePoints(e.getKey()) + "\t" + e.getValue());
+		}
+		for (Map.Entry<GlyphPair,Integer> e : font.kernPairs(false).entrySet()) {
+			Object l = e.getKey().getLeft();
+			Object r = e.getKey().getRight();
+			if (l instanceof Integer && r instanceof Integer) {
+				int lcp = (Integer)l;
+				int rcp = (Integer)r;
+				if (
+					lcp >= MIN_CODE_POINT && lcp <= MAX_CODE_POINT &&
+					rcp >= MIN_CODE_POINT && rcp <= MAX_CODE_POINT
+				) {
+					out.println(joinCodePoints(lcp, rcp) + "\t" + e.getValue());
+				}
+			}
 		}
 	}
 	

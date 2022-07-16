@@ -126,7 +126,7 @@ public class PSFBitmapFontExporter implements BitmapFontExporter {
 		}
 		if (useAllGlyphs && version >= 2) {
 			TreeSet<Integer> remainder = new TreeSet<Integer>();
-			remainder.addAll(font.codePointList());
+			remainder.addAll(font.characters(false).keySet());
 			remainder.removeAll(codePoints);
 			codePoints.addAll(remainder);
 		}

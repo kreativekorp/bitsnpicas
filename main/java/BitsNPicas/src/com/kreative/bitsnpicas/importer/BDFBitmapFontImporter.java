@@ -77,6 +77,12 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 					bm.setXHeight(i);
 				} catch (NumberFormatException nfe) {}
 			}
+			else if (kv[0].equals("CAP_HEIGHT")) {
+				try {
+					int i = Integer.parseInt(dequote(kv[1]));
+					bm.setCapHeight(i);
+				} catch (NumberFormatException nfe) {}
+			}
 			else if (kv[0].equals("CHARSET_REGISTRY")) {
 				String name = dequote(kv[1]);
 				if (name.equalsIgnoreCase("ISO10646")) {

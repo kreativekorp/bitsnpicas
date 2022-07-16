@@ -37,7 +37,7 @@ public class HexBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	private static BitmapFont importFont(Scanner in) {
-		BitmapFont f = new BitmapFont(10, 2, 14, 2, 8, 0);
+		BitmapFont f = new BitmapFont(10, 2, 14, 2, 8, 10, 0);
 		lines: while (in.hasNextLine()) {
 			String[] fields = in.nextLine().split(":");
 			if (fields.length != 2) continue lines;

@@ -57,7 +57,7 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 		String classText = gff.getClassTextString();
 		String[] classFields = classText.split(" +");
 		
-		BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0);
+		BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0, 0);
 		for (int cp = 0x20; cp < 0x80; cp++) {
 			BitmapFontGlyph g = getASCIIGlyph(gfps, cp);
 			if (g != null) f.putCharacter(cp, g);
@@ -73,6 +73,7 @@ public class GEOSBitmapFontImporter implements BitmapFontImporter {
 		f.setName(BitmapFont.NAME_VERSION, classFields[classFields.length - 1]);
 		f.setName(BitmapFont.NAME_DESCRIPTION, gff.getDescriptionString());
 		f.setXHeight();
+		f.setCapHeight();
 		return f;
 	}
 	
