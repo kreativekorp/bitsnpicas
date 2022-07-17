@@ -14,7 +14,7 @@ import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
 
-public class KBnPVectorFontExporter implements VectorFontExporter {
+public class KpcasVectorFontExporter implements VectorFontExporter {
 	@Override
 	public byte[] exportFontToBytes(VectorFont font) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();

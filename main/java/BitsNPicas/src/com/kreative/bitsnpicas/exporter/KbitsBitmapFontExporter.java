@@ -11,7 +11,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 
-public class KBnPBitmapFontExporter implements BitmapFontExporter {
+public class KbitsBitmapFontExporter implements BitmapFontExporter {
 	@Override
 	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();

@@ -10,7 +10,7 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 
-public class KBnPBitmapFontImporter implements BitmapFontImporter {
+public class KbitsBitmapFontImporter implements BitmapFontImporter {
 	@Override
 	public BitmapFont[] importFont(byte[] data) throws IOException {
 		ByteArrayInputStream bis = new ByteArrayInputStream(data);

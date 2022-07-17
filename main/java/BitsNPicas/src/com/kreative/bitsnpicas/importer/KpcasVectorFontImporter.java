@@ -13,7 +13,7 @@ import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontGlyph;
 import com.kreative.bitsnpicas.VectorFontImporter;
 
-public class KBnPVectorFontImporter implements VectorFontImporter {
+public class KpcasVectorFontImporter implements VectorFontImporter {
 	@Override
 	public VectorFont[] importFont(byte[] data) throws IOException {
 		ByteArrayInputStream bis = new ByteArrayInputStream(data);
