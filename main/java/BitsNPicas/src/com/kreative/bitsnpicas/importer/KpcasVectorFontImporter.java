@@ -1,6 +1,5 @@
 package com.kreative.bitsnpicas.importer;
 
-import java.awt.geom.GeneralPath;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -12,6 +11,8 @@ import java.util.List;
 import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontGlyph;
 import com.kreative.bitsnpicas.VectorFontImporter;
+import com.kreative.bitsnpicas.VectorInstruction;
+import com.kreative.bitsnpicas.VectorPath;
 
 public class KpcasVectorFontImporter implements VectorFontImporter {
 	@Override
@@ -64,10 +65,10 @@ public class KpcasVectorFontImporter implements VectorFontImporter {
 					if (in.readInt() != 1) throw new IOException("bad version number");
 					int codePoint = in.readInt();
 					double advance = in.readDouble();
-					List<GeneralPath> paths = new ArrayList<GeneralPath>();
+					List<VectorPath> paths = new ArrayList<VectorPath>();
 					int pathCount = in.readInt();
 					for (int i = 0; i < pathCount; i++) {
-						GeneralPath path = new GeneralPath();
+						VectorPath path = new VectorPath();
 						while (true) {
 							int type = in.readInt();
 							if (type == 0x2F637472) {
@@ -75,17 +76,17 @@ public class KpcasVectorFontImporter implements VectorFontImporter {
 							} else if (type == 0x6D6F7665) {
 								double x = in.readDouble();
 								double y = in.readDouble();
-								path.moveTo(x, y);
+								path.add(new VectorInstruction('M', x, y));
 							} else if (type == 0x6C696E65) {
 								double x = in.readDouble();
 								double y = in.readDouble();
-								path.lineTo(x, y);
+								path.add(new VectorInstruction('L', x, y));
 							} else if (type == 0x71756164) {
 								double x1 = in.readDouble();
 								double y1 = in.readDouble();
 								double x2 = in.readDouble();
 								double y2 = in.readDouble();
-								path.quadTo(x1, y1, x2, y2);
+								path.add(new VectorInstruction('Q', x1, y1, x2, y2));
 							} else if (type == 0x63756265) {
 								double x1 = in.readDouble();
 								double y1 = in.readDouble();
@@ -93,9 +94,14 @@ public class KpcasVectorFontImporter implements VectorFontImporter {
 								double y2 = in.readDouble();
 								double x3 = in.readDouble();
 								double y3 = in.readDouble();
-								path.curveTo(x1, y1, x2, y2, x3, y3);
+								path.add(new VectorInstruction('C', x1, y1, x2, y2, x3, y3));
 							} else if (type == 0x2F707468) {
-								path.closePath();
+								path.add(new VectorInstruction('Z'));
+							} else if ((type & 0xFFC0FFF0) == 0x00400000) {
+								char operation = (char)(type >> 16);
+								Double[] args = new Double[type & 0x0F];
+								for (int j = 0; j < args.length; j++) args[j] = in.readDouble();
+								path.add(new VectorInstruction(operation, args));
 							} else {
 								throw new IOException("bad magic number");
 							}

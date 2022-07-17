@@ -1,7 +1,5 @@
 package com.kreative.bitsnpicas.exporter;
 
-import java.awt.geom.GeneralPath;
-import java.awt.geom.PathIterator;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -9,10 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
+import com.kreative.bitsnpicas.VectorInstruction;
+import com.kreative.bitsnpicas.VectorPath;
 
 public class KpcasVectorFontExporter implements VectorFontExporter {
 	@Override
@@ -61,45 +62,47 @@ public class KpcasVectorFontExporter implements VectorFontExporter {
 			out.writeInt(e.getKey());
 			VectorFontGlyph g = e.getValue();
 			out.writeDouble(g.getCharacterWidth2D());
-			Collection<? extends GeneralPath> paths = g.getContours();
+			Collection<? extends VectorPath> paths = g.getContours();
 			out.writeInt(paths.size());
-			for (GeneralPath path : paths) {
-				PathIterator pi = path.getPathIterator(null);
-				double[] vals = new double[8];
-				while (!pi.isDone()) {
-					int type = pi.currentSegment(vals);
-					switch (type) {
-						case PathIterator.SEG_MOVETO:
+			for (VectorPath path : paths) {
+				for (VectorInstruction inst : path) {
+					List<Number> vals = inst.getOperands();
+					switch (inst.getOperation()) {
+						case 'M':
 							out.writeInt(0x6D6F7665);
-							out.writeDouble(vals[0]);
-							out.writeDouble(vals[1]);
+							out.writeDouble((vals.size() > 0) ? vals.get(0).doubleValue() : 0);
+							out.writeDouble((vals.size() > 1) ? vals.get(1).doubleValue() : 0);
 							break;
-						case PathIterator.SEG_LINETO:
+						case 'L':
 							out.writeInt(0x6C696E65);
-							out.writeDouble(vals[0]);
-							out.writeDouble(vals[1]);
+							out.writeDouble((vals.size() > 0) ? vals.get(0).doubleValue() : 0);
+							out.writeDouble((vals.size() > 1) ? vals.get(1).doubleValue() : 0);
 							break;
-						case PathIterator.SEG_QUADTO:
+						case 'Q':
 							out.writeInt(0x71756164);
-							out.writeDouble(vals[0]);
-							out.writeDouble(vals[1]);
-							out.writeDouble(vals[2]);
-							out.writeDouble(vals[3]);
+							out.writeDouble((vals.size() > 0) ? vals.get(0).doubleValue() : 0);
+							out.writeDouble((vals.size() > 1) ? vals.get(1).doubleValue() : 0);
+							out.writeDouble((vals.size() > 2) ? vals.get(2).doubleValue() : 0);
+							out.writeDouble((vals.size() > 3) ? vals.get(3).doubleValue() : 0);
 							break;
-						case PathIterator.SEG_CUBICTO:
+						case 'C':
 							out.writeInt(0x63756265);
-							out.writeDouble(vals[0]);
-							out.writeDouble(vals[1]);
-							out.writeDouble(vals[2]);
-							out.writeDouble(vals[3]);
-							out.writeDouble(vals[4]);
-							out.writeDouble(vals[5]);
+							out.writeDouble((vals.size() > 0) ? vals.get(0).doubleValue() : 0);
+							out.writeDouble((vals.size() > 1) ? vals.get(1).doubleValue() : 0);
+							out.writeDouble((vals.size() > 2) ? vals.get(2).doubleValue() : 0);
+							out.writeDouble((vals.size() > 3) ? vals.get(3).doubleValue() : 0);
+							out.writeDouble((vals.size() > 4) ? vals.get(4).doubleValue() : 0);
+							out.writeDouble((vals.size() > 5) ? vals.get(5).doubleValue() : 0);
 							break;
-						case PathIterator.SEG_CLOSE:
+						case 'Z':
 							out.writeInt(0x2F707468);
 							break;
+						default:
+							out.writeShort(inst.getOperation());
+							out.writeShort(vals.size());
+							for (Number n : vals) out.writeDouble(n.doubleValue());
+							break;
 					}
-					pi.next();
 				}
 				out.writeInt(0x2F637472);
 			}

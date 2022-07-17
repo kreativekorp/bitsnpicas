@@ -2,34 +2,38 @@ package com.kreative.bitsnpicas;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class VectorFontGlyph extends FontGlyph {
-	protected List<GeneralPath> contours;
+	protected List<VectorPath> contours;
 	protected double advance;
 	
 	public VectorFontGlyph() {
-		this.contours = new ArrayList<GeneralPath>();
+		this.contours = new ArrayList<VectorPath>();
 		this.advance = 0;
 	}
 	
-	public VectorFontGlyph(Collection<? extends GeneralPath> c) {
-		this.contours = new ArrayList<GeneralPath>();
+	public VectorFontGlyph(Collection<? extends VectorPath> c) {
+		this.contours = new ArrayList<VectorPath>();
 		this.contours.addAll(c);
 		if (c.isEmpty()) {
 			this.advance = 0;
 		} else {
-			GeneralPath p1 = c.iterator().next();
-			double left = p1.getBounds2D().getMinX();
-			double right = p1.getBounds2D().getMaxX();
-			for (GeneralPath p : c) {
-				double pleft = p.getBounds2D().getMinX();
-				double pright = p.getBounds2D().getMaxX();
+			VectorPath p1 = c.iterator().next();
+			Rectangle2D b1 = p1.toGeneralPath().getBounds2D();
+			double left = b1.getMinX();
+			double right = b1.getMaxX();
+			for (VectorPath p : c) {
+				Rectangle2D b = p.toGeneralPath().getBounds2D();
+				double pleft = b.getMinX();
+				double pright = b.getMaxX();
 				if (pleft < left) left = pleft;
 				if (pright > right) right = pright;
 			}
@@ -37,13 +41,13 @@ public class VectorFontGlyph extends FontGlyph {
 		}
 	}
 	
-	public VectorFontGlyph(Collection<? extends GeneralPath> c, double width) {
-		this.contours = new ArrayList<GeneralPath>();
+	public VectorFontGlyph(Collection<? extends VectorPath> c, double width) {
+		this.contours = new ArrayList<VectorPath>();
 		this.contours.addAll(c);
 		this.advance = width;
 	}
 	
-	public Collection<? extends GeneralPath> getContours() {
+	public Collection<VectorPath> getContours() {
 		return this.contours;
 	}
 	
@@ -51,10 +55,12 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			int left = p1.getBounds().x;
-			for (GeneralPath p : contours) {
-				int pleft = p.getBounds().x;
+			VectorPath p1 = contours.iterator().next();
+			Rectangle b1 = p1.toGeneralPath().getBounds();
+			int left = b1.x;
+			for (VectorPath p : contours) {
+				Rectangle b = p.toGeneralPath().getBounds();
+				int pleft = b.x;
 				if (pleft < left) left = pleft;
 			}
 			return left;
@@ -65,10 +71,12 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			double left = p1.getBounds2D().getMinX();
-			for (GeneralPath p : contours) {
-				double pleft = p.getBounds2D().getMinX();
+			VectorPath p1 = contours.iterator().next();
+			Rectangle2D b1 = p1.toGeneralPath().getBounds2D();
+			double left = b1.getMinX();
+			for (VectorPath p : contours) {
+				Rectangle2D b = p.toGeneralPath().getBounds2D();
+				double pleft = b.getMinX();
 				if (pleft < left) left = pleft;
 			}
 			return left;
@@ -79,12 +87,14 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			int left = p1.getBounds().x;
-			int right = p1.getBounds().x + p1.getBounds().width;
-			for (GeneralPath p : contours) {
-				int pleft = p.getBounds().x;
-				int pright = p.getBounds().x + p.getBounds().width;
+			VectorPath p1 = contours.iterator().next();
+			Rectangle b1 = p1.toGeneralPath().getBounds();
+			int left = b1.x;
+			int right = b1.x + b1.width;
+			for (VectorPath p : contours) {
+				Rectangle b = p.toGeneralPath().getBounds();
+				int pleft = b.x;
+				int pright = b.x + b.width;
 				if (pleft < left) left = pleft;
 				if (pright > right) right = pright;
 			}
@@ -96,12 +106,14 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			double left = p1.getBounds2D().getMinX();
-			double right = p1.getBounds2D().getMaxX();
-			for (GeneralPath p : contours) {
-				double pleft = p.getBounds2D().getMinX();
-				double pright = p.getBounds2D().getMaxX();
+			VectorPath p1 = contours.iterator().next();
+			Rectangle2D b1 = p1.toGeneralPath().getBounds2D();
+			double left = b1.getMinX();
+			double right = b1.getMaxX();
+			for (VectorPath p : contours) {
+				Rectangle2D b = p.toGeneralPath().getBounds2D();
+				double pleft = b.getMinX();
+				double pright = b.getMaxX();
 				if (pleft < left) left = pleft;
 				if (pright > right) right = pright;
 			}
@@ -113,12 +125,14 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			int top = p1.getBounds().y;
-			int bottom = p1.getBounds().y + p1.getBounds().height;
-			for (GeneralPath p : contours) {
-				int ptop = p.getBounds().y;
-				int pbottom = p.getBounds().y + p.getBounds().height;
+			VectorPath p1 = contours.iterator().next();
+			Rectangle b1 = p1.toGeneralPath().getBounds();
+			int top = b1.y;
+			int bottom = b1.y + b1.height;
+			for (VectorPath p : contours) {
+				Rectangle b = p.toGeneralPath().getBounds();
+				int ptop = b.y;
+				int pbottom = b.y + b.height;
 				if (ptop < top) top = ptop;
 				if (pbottom > bottom) bottom = pbottom;
 			}
@@ -130,12 +144,14 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			double top = p1.getBounds2D().getMinY();
-			double bottom = p1.getBounds2D().getMaxY();
-			for (GeneralPath p : contours) {
-				double ptop = p.getBounds2D().getMinY();
-				double pbottom = p.getBounds2D().getMaxY();
+			VectorPath p1 = contours.iterator().next();
+			Rectangle2D b1 = p1.toGeneralPath().getBounds2D();
+			double top = b1.getMinY();
+			double bottom = b1.getMaxY();
+			for (VectorPath p : contours) {
+				Rectangle2D b = p.toGeneralPath().getBounds2D();
+				double ptop = b.getMinY();
+				double pbottom = b.getMaxY();
 				if (ptop < top) top = ptop;
 				if (pbottom > bottom) bottom = pbottom;
 			}
@@ -147,10 +163,12 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			int top = p1.getBounds().y;
-			for (GeneralPath p : contours) {
-				int ptop = p.getBounds().y;
+			VectorPath p1 = contours.iterator().next();
+			Rectangle b1 = p1.toGeneralPath().getBounds();
+			int top = b1.y;
+			for (VectorPath p : contours) {
+				Rectangle b = p.toGeneralPath().getBounds();
+				int ptop = b.y;
 				if (ptop < top) top = ptop;
 			}
 			return -top;
@@ -161,10 +179,12 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			double top = p1.getBounds2D().getMinY();
-			for (GeneralPath p : contours) {
-				double ptop = p.getBounds2D().getMinY();
+			VectorPath p1 = contours.iterator().next();
+			Rectangle2D b1 = p1.toGeneralPath().getBounds2D();
+			double top = b1.getMinY();
+			for (VectorPath p : contours) {
+				Rectangle2D b = p.toGeneralPath().getBounds2D();
+				double ptop = b.getMinY();
 				if (ptop < top) top = ptop;
 			}
 			return -top;
@@ -175,10 +195,12 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			int bottom = p1.getBounds().y + p1.getBounds().height;
-			for (GeneralPath p : contours) {
-				int pbottom = p.getBounds().y + p.getBounds().height;
+			VectorPath p1 = contours.iterator().next();
+			Rectangle b1 = p1.toGeneralPath().getBounds();
+			int bottom = b1.y + b1.height;
+			for (VectorPath p : contours) {
+				Rectangle b = p.toGeneralPath().getBounds();
+				int pbottom = b.y + b.height;
 				if (pbottom > bottom) bottom = pbottom;
 			}
 			return bottom;
@@ -189,10 +211,12 @@ public class VectorFontGlyph extends FontGlyph {
 		if (contours.isEmpty()) {
 			return 0;
 		} else {
-			GeneralPath p1 = contours.iterator().next();
-			double bottom = p1.getBounds2D().getMaxY();
-			for (GeneralPath p : contours) {
-				double pbottom = p.getBounds2D().getMaxY();
+			VectorPath p1 = contours.iterator().next();
+			Rectangle2D b1 = p1.toGeneralPath().getBounds2D();
+			double bottom = b1.getMaxY();
+			for (VectorPath p : contours) {
+				Rectangle2D b = p.toGeneralPath().getBounds2D();
+				double pbottom = b.getMaxY();
 				if (pbottom > bottom) bottom = pbottom;
 			}
 			return bottom;
@@ -218,7 +242,8 @@ public class VectorFontGlyph extends FontGlyph {
 	public double paint(Graphics g, double x, double y, double scale) {
 		AffineTransform tx = AffineTransform.getTranslateInstance(x, y);
 		AffineTransform sx = AffineTransform.getScaleInstance(scale, scale);
-		for (GeneralPath path : contours) {
+		for (VectorPath contour : contours) {
+			GeneralPath path = contour.toGeneralPath();
 			Shape ss = sx.createTransformedShape(path);
 			Shape ts = tx.createTransformedShape(ss);
 			((Graphics2D)g).draw(ts);
