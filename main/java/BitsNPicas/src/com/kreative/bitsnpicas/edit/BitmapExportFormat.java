@@ -5,29 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.MacUtility;
-import com.kreative.bitsnpicas.exporter.BDFBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.CybikoBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.FNTBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.FONTXBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.FZXBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.GEOSBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.HMZKBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.HexBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.NFNTBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.OTBBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.PSFBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.PlaydateBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.RFontBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.RockboxBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.SBFBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.SFontBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.TOSBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.TTFBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.U8MBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.*;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
 public enum BitmapExportFormat {
+	KBITS("Kbits (Kreative Bits'n'Picas 1.x)", ".kbits", "v1") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new KbitsBitmapFontExporter();
+		}
+	},
 	TTF("TTF (TrueType)", ".ttf", "pixel") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			Dimension d = o.getPixelDimension();

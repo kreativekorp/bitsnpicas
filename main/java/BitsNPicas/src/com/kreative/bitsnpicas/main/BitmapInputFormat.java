@@ -4,28 +4,16 @@ import java.io.File;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.FileProxy;
-import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.FNTBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.FONTXBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.GEOSBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.KbitsBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.PlaydateBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.U8MBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.*;
 import com.kreative.unicode.data.EncodingList;
 
 public enum BitmapInputFormat {
+	KBITX(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbitx"); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new KbitxBitmapFontImporter();
+		}
+	},
 	KBITS(BitmapFont.NAME_FAMILY_AND_STYLE) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbits"); }
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {

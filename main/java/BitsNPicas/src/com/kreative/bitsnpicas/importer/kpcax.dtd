@@ -1,0 +1,49 @@
+<!--
+	Date: 2022/07/17 10:58:00 PDT
+	Author: Rebecca Bettencourt <support@kreativekorp.com>
+-->
+
+<!ELEMENT kpcas (prop*,name*,g*,k*,feat*,puaa?)>
+
+<!ELEMENT prop EMPTY>
+<!ATTLIST prop
+	id CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT name EMPTY>
+<!ATTLIST name
+	id CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT g EMPTY>
+<!ATTLIST g
+	u CDATA #IMPLIED
+	n CDATA #IMPLIED
+	w CDATA #IMPLIED
+	d CDATA #REQUIRED
+>
+
+<!ELEMENT k EMPTY>
+<!ATTLIST k
+	lu CDATA #IMPLIED
+	ln CDATA #IMPLIED
+	ru CDATA #IMPLIED
+	rn CDATA #IMPLIED
+	o CDATA #REQUIRED
+>
+
+<!ELEMENT feat (#PCDATA)>
+<!ATTLIST feat name CDATA #IMPLIED>
+
+<!ELEMENT puaa (pt*)>
+
+<!ELEMENT pt (pv*)>
+<!ATTLIST pt prop CDATA #REQUIRED>
+
+<!ELEMENT pv EMPTY>
+<!ATTLIST pv
+	range CDATA #REQUIRED
+	value CDATA #REQUIRED
+>

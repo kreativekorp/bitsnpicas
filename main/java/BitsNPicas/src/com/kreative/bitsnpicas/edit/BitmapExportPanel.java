@@ -15,7 +15,6 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
@@ -54,10 +53,12 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.playdatePanel = new BitmapExportPlaydatePanel();
 		this.exportButton = new JButton("Export");
 		
-		JLabel noneLabel = new JLabel("This format has no options.");
-		noneLabel.setHorizontalAlignment(JLabel.CENTER);
-		JPanel nonePanel = new JPanel(new BorderLayout());
-		nonePanel.add(noneLabel, BorderLayout.CENTER);
+		JPanel nonePanel = new BitmapExportLabelPanel("This format has no options.");
+		JPanel v1Panel = new BitmapExportLabelPanel(
+			"<html><center>Version 1.x only supports basic metrics, names,<br>" +
+			"and mapped characters. Other features, such<br>" +
+			"as named glyphs and kerning pairs, will be lost.</center></html>"
+		);
 		
 		final CardLayout formatOptionsLayout = new CardLayout();
 		final JPanel formatOptionsPanel = new JPanel(formatOptionsLayout);
@@ -70,6 +71,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		formatOptionsPanel.add(colorPanel, "color");
 		formatOptionsPanel.add(psfPanel, "psf");
 		formatOptionsPanel.add(playdatePanel, "playdate");
+		formatOptionsPanel.add(v1Panel, "v1");
 		formatOptionsPanel.add(nonePanel, "none");
 		
 		format.setEditable(false);

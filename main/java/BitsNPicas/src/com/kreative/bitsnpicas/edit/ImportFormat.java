@@ -7,40 +7,31 @@ import javax.swing.JFrame;
 import com.kreative.bitsnpicas.FileProxy;
 import com.kreative.bitsnpicas.FontExporter;
 import com.kreative.bitsnpicas.FontImporter;
-import com.kreative.bitsnpicas.exporter.KbitsBitmapFontExporter;
-import com.kreative.bitsnpicas.exporter.KpcasVectorFontExporter;
+import com.kreative.bitsnpicas.exporter.KbitxBitmapFontExporter;
+import com.kreative.bitsnpicas.exporter.KpcaxVectorFontExporter;
 import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
-import com.kreative.bitsnpicas.importer.BDFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.CybikoBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.DSFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.FNTBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.FONTXBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.FZXBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.HMZKBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.HexBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.KbitsBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.KpcasVectorFontImporter;
-import com.kreative.bitsnpicas.importer.PSFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.PlaydateBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.RockboxBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.S10BitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SBFBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SFDBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.SRFontBitmapFontImporter;
-import com.kreative.bitsnpicas.importer.U8MBitmapFontImporter;
+import com.kreative.bitsnpicas.importer.*;
 import com.kreative.bitsnpicas.mover.MoverFrame;
 import com.kreative.unicode.data.GlyphList;
 
 public enum ImportFormat {
+	KBITX {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbitx"); }
+		public FontImporter<?> createImporter() { return new KbitxBitmapFontImporter(); }
+		public FontExporter<?> createExporter() { return new KbitxBitmapFontExporter(); }
+	},
+	KPCAX {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kpcax"); }
+		public FontImporter<?> createImporter() { return new KpcaxVectorFontImporter(); }
+		public FontExporter<?> createExporter() { return new KpcaxVectorFontExporter(); }
+	},
 	KBITS {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbits"); }
 		public FontImporter<?> createImporter() { return new KbitsBitmapFontImporter(); }
-		public FontExporter<?> createExporter() { return new KbitsBitmapFontExporter(); }
 	},
 	KPCAS {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kpcas"); }
 		public FontImporter<?> createImporter() { return new KpcasVectorFontImporter(); }
-		public FontExporter<?> createExporter() { return new KpcasVectorFontExporter(); }
 	},
 	SFD {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".sfd"); }
