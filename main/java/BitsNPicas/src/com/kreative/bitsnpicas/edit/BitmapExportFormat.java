@@ -15,14 +15,14 @@ public enum BitmapExportFormat {
 			return new KbitsBitmapFontExporter();
 		}
 	},
-	TTF("TTF (TrueType)", ".ttf", "pixel") {
+	TTF("TTF (TrueType)", ".ttf", "ttf") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			Dimension d = o.getPixelDimension();
 			boolean exWinMtx = o.getExtendWinMetrics();
 			return new TTFBitmapFontExporter(d.width, d.height, exWinMtx);
 		}
 	},
-	OTB("OTB (OpenType Bitmap)", ".otb", "none") {
+	OTB("OTB (OpenType Bitmap)", ".otb", "otb") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			boolean exWinMtx = o.getExtendWinMetrics();
 			return new OTBBitmapFontExporter(exWinMtx);

@@ -10,7 +10,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-public class BitmapExportPixelPanel extends JPanel {
+public class BitmapExportTTFPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private final SpinnerNumberModel pixelWidth;
@@ -18,7 +18,7 @@ public class BitmapExportPixelPanel extends JPanel {
 	private final JRadioButton winMetricsLineHeight;
 	private final JRadioButton winMetricsYminYmax;
 	
-	public BitmapExportPixelPanel() {
+	public BitmapExportTTFPanel() {
 		this.pixelWidth = new SpinnerNumberModel(100, 1, 1000, 1);
 		this.pixelHeight = new SpinnerNumberModel(100, 1, 1000, 1);
 		this.winMetricsLineHeight = new JRadioButton("<html>typoAscent/typoDescent<br>(Force line height. More compatible.)</html>");

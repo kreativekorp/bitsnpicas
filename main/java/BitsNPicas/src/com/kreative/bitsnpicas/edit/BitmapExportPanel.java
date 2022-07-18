@@ -28,7 +28,8 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	
 	private final BitmapFont font;
 	private final JComboBox format;
-	private final BitmapExportPixelPanel pixelPanel;
+	private final BitmapExportTTFPanel ttfPanel;
+	private final BitmapExportOTBPanel otbPanel;
 	private final BitmapExportGEOSPanel geosPanel;
 	private final BitmapExportMacPanel macPanel;
 	private final BitmapExportEncodingPanel encodingPanel;
@@ -42,7 +43,8 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	public BitmapExportPanel(BitmapFont font) {
 		this.font = font;
 		this.format = new JComboBox(BitmapExportFormat.values());
-		this.pixelPanel = new BitmapExportPixelPanel();
+		this.ttfPanel = new BitmapExportTTFPanel();
+		this.otbPanel = new BitmapExportOTBPanel();
 		this.geosPanel = new BitmapExportGEOSPanel();
 		this.macPanel = new BitmapExportMacPanel();
 		this.encodingPanel = new BitmapExportEncodingPanel();
@@ -62,7 +64,8 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		
 		final CardLayout formatOptionsLayout = new CardLayout();
 		final JPanel formatOptionsPanel = new JPanel(formatOptionsLayout);
-		formatOptionsPanel.add(pixelPanel, "pixel");
+		formatOptionsPanel.add(ttfPanel, "ttf");
+		formatOptionsPanel.add(otbPanel, "otb");
 		formatOptionsPanel.add(geosPanel, "geos");
 		formatOptionsPanel.add(macPanel, "mac");
 		formatOptionsPanel.add(encodingPanel, "encoding");
@@ -143,12 +146,14 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	
 	@Override
 	public Dimension getPixelDimension() {
-		return pixelPanel.getPixelDimension();
+		return ttfPanel.getPixelDimension();
 	}
 	
 	@Override
 	public boolean getExtendWinMetrics() {
-		return pixelPanel.getExtendWinMetrics();
+		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
+		if (f.cardName.equals("otb")) return otbPanel.getExtendWinMetrics();
+		return ttfPanel.getExtendWinMetrics();
 	}
 	
 	@Override
