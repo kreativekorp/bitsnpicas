@@ -2,6 +2,7 @@ package com.kreative.bitsnpicas.puaa;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -42,7 +43,7 @@ public class PuaaCodecTest {
 		try {
 			// File -> PuaaTable
 			PuaaTable puaa = new PuaaTable();
-			Scanner in = new Scanner(src, "UTF-8");
+			Scanner in = new Scanner(new FileInputStream(src), "UTF-8");
 			codec.compile(puaa, in);
 			in.close();
 			

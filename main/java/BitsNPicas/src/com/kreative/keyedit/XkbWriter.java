@@ -1,6 +1,7 @@
 package com.kreative.keyedit;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -28,7 +29,7 @@ public class XkbWriter {
 			List<String> preLines = new ArrayList<String>();
 			List<String> postLines = new ArrayList<String>();
 			boolean foundLayoutListEnd = false;
-			Scanner scan = new Scanner(evdev, "UTF-8");
+			Scanner scan = new Scanner(new FileInputStream(evdev), "UTF-8");
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine();
 				if (line.trim().equalsIgnoreCase("</layoutList>")) foundLayoutListEnd = true;

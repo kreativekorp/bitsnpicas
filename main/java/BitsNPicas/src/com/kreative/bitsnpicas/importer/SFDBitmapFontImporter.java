@@ -16,7 +16,7 @@ public class SFDBitmapFontImporter implements BitmapFontImporter {
 	}
 
 	public BitmapFont[] importFont(File file) throws IOException {
-		return importFont(new Scanner(file, "UTF-8"));
+		return importFont(new Scanner(new FileInputStream(file), "UTF-8"));
 	}
 	
 	public BitmapFont[] importFont(Scanner scan) throws IOException {

@@ -3,6 +3,7 @@ package com.kreative.bitsnpicas.importer;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -99,7 +100,7 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	private BitmapFont[] importFont(File file, String name, BufferedImage img, int cw, int ch) throws IOException {
-		Scanner scan = new Scanner(file, "UTF-8");
+		Scanner scan = new Scanner(new FileInputStream(file), "UTF-8");
 		BitmapFont f = importFont(scan, name, img, cw, ch);
 		return new BitmapFont[]{f};
 	}

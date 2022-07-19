@@ -1,6 +1,7 @@
 package com.kreative.keyedit;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class WinReader {
 	}
 	
 	public static void read(File in, KeyboardMapping km) throws IOException {
-		Scanner scan = new Scanner(in, "UTF-16LE");
+		Scanner scan = new Scanner(new FileInputStream(in), "UTF-16LE");
 		read(scan, km);
 		scan.close();
 	}

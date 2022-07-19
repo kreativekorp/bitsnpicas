@@ -3,6 +3,7 @@ package com.kreative.unicode.fontmap;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -31,7 +32,7 @@ public class FontMapController {
 		try {
 			File file = getPreferencesFile();
 			if (file.exists()) {
-				Scanner in = new Scanner(file, "UTF-8");
+				Scanner in = new Scanner(new FileInputStream(file), "UTF-8");
 				while (in.hasNextLine()) {
 					String[] fields = in.nextLine().split("=", 2);
 					if (fields.length == 2) {

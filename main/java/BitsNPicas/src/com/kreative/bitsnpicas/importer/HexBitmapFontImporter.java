@@ -2,6 +2,7 @@ package com.kreative.bitsnpicas.importer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -29,7 +30,7 @@ public class HexBitmapFontImporter implements BitmapFontImporter {
 	
 	@Override
 	public BitmapFont[] importFont(File file) throws IOException {
-		Scanner in = new Scanner(file, "UTF-8");
+		Scanner in = new Scanner(new FileInputStream(file), "UTF-8");
 		BitmapFont f = importFont(in);
 		in.close();
 		if (f.isEmpty()) return new BitmapFont[0];

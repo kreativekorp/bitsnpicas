@@ -168,7 +168,7 @@ public class XkbReader {
 	}
 	
 	public static void readSymbols(File in, KeyboardMapping km) throws IOException {
-		Scanner scan = new Scanner(in, "UTF-8");
+		Scanner scan = new Scanner(new FileInputStream(in), "UTF-8");
 		readSymbols(scan, km);
 		scan.close();
 	}

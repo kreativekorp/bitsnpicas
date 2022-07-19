@@ -1,6 +1,7 @@
 package com.kreative.mapedit;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -108,7 +109,7 @@ public class Remap {
 	
 	private static boolean rewriteMapping(Map<Integer,Integer> map, File inFile, File outFile) throws IOException {
 		boolean changed = false;
-		Scanner scan = new Scanner(inFile, "UTF-8");
+		Scanner scan = new Scanner(new FileInputStream(inFile), "UTF-8");
 		FileOutputStream outStream = new FileOutputStream(outFile);
 		OutputStreamWriter outWriter = new OutputStreamWriter(outStream, "UTF-8");
 		PrintWriter out = new PrintWriter(outWriter, true);
@@ -168,7 +169,7 @@ public class Remap {
 	
 	private static boolean readRemapping(Map<Integer,Integer> map, File file, int from, int to) throws IOException {
 		boolean changed = false;
-		Scanner scan = new Scanner(file, "UTF-8");
+		Scanner scan = new Scanner(new FileInputStream(file), "UTF-8");
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine().trim();
 			int o = line.indexOf("#");

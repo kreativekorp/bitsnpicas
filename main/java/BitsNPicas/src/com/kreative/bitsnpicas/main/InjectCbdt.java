@@ -11,26 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import com.kreative.bitsnpicas.truetype.CbdtEntry;
-import com.kreative.bitsnpicas.truetype.CbdtEntryFormat17;
-import com.kreative.bitsnpicas.truetype.CbdtEntryFormat18;
-import com.kreative.bitsnpicas.truetype.CbdtEntryFormat19;
-import com.kreative.bitsnpicas.truetype.CmapSubtable;
-import com.kreative.bitsnpicas.truetype.CmapTable;
-import com.kreative.bitsnpicas.truetype.EbdtTable;
-import com.kreative.bitsnpicas.truetype.EblcBitmapSize;
-import com.kreative.bitsnpicas.truetype.EblcIndexSubtable1;
-import com.kreative.bitsnpicas.truetype.EblcIndexSubtableHeader;
-import com.kreative.bitsnpicas.truetype.EblcTable;
-import com.kreative.bitsnpicas.truetype.HheaTable;
-import com.kreative.bitsnpicas.truetype.PostTable;
-import com.kreative.bitsnpicas.truetype.PostTableEntry;
-import com.kreative.bitsnpicas.truetype.SbitBigGlyphMetrics;
-import com.kreative.bitsnpicas.truetype.SbitLineMetrics;
-import com.kreative.bitsnpicas.truetype.SbitSmallGlyphMetrics;
-import com.kreative.bitsnpicas.truetype.SbitTableType;
-import com.kreative.bitsnpicas.truetype.TrueTypeFile;
+import com.kreative.bitsnpicas.truetype.*;
 
 public class InjectCbdt {
 	public static void main(String[] args) {
@@ -173,7 +154,7 @@ public class InjectCbdt {
 		Map<Integer,SbitBigGlyphMetrics> bigMetrics,
 		CmapSubtable cmap, PostTable post
 	) throws IOException {
-		Scanner scan = new Scanner(meta, "UTF-8");
+		Scanner scan = new Scanner(new FileInputStream(meta), "UTF-8");
 		boolean inGlyph = false;
 		int glyphId = 0;
 		SbitSmallGlyphMetrics sgm = null;

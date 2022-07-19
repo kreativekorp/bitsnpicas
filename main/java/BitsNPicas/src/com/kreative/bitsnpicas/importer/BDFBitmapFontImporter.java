@@ -2,6 +2,7 @@ package com.kreative.bitsnpicas.importer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -32,7 +33,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	public BitmapFont[] importFont(File file) throws IOException {
-		return importFont(new Scanner(file, "UTF-8"));
+		return importFont(new Scanner(new FileInputStream(file), "UTF-8"));
 	}
 	
 	public BitmapFont[] importFont(Scanner scan) throws IOException {

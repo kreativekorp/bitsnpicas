@@ -131,7 +131,7 @@ public class PuaaCompiler {
 		} else {
 			PuaaCodec codec = registry.getCodec(src.getName());
 			if (codec != null) {
-				Scanner in = new Scanner(src, "UTF-8");
+				Scanner in = new Scanner(new FileInputStream(src), "UTF-8");
 				codec.compile(puaa, in);
 				in.close();
 			}

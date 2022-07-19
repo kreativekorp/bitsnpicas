@@ -1,6 +1,7 @@
 package com.kreative.bitsnpicas.main;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -59,7 +60,7 @@ public class ConvertBitmap {
 					} else if (arg.equals("-sr") && argi < args.length) {
 						File srFile = new File(args[argi++]);
 						try {
-							Scanner scan = new Scanner(srFile, "utf-8");
+							Scanner scan = new Scanner(new FileInputStream(srFile), "utf-8");
 							while (scan.hasNextLine()) {
 								String line = scan.nextLine().trim();
 								int offset = line.indexOf('#');
