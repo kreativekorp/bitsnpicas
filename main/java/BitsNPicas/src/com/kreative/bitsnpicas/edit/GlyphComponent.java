@@ -19,13 +19,14 @@ import javax.swing.JComponent;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontGlyph;
 
-public class GlyphComponent extends JComponent {
+public class GlyphComponent<G extends FontGlyph> extends JComponent {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int MARGIN_WIDTH = 60;
 	private static final int MARGIN_HEIGHT = 24;
 	
 	private static final Color GRID_COLOR = new Color(0xFFCCCCCC);
+	private static final Color CAP_HEIGHT_COLOR = new Color(0xFFFF9900);
 	private static final Color X_HEIGHT_COLOR = new Color(0xFFFF9900);
 	private static final Color LINE_GAP_COLOR = new Color(0xFFFFCC00);
 	private static final Color LINE_ASCENT_COLOR = new Color(0xFFFF00CC);
@@ -35,22 +36,8 @@ public class GlyphComponent extends JComponent {
 	private static final Color ADVANCE_COLOR = new Color(0xFF00CC00);
 	private static final Color BOUNDS_COLOR = new Color(0xFF9900FF);
 	
-	private static final java.awt.Font HEX_FONT;
-	static {
-		java.awt.Font hexFont;
-		try {
-			hexFont = java.awt.Font.createFont(
-				java.awt.Font.TRUETYPE_FONT,
-				GlyphList.class.getResourceAsStream("Hex.ttf")
-			).deriveFont(10f);
-		} catch (Exception e) {
-			hexFont = null;
-		}
-		HEX_FONT = hexFont;
-	}
-	
-	private final Font<?> font;
-	private final FontGlyph glyph;
+	private Font<G> font;
+	private G glyph;
 	private double scale;
 	private double tx;
 	private double ty;
@@ -58,14 +45,14 @@ public class GlyphComponent extends JComponent {
 	private boolean showGlyphBounds;
 	private Dimension minimumSize;
 	private Dimension preferredSize;
-	private final List<GlyphComponentListener> listeners;
+	private final List<GlyphComponentListener<G>> listeners;
 	
-	public GlyphComponent(Font<?> font, FontGlyph glyph) {
+	public GlyphComponent(Font<G> font, G glyph) {
 		this.font = font;
 		this.glyph = glyph;
 		this.fit = true;
 		this.showGlyphBounds = false;
-		this.listeners = new ArrayList<GlyphComponentListener>();
+		this.listeners = new ArrayList<GlyphComponentListener<G>>();
 		MyMouseListener ml = new MyMouseListener();
 		this.addMouseListener(ml);
 		this.addMouseMotionListener(ml);
@@ -74,8 +61,18 @@ public class GlyphComponent extends JComponent {
 		this.addComponentListener(cl);
 	}
 	
-	public FontGlyph getGlyph() {
+	public Font<G> getGlyphFont() {
+		return this.font;
+	}
+	
+	public G getGlyph() {
 		return this.glyph;
+	}
+	
+	public void setGlyph(Font<G> font, G glyph) {
+		this.font = font;
+		this.glyph = glyph;
+		metricsAndGlyphChanged();
 	}
 	
 	public double getScale() {
@@ -174,23 +171,31 @@ public class GlyphComponent extends JComponent {
 		this.preferredSize = d;
 	}
 	
-	public void addGlyphComponentListener(GlyphComponentListener l) {
+	public void addGlyphComponentListener(GlyphComponentListener<G> l) {
 		this.listeners.add(l);
 	}
 	
-	public void removeGlyphComponentListener(GlyphComponentListener l) {
+	public void removeGlyphComponentListener(GlyphComponentListener<G> l) {
 		this.listeners.remove(l);
 	}
 	
 	public void metricsChanged() {
-		for (GlyphComponentListener l : listeners) {
+		for (GlyphComponentListener<G> l : listeners) {
 			l.metricsChanged(glyph, font);
 		}
 		repaint();
 	}
 	
 	public void glyphChanged() {
-		for (GlyphComponentListener l : listeners) {
+		for (GlyphComponentListener<G> l : listeners) {
+			l.glyphChanged(glyph, font);
+		}
+		repaint();
+	}
+	
+	public void metricsAndGlyphChanged() {
+		for (GlyphComponentListener<G> l : listeners) {
+			l.metricsChanged(glyph, font);
 			l.glyphChanged(glyph, font);
 		}
 		repaint();
@@ -215,6 +220,7 @@ public class GlyphComponent extends JComponent {
 		int lineDescent = iy + (int)Math.round(ty + font.getLineDescent2D() * scale);
 		int lineGap = iy + (int)Math.round(ty + (font.getLineDescent2D() + font.getLineGap2D()) * scale);
 		int xHeight = iy + (int)Math.round(ty - font.getXHeight2D() * scale);
+		int capHeight = iy + (int)Math.round(ty - font.getCapHeight2D() * scale);
 		int advance = ix + (int)Math.round(tx + glyph.getCharacterWidth2D() * scale);
 		
 		g.setColor(Color.black);
@@ -248,6 +254,8 @@ public class GlyphComponent extends JComponent {
 		g.setColor(Color.black);
 		g.drawLine(ix, baseline, ix + iw, baseline);
 		g.drawLine(origin, iy, origin, iy + ih);
+		g.setColor(CAP_HEIGHT_COLOR);
+		g.drawLine(ix, capHeight, ix + iw, capHeight);
 		g.setColor(X_HEIGHT_COLOR);
 		g.drawLine(ix, xHeight, ix + iw, xHeight);
 		g.setColor(LINE_GAP_COLOR);
@@ -274,7 +282,7 @@ public class GlyphComponent extends JComponent {
 		
 		java.awt.Font saveFont = g.getFont();
 		g.setColor(Color.black);
-		if (HEX_FONT != null) g.setFont(HEX_FONT);
+		g.setFont(Resources.HEX_FONT);
 		FontMetrics fm = g.getFontMetrics();
 		if (emAscent >= iy && emAscent < iy + ih) {
 			String mas = toString(font.getEmAscent2D(), true) + " >";
@@ -299,6 +307,10 @@ public class GlyphComponent extends JComponent {
 		if (lineGap >= iy && lineGap < iy + ih && lineGap != lineAscent && lineGap != lineDescent) {
 			String lgs = "< " + toString(font.getLineGap2D(), false);
 			g.drawString(lgs, ix + iw + 2, lineGap + 4);
+		}
+		if (capHeight >= iy && capHeight < iy + ih && capHeight != lineAscent && capHeight != lineDescent && capHeight != lineGap) {
+			String chs = "< " + toString(font.getCapHeight2D(), false);
+			g.drawString(chs, ix + iw + 2, capHeight + 4);
 		}
 		if (advance >= ix && advance < ix + iw) {
 			String aws = toString(glyph.getCharacterWidth2D(), false);
@@ -330,7 +342,7 @@ public class GlyphComponent extends JComponent {
 				MouseRegion region = getRegion(e);
 				Point2D p = (region == MouseRegion.INTERIOR) ? getInteriorPoint(e) : null;
 				boolean changed = false;
-				for (GlyphComponentListener l : listeners) {
+				for (GlyphComponentListener<G> l : listeners) {
 					if (l.mouseWheelMoved(e, p, glyph, font)) {
 						changed = true;
 					}
@@ -370,7 +382,7 @@ public class GlyphComponent extends JComponent {
 						setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
 						setToolTipText("Em Descent");
 						break;
-					case EX_HEIGHT:
+					case X_HEIGHT:
 						setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 						setToolTipText("X Height");
 						break;
@@ -386,9 +398,13 @@ public class GlyphComponent extends JComponent {
 						setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
 						setToolTipText("Line Gap");
 						break;
+					case CAP_HEIGHT:
+						setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+						setToolTipText("Cap Height");
+						break;
 					case ADVANCE_WIDTH:
 						setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
-						setToolTipText("Glyph Width");
+						setToolTipText("Advance Width");
 						break;
 					case NONE:
 						setCursor(null);
@@ -396,7 +412,7 @@ public class GlyphComponent extends JComponent {
 						break;
 					case INTERIOR:
 						Cursor cursor = null;
-						for (GlyphComponentListener l : listeners) {
+						for (GlyphComponentListener<G> l : listeners) {
 							Cursor lc = l.getCursor(e, p, glyph, font);
 							if (lc != null) cursor = lc;
 						}
@@ -405,7 +421,7 @@ public class GlyphComponent extends JComponent {
 						break;
 				}
 				boolean changed = false;
-				for (GlyphComponentListener l : listeners) {
+				for (GlyphComponentListener<G> l : listeners) {
 					if (l.mouseMoved(e, p, glyph, font)) {
 						changed = true;
 					}
@@ -418,7 +434,7 @@ public class GlyphComponent extends JComponent {
 			if (inRegion == MouseRegion.INTERIOR) {
 				Point2D p = getInteriorPoint(e);
 				boolean changed = false;
-				for (GlyphComponentListener l : listeners) {
+				for (GlyphComponentListener<G> l : listeners) {
 					if (l.mousePressed(e, p, glyph, font)) {
 						changed = true;
 					}
@@ -430,10 +446,11 @@ public class GlyphComponent extends JComponent {
 				switch (inRegion) {
 					case EM_ASCENT: baseValue = font.getEmAscent2D(); break;
 					case EM_DESCENT: baseValue = font.getEmDescent2D(); break;
-					case EX_HEIGHT: baseValue = font.getXHeight2D(); break;
+					case X_HEIGHT: baseValue = font.getXHeight2D(); break;
 					case LINE_ASCENT: baseValue = font.getLineAscent2D(); break;
 					case LINE_DESCENT: baseValue = font.getLineDescent2D(); break;
 					case LINE_GAP: baseValue = font.getLineGap2D(); break;
+					case CAP_HEIGHT: baseValue = font.getCapHeight2D(); break;
 					case ADVANCE_WIDTH: baseValue = glyph.getCharacterWidth2D(); break;
 					default: break;
 				}
@@ -443,7 +460,7 @@ public class GlyphComponent extends JComponent {
 			if (inRegion == MouseRegion.INTERIOR) {
 				Point2D p = getInteriorPoint(e);
 				boolean changed = false;
-				for (GlyphComponentListener l : listeners) {
+				for (GlyphComponentListener<G> l : listeners) {
 					if (l.mouseDragged(e, p, glyph, font)) {
 						changed = true;
 					}
@@ -456,10 +473,11 @@ public class GlyphComponent extends JComponent {
 				switch (inRegion) {
 					case EM_ASCENT: font.setEmAscent2D((valueY2 > 0) ? valueY2 : 0); break;
 					case EM_DESCENT: font.setEmDescent2D((valueY > 0) ? valueY : 0); break;
-					case EX_HEIGHT: font.setXHeight2D((valueY2 > 0) ? valueY2 : 0); break;
+					case X_HEIGHT: font.setXHeight2D((valueY2 > 0) ? valueY2 : 0); break;
 					case LINE_ASCENT: font.setLineAscent2D((valueY2 > 0) ? valueY2 : 0); break;
 					case LINE_DESCENT: font.setLineDescent2D((valueY > 0) ? valueY : 0); break;
 					case LINE_GAP: font.setLineGap2D((valueY > 0) ? valueY : 0); break;
+					case CAP_HEIGHT: font.setCapHeight2D((valueY2 > 0) ? valueY2 : 0); break;
 					case ADVANCE_WIDTH: glyph.setCharacterWidth2D((valueX > 0) ? valueX : 0); break;
 					default: break;
 				}
@@ -470,7 +488,7 @@ public class GlyphComponent extends JComponent {
 			if (inRegion == MouseRegion.INTERIOR) {
 				Point2D p = getInteriorPoint(e);
 				boolean changed = false;
-				for (GlyphComponentListener l : listeners) {
+				for (GlyphComponentListener<G> l : listeners) {
 					if (l.mouseReleased(e, p, glyph, font)) {
 						changed = true;
 					}
@@ -483,10 +501,11 @@ public class GlyphComponent extends JComponent {
 				switch (inRegion) {
 					case EM_ASCENT: font.setEmAscent2D((valueY2 > 0) ? valueY2 : 0); break;
 					case EM_DESCENT: font.setEmDescent2D((valueY > 0) ? valueY : 0); break;
-					case EX_HEIGHT: font.setXHeight2D((valueY2 > 0) ? valueY2 : 0); break;
+					case X_HEIGHT: font.setXHeight2D((valueY2 > 0) ? valueY2 : 0); break;
 					case LINE_ASCENT: font.setLineAscent2D((valueY2 > 0) ? valueY2 : 0); break;
 					case LINE_DESCENT: font.setLineDescent2D((valueY > 0) ? valueY : 0); break;
 					case LINE_GAP: font.setLineGap2D((valueY > 0) ? valueY : 0); break;
+					case CAP_HEIGHT: font.setCapHeight2D((valueY2 > 0) ? valueY2 : 0); break;
 					case ADVANCE_WIDTH: glyph.setCharacterWidth2D((valueX > 0) ? valueX : 0); break;
 					default: break;
 				}
@@ -522,7 +541,7 @@ public class GlyphComponent extends JComponent {
 					} else if (e.getY() > emDescent - 10 && e.getY() < emDescent + 10) {
 						return MouseRegion.EM_DESCENT;
 					} else if (e.getY() > exHeight - 10 && e.getY() < exHeight + 10) {
-						return MouseRegion.EX_HEIGHT;
+						return MouseRegion.X_HEIGHT;
 					}
 				}
 			} else if (e.getX() >= ix + iw) {
@@ -530,12 +549,15 @@ public class GlyphComponent extends JComponent {
 					int lineAscent = iy + (int)Math.round(ty - font.getLineAscent2D() * scale);
 					int lineDescent = iy + (int)Math.round(ty + font.getLineDescent2D() * scale);
 					int lineGap = iy + (int)Math.round(ty + (font.getLineDescent2D() + font.getLineGap2D()) * scale);
+					int capHeight = iy + (int)Math.round(ty - font.getCapHeight2D() * scale);
 					if (e.getY() > lineAscent - 10 && e.getY() < lineAscent + 10) {
 						return MouseRegion.LINE_ASCENT;
 					} else if (e.getY() > lineDescent - 10 && e.getY() < lineDescent + 10) {
 						return MouseRegion.LINE_DESCENT;
 					} else if (e.getY() > lineGap - 10 && e.getY() < lineGap + 10) {
 						return MouseRegion.LINE_GAP;
+					} else if (e.getY() > capHeight - 10 && e.getY() < capHeight + 10) {
+						return MouseRegion.CAP_HEIGHT;
 					}
 				}
 			} else {
@@ -557,7 +579,8 @@ public class GlyphComponent extends JComponent {
 	}
 	
 	private static enum MouseRegion {
-		NONE, INTERIOR, EM_ASCENT, EM_DESCENT, EX_HEIGHT,
-		LINE_ASCENT, LINE_DESCENT, LINE_GAP, ADVANCE_WIDTH;
+		NONE, INTERIOR, EM_ASCENT, EM_DESCENT, X_HEIGHT,
+		LINE_ASCENT, LINE_DESCENT, LINE_GAP, CAP_HEIGHT,
+		ADVANCE_WIDTH;
 	}
 }

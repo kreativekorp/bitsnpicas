@@ -6,9 +6,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,9 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.SortedSet;
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -34,22 +31,22 @@ import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.BitmapGlyphTransform.BitmapGlyphTransformInfo;
 import com.kreative.bitsnpicas.edit.MoveGlyphsDialog.Result;
+import com.kreative.bitsnpicas.edit.exporter.BitmapExportFrame;
 import com.kreative.bitsnpicas.main.ViewFont;
-import com.kreative.unicode.data.Block;
 
 public class BitmapListMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
-	public BitmapListMenuBar(final Window window, final SaveManager sm, final BitmapFont font, final GlyphList gl) {
+	public BitmapListMenuBar(final Window window, final SaveManager sm, final BitmapFont font, final GlyphList<BitmapFontGlyph> gl) {
 		add(new FileMenu(window, sm, font, gl));
-		add(new EditMenu(font, gl, window, sm));
+		add(new EditMenu(window, gl));
 		add(new GlyphListMenuBar.ViewMenu(window, gl));
-		add(new TransformMenu(font, gl));
+		add(new TransformMenu(gl));
 	}
 	
-	public static class FileMenu extends JMenu {
+	public static final class FileMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public FileMenu(final Window window, final SaveManager sm, final BitmapFont font, final GlyphList gl) {
+		public FileMenu(final Window window, final SaveManager sm, final BitmapFont font, final GlyphList<BitmapFontGlyph> gl) {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
 			add(new CommonMenuItems.OpenMenuItem());
@@ -59,7 +56,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
 			add(new ExportMenuItem(font));
 			addSeparator();
-			add(new ImportMenuItem(font, gl));
+			add(new ImportMenuItem(gl));
 			addSeparator();
 			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			add(new PreviewMenuItem(font, gl));
@@ -70,7 +67,7 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static class ExportMenuItem extends JMenuItem {
+	public static final class ExportMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
 		public ExportMenuItem(final BitmapFont font) {
 			super("Export...");
@@ -83,9 +80,9 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static class ImportMenuItem extends JMenuItem {
+	public static final class ImportMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public ImportMenuItem(final BitmapFont font, final GlyphList gl) {
+		public ImportMenuItem(final GlyphList<BitmapFontGlyph> gl) {
 			super("Import Image...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
@@ -97,14 +94,11 @@ public class BitmapListMenuBar extends JMenuBar {
 					try {
 						BufferedImage image = ImageIO.read(file);
 						if (image != null) {
-							for (int cp : gl.getSelectedCodePoints()) {
-								BitmapFontGlyph glyph = font.getCharacter(cp);
-								if (glyph == null) {
-									glyph = new BitmapFontGlyph();
-									font.putCharacter(cp, glyph);
-								}
-								glyph.setToImage(0, -font.getLineAscent(), image);
+							for (GlyphLocator<BitmapFontGlyph> loc : gl.getSelection()) {
+								BitmapFontGlyph glyph = new BitmapFontGlyph();
+								glyph.setToImage(0, -loc.getGlyphFont().getLineAscent(), image);
 								glyph.setCharacterWidth(image.getWidth());
+								loc.setGlyph(glyph);
 							}
 							gl.glyphsChanged();
 						} else {
@@ -124,21 +118,21 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static class PreviewMenuItem extends JMenuItem {
+	public static final class PreviewMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PreviewMenuItem(final BitmapFont font, final GlyphList gl) {
+		public PreviewMenuItem(final BitmapFont font, final GlyphList<BitmapFontGlyph> gl) {
 			super("Preview");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					final ViewFont vf = new ViewFont(font);
-					final GlyphListListener gll = new GlyphListListener() {
-						public void codePointsSelected(GlyphList gl, Font<?> font) {}
-						public void codePointsOpened(GlyphList gl, Font<?> font) {}
-						public void metricsChanged(GlyphList gl, Font<?> font) {
+					final GlyphListListener<BitmapFontGlyph> gll = new GlyphListListener<BitmapFontGlyph>() {
+						public void selectionChanged(GlyphList<BitmapFontGlyph> gl, Font<BitmapFontGlyph> font) {}
+						public void selectionOpened(GlyphList<BitmapFontGlyph> gl, Font<BitmapFontGlyph> font) {}
+						public void metricsChanged(GlyphList<BitmapFontGlyph> gl, Font<BitmapFontGlyph> font) {
 							vf.fontChanged();
 						}
-						public void glyphsChanged(GlyphList gl, Font<?> font) {
+						public void glyphsChanged(GlyphList<BitmapFontGlyph> gl, Font<BitmapFontGlyph> font) {
 							vf.fontChanged();
 						}
 					};
@@ -154,70 +148,65 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static class EditMenu extends JMenu {
+	public static final class EditMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public EditMenu(final BitmapFont font, final GlyphList gl, final Window window, final SaveManager sm) {
+		public EditMenu(final Window window, final GlyphList<BitmapFontGlyph> gl) {
 			super("Edit");
-			add(new CutMenuItem(font, gl));
-			add(new CopyMenuItem(font, gl));
-			add(new PasteMenuItem(font, gl));
-			add(new ClearMenuItem(font, gl));
+			add(new CutMenuItem(gl));
+			add(new CopyMenuItem(gl));
+			add(new PasteMenuItem(gl));
+			add(new ClearMenuItem(gl));
 			addSeparator();
 			add(new GlyphListMenuBar.SelectAllMenuItem(gl));
 			add(new GlyphListMenuBar.SelectNoneMenuItem(gl));
 			add(new GlyphListMenuBar.SetSelectionMenuItem(window, gl));
 			addSeparator();
-			add(new MoveMenuItem(window, font, gl, false));
-			add(new MoveMenuItem(window, font, gl, true));
-			add(new GlyphListMenuBar.EditMenuItem(font, gl, sm));
-			add(new GlyphListMenuBar.DeleteMenuItem(font, gl));
+			add(new MoveMenuItem(window, gl, false));
+			add(new MoveMenuItem(window, gl, true));
+			add(new GlyphListMenuBar.EditMenuItem(gl));
+			add(new GlyphListMenuBar.DeleteMenuItem(gl));
 			addSeparator();
-			add(new GenerateUnifontHexGlyphMenuItem(font, gl));
-			add(new GenerateTimestampGlyphMenuItem(font, gl));
+			add(new GenerateUnifontHexGlyphMenuItem(gl));
+			add(new GenerateTimestampGlyphMenuItem(gl));
 			addSeparator();
 			add(new CommonMenuItems.FontMapMenuItem());
 		}
 	}
 	
-	public static class CutMenuItem extends JMenuItem {
+	public static final class CutMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public CutMenuItem(final BitmapFont font, final GlyphList gl) {
+		public CutMenuItem(final GlyphList<BitmapFontGlyph> gl) {
 			super("Cut");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					BitmapGlyphListSelection sel = new BitmapGlyphListSelection(gl.getSelection());
 					Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-					cb.setContents(new BitmapGlyphListSelection(font, gl.getSelectedCodePoints()), new ClipboardOwner() {
-						public void lostOwnership(Clipboard cb, Transferable t) {}
-					});
-					for (int cp : gl.getSelectedCodePoints()) {
-						font.removeCharacter(cp);
-					}
-					gl.glyphsChanged();
+					cb.setContents(sel, sel);
+					gl.deleteSelection();
 				}
 			});
 		}
 	}
 	
-	public static class CopyMenuItem extends JMenuItem {
+	public static final class CopyMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public CopyMenuItem(final BitmapFont font, final GlyphList gl) {
+		public CopyMenuItem(final GlyphList<BitmapFontGlyph> gl) {
 			super("Copy");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					BitmapGlyphListSelection sel = new BitmapGlyphListSelection(gl.getSelection());
 					Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-					cb.setContents(new BitmapGlyphListSelection(font, gl.getSelectedCodePoints()), new ClipboardOwner() {
-						public void lostOwnership(Clipboard cb, Transferable t) {}
-					});
+					cb.setContents(sel, sel);
 				}
 			});
 		}
 	}
 	
-	public static class PasteMenuItem extends JMenuItem {
+	public static final class PasteMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PasteMenuItem(final BitmapFont font, final GlyphList gl) {
+		public PasteMenuItem(final GlyphList<BitmapFontGlyph> gl) {
 			super("Paste");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
@@ -227,11 +216,20 @@ public class BitmapListMenuBar extends JMenuBar {
 						if (cb.isDataFlavorAvailable(BitmapGlyphListSelection.flavor)) {
 							BitmapGlyphState[] content = (BitmapGlyphState[])cb.getData(BitmapGlyphListSelection.flavor);
 							if (content.length > 0) {
-								List<Integer> cps = gl.getSelectedCodePoints();
-								for (int i = 0, n = cps.size(); i < n; i++) {
+								List<GlyphLocator<BitmapFontGlyph>> sel = gl.getSelection();
+								if (sel.isEmpty()) return;
+								for (int i = 0, n = sel.size(); i < n; i++) {
 									BitmapFontGlyph glyph = new BitmapFontGlyph();
 									content[i % content.length].apply(glyph);
-									font.putCharacter(cps.get(i), glyph);
+									sel.get(i).setGlyph(glyph);
+								}
+								GlyphLocator<BitmapFontGlyph> last = sel.get(sel.size() - 1);
+								for (int i = sel.size(); i < content.length; i++) {
+									last = last.getNext();
+									if (last == null) break;
+									BitmapFontGlyph glyph = new BitmapFontGlyph();
+									content[i].apply(glyph);
+									last.setGlyph(glyph);
 								}
 							}
 							gl.glyphsChanged();
@@ -239,11 +237,11 @@ public class BitmapListMenuBar extends JMenuBar {
 							Image content = (Image)cb.getData(DataFlavor.imageFlavor);
 							BufferedImage image = SwingUtils.toBufferedImage(content);
 							if (image != null) {
-								for (int cp : gl.getSelectedCodePoints()) {
+								for (GlyphLocator<BitmapFontGlyph> loc : gl.getSelection()) {
 									BitmapFontGlyph glyph = new BitmapFontGlyph();
-									glyph.setToImage(0, -font.getLineAscent(), image);
+									glyph.setToImage(0, -loc.getGlyphFont().getLineAscent(), image);
 									glyph.setCharacterWidth(image.getWidth());
-									font.putCharacter(cp, glyph);
+									loc.setGlyph(glyph);
 								}
 							}
 							gl.glyphsChanged();
@@ -258,24 +256,21 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static class ClearMenuItem extends JMenuItem {
+	public static final class ClearMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public ClearMenuItem(final BitmapFont font, final GlyphList gl) {
+		public ClearMenuItem(final GlyphList<BitmapFontGlyph> gl) {
 			super("Clear");
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					for (int cp : gl.getSelectedCodePoints()) {
-						font.removeCharacter(cp);
-					}
-					gl.glyphsChanged();
+					gl.deleteSelection();
 				}
 			});
 		}
 	}
 	
-	public static class MoveMenuItem extends JMenuItem {
+	public static final class MoveMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public MoveMenuItem(final Window window, final BitmapFont font, final GlyphList gl, final boolean copy) {
+		public MoveMenuItem(final Window window, final GlyphList<BitmapFontGlyph> gl, final boolean copy) {
 			super(copy ? "Copy Glyphs..." : "Move Glyphs...");
 			setAccelerator(KeyStroke.getKeyStroke(
 				copy ? KeyEvent.VK_C : KeyEvent.VK_X,
@@ -283,80 +278,104 @@ public class BitmapListMenuBar extends JMenuBar {
 			));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					List<Integer> codePointList = gl.getCodePointList();
-					boolean byIndex = !(codePointList instanceof Block);
-					Result result = new MoveGlyphsDialog(window, copy, byIndex).showDialog();
+					boolean isUnicode = isUnicodeRange(gl.getModel());
+					Result result = new MoveGlyphsDialog(window, copy, !isUnicode).showDialog();
 					if (result == null) return;
-					if (result.byIndex) {
-						SortedSet<Integer> indices = gl.getSelectedIndices();
-						if (indices.isEmpty()) return;
-						List<BitmapFontGlyph> glyphs = new ArrayList<BitmapFontGlyph>();
-						for (int i : indices) glyphs.add(font.getCharacter(codePointList.get(i)));
-						if (!copy) for (int i : indices) font.removeCharacter(codePointList.get(i));
-						List<Integer> newSel = new ArrayList<Integer>();
-						int start = indices.first(), limit = codePointList.size();
-						Iterator<Integer> indexIter = indices.iterator();
-						Iterator<BitmapFontGlyph> glyphIter = glyphs.iterator();
-						while (indexIter.hasNext() && glyphIter.hasNext()) {
-							int index = indexIter.next();
-							BitmapFontGlyph glyph = glyphIter.next();
-							if (glyph == null) continue;
-							if (copy) {
-								BitmapGlyphState state = new BitmapGlyphState(glyph);
-								glyph = new BitmapFontGlyph();
-								state.apply(glyph);
-							}
-							index += result.offset;
-							if (!result.relative) index -= start;
-							if (index < 0 || index >= limit) continue;
-							int cp = codePointList.get(index);
-							if (cp < 0 || cp >= 0x110000) continue;
-							font.putCharacter(cp, glyph);
-							newSel.add(index);
-						}
-						gl.glyphsChanged();
-						gl.setSelectedIndices(newSel);
-					} else {
-						List<Integer> codePoints = gl.getSelectedCodePoints();
-						if (codePoints.isEmpty()) return;
-						List<BitmapFontGlyph> glyphs = new ArrayList<BitmapFontGlyph>();
-						for (int cp : codePoints) glyphs.add(font.getCharacter(cp));
-						if (!copy) for (int cp : codePoints) font.removeCharacter(cp);
-						List<Integer> newSel = new ArrayList<Integer>();
-						int start = codePoints.get(0);
-						Iterator<Integer> cpIter = codePoints.iterator();
-						Iterator<BitmapFontGlyph> glyphIter = glyphs.iterator();
-						while (cpIter.hasNext() && glyphIter.hasNext()) {
-							int cp = cpIter.next();
-							BitmapFontGlyph glyph = glyphIter.next();
-							if (glyph == null) continue;
-							if (copy) {
-								BitmapGlyphState state = new BitmapGlyphState(glyph);
-								glyph = new BitmapFontGlyph();
-								state.apply(glyph);
-							}
-							cp += result.offset;
-							if (!result.relative) cp -= start;
-							if (cp < 0 || cp >= 0x110000) continue;
-							font.putCharacter(cp, glyph);
-							newSel.add(cp);
-						}
-						gl.glyphsChanged();
-						gl.setSelectedCodePoints(newSel);
+					
+					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
+					if (locators.isEmpty()) return;
+					
+					List<BitmapGlyphState> states = new ArrayList<BitmapGlyphState>();
+					for (GlyphLocator<BitmapFontGlyph> loc : locators) {
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph == null) states.add(null);
+						else states.add(new BitmapGlyphState(glyph));
 					}
+					
+					if (!copy) gl.deleteSelection();
+					
+					Font<BitmapFontGlyph> font = gl.getGlyphFont();
+					GlyphListModel model = gl.getModel();
+					HashSet<Integer> selectedIndices = new HashSet<Integer>();
+					if (result.byIndex) {
+						int gn = model.getCellCount();
+						for (int i = 0, n = locators.size(); i < n; i++) {
+							int gi = locators.get(i).getGlyphIndex();
+							if (gi < 0) continue;
+							if (result.relative) gi += result.offset;
+							else gi = result.offset + i;
+							if (gi >= 0 && gi < gn) {
+								selectedIndices.add(gi);
+								BitmapGlyphState state = states.get(i);
+								if (state != null) {
+									BitmapFontGlyph g = new BitmapFontGlyph();
+									state.apply(g);
+									new GlyphLocator<BitmapFontGlyph>(font, model, gi).setGlyph(g);
+								}
+							}
+						}
+					} else {
+						for (int i = 0, n = locators.size(); i < n; i++) {
+							GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
+							BitmapGlyphState state = states.get(i);
+							int cp;
+							if (result.relative) {
+								if (loc.isCodePoint()) {
+									cp = loc.getCodePoint() + result.offset;
+								} else {
+									int gi = loc.getGlyphIndex();
+									if (gi >= 0) selectedIndices.add(gi);
+									if (states.get(i) != null) {
+										BitmapFontGlyph g = new BitmapFontGlyph();
+										state.apply(g);
+										loc.setGlyph(g);
+									}
+									continue;
+								}
+							} else {
+								cp = result.offset + i;
+							}
+							if (Character.isValidCodePoint(cp)) {
+								int gi = model.indexOfCodePoint(cp);
+								if (gi >= 0) selectedIndices.add(gi);
+								if (states.get(i) != null) {
+									BitmapFontGlyph g = new BitmapFontGlyph();
+									state.apply(g);
+									font.putCharacter(cp, g);
+								}
+							}
+						}
+					}
+					gl.glyphsChanged();
+					gl.setSelectedIndices(selectedIndices);
 				}
 			});
 		}
+		private static boolean isUnicodeRange(GlyphListModel model) {
+			for (int lastCP = -1, i = 0, n = model.getCellCount(); i < n; i++) {
+				if (model.isCodePoint(i)) {
+					int cp = model.getCodePoint(i);
+					if (lastCP < 0 || (lastCP + 1) == cp) {
+						lastCP = cp;
+						continue;
+					}
+				}
+				return false;
+			}
+			return true;
+		}
 	}
 	
-	public static class GenerateUnifontHexGlyphMenuItem extends JMenuItem {
+	public static final class GenerateUnifontHexGlyphMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public GenerateUnifontHexGlyphMenuItem(final BitmapFont font, final GlyphList gl) {
+		public GenerateUnifontHexGlyphMenuItem(final GlyphList<BitmapFontGlyph> gl) {
 			super("Generate Unifont Hex Glyph");
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					for (int cp : gl.getSelectedCodePoints()) {
-						font.putCharacter(cp, UnifontHexGlyphGenerator.createGlyph(cp));
+					for (GlyphLocator<BitmapFontGlyph> loc : gl.getSelection()) {
+						if (loc.isCodePoint()) {
+							loc.setGlyph(UnifontHexGlyphGenerator.createGlyph(loc.getCodePoint()));
+						}
 					}
 					gl.glyphsChanged();
 				}
@@ -364,17 +383,38 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static class GenerateTimestampGlyphMenuItem extends JMenuItem {
+	public static final class GenerateTimestampGlyphMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public GenerateTimestampGlyphMenuItem(final BitmapFont font, final GlyphList gl) {
+		public GenerateTimestampGlyphMenuItem(final GlyphList<BitmapFontGlyph> gl) {
 			super("Generate Timestamp Glyph");
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Font<BitmapFontGlyph> font = gl.getGlyphFont();
 					GregorianCalendar now = new GregorianCalendar();
 					int y = now.get(GregorianCalendar.YEAR);
 					int m = now.get(GregorianCalendar.MONTH) + 1;
 					int d = now.get(GregorianCalendar.DAY_OF_MONTH);
-					BitmapFontGlyph[] glyphs = {
+					BitmapFontGlyph[] namedGlyphs = {
+						font.getNamedGlyph("timestamp.ch" + ((y / 1000) % 10)),
+						font.getNamedGlyph("timestamp.cl" + ((y /  100) % 10)),
+						font.getNamedGlyph("timestamp.yh" + ((y /   10) % 10)),
+						font.getNamedGlyph("timestamp.yl" + ((y /    1) % 10)),
+						font.getNamedGlyph("timestamp.mh" + ((m /   10) % 10)),
+						font.getNamedGlyph("timestamp.ml" + ((m /    1) % 10)),
+						font.getNamedGlyph("timestamp.dh" + ((d /   10) % 10)),
+						font.getNamedGlyph("timestamp.dl" + ((d /    1) % 10)),
+						font.getNamedGlyph("timestamp"),
+					};
+					for (BitmapFontGlyph g : namedGlyphs) {
+						if (g != null) {
+							for (GlyphLocator<BitmapFontGlyph> loc : gl.getSelection()) {
+								loc.setGlyph(BitmapFontGlyph.compose(namedGlyphs));
+							}
+							gl.glyphsChanged();
+							return;
+						}
+					}
+					BitmapFontGlyph[] mappedGlyphs = {
 						font.getCharacter(0x10FF40 + ((y / 1000) % 10)),
 						font.getCharacter(0x10FF50 + ((y /  100) % 10)),
 						font.getCharacter(0x10FF60 + ((y /   10) % 10)),
@@ -385,10 +425,10 @@ public class BitmapListMenuBar extends JMenuBar {
 						font.getCharacter(0x10FFB0 + ((d /    1) % 10)),
 						font.getCharacter(0x10FFC0)
 					};
-					for (BitmapFontGlyph g : glyphs) {
+					for (BitmapFontGlyph g : mappedGlyphs) {
 						if (g != null) {
-							for (int cp : gl.getSelectedCodePoints()) {
-								font.putCharacter(cp, BitmapFontGlyph.compose(glyphs));
+							for (GlyphLocator<BitmapFontGlyph> loc : gl.getSelection()) {
+								loc.setGlyph(BitmapFontGlyph.compose(mappedGlyphs));
 							}
 							gl.glyphsChanged();
 							return;
@@ -399,30 +439,28 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static class TransformMenu extends JMenu {
+	public static final class TransformMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public TransformMenu(final BitmapFont font, final GlyphList gl) {
+		public TransformMenu(final GlyphList<BitmapFontGlyph> gl) {
 			super("Transform");
 			for (BitmapGlyphTransformInfo txi : BitmapGlyphTransform.TRANSFORMS) {
 				if (txi == null) addSeparator();
-				else add(new TransformMenuItem(font, gl, txi.transform, txi.name, txi.keystroke));
+				else add(new TransformMenuItem(txi, gl));
 			}
 		}
 	}
 	
-	public static class TransformMenuItem extends JMenuItem {
+	public static final class TransformMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public TransformMenuItem(
-			final BitmapFont font, final GlyphList gl,
-			final BitmapGlyphTransform tx, final String name, final KeyStroke ks
-		) {
-			super(name);
-			setAccelerator(ks);
+		public TransformMenuItem(final BitmapGlyphTransformInfo txi, final GlyphList<BitmapFontGlyph> gl) {
+			super(txi.name);
+			setAccelerator(txi.keystroke);
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					for (int cp : gl.getSelectedCodePoints()) {
-						BitmapFontGlyph glyph = font.getCharacter(cp);
-						if (glyph != null) tx.transform(font, glyph);
+					for (GlyphLocator<BitmapFontGlyph> loc : gl.getSelection()) {
+						Font<BitmapFontGlyph> font = loc.getGlyphFont();
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph != null) txi.transform.transform(font, glyph);
 					}
 					gl.glyphsChanged();
 				}

@@ -5,23 +5,37 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 
 public class BitmapEditPanel extends GlyphEditPanel<BitmapFontGlyph> {
 	private static final long serialVersionUID = 1L;
 	
-	public final BitmapToolPanel toolPanel;
-	public final BitmapToolHandler toolHandler;
+	private final GlyphComponent<BitmapFontGlyph> glyphComponent;
+	private final BitmapToolPanel toolPanel;
+	private final BitmapToolHandler toolHandler;
 	
-	public BitmapEditPanel(BitmapFont font, BitmapFontGlyph glyph, GlyphList gl) {
-		super(font, glyph, gl);
+	public BitmapEditPanel(GlyphLocator<BitmapFontGlyph> locator, GlyphList<BitmapFontGlyph> gl) {
+		super(locator, gl);
+		this.glyphComponent = getGlyphComponent();
 		this.toolPanel = new BitmapToolPanel();
 		this.toolHandler = new BitmapToolHandler(toolPanel, glyphComponent);
 		add(toolPanel, BorderLayout.LINE_START);
 		glyphComponent.setFocusable(true);
 		glyphComponent.addMouseListener(new MyMouseListener());
-		glyphComponent.addKeyListener(new MyKeyListener() {});
+		glyphComponent.addKeyListener(new MyKeyListener());
+	}
+	
+	public BitmapToolPanel getToolPanel() {
+		return toolPanel;
+	}
+	
+	public BitmapToolHandler getToolHandler() {
+		return toolHandler;
+	}
+	
+	public void setGlyph(GlyphLocator<BitmapFontGlyph> locator) {
+		super.setGlyph(locator);
+		this.toolHandler.clearHistory();
 	}
 	
 	private class MyMouseListener extends MouseAdapter {
@@ -79,13 +93,13 @@ public class BitmapEditPanel extends GlyphEditPanel<BitmapFontGlyph> {
 	
 	private void translateGlyph(boolean first, int tx, int ty) {
 		if (first) toolHandler.pushUndoState(null);
-		BitmapFontGlyph glyph = (BitmapFontGlyph)glyphComponent.getGlyph();
+		BitmapFontGlyph glyph = glyphComponent.getGlyph();
 		glyph.setXY(glyph.getX() + tx, glyph.getY() - ty);
 		glyphComponent.glyphChanged();
 	}
 	
 	private void translateGlyphWidth(int t) {
-		BitmapFontGlyph glyph = (BitmapFontGlyph)glyphComponent.getGlyph();
+		BitmapFontGlyph glyph = glyphComponent.getGlyph();
 		t += glyph.getCharacterWidth();
 		if (t < 0) t = 0;
 		glyph.setCharacterWidth(t);

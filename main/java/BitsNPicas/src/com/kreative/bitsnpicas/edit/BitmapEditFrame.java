@@ -10,15 +10,15 @@ public class BitmapEditFrame extends JFrame {
 	private final BitmapEditPanel panel;
 	private final BitmapEditMenuBar mb;
 	
-	public BitmapEditFrame(BitmapFont font, BitmapFontGlyph glyph, int codePoint, GlyphList gl, SaveManager sm) {
-		this.panel = new BitmapEditPanel(font, glyph, gl);
-		this.mb = new BitmapEditMenuBar(this, sm, font, panel.toolHandler, glyph, panel.glyphComponent, gl, codePoint);
-		setTitle(GlyphEditFrame.getTitle(font, codePoint));
+	public BitmapEditFrame(BitmapFont font, GlyphLocator<BitmapFontGlyph> locator, GlyphList<BitmapFontGlyph> gl, SaveManager sm) {
+		this.panel = new BitmapEditPanel(locator, gl);
+		this.mb = new BitmapEditMenuBar(this, sm, font, panel);
+		setTitle(locator.toString());
 		setJMenuBar(mb);
 		setContentPane(panel);
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		panel.glyphComponent.requestFocusInWindow();
+		panel.getGlyphComponent().requestFocusInWindow();
 	}
 }

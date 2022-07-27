@@ -7,11 +7,10 @@ import java.awt.geom.Point2D;
 import java.util.Stack;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.FontGlyph;
 
-public class BitmapToolHandler implements GlyphComponentListener {
+public class BitmapToolHandler implements GlyphComponentListener<BitmapFontGlyph> {
 	private final BitmapToolPanel toolPanel;
-	private final GlyphComponent glyphComponent;
+	private final GlyphComponent<BitmapFontGlyph> glyphComponent;
 	private final Stack<BitmapGlyphState> undoStack;
 	private final Stack<BitmapGlyphState> redoStack;
 	private BitmapTool inProgressTool;
@@ -24,12 +23,17 @@ public class BitmapToolHandler implements GlyphComponentListener {
 	private double startTx;
 	private double startTy;
 	
-	public BitmapToolHandler(BitmapToolPanel toolPanel, GlyphComponent glyphComponent) {
+	public BitmapToolHandler(BitmapToolPanel toolPanel, GlyphComponent<BitmapFontGlyph> glyphComponent) {
 		this.toolPanel = toolPanel;
 		this.glyphComponent = glyphComponent;
 		this.undoStack = new Stack<BitmapGlyphState>();
 		this.redoStack = new Stack<BitmapGlyphState>();
 		glyphComponent.addGlyphComponentListener(this);
+	}
+	
+	public void clearHistory() {
+		undoStack.clear();
+		redoStack.clear();
 	}
 	
 	public boolean canUndo() {
@@ -42,7 +46,7 @@ public class BitmapToolHandler implements GlyphComponentListener {
 	
 	public void pushUndoState(BitmapGlyphState state) {
 		if (state == null) {
-			BitmapFontGlyph g = (BitmapFontGlyph)glyphComponent.getGlyph();
+			BitmapFontGlyph g = glyphComponent.getGlyph();
 			state = new BitmapGlyphState(g);
 		}
 		undoStack.push(state);
@@ -51,7 +55,7 @@ public class BitmapToolHandler implements GlyphComponentListener {
 	
 	public void undo() {
 		if (!undoStack.isEmpty()) {
-			BitmapFontGlyph g = (BitmapFontGlyph)glyphComponent.getGlyph();
+			BitmapFontGlyph g = glyphComponent.getGlyph();
 			redoStack.push(new BitmapGlyphState(g));
 			undoStack.pop().apply(g);
 			glyphComponent.glyphChanged();
@@ -60,48 +64,45 @@ public class BitmapToolHandler implements GlyphComponentListener {
 	
 	public void redo() {
 		if (!redoStack.isEmpty()) {
-			BitmapFontGlyph g = (BitmapFontGlyph)glyphComponent.getGlyph();
+			BitmapFontGlyph g = glyphComponent.getGlyph();
 			undoStack.push(new BitmapGlyphState(g));
 			redoStack.pop().apply(g);
 			glyphComponent.glyphChanged();
 		}
 	}
 	
-	public Cursor getCursor(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) {
+	public Cursor getCursor(MouseEvent e, Point2D p, BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {
 		return toolPanel.getSelectedTool().cursor;
 	}
 	
-	public boolean mouseMoved(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) {
+	public boolean mouseMoved(MouseEvent e, Point2D p, BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {
 		return false;
 	}
 	
-	public boolean mousePressed(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) {
-		BitmapFontGlyph g = (BitmapFontGlyph)glyph;
+	public boolean mousePressed(MouseEvent e, Point2D p, BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {
 		this.inProgressTool = toolPanel.getSelectedTool();
 		this.inProgressOpacity = (byte)toolPanel.getOpacity();
-		this.inProgressState = new BitmapGlyphState(g);
+		this.inProgressState = new BitmapGlyphState(glyph);
 		this.startX = (int)Math.floor(p.getX());
 		this.startY = (int)Math.floor(p.getY());
-		return doTool(e, startX, startY, g, font, true, false);
+		return doTool(e, startX, startY, glyph, font, true, false);
 	}
 	
-	public boolean mouseDragged(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) {
-		BitmapFontGlyph g = (BitmapFontGlyph)glyph;
+	public boolean mouseDragged(MouseEvent e, Point2D p, BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {
 		int x = (int)Math.floor(p.getX());
 		int y = (int)Math.floor(p.getY());
-		return doTool(e, x, y, g, font, false, false);
+		return doTool(e, x, y, glyph, font, false, false);
 	}
 	
-	public boolean mouseReleased(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) {
-		BitmapFontGlyph g = (BitmapFontGlyph)glyph;
+	public boolean mouseReleased(MouseEvent e, Point2D p, BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {
 		int x = (int)Math.floor(p.getX());
 		int y = (int)Math.floor(p.getY());
-		return doTool(e, x, y, g, font, false, true);
+		return doTool(e, x, y, glyph, font, false, true);
 	}
 	
 	private boolean doTool(
 		MouseEvent e, int x, int y,
-		BitmapFontGlyph glyph, Font<?> font,
+		BitmapFontGlyph glyph, Font<BitmapFontGlyph> font,
 		boolean pressed, boolean released
 	) {
 		int rx = Math.min(startX, x);
@@ -193,7 +194,7 @@ public class BitmapToolHandler implements GlyphComponentListener {
 		return false;
 	}
 	
-	public boolean mouseWheelMoved(MouseWheelEvent e, Point2D p, FontGlyph glyph, Font<?> font) {
+	public boolean mouseWheelMoved(MouseWheelEvent e, Point2D p, BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {
 		int opacity = toolPanel.getOpacity() - e.getWheelRotation();
 		if (opacity < 0) opacity = 0;
 		if (opacity > 255) opacity = 255;
@@ -201,6 +202,6 @@ public class BitmapToolHandler implements GlyphComponentListener {
 		return false;
 	}
 	
-	public void metricsChanged(FontGlyph glyph, Font<?> font) {}
-	public void glyphChanged(FontGlyph glyph, Font<?> font) {}
+	public void metricsChanged(BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {}
+	public void glyphChanged(BitmapFontGlyph glyph, Font<BitmapFontGlyph> font) {}
 }

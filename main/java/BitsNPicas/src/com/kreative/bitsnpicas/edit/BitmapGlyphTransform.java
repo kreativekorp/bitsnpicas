@@ -2,12 +2,12 @@ package com.kreative.bitsnpicas.edit;
 
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
-import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 
 public interface BitmapGlyphTransform {
-	public static class BitmapGlyphTransformInfo {
+	public static final class BitmapGlyphTransformInfo {
 		public final BitmapGlyphTransform transform;
 		public final String name;
 		public final KeyStroke keystroke;
@@ -30,18 +30,17 @@ public interface BitmapGlyphTransform {
 		new BitmapGlyphTransformInfo(new Nudge(0, +1), "Nudge Down", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK)),
 	};
 	
-	public void transform(BitmapFont font, BitmapFontGlyph glyph);
+	public abstract void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph);
 	
-	public static class Bold implements BitmapGlyphTransform {
-		private static final BoldBitmapFontGlyphTransformer tx =
-			new BoldBitmapFontGlyphTransformer();
-		public void transform(BitmapFont font, BitmapFontGlyph glyph) {
+	public static final class Bold implements BitmapGlyphTransform {
+		private static final BoldBitmapFontGlyphTransformer tx = new BoldBitmapFontGlyphTransformer();
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
 			new BitmapGlyphState(tx.transformGlyph(glyph)).apply(glyph);
 		}
 	}
 	
-	public static class Invert implements BitmapGlyphTransform {
-		public void transform(BitmapFont font, BitmapFontGlyph glyph) {
+	public static final class Invert implements BitmapGlyphTransform {
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
 			glyph.expand(
 				0, -font.getLineAscent(), glyph.getCharacterWidth(),
 				font.getLineAscent() + font.getLineDescent()
@@ -54,8 +53,8 @@ public interface BitmapGlyphTransform {
 		}
 	}
 	
-	public static class FlipHorizontal implements BitmapGlyphTransform {
-		public void transform(BitmapFont font, BitmapFontGlyph glyph) {
+	public static final class FlipHorizontal implements BitmapGlyphTransform {
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
 			for (byte[] row : glyph.getGlyph()) transform(row);
 			int x = glyph.getCharacterWidth() - glyph.getGlyphWidth() - glyph.getGlyphOffset();
 			glyph.setXY(x, glyph.getGlyphAscent());
@@ -69,8 +68,8 @@ public interface BitmapGlyphTransform {
 		}
 	}
 	
-	public static class FlipVertical implements BitmapGlyphTransform {
-		public void transform(BitmapFont font, BitmapFontGlyph glyph) {
+	public static final class FlipVertical implements BitmapGlyphTransform {
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
 			transform(glyph.getGlyph());
 			int y = font.getLineAscent() - font.getLineDescent();
 			y += glyph.getGlyphHeight() - glyph.getGlyphAscent();
@@ -85,13 +84,13 @@ public interface BitmapGlyphTransform {
 		}
 	}
 	
-	public static class Nudge implements BitmapGlyphTransform {
+	public static final class Nudge implements BitmapGlyphTransform {
 		private final int dx, dy;
 		public Nudge(int dx, int dy) {
 			this.dx = dx;
 			this.dy = dy;
 		}
-		public void transform(BitmapFont font, BitmapFontGlyph glyph) {
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
 			int x = glyph.getX() + dx;
 			int y = glyph.getY() - dy;
 			glyph.setXY(x, y);

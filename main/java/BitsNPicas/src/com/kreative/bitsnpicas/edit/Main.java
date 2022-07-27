@@ -21,6 +21,7 @@ import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.VectorFont;
 import com.kreative.bitsnpicas.VectorFontExporter;
 import com.kreative.bitsnpicas.VectorFontGlyph;
+import com.kreative.bitsnpicas.edit.importer.ImportFormat;
 import com.kreative.bitsnpicas.exporter.KbitxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KpcaxVectorFontExporter;
 
@@ -150,11 +151,16 @@ public class Main {
 		} else if (font instanceof VectorFont) {
 			VectorFontExporter vformat = (VectorFontExporter)format;
 			VectorFont vfont = (VectorFont)font;
-			JFrame f = new GlyphListFrame(fontFile, vformat, vfont);
+			JFrame f = new GlyphListFrame<VectorFontGlyph>(fontFile, vformat, vfont);
 			f.setVisible(true);
 			return f;
 		} else {
-			JFrame f = new GlyphListFrame(fontFile, format, font);
+			@SuppressWarnings("unchecked")
+			JFrame f = new GlyphListFrame<FontGlyph>(
+				fontFile,
+				(FontExporter<Font<FontGlyph>>)format,
+				(Font<FontGlyph>)font
+			);
 			f.setVisible(true);
 			return f;
 		}
@@ -168,43 +174,55 @@ public class Main {
 			return f;
 		} else if (font instanceof VectorFont) {
 			VectorFont vfont = (VectorFont)font;
-			JFrame f = new GlyphListFrame(routine, vfont);
+			JFrame f = new GlyphListFrame<VectorFontGlyph>(routine, vfont);
 			f.setVisible(true);
 			return f;
 		} else {
-			JFrame f = new GlyphListFrame(routine, font);
+			@SuppressWarnings("unchecked")
+			Font<FontGlyph> gfont = (Font<FontGlyph>)font;
+			JFrame f = new GlyphListFrame<FontGlyph>(routine, gfont);
 			f.setVisible(true);
 			return f;
 		}
 	}
 	
-	public static JFrame openGlyph(Font<?> font, int codePoint, GlyphList gl, SaveManager sm) {
+	@SuppressWarnings("unchecked")
+	public static <G extends FontGlyph> JFrame openGlyph(Font<G> font, GlyphLocator<G> loc, GlyphList<G> gl, SaveManager sm) {
 		if (font instanceof BitmapFont) {
 			BitmapFont bfont = (BitmapFont)font;
-			BitmapFontGlyph bglyph = bfont.getCharacter(codePoint);
-			if (bglyph == null) {
-				bglyph = new BitmapFontGlyph();
-				bfont.putCharacter(codePoint, bglyph);
-				gl.glyphsChanged();
+			GlyphLocator<BitmapFontGlyph> bloc = (GlyphLocator<BitmapFontGlyph>)loc;
+			GlyphList<BitmapFontGlyph> bgl = (GlyphList<BitmapFontGlyph>)gl;
+			if (bloc.getGlyph() == null) {
+				bloc.setGlyph(new BitmapFontGlyph());
+				if (bgl.getModel().tracksFont()) bgl.clearSelection();
+				bgl.glyphsChanged();
 			}
-			JFrame f = new BitmapEditFrame(bfont, bglyph, codePoint, gl, sm);
+			JFrame f = new BitmapEditFrame(bfont, bloc, bgl, sm);
 			f.setVisible(true);
 			return f;
 		} else if (font instanceof VectorFont) {
 			VectorFont vfont = (VectorFont)font;
-			VectorFontGlyph vglyph = vfont.getCharacter(codePoint);
-			if (vglyph == null) {
-				vglyph = new VectorFontGlyph();
-				vfont.putCharacter(codePoint, vglyph);
-				gl.glyphsChanged();
+			GlyphLocator<VectorFontGlyph> vloc = (GlyphLocator<VectorFontGlyph>)loc;
+			GlyphList<VectorFontGlyph> vgl = (GlyphList<VectorFontGlyph>)gl;
+			if (vloc.getGlyph() == null) {
+				vloc.setGlyph(new VectorFontGlyph());
+				if (vgl.getModel().tracksFont()) vgl.clearSelection();
+				vgl.glyphsChanged();
 			}
-			JFrame f = new GlyphEditFrame(vfont, vglyph, codePoint, gl, sm);
+			JFrame f = new GlyphEditFrame<VectorFontGlyph>(vfont, vloc, vgl, sm) {
+				private static final long serialVersionUID = 1L;
+				protected VectorFontGlyph createGlyph() {
+					return new VectorFontGlyph();
+				}
+			};
 			f.setVisible(true);
 			return f;
 		} else {
-			FontGlyph glyph = font.getCharacter(codePoint);
-			if (glyph == null) return null;
-			JFrame f = new GlyphEditFrame(font, glyph, codePoint, gl, sm);
+			if (loc.getGlyph() == null) return null;
+			JFrame f = new GlyphEditFrame<G>(font, loc, gl, sm) {
+				private static final long serialVersionUID = 1L;
+				protected G createGlyph() { return null; }
+			};
 			f.setVisible(true);
 			return f;
 		}

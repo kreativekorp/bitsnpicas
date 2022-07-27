@@ -12,27 +12,54 @@ import com.kreative.bitsnpicas.FontGlyph;
 public class GlyphEditPanel<G extends FontGlyph> extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public final GlyphComponent glyphComponent;
-	public final GlyphList glyphList;
+	private final GlyphComponent<G> glyphComponent;
+	private final GlyphList<G> glyphList;
+	private GlyphLocator<G> locator;
 	
-	public GlyphEditPanel(Font<G> font, G glyph, GlyphList gl) {
-		this.glyphComponent = new GlyphComponent(font, glyph);
+	public GlyphEditPanel(GlyphLocator<G> locator, GlyphList<G> gl) {
+		this.glyphComponent = new GlyphComponent<G>(locator.getGlyphFont(), locator.getGlyph());
 		this.glyphList = gl;
+		this.locator = locator;
 		setLayout(new BorderLayout());
 		add(glyphComponent, BorderLayout.CENTER);
-		glyphComponent.addGlyphComponentListener(new GlyphComponentListener() {
-			public void metricsChanged(FontGlyph glyph, Font<?> font) {
+		glyphComponent.addGlyphComponentListener(new GlyphComponentListener<G>() {
+			public void metricsChanged(G glyph, Font<G> font) {
 				if (glyphList != null) glyphList.metricsChanged();
 			}
-			public void glyphChanged(FontGlyph glyph, Font<?> font) {
+			public void glyphChanged(G glyph, Font<G> font) {
 				if (glyphList != null) glyphList.glyphsChanged();
 			}
-			public Cursor getCursor(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return null; }
-			public boolean mouseMoved(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }
-			public boolean mousePressed(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }
-			public boolean mouseDragged(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }
-			public boolean mouseReleased(MouseEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }
-			public boolean mouseWheelMoved(MouseWheelEvent e, Point2D p, FontGlyph glyph, Font<?> font) { return false; }
+			public Cursor getCursor(MouseEvent e, Point2D p, G glyph, Font<G> font) { return null; }
+			public boolean mouseMoved(MouseEvent e, Point2D p, G glyph, Font<G> font) { return false; }
+			public boolean mousePressed(MouseEvent e, Point2D p, G glyph, Font<G> font) { return false; }
+			public boolean mouseDragged(MouseEvent e, Point2D p, G glyph, Font<G> font) { return false; }
+			public boolean mouseReleased(MouseEvent e, Point2D p, G glyph, Font<G> font) { return false; }
+			public boolean mouseWheelMoved(MouseWheelEvent e, Point2D p, G glyph, Font<G> font) { return false; }
 		});
+	}
+	
+	public GlyphComponent<G> getGlyphComponent() {
+		return glyphComponent;
+	}
+	
+	public Font<G> getGlyphFont() {
+		return glyphComponent.getGlyphFont();
+	}
+	
+	public G getGlyph() {
+		return glyphComponent.getGlyph();
+	}
+	
+	public GlyphList<G> getGlyphList() {
+		return glyphList;
+	}
+	
+	public GlyphLocator<G> getGlyphLocator() {
+		return locator;
+	}
+	
+	public void setGlyph(GlyphLocator<G> locator) {
+		this.glyphComponent.setGlyph(locator.getGlyphFont(), locator.getGlyph());
+		this.locator = locator;
 	}
 }

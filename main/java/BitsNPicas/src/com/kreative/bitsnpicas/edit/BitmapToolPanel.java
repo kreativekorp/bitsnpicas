@@ -42,20 +42,12 @@ public class BitmapToolPanel extends JPanel {
 		add(p1, BorderLayout.CENTER);
 	}
 	
-	public BitmapToolList getToolList() {
-		return toolList;
-	}
-	
 	public BitmapTool getSelectedTool() {
 		return (BitmapTool)toolList.getSelectedValue();
 	}
 	
 	public void setSelectedTool(BitmapTool tool) {
 		toolList.setSelectedValue(tool, true);
-	}
-	
-	public JSlider getOpacitySlider() {
-		return opacitySlider;
 	}
 	
 	public int getOpacity() {
