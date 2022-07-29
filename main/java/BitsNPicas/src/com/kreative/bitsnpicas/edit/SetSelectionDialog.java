@@ -144,7 +144,7 @@ public class SetSelectionDialog extends JDialog {
 					selectionField.getText(),
 					gl.getModel(),
 					byIndexButton.isSelected()
-				));
+				), true);
 				dispose();
 			}
 		});
@@ -239,7 +239,7 @@ public class SetSelectionDialog extends JDialog {
 					}
 				}
 			} catch (NumberFormatException nfe) {
-				if (!byIndex && (part = part.trim()).length() > 0) {
+				if ((part = part.trim()).length() > 0) {
 					int i = model.indexOfGlyphName(part);
 					if (i >= 0) indices.add(i);
 				}

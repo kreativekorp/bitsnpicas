@@ -27,7 +27,7 @@ public class GlyphEditPanel<G extends FontGlyph> extends JPanel {
 				if (glyphList != null) glyphList.metricsChanged();
 			}
 			public void glyphChanged(G glyph, Font<G> font) {
-				if (glyphList != null) glyphList.glyphsChanged();
+				if (glyphList != null) glyphList.glyphContentChanged();
 			}
 			public Cursor getCursor(MouseEvent e, Point2D p, G glyph, Font<G> font) { return null; }
 			public boolean mouseMoved(MouseEvent e, Point2D p, G glyph, Font<G> font) { return false; }

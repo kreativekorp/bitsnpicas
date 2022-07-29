@@ -2,10 +2,12 @@ package com.kreative.bitsnpicas.edit;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import com.kreative.bitsnpicas.Font;
@@ -61,6 +63,12 @@ public class GlyphListPanel<G extends FontGlyph> extends JPanel {
 				sm.setChanged();
 			}
 		});
+		
+		InputMap im = glyphPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		im.put(KeyStroke.getKeyStroke("UP"), "none");
+		im.put(KeyStroke.getKeyStroke("DOWN"), "none");
+		im.put(KeyStroke.getKeyStroke("LEFT"), "none");
+		im.put(KeyStroke.getKeyStroke("RIGHT"), "none");
 	}
 	
 	public GlyphList<G> getGlyphList() {

@@ -141,13 +141,17 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		repaint();
 	}
 	
-	public void setSelectedIndices(Collection<Integer> indices) {
+	public void setSelectedIndices(Collection<Integer> indices, boolean shouldScroll) {
 		selection.clear();
 		int n = model.getCellCount();
 		for (Integer i : indices) {
 			if (i != null && i >= 0 && i < n) {
 				selection.add(i);
 			}
+		}
+		if (shouldScroll) {
+			Rectangle r = getSelectionRect();
+			if (r != null) scrollRectToVisible(r);
 		}
 		for (GlyphListListener<G> l : listeners) l.selectionChanged(this, font);
 		repaint();
@@ -170,8 +174,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 	public void deleteSelection() {
 		if (selection.isEmpty()) return;
 		for (GlyphLocator<G> loc : getSelection()) loc.removeGlyph();
-		if (model.tracksFont()) selection.clear();
-		glyphsChanged();
+		glyphRepertoireChanged();
 	}
 	
 	public Dimension getPreferredSize() {
@@ -203,8 +206,15 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		repaint();
 	}
 	
-	public void glyphsChanged() {
+	public void glyphContentChanged() {
 		for (GlyphListListener<G> l : listeners) l.glyphsChanged(this, font);
+		repaint();
+	}
+	
+	public void glyphRepertoireChanged() {
+		if (model.tracksFont()) selection.clear();
+		for (GlyphListListener<G> l : listeners) l.glyphsChanged(this, font);
+		revalidate();
 		repaint();
 	}
 	
@@ -291,7 +301,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 					double gx = Math.round((x1 + x2 - glyph.getCharacterWidth2D() * scale) / 2);
 					double gy = Math.round(y + LABEL_HEIGHT + 2 + ascent);
 					glyph.paint(g, gx, gy, scale);
-				} else {
+				} else if (model.isCodePoint(i) || model.isGlyphName(i)) {
 					g.setColor(Color.gray);
 					g.drawLine(x1 + 1, y + LABEL_HEIGHT + 1, x2 - 1, y + cellSize + LABEL_HEIGHT - 1);
 					g.drawLine(x2 - 1, y + LABEL_HEIGHT + 1, x1 + 1, y + cellSize + LABEL_HEIGHT - 1);
@@ -338,6 +348,38 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		}
 	}
 	
+	private Rectangle getSelectionRect() {
+		SortedSet<Integer> sel = selection.toSet();
+		if (sel.isEmpty()) return null;
+		Insets insets = getInsets();
+		int w = getWidth() - insets.left - insets.right - 1;
+		int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+		int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+		for (int i : sel) {
+			int x1 = insets.left + w * (i % columnCount) / columnCount;
+			int x2 = insets.left + w * ((i % columnCount) + 1) / columnCount;
+			int y1 = insets.top + (cellSize + LABEL_HEIGHT) * (i / columnCount);
+			int y2 = y1 + cellSize + LABEL_HEIGHT;
+			if (x1 < minX) minX = x1;
+			if (y1 < minY) minY = y1;
+			if (x2 > maxX) maxX = x2;
+			if (y2 > maxY) maxY = y2;
+		}
+		return new Rectangle(minX, minY, maxX-minX+1, maxY-minY+1);
+	}
+	
+	private Rectangle getLastSelectionRect() {
+		int i = selection.getLast();
+		if (i < 0) return null;
+		Insets insets = getInsets();
+		int w = getWidth() - insets.left - insets.right - 1;
+		int x1 = insets.left + w * (i % columnCount) / columnCount;
+		int x2 = insets.left + w * ((i % columnCount) + 1) / columnCount;
+		int y1 = insets.top + (cellSize + LABEL_HEIGHT) * (i / columnCount);
+		int y2 = y1 + cellSize + LABEL_HEIGHT;
+		return new Rectangle(x1, y1, x2-x1+1, y2-y1+1);
+	}
+	
 	private void startSelection(InputEvent e, int i) {
 		if (e.isShiftDown()) {
 			selection.extend(i);
@@ -347,12 +389,16 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			selection.clear();
 			selection.add(i);
 		}
+		Rectangle r = getLastSelectionRect();
+		if (r != null) scrollRectToVisible(r);
 		for (GlyphListListener<G> l : listeners) l.selectionChanged(GlyphList.this, font);
 		repaint();
 	}
 	
 	private void continueSelection(InputEvent e, int i) {
 		selection.extend(i);
+		Rectangle r = getLastSelectionRect();
+		if (r != null) scrollRectToVisible(r);
 		for (GlyphListListener<G> l : listeners) l.selectionChanged(GlyphList.this, font);
 		repaint();
 	}
@@ -444,6 +490,8 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 				if (i >= 0) {
 					selection.clear();
 					selection.add(i);
+					Rectangle r = getLastSelectionRect();
+					if (r != null) scrollRectToVisible(r);
 					for (GlyphListListener<G> l : listeners) l.selectionChanged(GlyphList.this, font);
 					repaint();
 				}

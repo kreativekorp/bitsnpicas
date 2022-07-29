@@ -73,11 +73,17 @@ public class Main {
 		return openFont(null, new KpcaxVectorFontExporter(), vfont);
 	}
 	
+	private static String lastOpenDirectory = null;
 	public static JFrame openFonts() {
-		FileDialog fd = new FileDialog(new Frame(), "Open", FileDialog.LOAD);
+		Frame frame = new Frame();
+		FileDialog fd = new FileDialog(frame, "Open", FileDialog.LOAD);
+		if (lastOpenDirectory != null) fd.setDirectory(lastOpenDirectory);
 		fd.setVisible(true);
-		if (fd.getDirectory() == null || fd.getFile() == null) return null;
-		File file = new File(fd.getDirectory(), fd.getFile());
+		String ds = fd.getDirectory(), fs = fd.getFile();
+		fd.dispose();
+		frame.dispose();
+		if (ds == null || fs == null) return null;
+		File file = new File((lastOpenDirectory = ds), fs);
 		return openFonts(file);
 	}
 	
@@ -194,8 +200,7 @@ public class Main {
 			GlyphList<BitmapFontGlyph> bgl = (GlyphList<BitmapFontGlyph>)gl;
 			if (bloc.getGlyph() == null) {
 				bloc.setGlyph(new BitmapFontGlyph());
-				if (bgl.getModel().tracksFont()) bgl.clearSelection();
-				bgl.glyphsChanged();
+				bgl.glyphRepertoireChanged();
 			}
 			JFrame f = new BitmapEditFrame(bfont, bloc, bgl, sm);
 			f.setVisible(true);
@@ -206,8 +211,7 @@ public class Main {
 			GlyphList<VectorFontGlyph> vgl = (GlyphList<VectorFontGlyph>)gl;
 			if (vloc.getGlyph() == null) {
 				vloc.setGlyph(new VectorFontGlyph());
-				if (vgl.getModel().tracksFont()) vgl.clearSelection();
-				vgl.glyphsChanged();
+				vgl.glyphRepertoireChanged();
 			}
 			JFrame f = new GlyphEditFrame<VectorFontGlyph>(vfont, vloc, vgl, sm) {
 				private static final long serialVersionUID = 1L;
@@ -234,14 +238,18 @@ public class Main {
 		return null;
 	}
 	
+	private static String lastSaveDirectory = null;
 	public static File getSaveFile(String suffix) {
-		FileDialog fd = new FileDialog(new Frame(), "Save", FileDialog.SAVE);
+		Frame frame = new Frame();
+		FileDialog fd = new FileDialog(frame, "Save", FileDialog.SAVE);
+		if (lastSaveDirectory != null) fd.setDirectory(lastSaveDirectory);
 		fd.setVisible(true);
-		String parent = fd.getDirectory();
-		String name = fd.getFile();
-		if (parent == null || name == null) return null;
-		if (!name.toLowerCase().endsWith(suffix.toLowerCase())) name += suffix;
-		return new File(parent, name);
+		String ds = fd.getDirectory(), fs = fd.getFile();
+		fd.dispose();
+		frame.dispose();
+		if (ds == null || fs == null) return null;
+		if (!fs.toLowerCase().endsWith(suffix.toLowerCase())) fs += suffix;
+		return new File((lastSaveDirectory = ds), fs);
 	}
 	
 	public static FontExporter<?> getSaveFormat(Font<?> font) {

@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -19,7 +21,7 @@ import javax.swing.JTextField;
 public class MoveGlyphsDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
-	public static class Result {
+	public static final class Result {
 		public final boolean byIndex;
 		public final boolean relative;
 		public final int offset;
@@ -37,33 +39,39 @@ public class MoveGlyphsDialog extends JDialog {
 	private JButton okButton;
 	private Result result;
 	
-	public MoveGlyphsDialog(Dialog parent, boolean copy, boolean byIndex) {
+	public MoveGlyphsDialog(Dialog parent, boolean copy, Boolean byIndex) {
 		super(parent, copy ? "Copy Glyphs" : "Move Glyphs");
 		setModal(true);
 		make(byIndex);
 	}
 	
-	public MoveGlyphsDialog(Frame parent, boolean copy, boolean byIndex) {
+	public MoveGlyphsDialog(Frame parent, boolean copy, Boolean byIndex) {
 		super(parent, copy ? "Copy Glyphs" : "Move Glyphs");
 		setModal(true);
 		make(byIndex);
 	}
 	
-	public MoveGlyphsDialog(Window parent, boolean copy, boolean byIndex) {
+	public MoveGlyphsDialog(Window parent, boolean copy, Boolean byIndex) {
 		super(parent, copy ? "Copy Glyphs" : "Move Glyphs");
 		setModal(true);
 		make(byIndex);
 	}
 	
-	private void make(boolean byIndex) {
+	private void make(Boolean byIndex) {
 		this.byCodePointButton = new JRadioButton("By Code Point");
 		this.byIndexButton = new JRadioButton("By Index");
 		this.offsetField = new JTextField("+0");
 		this.cancelButton = new JButton("Cancel");
 		this.okButton = new JButton("OK");
 		
-		this.byCodePointButton.setSelected(!byIndex);
-		this.byIndexButton.setSelected(byIndex);
+		if (byIndex == null) {
+			this.byCodePointButton.setSelected(true);
+			this.byIndexButton.setSelected(false);
+			this.byIndexButton.setEnabled(false);
+		} else {
+			this.byCodePointButton.setSelected(!byIndex);
+			this.byIndexButton.setSelected(byIndex);
+		}
 		ButtonGroup bg1 = new ButtonGroup();
 		bg1.add(this.byCodePointButton);
 		bg1.add(this.byIndexButton);
@@ -88,6 +96,29 @@ public class MoveGlyphsDialog extends JDialog {
 		pack();
 		setLocationRelativeTo(null);
 		offsetField.requestFocusInWindow();
+		
+		offsetField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_ENTER:
+						okButton.doClick();
+						break;
+					case KeyEvent.VK_ESCAPE:
+						cancelButton.doClick();
+						break;
+					case KeyEvent.VK_U:
+						if (e.isControlDown() || e.isMetaDown()) {
+							byCodePointButton.doClick();
+						}
+						break;
+					case KeyEvent.VK_I:
+						if (e.isControlDown() || e.isMetaDown()) {
+							byIndexButton.doClick();
+						}
+						break;
+				}
+			}
+		});
 		
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -23,7 +23,6 @@ import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.edit.BitmapGlyphTransform.BitmapGlyphTransformInfo;
 
 public class BitmapEditMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
@@ -243,9 +242,9 @@ public class BitmapEditMenuBar extends JMenuBar {
 		private static final long serialVersionUID = 1L;
 		public TransformMenu(final GlyphComponent<BitmapFontGlyph> gc) {
 			super("Transform");
-			for (BitmapGlyphTransformInfo txi : BitmapGlyphTransform.TRANSFORMS) {
-				if (txi == null) addSeparator();
-				else add(new TransformMenuItem(txi, gc));
+			for (BitmapGlyphTransform tx : BitmapGlyphTransform.TRANSFORMS) {
+				if (tx == null) addSeparator();
+				else add(new TransformMenuItem(tx, gc));
 			}
 		}
 	}
@@ -253,14 +252,14 @@ public class BitmapEditMenuBar extends JMenuBar {
 	public static final class TransformMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
 		public TransformMenuItem(
-			final BitmapGlyphTransformInfo txi,
+			final BitmapGlyphTransform tx,
 			final GlyphComponent<BitmapFontGlyph> gc
 		) {
-			super(txi.name);
-			setAccelerator(txi.keystroke);
+			super(tx.name);
+			setAccelerator(tx.keystroke);
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					txi.transform.transform(gc.getGlyphFont(), gc.getGlyph());
+					tx.transform(gc.getGlyphFont(), gc.getGlyph());
 					gc.glyphChanged();
 				}
 			});

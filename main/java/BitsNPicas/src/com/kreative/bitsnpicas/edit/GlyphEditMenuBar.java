@@ -151,9 +151,7 @@ public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 						G g = createGlyph();
 						if (g == null) return;
 						loc.setGlyph(g);
-						GlyphList<G> gl = panel.getGlyphList();
-						if (gl.getModel().tracksFont()) gl.clearSelection();
-						gl.glyphsChanged();
+						panel.getGlyphList().glyphRepertoireChanged();
 					}
 					panel.setGlyph(loc);
 					frame.setTitle(loc.toString());
@@ -176,9 +174,7 @@ public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 						G g = createGlyph();
 						if (g == null) return;
 						loc.setGlyph(g);
-						GlyphList<G> gl = panel.getGlyphList();
-						if (gl.getModel().tracksFont()) gl.clearSelection();
-						gl.glyphsChanged();
+						panel.getGlyphList().glyphRepertoireChanged();
 					}
 					panel.setGlyph(loc);
 					frame.setTitle(loc.toString());
