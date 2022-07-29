@@ -10,12 +10,12 @@ import com.kreative.bitsnpicas.Font;
 public class FontInfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private final NamesPanel namesPanel;
-	private final MetricsPanel metricsPanel;
+	private final FontInfoNamesPanel namesPanel;
+	private final FontInfoMetricsPanel metricsPanel;
 	
 	public FontInfoPanel() {
 		JScrollPane namesPane = new JScrollPane(
-			namesPanel = new NamesPanel(),
+			namesPanel = new FontInfoNamesPanel(),
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
 		);
@@ -26,7 +26,7 @@ public class FontInfoPanel extends JPanel {
 		
 		JTabbedPane tabPane = new JTabbedPane();
 		tabPane.addTab("Names", namesPanel2);
-		tabPane.addTab("Metrics", metricsPanel = new MetricsPanel());
+		tabPane.addTab("Metrics", metricsPanel = new FontInfoMetricsPanel());
 		SwingUtils.setOpaque(metricsPanel, false);
 		
 		setLayout(new BorderLayout());

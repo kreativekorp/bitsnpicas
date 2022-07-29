@@ -21,7 +21,7 @@ import javax.swing.Scrollable;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontGlyph;
 
-public class NamesPanel extends JPanel implements Scrollable {
+public class FontInfoNamesPanel extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final Map<Integer,String> NAME_TYPE_NAMES;
@@ -54,7 +54,7 @@ public class NamesPanel extends JPanel implements Scrollable {
 	
 	private final Map<Integer,JTextField> fields;
 	
-	public NamesPanel() {
+	public FontInfoNamesPanel() {
 		JPanel labelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		JPanel fieldPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		fields = new HashMap<Integer,JTextField>();

@@ -10,7 +10,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import com.kreative.bitsnpicas.Font;
 
-public class MetricsPanel extends JPanel {
+public class FontInfoMetricsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private final SpinnerNumberModel emAscent;
@@ -21,7 +21,7 @@ public class MetricsPanel extends JPanel {
 	private final SpinnerNumberModel xHeight;
 	private final SpinnerNumberModel capHeight;
 	
-	public MetricsPanel() {
+	public FontInfoMetricsPanel() {
 		JPanel labelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		labelPanel.add(new JLabel("Em Ascent"));
 		labelPanel.add(new JLabel("Em Descent"));
