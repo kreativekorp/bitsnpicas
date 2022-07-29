@@ -27,25 +27,16 @@ import com.kreative.bitsnpicas.Font;
 public class BitmapEditMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
-	public BitmapEditMenuBar(
-		final Frame frame, final SaveManager sm,
-		final BitmapFont font, final BitmapEditPanel panel
-	) {
+	public BitmapEditMenuBar(final Frame frame, final SaveManager sm, final BitmapFont font, final BitmapEditPanel panel) {
 		add(new FileMenu(frame, sm, font, panel));
 		add(new EditMenu(panel));
-		add(new GlyphEditMenuBar.ViewMenu<BitmapFontGlyph>(frame, panel) {
-			private static final long serialVersionUID = 1L;
-			protected BitmapFontGlyph createGlyph() { return new BitmapFontGlyph(); }
-		});
+		add(new GlyphEditMenuBar.ViewMenu<BitmapFontGlyph>(frame, panel, BitmapFontGlyph.class));
 		add(new TransformMenu(panel.getGlyphComponent()));
 	}
 	
 	public static final class FileMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public FileMenu(
-			final Frame frame, final SaveManager sm,
-			final BitmapFont font, final BitmapEditPanel panel
-		) {
+		public FileMenu(final Frame frame, final SaveManager sm, final BitmapFont font, final BitmapEditPanel panel) {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
 			add(new CommonMenuItems.OpenMenuItem());
@@ -55,7 +46,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
 			add(new BitmapListMenuBar.ExportMenuItem(font));
 			addSeparator();
-			add(new ImportMenuItem(panel));
+			add(new ImportMenuItem(frame, panel));
 			addSeparator();
 			add(new CommonMenuItems.FontInfoMenuItem(font, sm));
 			add(new BitmapListMenuBar.PreviewMenuItem(font, panel.getGlyphList()));
@@ -68,15 +59,19 @@ public class BitmapEditMenuBar extends JMenuBar {
 	
 	public static final class ImportMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public ImportMenuItem(final BitmapEditPanel panel) {
+		private String lastDirectory = null;
+		public ImportMenuItem(final Frame frame, final BitmapEditPanel panel) {
 			super("Import Image...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					FileDialog fd = new FileDialog(new Frame(), "Import Image", FileDialog.LOAD);
+					FileDialog fd = new FileDialog(frame, "Import Image", FileDialog.LOAD);
+					if (lastDirectory != null) fd.setDirectory(lastDirectory);
 					fd.setVisible(true);
-					if (fd.getDirectory() == null || fd.getFile() == null) return;
-					File file = new File(fd.getDirectory(), fd.getFile());
+					String ds = fd.getDirectory(), fs = fd.getFile();
+					fd.dispose();
+					if (ds == null || fs == null) return;
+					File file = new File((lastDirectory = ds), fs);
 					try {
 						BufferedImage image = ImageIO.read(file);
 						if (image != null) {
@@ -216,6 +211,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 					} catch (UnsupportedFlavorException ufe) {
 						ufe.printStackTrace();
 					}
+					Toolkit.getDefaultToolkit().beep();
 				}
 			});
 		}
@@ -251,10 +247,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 	
 	public static final class TransformMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public TransformMenuItem(
-			final BitmapGlyphTransform tx,
-			final GlyphComponent<BitmapFontGlyph> gc
-		) {
+		public TransformMenuItem(final BitmapGlyphTransform tx,final GlyphComponent<BitmapFontGlyph> gc) {
 			super(tx.name);
 			setAccelerator(tx.keystroke);
 			addActionListener(new ActionListener() {

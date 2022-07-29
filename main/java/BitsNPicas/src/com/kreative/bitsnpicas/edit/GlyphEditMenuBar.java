@@ -12,21 +12,17 @@ import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontGlyph;
 
-public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
+public class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
 	public GlyphEditMenuBar(
 		final Frame frame, final SaveManager sm,
-		final Font<G> font, final GlyphEditPanel<G> panel
+		final Font<G> font, final GlyphEditPanel<G> panel,
+		final Class<G> glyphClass
 	) {
 		add(new FileMenu(frame, sm, font));
-		add(new ViewMenu<G>(frame, panel) {
-			private static final long serialVersionUID = 1L;
-			protected G createGlyph() { return GlyphEditMenuBar.this.createGlyph(); }
-		});
+		add(new ViewMenu<G>(frame, panel, glyphClass));
 	}
-	
-	protected abstract G createGlyph();
 	
 	public static final class FileMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
@@ -47,9 +43,9 @@ public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 		}
 	}
 	
-	public static abstract class ViewMenu<G extends FontGlyph> extends JMenu {
+	public static final class ViewMenu<G extends FontGlyph> extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public ViewMenu(final Frame frame, final GlyphEditPanel<G> panel) {
+		public ViewMenu(final Frame frame, final GlyphEditPanel<G> panel, final Class<G> glyphClass) {
 			super("View");
 			GlyphComponent<G> gc = panel.getGlyphComponent();
 			FitToEmMenuItem fitToEm = new FitToEmMenuItem(gc);
@@ -59,18 +55,11 @@ public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 			addSeparator();
 			add(new ShowBoundingBoxMenuItem(gc));
 			addSeparator();
-			add(new PreviousGlyphMenuItem<G>(frame, panel) {
-				private static final long serialVersionUID = 1L;
-				protected G createGlyph() { return ViewMenu.this.createGlyph(); }
-			});
-			add(new NextGlyphMenuItem<G>(frame, panel) {
-				private static final long serialVersionUID = 1L;
-				protected G createGlyph() { return ViewMenu.this.createGlyph(); }
-			});
+			add(new PreviousGlyphMenuItem<G>(frame, panel, glyphClass));
+			add(new NextGlyphMenuItem<G>(frame, panel, glyphClass));
 			add(new PreviousDefinedGlyphMenuItem<G>(frame, panel));
 			add(new NextDefinedGlyphMenuItem<G>(frame, panel));
 		}
-		protected abstract G createGlyph();
 	}
 	
 	public static final class FitToEmMenuItem extends JCheckBoxMenuItem {
@@ -138,9 +127,9 @@ public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 		}
 	}
 	
-	public static abstract class PreviousGlyphMenuItem<G extends FontGlyph> extends JMenuItem {
+	public static final class PreviousGlyphMenuItem<G extends FontGlyph> extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PreviousGlyphMenuItem(final Frame frame, final GlyphEditPanel<G> panel) {
+		public PreviousGlyphMenuItem(final Frame frame, final GlyphEditPanel<G> panel, final Class<G> glyphClass) {
 			super("Previous Glyph");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
@@ -148,22 +137,24 @@ public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 					GlyphLocator<G> loc = panel.getGlyphLocator().getPrevious();
 					if (loc == null) return;
 					if (loc.getGlyph() == null) {
-						G g = createGlyph();
-						if (g == null) return;
-						loc.setGlyph(g);
-						panel.getGlyphList().glyphRepertoireChanged();
+						try {
+							G g = glyphClass.newInstance();
+							loc.setGlyph(g);
+							panel.getGlyphList().glyphRepertoireChanged();
+						} catch (Exception ex) {
+							return;
+						}
 					}
 					panel.setGlyph(loc);
 					frame.setTitle(loc.toString());
 				}
 			});
 		}
-		protected abstract G createGlyph();
 	}
 	
-	public static abstract class NextGlyphMenuItem<G extends FontGlyph> extends JMenuItem {
+	public static final class NextGlyphMenuItem<G extends FontGlyph> extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public NextGlyphMenuItem(final Frame frame, final GlyphEditPanel<G> panel) {
+		public NextGlyphMenuItem(final Frame frame, final GlyphEditPanel<G> panel, final Class<G> glyphClass) {
 			super("Next Glyph");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
@@ -171,17 +162,19 @@ public abstract class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 					GlyphLocator<G> loc = panel.getGlyphLocator().getNext();
 					if (loc == null) return;
 					if (loc.getGlyph() == null) {
-						G g = createGlyph();
-						if (g == null) return;
-						loc.setGlyph(g);
-						panel.getGlyphList().glyphRepertoireChanged();
+						try {
+							G g = glyphClass.newInstance();
+							loc.setGlyph(g);
+							panel.getGlyphList().glyphRepertoireChanged();
+						} catch (Exception ex) {
+							return;
+						}
 					}
 					panel.setGlyph(loc);
 					frame.setTitle(loc.toString());
 				}
 			});
 		}
-		protected abstract G createGlyph();
 	}
 	
 	public static final class PreviousDefinedGlyphMenuItem<G extends FontGlyph> extends JMenuItem {

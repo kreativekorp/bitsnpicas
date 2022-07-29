@@ -15,7 +15,6 @@ import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontExporter;
-import com.kreative.bitsnpicas.FontGlyph;
 import com.kreative.bitsnpicas.FontImporter;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.VectorFont;
@@ -161,14 +160,11 @@ public class Main {
 			f.setVisible(true);
 			return f;
 		} else {
-			@SuppressWarnings("unchecked")
-			JFrame f = new GlyphListFrame<FontGlyph>(
-				fontFile,
-				(FontExporter<Font<FontGlyph>>)format,
-				(Font<FontGlyph>)font
+			JOptionPane.showMessageDialog(
+				null, "The selected font was not recognized by the Bits'n'Picas editor.",
+				"Open", JOptionPane.ERROR_MESSAGE
 			);
-			f.setVisible(true);
-			return f;
+			return null;
 		}
 	}
 	
@@ -184,19 +180,20 @@ public class Main {
 			f.setVisible(true);
 			return f;
 		} else {
-			@SuppressWarnings("unchecked")
-			Font<FontGlyph> gfont = (Font<FontGlyph>)font;
-			JFrame f = new GlyphListFrame<FontGlyph>(routine, gfont);
-			f.setVisible(true);
-			return f;
+			JOptionPane.showMessageDialog(
+				null, "The selected font was not recognized by the Bits'n'Picas editor.",
+				"Open", JOptionPane.ERROR_MESSAGE
+			);
+			return null;
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <G extends FontGlyph> JFrame openGlyph(Font<G> font, GlyphLocator<G> loc, GlyphList<G> gl, SaveManager sm) {
+	public static JFrame openGlyph(Font<?> font, GlyphLocator<?> loc, GlyphList<?> gl, SaveManager sm) {
 		if (font instanceof BitmapFont) {
 			BitmapFont bfont = (BitmapFont)font;
+			@SuppressWarnings("unchecked")
 			GlyphLocator<BitmapFontGlyph> bloc = (GlyphLocator<BitmapFontGlyph>)loc;
+			@SuppressWarnings("unchecked")
 			GlyphList<BitmapFontGlyph> bgl = (GlyphList<BitmapFontGlyph>)gl;
 			if (bloc.getGlyph() == null) {
 				bloc.setGlyph(new BitmapFontGlyph());
@@ -207,28 +204,23 @@ public class Main {
 			return f;
 		} else if (font instanceof VectorFont) {
 			VectorFont vfont = (VectorFont)font;
+			@SuppressWarnings("unchecked")
 			GlyphLocator<VectorFontGlyph> vloc = (GlyphLocator<VectorFontGlyph>)loc;
+			@SuppressWarnings("unchecked")
 			GlyphList<VectorFontGlyph> vgl = (GlyphList<VectorFontGlyph>)gl;
 			if (vloc.getGlyph() == null) {
 				vloc.setGlyph(new VectorFontGlyph());
 				vgl.glyphRepertoireChanged();
 			}
-			JFrame f = new GlyphEditFrame<VectorFontGlyph>(vfont, vloc, vgl, sm) {
-				private static final long serialVersionUID = 1L;
-				protected VectorFontGlyph createGlyph() {
-					return new VectorFontGlyph();
-				}
-			};
+			JFrame f = new GlyphEditFrame<VectorFontGlyph>(VectorFontGlyph.class, vfont, vloc, vgl, sm);
 			f.setVisible(true);
 			return f;
 		} else {
-			if (loc.getGlyph() == null) return null;
-			JFrame f = new GlyphEditFrame<G>(font, loc, gl, sm) {
-				private static final long serialVersionUID = 1L;
-				protected G createGlyph() { return null; }
-			};
-			f.setVisible(true);
-			return f;
+			JOptionPane.showMessageDialog(
+				null, "The selected font was not recognized by the Bits'n'Picas editor.",
+				"Open", JOptionPane.ERROR_MESSAGE
+			);
+			return null;
 		}
 	}
 	
