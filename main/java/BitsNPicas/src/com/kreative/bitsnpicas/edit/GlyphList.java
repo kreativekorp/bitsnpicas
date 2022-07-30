@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.SystemColor;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -14,6 +16,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +39,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 	private int cellSize;
 	private int columnCount;
 	private int rowCount;
+	private boolean antiAlias;
 	private Dimension preferredSize;
 	private GlyphListModel model;
 	private final GlyphListSelection selection;
@@ -47,6 +51,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		this.cellSize = 36;
 		this.columnCount = 16;
 		this.rowCount = 8;
+		this.antiAlias = false;
 		this.preferredSize = null;
 		this.model = new GlyphListCodePointModel(new Block(0, 127, "Basic Latin"));
 		this.selection = new GlyphListSelection();
@@ -111,6 +116,15 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			this.revalidate();
 			this.repaint();
 		}
+	}
+	
+	public boolean getAntiAlias() {
+		return this.antiAlias;
+	}
+	
+	public void setAntiAlias(boolean antiAlias) {
+		this.antiAlias = antiAlias;
+		this.repaint();
 	}
 	
 	public GlyphListModel getModel() {
@@ -223,88 +237,89 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		Rectangle vr = getVisibleRect();
 		Insets insets = getInsets();
 		int w = getWidth() - insets.left - insets.right - 1;
+		int bufw = (w / columnCount) + 1;
+		BufferedImage lbuf = new BufferedImage(bufw, LABEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage gbuf = new BufferedImage(bufw, cellSize, BufferedImage.TYPE_INT_ARGB);
 		double fa = font.getEmAscent2D();
 		double fh = fa + font.getEmDescent2D();
 		double scale = (fh <= 0) ? ((cellSize - 3) / 10.0) : ((cellSize - 3) / fh);
 		if (scale <= 0) scale = 1;
 		if (scale >= 1) scale = Math.floor(scale);
-		double ascent = ((cellSize - 3) - fh * scale) / 2 + fa * scale;
+		double ascent = Math.round(((cellSize - 3) - fh * scale) / 2 + fa * scale + 1);
 		for (int i = 0, n = model.getCellCount(); i < n; i++) {
 			int x1 = insets.left + w * (i % columnCount) / columnCount;
 			int x2 = insets.left + w * ((i % columnCount) + 1) / columnCount;
 			int y = insets.top + (cellSize + LABEL_HEIGHT) * (i / columnCount);
 			if (vr.intersects(x1, y, x2 - x1 + 1, cellSize + LABEL_HEIGHT + 1)) {
-				if (model.isCodePoint(i) || model.isGlyphName(i)) {
-					g.setColor(Color.black);
-					g.fillRect(x1, y, x2 - x1 + 1, cellSize + LABEL_HEIGHT + 1);
-					g.setColor(Color.gray);
-					g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, cellSize + LABEL_HEIGHT - 1);
-					g.setColor(SystemColor.text);
-					g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, LABEL_HEIGHT - 1);
-					if (sel.contains(i)) g.setColor(SystemColor.textHighlight);
-					g.fillRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
-					g.setColor(SystemColor.textText);
-				}
+				// Get glyph. If this index is undefined, skip this cell.
+				String label;
+				FontGlyph glyph;
+				java.awt.Font labelFont;
+				boolean labelAntiAlias;
 				if (model.isCodePoint(i)) {
 					int cp = model.getCodePoint(i);
-					String cps = getCharacterLabel(cp);
-					if (Resources.HEX_FONT == null || cps.length() < 4) {
+					glyph = font.getCharacter(cp);
+					label = getCharacterLabel(cp);
+					if (label.length() < 4) {
 						FontMapEntry e = fontMap.entryForCodePoint(cp);
-						if (e == null) {
-							FontMetrics fm = g.getFontMetrics();
-							int cpsx = (x1 + x2 - fm.stringWidth(cps) + 1) / 2;
-							int cpsy = y + (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
-							g.drawString(cps, cpsx, cpsy);
-						} else {
-							java.awt.Font sf = g.getFont();
-							g.setFont(e.getFont());
-							FontMetrics fm = g.getFontMetrics();
-							int cpsx = (x1 + x2 - fm.stringWidth(cps) + 1) / 2;
-							int cpsy = y + (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
-							g.drawString(cps, cpsx, cpsy);
-							g.setFont(sf);
-						}
+						labelFont = (e != null) ? e.getFont() : g.getFont();
+						labelAntiAlias = antiAlias;
 					} else {
-						java.awt.Font sf = g.getFont();
-						g.setFont(Resources.HEX_FONT);
-						int cpsx = (x1 + x2 - cps.length() * 5 + 1) / 2;
-						int cpsy = y + (LABEL_HEIGHT - 8) / 2 + 8;
-						g.drawString(cps, cpsx, cpsy);
-						g.setFont(sf);
+						labelFont = (Resources.HEX_FONT != null) ? Resources.HEX_FONT : g.getFont();
+						labelAntiAlias = (Resources.HEX_FONT != null) ? false : antiAlias;
 					}
 				} else if (model.isGlyphName(i)) {
-					String name = model.getGlyphName(i);
-					if (Resources.PSNAME_FONT == null) {
-						FontMetrics fm = g.getFontMetrics();
-						int nx = (x1 + x2 - fm.stringWidth(name) + 1) / 2;
-						int ny = y + (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
-						g.drawString(name, nx, ny);
-					} else {
-						java.awt.Font sf = g.getFont();
-						g.setFont(Resources.PSNAME_FONT);
-						FontMetrics fm = g.getFontMetrics();
-						int nx = (x1 + x2 - fm.stringWidth(name) + 1) / 2;
-						int ny = y + (LABEL_HEIGHT - 8) / 2 + 8;
-						g.drawString(name, nx, ny);
-						g.setFont(sf);
-					}
+					label = model.getGlyphName(i);
+					glyph = font.getNamedGlyph(label);
+					labelFont = (Resources.PSNAME_FONT != null) ? Resources.PSNAME_FONT : g.getFont();
+					labelAntiAlias = (Resources.PSNAME_FONT != null) ? false : antiAlias;
+				} else {
+					continue;
 				}
-				if (model.isCodePoint(i) && font.containsCharacter(model.getCodePoint(i))) {
-					if (sel.contains(i)) g.setColor(SystemColor.textHighlightText);
-					FontGlyph glyph = font.getCharacter(model.getCodePoint(i));
-					double gx = Math.round((x1 + x2 - glyph.getCharacterWidth2D() * scale) / 2);
-					double gy = Math.round(y + LABEL_HEIGHT + 2 + ascent);
-					glyph.paint(g, gx, gy, scale);
-				} else if (model.isGlyphName(i) && font.containsNamedGlyph(model.getGlyphName(i))) {
-					if (sel.contains(i)) g.setColor(SystemColor.textHighlightText);
-					FontGlyph glyph = font.getNamedGlyph(model.getGlyphName(i));
-					double gx = Math.round((x1 + x2 - glyph.getCharacterWidth2D() * scale) / 2);
-					double gy = Math.round(y + LABEL_HEIGHT + 2 + ascent);
-					glyph.paint(g, gx, gy, scale);
-				} else if (model.isCodePoint(i) || model.isGlyphName(i)) {
+				// Paint background.
+				g.setColor(Color.black);
+				g.fillRect(x1, y, x2 - x1 + 1, cellSize + LABEL_HEIGHT + 1);
+				g.setColor(Color.gray);
+				g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, cellSize + LABEL_HEIGHT - 1);
+				// Paint cell label.
+				Graphics2D lg = lbuf.createGraphics();
+				lg.setColor(SystemColor.text);
+				lg.fillRect(0, 0, bufw, LABEL_HEIGHT);
+				lg.setColor(SystemColor.textText);
+				lg.setFont(labelFont);
+				if (labelAntiAlias) {
+					lg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				}
+				FontMetrics fm = lg.getFontMetrics();
+				int lx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
+				int ly = (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
+				lg.drawString(label, lx, ly);
+				lg.dispose();
+				g.drawImage(
+					lbuf, x1 + 1, y + 1, x2, y + LABEL_HEIGHT,
+					0, 0, x2 - x1 - 1, LABEL_HEIGHT - 1, null
+				);
+				// Paint glyph.
+				if (glyph == null) {
+					g.setColor(sel.contains(i) ? SystemColor.textHighlight : SystemColor.text);
+					g.fillRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
 					g.setColor(Color.gray);
 					g.drawLine(x1 + 1, y + LABEL_HEIGHT + 1, x2 - 1, y + cellSize + LABEL_HEIGHT - 1);
 					g.drawLine(x2 - 1, y + LABEL_HEIGHT + 1, x1 + 1, y + cellSize + LABEL_HEIGHT - 1);
+				} else {
+					Graphics2D gg = gbuf.createGraphics();
+					gg.setColor(sel.contains(i) ? SystemColor.textHighlight : SystemColor.text);
+					gg.fillRect(0, 0, bufw, cellSize);
+					gg.setColor(sel.contains(i) ? SystemColor.textHighlightText : SystemColor.textText);
+					double gx = Math.round(((x2 - x1 - 2) - glyph.getCharacterWidth2D() * scale) / 2);
+					glyph.paint(gg, gx, ascent, scale);
+					gg.dispose();
+					g.drawImage(
+						gbuf, x1 + 1, y + LABEL_HEIGHT + 1,
+						x2, y + LABEL_HEIGHT + cellSize,
+						0, 0, x2 - x1 - 1, cellSize - 1, null
+					);
 				}
 			}
 		}
@@ -474,11 +489,20 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 						startSelection(e, i);
 					}
 					break;
+				case KeyEvent.VK_HOME:
+					startSelection(e, 0);
+					break;
+				case KeyEvent.VK_END:
+					startSelection(e, model.getCellCount() - 1);
+					break;
 				case KeyEvent.VK_ENTER:
 					openSelection();
 					break;
 				case KeyEvent.VK_DELETE:
 					deleteSelection();
+					break;
+				case KeyEvent.VK_INSERT:
+					setAntiAlias(!antiAlias);
 					break;
 			}
 		}
