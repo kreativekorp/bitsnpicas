@@ -31,7 +31,6 @@ import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
-import com.kreative.bitsnpicas.edit.MoveGlyphsDialog.Result;
 import com.kreative.bitsnpicas.edit.exporter.BitmapExportFrame;
 import com.kreative.bitsnpicas.main.ViewFont;
 
@@ -331,8 +330,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			super("Clear");
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
-					if (locators.isEmpty()) {
+					if (gl.getSelection().isEmpty()) {
 						Toolkit.getDefaultToolkit().beep();
 						return;
 					}
@@ -352,117 +350,23 @@ public class BitmapListMenuBar extends JMenuBar {
 			));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// The order in which we do things here is very important!
-					// If we get it wrong we can completely screw it up.
-					// Get the locators for the selected glyphs.
-					// Must be done before calling tracksFont()
-					// in case that changes the model's glyph list.
-					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
-					if (locators.isEmpty()) {
+					if (gl.getSelection().isEmpty()) {
 						Toolkit.getDefaultToolkit().beep();
 						return;
 					}
-					// Show the dialog.
-					// Disable moving by index if the model tracks
-					// the font because what does that even mean?
-					GlyphListModel model = gl.getModel();
-					Boolean byIndex = (
-						model.tracksFont() ?
-						(copy ? Boolean.FALSE : null) :
-						Boolean.valueOf(!isUnicodeRange(model))
-					);
-					Result result = new MoveGlyphsDialog(frame, copy, byIndex).showDialog();
-					if (result == null) return;
-					// Create a copy of the selected glyphs.
-					List<BitmapGlyphState> states = new ArrayList<BitmapGlyphState>();
-					for (GlyphLocator<BitmapFontGlyph> loc : locators) {
-						BitmapFontGlyph glyph = loc.getGlyph();
-						if (glyph == null) states.add(null);
-						else states.add(new BitmapGlyphState(glyph));
-					}
-					// If this is a move operation, remove the
-					// selected glyphs from their current location.
-					// This also calls tracksFont() again afterwards.
-					if (!copy) gl.deleteSelection();
-					// Put the glyphs back in the destination location.
-					if (result.byIndex) {
-						Font<BitmapFontGlyph> font = gl.getGlyphFont();
-						HashSet<Integer> selectedIndices = new HashSet<Integer>();
-						int gn = model.getCellCount();
-						for (int i = 0, n = locators.size(); i < n; i++) {
-							int gi = locators.get(i).getGlyphIndex();
-							if (gi < 0) continue;
-							if (result.relative) gi += result.offset;
-							else gi = result.offset + i;
-							if (gi < 0 || gi >= gn) continue;
-							selectedIndices.add(gi);
-							BitmapGlyphState state = states.get(i);
-							if (state == null) continue;
+					new MoveGlyphsDialog<BitmapFontGlyph, BitmapGlyphState>(frame, copy, gl) {
+						private static final long serialVersionUID = 1L;
+						public BitmapGlyphState serializeGlyph(BitmapFontGlyph g) {
+							return new BitmapGlyphState(g);
+						}
+						public BitmapFontGlyph deserializeGlyph(BitmapGlyphState s) {
 							BitmapFontGlyph g = new BitmapFontGlyph();
-							state.apply(g);
-							new GlyphLocator<BitmapFontGlyph>(font, model, gi).setGlyph(g);
+							s.apply(g);
+							return g;
 						}
-						gl.glyphRepertoireChanged();
-						gl.setSelectedIndices(selectedIndices, true);
-					} else {
-						// Put the glyphs at the destination code points before
-						// setting the selection since the indices may change.
-						Font<BitmapFontGlyph> font = gl.getGlyphFont();
-						HashSet<Integer> selectedCodePoints = new HashSet<Integer>();
-						List<GlyphLocator<BitmapFontGlyph>> selectedLocators;
-						selectedLocators = new ArrayList<GlyphLocator<BitmapFontGlyph>>();
-						for (int i = 0, n = locators.size(); i < n; i++) {
-							GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
-							BitmapGlyphState state = states.get(i);
-							int cp;
-							if (result.relative) {
-								if (loc.isCodePoint()) {
-									cp = loc.getCodePoint() + result.offset;
-								} else {
-									selectedLocators.add(loc);
-									if (state == null) continue;
-									BitmapFontGlyph g = new BitmapFontGlyph();
-									state.apply(g);
-									loc.setGlyph(g);
-									continue;
-								}
-							} else {
-								cp = result.offset + i;
-							}
-							if (Character.isValidCodePoint(cp)) {
-								selectedCodePoints.add(cp);
-								if (state == null) continue;
-								BitmapFontGlyph g = new BitmapFontGlyph();
-								state.apply(g);
-								font.putCharacter(cp, g);
-							}
-						}
-						gl.glyphRepertoireChanged();
-						// Calculate the selected indices now that the font is done changing.
-						HashSet<Integer> selectedIndices = new HashSet<Integer>();
-						for (int cp : selectedCodePoints) {
-							selectedIndices.add(model.indexOfCodePoint(cp));
-						}
-						for (GlyphLocator<BitmapFontGlyph> loc : selectedLocators) {
-							selectedIndices.add(loc.getGlyphIndex());
-						}
-						gl.setSelectedIndices(selectedIndices, true);
-					}
+					}.setVisible(true);
 				}
 			});
-		}
-		private static boolean isUnicodeRange(GlyphListModel model) {
-			for (int lastCP = -1, i = 0, n = model.getCellCount(); i < n; i++) {
-				if (model.isCodePoint(i)) {
-					int cp = model.getCodePoint(i);
-					if (lastCP < 0 || (lastCP + 1) == cp) {
-						lastCP = cp;
-						continue;
-					}
-				}
-				return false;
-			}
-			return true;
 		}
 	}
 	
