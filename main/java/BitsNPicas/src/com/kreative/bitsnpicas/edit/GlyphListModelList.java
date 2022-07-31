@@ -20,8 +20,9 @@ import com.kreative.unicode.data.GlyphLists;
 
 public class GlyphListModelList extends JTree {
 	private static final long serialVersionUID = 1L;
-	public static final int SUBTABLE_MARKER = 0xFEEDB175;
-	public static final int UNDEFINED_MARKER = 0xABADC0DE;
+	public static final int SEQUENCE_MARKER = 0xFFFF2B16;
+	public static final int SUBTABLE_MARKER = 0xFFFF1EAD;
+	public static final int UNDEFINED_MARKER = 0xFFFFBAD1;
 	
 	public GlyphListModelList(Font<?> font) {
 		super(new GlyphListModelRootNode(font));
@@ -117,8 +118,19 @@ public class GlyphListModelList extends JTree {
 			Integer[] codePoints = new Integer[256];
 			for (int i = 0; i < 256; i++) {
 				String s = table.getSequence(i);
-				if (s != null && s.codePointCount(0, s.length()) == 1) {
-					codePoints[i] = s.codePointAt(0);
+				if (s != null && s.length() > 0) {
+					if (s.codePointCount(0, s.length()) == 1) {
+						codePoints[i] = s.codePointAt(0);
+					} else if (s.length() == 2) {
+						int ch0 = s.charAt(0) & 0xFFFF;
+						int ch1 = s.charAt(1) & 0xFFFF;
+						codePoints[i] = (
+							(ch0 < 0x20 || ch0 > 0xFFFD || ch1 < 0x20 || ch1 > 0xFFFD)
+							? SEQUENCE_MARKER : ((ch0 << 16) | ch1)
+						);
+					} else {
+						codePoints[i] = SEQUENCE_MARKER;
+					}
 					nullOnEmpty = false;
 				} else if (table.getSubtable(i) != null) {
 					codePoints[i] = SUBTABLE_MARKER;
@@ -135,7 +147,7 @@ public class GlyphListModelList extends JTree {
 		protected final GlyphListModelTreeNode parent;
 		protected final GlyphListModel model;
 		protected final List<GlyphListModelTreeNode> children;
-		protected GlyphListModelTreeNode(GlyphListModelTreeNode parent, GlyphListModel model) {
+		public GlyphListModelTreeNode(GlyphListModelTreeNode parent, GlyphListModel model) {
 			this.parent = parent;
 			this.model = model;
 			this.children = new ArrayList<GlyphListModelTreeNode>();

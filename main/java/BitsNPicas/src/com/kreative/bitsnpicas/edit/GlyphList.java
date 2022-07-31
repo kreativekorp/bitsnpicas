@@ -278,26 +278,43 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 					Integer marker = model.getCodePoint(i);
 					if (marker != null) {
 						Color bg, fg;
+						String ms;
 						switch (marker.intValue()) {
+							case GlyphListModelList.SEQUENCE_MARKER:
+								bg = Color.lightGray;
+								fg = Color.black;
+								label = "Sequence";
+								ms = Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
+								break;
 							case GlyphListModelList.SUBTABLE_MARKER:
 								bg = Color.orange;
 								fg = Color.black;
 								label = "Subtable";
+								ms = Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
 								break;
 							case GlyphListModelList.UNDEFINED_MARKER:
 								bg = Color.darkGray;
 								fg = Color.white;
 								label = "Undefined";
+								ms = Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
 								break;
 							default:
-								continue;
+								int ch0 = (marker.intValue() >>> 16);
+								int ch1 = (marker.intValue() & 0xFFFF);
+								if (ch0 < 0x20 || ch0 > 0xFFFD || ch1 < 0x20 || ch1 > 0xFFFD) continue;
+								String cs0 = Integer.toHexString(0xFF0000 | ch0).substring(2).toUpperCase();
+								String cs1 = Integer.toHexString(0xFF0000 | ch1).substring(2).toUpperCase();
+								bg = Color.lightGray;
+								fg = Color.black;
+								label = cs0 + "." + cs1;
+								ms = String.valueOf(new char[]{(char)ch0, (char)ch1});
+								break;
 						}
 						labelFont = (Resources.PSNAME_FONT != null) ? Resources.PSNAME_FONT : g.getFont();
 						labelAntiAlias = (Resources.PSNAME_FONT != null) ? false : antiAlias;
-						String h = Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
 						paintCellBackground(g, bg, x1, x2, y);
 						paintCellLabel(g, bg, fg, label, labelFont, labelAntiAlias, x1, x2, y, lbuf);
-						paintCellMarker(g, bg, fg, h, markerFont, antiAlias, x1, x2, y, gbuf);
+						paintCellMarker(g, bg, fg, ms, markerFont, antiAlias, x1, x2, y, gbuf);
 					}
 					continue;
 				}
@@ -329,7 +346,9 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
 		FontMetrics fm = lg.getFontMetrics();
-		int lx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
+		int sw = fm.stringWidth(label);
+		if (labelFont == Resources.PSNAME_FONT) sw--;
+		int lx = ((x2 - x1 - 1) - sw) / 2;
 		int ly = (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
 		lg.drawString(label, lx, ly);
 		lg.dispose();
