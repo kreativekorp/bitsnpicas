@@ -6,12 +6,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
-public class GlyphListURLPanel extends JPanel implements ListSelectionListener {
+public class GlyphListURLPanel extends JPanel implements TreeSelectionListener {
 	private static final long serialVersionUID = 1L;
 	
 	private final JLabel label;
@@ -23,7 +22,7 @@ public class GlyphListURLPanel extends JPanel implements ListSelectionListener {
 		this.label.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
 		setLayout(new BorderLayout());
 		add(this.label, BorderLayout.LINE_START);
-		if (modelList != null) modelList.addListSelectionListener(this);
+		modelList.addTreeSelectionListener(this);
 		
 		this.label.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -33,12 +32,12 @@ public class GlyphListURLPanel extends JPanel implements ListSelectionListener {
 		});
 	}
 	
-	public void valueChanged(ListSelectionEvent e) {
+	public void valueChanged(TreeSelectionEvent e) {
 		label.setText(" ");
 		label.setToolTipText(null);
-		Object o = ((JList)e.getSource()).getSelectedValue();
-		if (o instanceof GlyphListModel) {
-			String url = ((GlyphListModel)o).getURL();
+		GlyphListModel model = ((GlyphListModelList)e.getSource()).getSelectedModel();
+		if (model != null) {
+			String url = model.getURL();
 			if (url != null) {
 				label.setText(url);
 				label.setToolTipText(url);

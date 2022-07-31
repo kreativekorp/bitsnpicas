@@ -246,6 +246,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		if (scale <= 0) scale = 1;
 		if (scale >= 1) scale = Math.floor(scale);
 		double ascent = Math.round(((cellSize - 3) - fh * scale) / 2 + fa * scale + 1);
+		java.awt.Font markerFont = new java.awt.Font("Monospaced", 0, cellSize / 2);
 		for (int i = 0, n = model.getCellCount(); i < n; i++) {
 			int x1 = insets.left + w * (i % columnCount) / columnCount;
 			int x2 = insets.left + w * ((i % columnCount) + 1) / columnCount;
@@ -274,55 +275,118 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 					labelFont = (Resources.PSNAME_FONT != null) ? Resources.PSNAME_FONT : g.getFont();
 					labelAntiAlias = (Resources.PSNAME_FONT != null) ? false : antiAlias;
 				} else {
+					Integer marker = model.getCodePoint(i);
+					if (marker != null) {
+						Color bg, fg;
+						switch (marker.intValue()) {
+							case GlyphListModelList.SUBTABLE_MARKER:
+								bg = Color.orange;
+								fg = Color.black;
+								label = "Subtable";
+								break;
+							case GlyphListModelList.UNDEFINED_MARKER:
+								bg = Color.darkGray;
+								fg = Color.white;
+								label = "Undefined";
+								break;
+							default:
+								continue;
+						}
+						labelFont = (Resources.PSNAME_FONT != null) ? Resources.PSNAME_FONT : g.getFont();
+						labelAntiAlias = (Resources.PSNAME_FONT != null) ? false : antiAlias;
+						String h = Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
+						paintCellBackground(g, bg, x1, x2, y);
+						paintCellLabel(g, bg, fg, label, labelFont, labelAntiAlias, x1, x2, y, lbuf);
+						paintCellMarker(g, bg, fg, h, markerFont, antiAlias, x1, x2, y, gbuf);
+					}
 					continue;
 				}
-				// Paint background.
-				g.setColor(Color.black);
-				g.fillRect(x1, y, x2 - x1 + 1, cellSize + LABEL_HEIGHT + 1);
-				g.setColor(Color.gray);
-				g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, cellSize + LABEL_HEIGHT - 1);
-				// Paint cell label.
-				Graphics2D lg = lbuf.createGraphics();
-				lg.setColor(SystemColor.text);
-				lg.fillRect(0, 0, bufw, LABEL_HEIGHT);
-				lg.setColor(SystemColor.textText);
-				lg.setFont(labelFont);
-				if (labelAntiAlias) {
-					lg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-					lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-				}
-				FontMetrics fm = lg.getFontMetrics();
-				int lx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
-				int ly = (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
-				lg.drawString(label, lx, ly);
-				lg.dispose();
-				g.drawImage(
-					lbuf, x1 + 1, y + 1, x2, y + LABEL_HEIGHT,
-					0, 0, x2 - x1 - 1, LABEL_HEIGHT - 1, null
-				);
-				// Paint glyph.
-				if (glyph == null) {
-					g.setColor(sel.contains(i) ? SystemColor.textHighlight : SystemColor.text);
-					g.fillRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
-					g.setColor(Color.gray);
-					g.drawLine(x1 + 1, y + LABEL_HEIGHT + 1, x2 - 1, y + cellSize + LABEL_HEIGHT - 1);
-					g.drawLine(x2 - 1, y + LABEL_HEIGHT + 1, x1 + 1, y + cellSize + LABEL_HEIGHT - 1);
-				} else {
-					Graphics2D gg = gbuf.createGraphics();
-					gg.setColor(sel.contains(i) ? SystemColor.textHighlight : SystemColor.text);
-					gg.fillRect(0, 0, bufw, cellSize);
-					gg.setColor(sel.contains(i) ? SystemColor.textHighlightText : SystemColor.textText);
-					double gx = Math.round(((x2 - x1 - 2) - glyph.getCharacterWidth2D() * scale) / 2);
-					glyph.paint(gg, gx, ascent, scale);
-					gg.dispose();
-					g.drawImage(
-						gbuf, x1 + 1, y + LABEL_HEIGHT + 1,
-						x2, y + LABEL_HEIGHT + cellSize,
-						0, 0, x2 - x1 - 1, cellSize - 1, null
-					);
-				}
+				paintCellBackground(g, Color.gray, x1, x2, y);
+				paintCellLabel(g, SystemColor.text, SystemColor.textText, label, labelFont, labelAntiAlias, x1, x2, y, lbuf);
+				paintCellGlyph(g, glyph, sel.contains(i), x1, x2, y, gbuf, ascent, scale);
 			}
 		}
+	}
+	
+	private void paintCellBackground(Graphics g, Color c, int x1, int x2, int y) {
+		g.setColor(Color.black);
+		g.fillRect(x1, y, x2 - x1 + 1, cellSize + LABEL_HEIGHT + 1);
+		g.setColor(c);
+		g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, cellSize + LABEL_HEIGHT - 1);
+	}
+	
+	private void paintCellLabel(
+		Graphics g, Color bg, Color fg, String label, java.awt.Font labelFont,
+		boolean labelAntiAlias, int x1, int x2, int y, BufferedImage lbuf
+	) {
+		Graphics2D lg = lbuf.createGraphics();
+		lg.setColor(bg);
+		lg.fillRect(0, 0, lbuf.getWidth(), lbuf.getHeight());
+		lg.setColor(fg);
+		lg.setFont(labelFont);
+		if (labelAntiAlias) {
+			lg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		}
+		FontMetrics fm = lg.getFontMetrics();
+		int lx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
+		int ly = (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
+		lg.drawString(label, lx, ly);
+		lg.dispose();
+		g.drawImage(
+			lbuf, x1 + 1, y + 1, x2, y + LABEL_HEIGHT,
+			0, 0, x2 - x1 - 1, LABEL_HEIGHT - 1, null
+		);
+	}
+	
+	private void paintCellGlyph(
+		Graphics g, FontGlyph glyph, boolean sel, int x1, int x2,
+		int y, BufferedImage gbuf, double ascent, double scale
+	) {
+		if (glyph == null) {
+			g.setColor(sel ? SystemColor.textHighlight : SystemColor.text);
+			g.fillRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
+			g.setColor(Color.gray);
+			g.drawLine(x1 + 1, y + LABEL_HEIGHT + 1, x2 - 1, y + cellSize + LABEL_HEIGHT - 1);
+			g.drawLine(x2 - 1, y + LABEL_HEIGHT + 1, x1 + 1, y + cellSize + LABEL_HEIGHT - 1);
+		} else {
+			Graphics2D gg = gbuf.createGraphics();
+			gg.setColor(sel ? SystemColor.textHighlight : SystemColor.text);
+			gg.fillRect(0, 0, gbuf.getWidth(), gbuf.getHeight());
+			gg.setColor(sel ? SystemColor.textHighlightText : SystemColor.textText);
+			double gx = Math.round(((x2 - x1 - 2) - glyph.getCharacterWidth2D() * scale) / 2);
+			glyph.paint(gg, gx, ascent, scale);
+			gg.dispose();
+			g.drawImage(
+				gbuf, x1 + 1, y + LABEL_HEIGHT + 1,
+				x2, y + LABEL_HEIGHT + cellSize,
+				0, 0, x2 - x1 - 1, cellSize - 1, null
+			);
+		}
+	}
+	
+	private void paintCellMarker(
+		Graphics g, Color bg, Color fg, String label, java.awt.Font labelFont,
+		boolean labelAntiAlias, int x1, int x2, int y, BufferedImage gbuf
+	) {
+		Graphics2D gg = gbuf.createGraphics();
+		gg.setColor(bg);
+		gg.fillRect(0, 0, gbuf.getWidth(), gbuf.getHeight());
+		gg.setColor(fg);
+		gg.setFont(labelFont);
+		if (labelAntiAlias) {
+			gg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			gg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		}
+		FontMetrics fm = gg.getFontMetrics();
+		int gx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
+		int gy = ((cellSize - 3) - fm.getHeight()) / 2 + fm.getAscent();
+		gg.drawString(label, gx, gy);
+		g.drawImage(
+			gbuf, x1 + 1, y + LABEL_HEIGHT + 1,
+			x2, y + LABEL_HEIGHT + cellSize,
+			0, 0, x2 - x1 - 1, cellSize - 1, null
+		);
 	}
 	
 	public Dimension getPreferredScrollableViewportSize() {

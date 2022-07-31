@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontGlyph;
 
@@ -32,8 +32,8 @@ public class GlyphListPanel<G extends FontGlyph> extends JPanel {
 		dataPanel = new GlyphListDataPanel<G>(glyphList);
 		
 		JPanel left = new JPanel(new BorderLayout());
-		left.add(setWidth(modelPane, 200), BorderLayout.CENTER);
-		left.add(setWidth(urlPanel, 200), BorderLayout.PAGE_END);
+		left.add(setWidth(modelPane, 240), BorderLayout.CENTER);
+		left.add(setWidth(urlPanel, 240), BorderLayout.PAGE_END);
 		JPanel right = new JPanel(new BorderLayout());
 		right.add(glyphPane, BorderLayout.CENTER);
 		right.add(dataPanel, BorderLayout.PAGE_END);
@@ -43,8 +43,8 @@ public class GlyphListPanel<G extends FontGlyph> extends JPanel {
 		add(main, BorderLayout.CENTER);
 		
 		modelList.setSelectedModel(glyphList.getModel(), false);
-		modelList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
+		modelList.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
 				glyphList.setModel(modelList.getSelectedModel());
 			}
 		});
