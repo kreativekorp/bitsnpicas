@@ -13,7 +13,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -21,52 +20,57 @@ import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.FontGlyph;
 
-public class SetSelectionDialog extends JDialog {
+public abstract class CreateGlyphsDialog<G extends FontGlyph> extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
-	private final GlyphList<?> gl;
+	private final GlyphList<G> glyphList;
 	private JRadioButton byCodePointButton;
 	private JRadioButton byIndexButton;
-	private JTextArea selectionField;
+	private JCheckBox overwriteButton;
+	private JTextArea specificationField;
 	private JButton cancelButton;
 	private JButton okButton;
 	
-	public SetSelectionDialog(Dialog parent, GlyphList<?> gl) {
-		super(parent, "Set Selection");
+	public CreateGlyphsDialog(Dialog parent, GlyphList<G> gl) {
+		super(parent, "Create Glyphs");
+		this.glyphList = gl;
 		setModal(true);
-		this.gl = gl;
 		make();
 	}
 	
-	public SetSelectionDialog(Frame parent, GlyphList<?> gl) {
-		super(parent, "Set Selection");
+	public CreateGlyphsDialog(Frame parent, GlyphList<G> gl) {
+		super(parent, "Create Glyphs");
+		this.glyphList = gl;
 		setModal(true);
-		this.gl = gl;
 		make();
 	}
 	
-	public SetSelectionDialog(Window parent, GlyphList<?> gl) {
-		super(parent, "Set Selection");
+	public CreateGlyphsDialog(Window parent, GlyphList<G> gl) {
+		super(parent, "Create Glyphs");
+		this.glyphList = gl;
 		setModal(true);
-		this.gl = gl;
 		make();
 	}
 	
 	private void make() {
 		this.byCodePointButton = new JRadioButton("By Code Point");
 		this.byIndexButton = new JRadioButton("By Index");
-		this.selectionField = new JTextArea();
+		this.overwriteButton = new JCheckBox("Overwrite existing glyphs");
+		this.specificationField = new JTextArea();
 		this.cancelButton = new JButton("Cancel");
 		this.okButton = new JButton("OK");
 		
-		boolean isUnicode = isUnicodeRange(gl.getModel());
+		boolean isUnicode = isUnicodeRange(glyphList.getModel());
 		this.byCodePointButton.setSelected(isUnicode);
 		this.byIndexButton.setSelected(!isUnicode);
 		
@@ -79,15 +83,15 @@ public class SetSelectionDialog extends JDialog {
 		JPanel bp2 = new JPanel(new GridLayout(0, 1, 4, 4));
 		bp2.add(bp1);
 		bp2.add(new JLabel("(Non-numeric values will be treated as glyph names.)"));
+		bp2.add(this.overwriteButton);
 		
 		Dimension d = new Dimension(240, 120);
-		this.selectionField.setMinimumSize(d);
-		this.selectionField.setPreferredSize(d);
-		this.selectionField.setLineWrap(true);
-		this.selectionField.setWrapStyleWord(true);
-		this.selectionField.setText(selectionToString(gl.getSelection(), !isUnicode));
+		this.specificationField.setMinimumSize(d);
+		this.specificationField.setPreferredSize(d);
+		this.specificationField.setLineWrap(true);
+		this.specificationField.setWrapStyleWord(true);
 		JScrollPane sp = new JScrollPane(
-			this.selectionField,
+			this.specificationField,
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
 		);
@@ -111,21 +115,9 @@ public class SetSelectionDialog extends JDialog {
 		setResizable(false);
 		pack();
 		setLocationRelativeTo(null);
-		selectionField.requestFocusInWindow();
+		specificationField.requestFocusInWindow();
 		
-		byCodePointButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				selectionField.setText(selectionToString(gl.getSelection(), false));
-			}
-		});
-		
-		byIndexButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				selectionField.setText(selectionToString(gl.getSelection(), true));
-			}
-		});
-		
-		selectionField.addKeyListener(new KeyAdapter() {
+		specificationField.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_ENTER:
@@ -144,17 +136,22 @@ public class SetSelectionDialog extends JDialog {
 							byIndexButton.doClick();
 						}
 						break;
+					case KeyEvent.VK_O:
+						if (e.isControlDown() || e.isMetaDown()) {
+							overwriteButton.doClick();
+						}
+						break;
 				}
 			}
 		});
 		
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gl.setSelectedIndices(stringToIndices(
-					selectionField.getText(),
-					gl.getModel(),
-					byIndexButton.isSelected()
-				), true);
+				createGlyphs(
+					specificationField.getText(),
+					byIndexButton.isSelected(),
+					overwriteButton.isSelected()
+				);
 				dispose();
 			}
 		});
@@ -165,6 +162,8 @@ public class SetSelectionDialog extends JDialog {
 			}
 		});
 	}
+	
+	public abstract G createGlyph();
 	
 	private static boolean isUnicodeRange(GlyphListModel model) {
 		for (int lastCP = -1, i = 0, n = model.getCellCount(); i < n; i++) {
@@ -180,60 +179,14 @@ public class SetSelectionDialog extends JDialog {
 		return true;
 	}
 	
-	private static String selectionToString(Collection<? extends GlyphLocator<?>> locators, boolean byIndex) {
-		List<Integer> intValues = new ArrayList<Integer>();
-		List<String> stringValues = new ArrayList<String>();
-		for (GlyphLocator<?> loc : locators) {
-			if (byIndex) intValues.add(loc.getGlyphIndex());
-			else if (loc.isCodePoint()) intValues.add(loc.getCodePoint());
-			else if (loc.isGlyphName()) stringValues.add(loc.getGlyphName());
-		}
-		Collections.sort(intValues);
-		Collections.sort(stringValues);
-		StringBuffer sb = new StringBuffer();
-		List<int[]> runs = new ArrayList<int[]>();
-		for (int i : intValues) {
-			if (runs.isEmpty()) {
-				runs.add(new int[]{i, i});
-			} else if (i == runs.get(runs.size() - 1)[1] + 1) {
-				runs.get(runs.size() - 1)[1] = i;
-			} else {
-				runs.add(new int[]{i, i});
-			}
-		}
-		for (int[] run : runs) {
-			if (sb.length() > 0) {
-				sb.append(", ");
-			}
-			if (byIndex) {
-				sb.append(run[0]);
-			} else {
-				sb.append("U+");
-				String h = Integer.toHexString(run[0]).toUpperCase();
-				for (int i = h.length(); i < 4; i++) sb.append("0");
-				sb.append(h);
-			}
-			if (run[0] != run[1]) {
-				sb.append("-");
-				if (byIndex) {
-					sb.append(run[1]);
-				} else {
-					sb.append("U+");
-					String h = Integer.toHexString(run[1]).toUpperCase();
-					for (int i = h.length(); i < 4; i++) sb.append("0");
-					sb.append(h);
-				}
-			}
-		}
-		for (String s : stringValues) {
-			if (sb.length() > 0) sb.append(", ");
-			sb.append(s);
-		}
-		return sb.toString();
-	}
-	
-	private static Collection<Integer> stringToIndices(String s, GlyphListModel model, boolean byIndex) {
-		TreeSet<Integer> indices = new TreeSet<Integer>();
+	private void createGlyphs(String s, boolean byIndex, boolean overwrite) {
+		// Get the specified glyph identifiers before creating any glyphs.
+		// If we create the glyphs at the same time the indices may change.
+		Font<G> font = glyphList.getGlyphFont();
+		GlyphListModel model = glyphList.getModel();
+		List<GlyphLocator<G>> specifiedLocators = new ArrayList<GlyphLocator<G>>();
+		TreeSet<Integer> specifiedCodePoints = new TreeSet<Integer>();
+		TreeSet<String> specifiedGlyphNames = new TreeSet<String>();
 		String[] parts = s.split("[,;]");
 		for (String part : parts) {
 			try {
@@ -241,26 +194,41 @@ public class SetSelectionDialog extends JDialog {
 				if (byIndex) {
 					int n = model.getCellCount();
 					for (int i = range[0]; i <= range[1]; i++) {
-						if (i >= 0 && i < n) indices.add(i);
+						if (i >= 0 && i < n) {
+							specifiedLocators.add(new GlyphLocator<G>(font, model, i));
+						}
 					}
 				} else {
 					for (int cp = range[0]; cp <= range[1]; cp++) {
-						int i = model.indexOfCodePoint(cp);
-						if (i >= 0) indices.add(i);
+						specifiedCodePoints.add(cp);
 					}
 				}
 			} catch (NumberFormatException nfe) {
 				if ((part = part.trim()).length() > 0) {
-					TreeSet<String> names = new TreeSet<String>();
-					parseGlyphNames(part, names);
-					for (String name : names) {
-						int i = model.indexOfGlyphName(name);
-						if (i >= 0) indices.add(i);
-					}
+					parseGlyphNames(part, specifiedGlyphNames);
 				}
 			}
 		}
-		return indices;
+		
+		// Put the glyphs at the destination glyph names before
+		// setting the selection since the indices may change.
+		for (GlyphLocator<G> loc : specifiedLocators) {
+			if (overwrite || loc.getGlyph() == null) loc.setGlyph(createGlyph());
+		}
+		for (int cp : specifiedCodePoints) {
+			if (overwrite || font.getCharacter(cp) == null) font.putCharacter(cp, createGlyph());
+		}
+		for (String gn : specifiedGlyphNames) {
+			if (overwrite || font.getNamedGlyph(gn) == null) font.putNamedGlyph(gn, createGlyph());
+		}
+		glyphList.glyphRepertoireChanged();
+		
+		// Calculate the selected indices now that the font is done changing.
+		TreeSet<Integer> selectedIndices = new TreeSet<Integer>();
+		for (GlyphLocator<G> loc : specifiedLocators) selectedIndices.add(loc.getGlyphIndex());
+		for (int cp : specifiedCodePoints) selectedIndices.add(model.indexOfCodePoint(cp));
+		for (String n : specifiedGlyphNames) selectedIndices.add(model.indexOfGlyphName(n));
+		glyphList.setSelectedIndices(selectedIndices, true);
 	}
 	
 	private static int[] parseRange(String s) {

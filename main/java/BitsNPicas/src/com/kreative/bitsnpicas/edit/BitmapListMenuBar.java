@@ -170,6 +170,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new GlyphListMenuBar.SelectNoneMenuItem(gl));
 			add(new GlyphListMenuBar.SetSelectionMenuItem(frame, gl));
 			addSeparator();
+			add(new CreateMenuItem(frame, gl));
 			add(new MoveMenuItem(frame, gl, false));
 			add(new MoveMenuItem(frame, gl, true));
 			add(new GlyphListMenuBar.EditMenuItem(gl));
@@ -335,6 +336,24 @@ public class BitmapListMenuBar extends JMenuBar {
 						return;
 					}
 					gl.deleteSelection();
+				}
+			});
+		}
+	}
+	
+	public static final class CreateMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public CreateMenuItem(final Frame frame, final GlyphList<BitmapFontGlyph> gl) {
+			super("Create Glyphs...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, CommonMenuItems.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new CreateGlyphsDialog<BitmapFontGlyph>(frame, gl) {
+						private static final long serialVersionUID = 1L;
+						public BitmapFontGlyph createGlyph() {
+							return new BitmapFontGlyph();
+						}
+					}.setVisible(true);
 				}
 			});
 		}

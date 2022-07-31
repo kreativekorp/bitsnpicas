@@ -19,6 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -99,12 +100,18 @@ public abstract class MoveGlyphsDialog<G extends FontGlyph, S> extends JDialog {
 		JPanel bp1 = new JPanel(new GridLayout(1, 0, 8, 8));
 		bp1.add(this.byCodePointButton);
 		bp1.add(this.byIndexButton);
-		JPanel cp = new JPanel(new GridLayout(0, 1, 4, 4));
-		cp.add(bp1);
-		cp.add(this.offsetField);
+		JPanel bp2 = new JPanel(new GridLayout(0, 1, 4, 4));
+		bp2.add(bp1);
+		bp2.add(new JLabel("(Non-numeric values will be treated as glyph names.)"));
+		
+		JPanel cp = new JPanel(new BorderLayout(8, 8));
+		cp.add(bp2, BorderLayout.PAGE_START);
+		cp.add(this.offsetField, BorderLayout.CENTER);
+		
 		JPanel bp = new JPanel(new FlowLayout());
 		bp.add(this.cancelButton);
 		bp.add(this.okButton);
+		
 		JPanel mainPanel = new JPanel(new BorderLayout(8, 8));
 		mainPanel.add(cp, BorderLayout.CENTER);
 		mainPanel.add(bp, BorderLayout.PAGE_END);
