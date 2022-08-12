@@ -7,11 +7,13 @@ public class GlyphListCodePointModel implements GlyphListModel {
 	private final List<Integer> codePoints;
 	private final String name;
 	private final String url;
+	private final String iconGroup;
 	
-	public GlyphListCodePointModel(List<Integer> codePoints, String name, String url) {
+	public GlyphListCodePointModel(List<Integer> codePoints, String name, String url, String iconGroup) {
 		this.codePoints = codePoints;
 		this.name = name;
 		this.url = url;
+		this.iconGroup = iconGroup;
 	}
 	
 	public GlyphListCodePointModel(Block block) {
@@ -19,10 +21,12 @@ public class GlyphListCodePointModel implements GlyphListModel {
 		this.name = block.name;
 		if (isPUABlock(block)) {
 			this.url = null;
+			this.iconGroup = "pua";
 		} else {
 			String h = Integer.toHexString(block.firstCodePoint).toUpperCase();
 			while (h.length() < 4) h = "0" + h;
 			this.url = "http://www.unicode.org/charts/PDF/U" + h + ".pdf";
+			this.iconGroup = "unicode";
 		}
 	}
 	
@@ -62,6 +66,7 @@ public class GlyphListCodePointModel implements GlyphListModel {
 	@Override public int indexOfGlyphName(String name) { return -1; }
 	@Override public String toString() { return name; }
 	@Override public String getURL() { return url; }
+	@Override public String getIconGroup() { return iconGroup; }
 	
 	@Override
 	public boolean equals(Object o) {

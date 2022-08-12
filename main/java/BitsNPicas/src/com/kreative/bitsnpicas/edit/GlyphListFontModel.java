@@ -97,6 +97,11 @@ public class GlyphListFontModel implements GlyphListModel {
 	}
 	
 	@Override
+	public String getIconGroup() {
+		return "font";
+	}
+	
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof GlyphListFontModel) {
 			GlyphListFontModel that = (GlyphListFontModel)o;

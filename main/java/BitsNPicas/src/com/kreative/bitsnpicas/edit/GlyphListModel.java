@@ -11,4 +11,5 @@ public interface GlyphListModel {
 	public abstract int indexOfGlyphName(String name);
 	public abstract String toString();
 	public abstract String getURL();
+	public abstract String getIconGroup();
 }

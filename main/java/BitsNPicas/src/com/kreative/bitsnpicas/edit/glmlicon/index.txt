@@ -1,0 +1,470 @@
+allglyph.png    font        All Glyphs in Font
+allcodes.png    font        All Code Points in Font
+allnamed.png    font        All Named Glyphs in Font
+unicode.png     unicode     Unicode (Full)
+uplane00.png    unicode     Unicode (BMP)
+uplane01.png    unicode     Unicode (SMP)
+uplane02.png    unicode     Unicode (SIP)
+uplane03.png    unicode     Unicode (TIP)
+uplane04.png    unicode     Unicode (Plane 4)
+uplane05.png    unicode     Unicode (Plane 5)
+uplane06.png    unicode     Unicode (Plane 6)
+uplane07.png    unicode     Unicode (Plane 7)
+uplane08.png    unicode     Unicode (Plane 8)
+uplane09.png    unicode     Unicode (Plane 9)
+uplane10.png    unicode     Unicode (Plane 10)
+uplane11.png    unicode     Unicode (Plane 11)
+uplane12.png    unicode     Unicode (Plane 12)
+uplane13.png    unicode     Unicode (Plane 13)
+uplane14.png    unicode     Unicode (SSP)
+uplane15.png    unicode     Unicode (SPUA-A)
+uplane16.png    unicode     Unicode (SPUA-B)
+u000000.png     unicode     Basic Latin
+u000080.png     unicode     Latin-1 Supplement
+u000100.png     unicode     Latin Extended-A
+u000180.png     unicode     Latin Extended-B
+u000250.png     unicode     IPA Extensions
+u0002b0.png     unicode     Spacing Modifier Letters
+u000300.png     unicode     Combining Diacritical Marks
+u000370.png     unicode     Greek and Coptic
+u000400.png     unicode     Cyrillic
+u000500.png     unicode     Cyrillic Supplement
+u000530.png     unicode     Armenian
+u000590.png     unicode     Hebrew
+u000600.png     unicode     Arabic
+u000700.png     unicode     Syriac
+u000750.png     unicode     Arabic Supplement
+u000780.png     unicode     Thaana
+u0007c0.png     unicode     NKo
+u000800.png     unicode     Samaritan
+u000840.png     unicode     Mandaic
+u000860.png     unicode     Syriac Supplement
+u000870.png     unicode     Arabic Extended-B
+u0008a0.png     unicode     Arabic Extended-A
+u000900.png     unicode     Devanagari
+u000980.png     unicode     Bengali
+u000a00.png     unicode     Gurmukhi
+u000a80.png     unicode     Gujarati
+u000b00.png     unicode     Oriya
+u000b80.png     unicode     Tamil
+u000c00.png     unicode     Telugu
+u000c80.png     unicode     Kannada
+u000d00.png     unicode     Malayalam
+u000d80.png     unicode     Sinhala
+u000e00.png     unicode     Thai
+u000e80.png     unicode     Lao
+u000f00.png     unicode     Tibetan
+u001000.png     unicode     Myanmar
+u0010a0.png     unicode     Georgian
+u001100.png     unicode     Hangul Jamo
+u001200.png     unicode     Ethiopic
+u001380.png     unicode     Ethiopic Supplement
+u0013a0.png     unicode     Cherokee
+u001400.png     unicode     Unified Canadian Aboriginal Syllabics
+u001680.png     unicode     Ogham
+u0016a0.png     unicode     Runic
+u001700.png     unicode     Tagalog
+u001720.png     unicode     Hanunoo
+u001740.png     unicode     Buhid
+u001760.png     unicode     Tagbanwa
+u001780.png     unicode     Khmer
+u001800.png     unicode     Mongolian
+u0018b0.png     unicode     Unified Canadian Aboriginal Syllabics Extended
+u001900.png     unicode     Limbu
+u001950.png     unicode     Tai Le
+u001980.png     unicode     New Tai Lue
+u0019e0.png     unicode     Khmer Symbols
+u001a00.png     unicode     Buginese
+u001a20.png     unicode     Tai Tham
+u001ab0.png     unicode     Combining Diacritical Marks Extended
+u001b00.png     unicode     Balinese
+u001b80.png     unicode     Sundanese
+u001bc0.png     unicode     Batak
+u001c00.png     unicode     Lepcha
+u001c50.png     unicode     Ol Chiki
+u001c80.png     unicode     Cyrillic Extended-C
+u001c90.png     unicode     Georgian Extended
+u001cc0.png     unicode     Sundanese Supplement
+u001cd0.png     unicode     Vedic Extensions
+u001d00.png     unicode     Phonetic Extensions
+u001d80.png     unicode     Phonetic Extensions Supplement
+u001dc0.png     unicode     Combining Diacritical Marks Supplement
+u001e00.png     unicode     Latin Extended Additional
+u001f00.png     unicode     Greek Extended
+u002000.png     unicode     General Punctuation
+u002070.png     unicode     Superscripts and Subscripts
+u0020a0.png     unicode     Currency Symbols
+u0020d0.png     unicode     Combining Diacritical Marks for Symbols
+u002100.png     unicode     Letterlike Symbols
+u002150.png     unicode     Number Forms
+u002190.png     unicode     Arrows
+u002200.png     unicode     Mathematical Operators
+u002300.png     unicode     Miscellaneous Technical
+u002400.png     unicode     Control Pictures
+u002440.png     unicode     Optical Character Recognition
+u002460.png     unicode     Enclosed Alphanumerics
+u002500.png     unicode     Box Drawing
+u002580.png     unicode     Block Elements
+u0025a0.png     unicode     Geometric Shapes
+u002600.png     unicode     Miscellaneous Symbols
+u002700.png     unicode     Dingbats
+u0027c0.png     unicode     Miscellaneous Mathematical Symbols-A
+u0027f0.png     unicode     Supplemental Arrows-A
+u002800.png     unicode     Braille Patterns
+u002900.png     unicode     Supplemental Arrows-B
+u002980.png     unicode     Miscellaneous Mathematical Symbols-B
+u002a00.png     unicode     Supplemental Mathematical Operators
+u002b00.png     unicode     Miscellaneous Symbols and Arrows
+u002c00.png     unicode     Glagolitic
+u002c60.png     unicode     Latin Extended-C
+u002c80.png     unicode     Coptic
+u002d00.png     unicode     Georgian Supplement
+u002d30.png     unicode     Tifinagh
+u002d80.png     unicode     Ethiopic Extended
+u002de0.png     unicode     Cyrillic Extended-A
+u002e00.png     unicode     Supplemental Punctuation
+u002e80.png     unicode     CJK Radicals Supplement
+u002f00.png     unicode     Kangxi Radicals
+u002ff0.png     unicode     Ideographic Description Characters
+u003000.png     unicode     CJK Symbols and Punctuation
+u003040.png     unicode     Hiragana
+u0030a0.png     unicode     Katakana
+u003100.png     unicode     Bopomofo
+u003130.png     unicode     Hangul Compatibility Jamo
+u003190.png     unicode     Kanbun
+u0031a0.png     unicode     Bopomofo Extended
+u0031c0.png     unicode     CJK Strokes
+u0031f0.png     unicode     Katakana Phonetic Extensions
+u003200.png     unicode     Enclosed CJK Letters and Months
+u003300.png     unicode     CJK Compatibility
+u003400.png     unicode     CJK Unified Ideographs Extension A
+u004dc0.png     unicode     Yijing Hexagram Symbols
+u004e00.png     unicode     CJK Unified Ideographs
+u00a000.png     unicode     Yi Syllables
+u00a490.png     unicode     Yi Radicals
+u00a4d0.png     unicode     Lisu
+u00a500.png     unicode     Vai
+u00a640.png     unicode     Cyrillic Extended-B
+u00a6a0.png     unicode     Bamum
+u00a700.png     unicode     Modifier Tone Letters
+u00a720.png     unicode     Latin Extended-D
+u00a800.png     unicode     Syloti Nagri
+u00a830.png     unicode     Common Indic Number Forms
+u00a840.png     unicode     Phags-pa
+u00a880.png     unicode     Saurashtra
+u00a8e0.png     unicode     Devanagari Extended
+u00a900.png     unicode     Kayah Li
+u00a930.png     unicode     Rejang
+u00a960.png     unicode     Hangul Jamo Extended-A
+u00a980.png     unicode     Javanese
+u00a9e0.png     unicode     Myanmar Extended-B
+u00aa00.png     unicode     Cham
+u00aa60.png     unicode     Myanmar Extended-A
+u00aa80.png     unicode     Tai Viet
+u00aae0.png     unicode     Meetei Mayek Extensions
+u00ab00.png     unicode     Ethiopic Extended-A
+u00ab30.png     unicode     Latin Extended-E
+u00ab70.png     unicode     Cherokee Supplement
+u00abc0.png     unicode     Meetei Mayek
+u00ac00.png     unicode     Hangul Syllables
+u00d7b0.png     unicode     Hangul Jamo Extended-B
+u00d800.png     unicode     High Surrogates
+u00db80.png     unicode     High Private Use Surrogates
+u00dc00.png     unicode     Low Surrogates
+u00e000.png     unicode     Private Use Area
+u00f900.png     unicode     CJK Compatibility Ideographs
+u00fb00.png     unicode     Alphabetic Presentation Forms
+u00fb50.png     unicode     Arabic Presentation Forms-A
+u00fe00.png     unicode     Variation Selectors
+u00fe10.png     unicode     Vertical Forms
+u00fe20.png     unicode     Combining Half Marks
+u00fe30.png     unicode     CJK Compatibility Forms
+u00fe50.png     unicode     Small Form Variants
+u00fe70.png     unicode     Arabic Presentation Forms-B
+u00ff00.png     unicode     Halfwidth and Fullwidth Forms
+u00fff0.png     unicode     Specials
+u010000.png     unicode     Linear B Syllabary
+u010080.png     unicode     Linear B Ideograms
+u010100.png     unicode     Aegean Numbers
+u010140.png     unicode     Ancient Greek Numbers
+u010190.png     unicode     Ancient Symbols
+u0101d0.png     unicode     Phaistos Disc
+u010280.png     unicode     Lycian
+u0102a0.png     unicode     Carian
+u0102e0.png     unicode     Coptic Epact Numbers
+u010300.png     unicode     Old Italic
+u010330.png     unicode     Gothic
+u010350.png     unicode     Old Permic
+u010380.png     unicode     Ugaritic
+u0103a0.png     unicode     Old Persian
+u010400.png     unicode     Deseret
+u010450.png     unicode     Shavian
+u010480.png     unicode     Osmanya
+u0104b0.png     unicode     Osage
+u010500.png     unicode     Elbasan
+u010530.png     unicode     Caucasian Albanian
+u010570.png     unicode     Vithkuqi
+u0105c0.png     unicode     Todhri
+u010600.png     unicode     Linear A
+u010780.png     unicode     Latin Extended-F
+u010800.png     unicode     Cypriot Syllabary
+u010840.png     unicode     Imperial Aramaic
+u010860.png     unicode     Palmyrene
+u010880.png     unicode     Nabataean
+u0108e0.png     unicode     Hatran
+u010900.png     unicode     Phoenician
+u010920.png     unicode     Lydian
+u010980.png     unicode     Meroitic Hieroglyphs
+u0109a0.png     unicode     Meroitic Cursive
+u010a00.png     unicode     Kharoshthi
+u010a60.png     unicode     Old South Arabian
+u010a80.png     unicode     Old North Arabian
+u010ac0.png     unicode     Manichaean
+u010b00.png     unicode     Avestan
+u010b40.png     unicode     Inscriptional Parthian
+u010b60.png     unicode     Inscriptional Pahlavi
+u010b80.png     unicode     Psalter Pahlavi
+u010c00.png     unicode     Old Turkic
+u010c80.png     unicode     Old Hungarian
+u010d00.png     unicode     Hanifi Rohingya
+u010d40.png     unicode     Garay
+u010e60.png     unicode     Rumi Numeral Symbols
+u010e80.png     unicode     Yezidi
+u010ec0.png     unicode     Arabic Extended-C
+u010f00.png     unicode     Old Sogdian
+u010f30.png     unicode     Sogdian
+u010f70.png     unicode     Old Uyghur
+u010fb0.png     unicode     Chorasmian
+u010fe0.png     unicode     Elymaic
+u011000.png     unicode     Brahmi
+u011080.png     unicode     Kaithi
+u0110d0.png     unicode     Sora Sompeng
+u011100.png     unicode     Chakma
+u011150.png     unicode     Mahajani
+u011180.png     unicode     Sharada
+u0111e0.png     unicode     Sinhala Archaic Numbers
+u011200.png     unicode     Khojki
+u011280.png     unicode     Multani
+u0112b0.png     unicode     Khudawadi
+u011300.png     unicode     Grantha
+u011380.png     unicode     Tulu-Tigalari
+u011400.png     unicode     Newa
+u011480.png     unicode     Tirhuta
+u011580.png     unicode     Siddham
+u011600.png     unicode     Modi
+u011660.png     unicode     Mongolian Supplement
+u011680.png     unicode     Takri
+u0116d0.png     unicode     Myanmar Extended-C
+u011700.png     unicode     Ahom
+u011800.png     unicode     Dogra
+u0118a0.png     unicode     Warang Citi
+u011900.png     unicode     Dives Akuru
+u0119a0.png     unicode     Nandinagari
+u011a00.png     unicode     Zanabazar Square
+u011a50.png     unicode     Soyombo
+u011ab0.png     unicode     Unified Canadian Aboriginal Syllabics Extended-A
+u011ac0.png     unicode     Pau Cin Hau
+u011b00.png     unicode     Devanagari Extended-A
+u011bc0.png     unicode     Sunuwar
+u011c00.png     unicode     Bhaiksuki
+u011c70.png     unicode     Marchen
+u011d00.png     unicode     Masaram Gondi
+u011d60.png     unicode     Gunjala Gondi
+u011ee0.png     unicode     Makasar
+u011f00.png     unicode     Kawi
+u011fb0.png     unicode     Lisu Supplement
+u011fc0.png     unicode     Tamil Supplement
+u012000.png     unicode     Cuneiform
+u012400.png     unicode     Cuneiform Numbers and Punctuation
+u012480.png     unicode     Early Dynastic Cuneiform
+u012f90.png     unicode     Cypro-Minoan
+u013000.png     unicode     Egyptian Hieroglyphs
+u013430.png     unicode     Egyptian Hieroglyph Format Controls
+u014400.png     unicode     Anatolian Hieroglyphs
+u016100.png     unicode     Gurung Khema
+u016800.png     unicode     Bamum Supplement
+u016a40.png     unicode     Mro
+u016a70.png     unicode     Tangsa
+u016ad0.png     unicode     Bassa Vah
+u016b00.png     unicode     Pahawh Hmong
+u016d40.png     unicode     Kirat Rai
+u016e40.png     unicode     Medefaidrin
+u016f00.png     unicode     Miao
+u016fe0.png     unicode     Ideographic Symbols and Punctuation
+u017000.png     unicode     Tangut
+u018800.png     unicode     Tangut Components
+u018b00.png     unicode     Khitan Small Script
+u018d00.png     unicode     Tangut Supplement
+u01aff0.png     unicode     Kana Extended-B
+u01b000.png     unicode     Kana Supplement
+u01b100.png     unicode     Kana Extended-A
+u01b130.png     unicode     Small Kana Extension
+u01b170.png     unicode     Nushu
+u01bc00.png     unicode     Duployan
+u01bca0.png     unicode     Shorthand Format Controls
+u01cc00.png     unicode     Symbols for Legacy Computing Supplement
+u01cf00.png     unicode     Znamenny Musical Notation
+u01d000.png     unicode     Byzantine Musical Symbols
+u01d100.png     unicode     Musical Symbols
+u01d200.png     unicode     Ancient Greek Musical Notation
+u01d2c0.png     unicode     Kaktovik Numerals
+u01d2e0.png     unicode     Mayan Numerals
+u01d300.png     unicode     Tai Xuan Jing Symbols
+u01d360.png     unicode     Counting Rod Numerals
+u01d400.png     unicode     Mathematical Alphanumeric Symbols
+u01d800.png     unicode     Sutton SignWriting
+u01df00.png     unicode     Latin Extended-G
+u01e000.png     unicode     Glagolitic Supplement
+u01e030.png     unicode     Cyrillic Extended-D
+u01e100.png     unicode     Nyiakeng Puachue Hmong
+u01e290.png     unicode     Toto
+u01e2c0.png     unicode     Wancho
+u01e4d0.png     unicode     Nag Mundari
+u01e7e0.png     unicode     Ethiopic Extended-B
+u01e800.png     unicode     Mende Kikakui
+u01e900.png     unicode     Adlam
+u01ec70.png     unicode     Indic Siyaq Numbers
+u01ed00.png     unicode     Ottoman Siyaq Numbers
+u01ee00.png     unicode     Arabic Mathematical Alphabetic Symbols
+u01f000.png     unicode     Mahjong Tiles
+u01f030.png     unicode     Domino Tiles
+u01f0a0.png     unicode     Playing Cards
+u01f100.png     unicode     Enclosed Alphanumeric Supplement
+u01f200.png     unicode     Enclosed Ideographic Supplement
+u01f300.png     unicode     Miscellaneous Symbols and Pictographs
+u01f600.png     unicode     Emoticons
+u01f650.png     unicode     Ornamental Dingbats
+u01f680.png     unicode     Transport and Map Symbols
+u01f700.png     unicode     Alchemical Symbols
+u01f780.png     unicode     Geometric Shapes Extended
+u01f800.png     unicode     Supplemental Arrows-C
+u01f900.png     unicode     Supplemental Symbols and Pictographs
+u01fa00.png     unicode     Chess Symbols
+u01fa70.png     unicode     Symbols and Pictographs Extended-A
+u01fb00.png     unicode     Symbols for Legacy Computing
+u020000.png     unicode     CJK Unified Ideographs Extension B
+u02a700.png     unicode     CJK Unified Ideographs Extension C
+u02b740.png     unicode     CJK Unified Ideographs Extension D
+u02b820.png     unicode     CJK Unified Ideographs Extension E
+u02ceb0.png     unicode     CJK Unified Ideographs Extension F
+u02f800.png     unicode     CJK Compatibility Ideographs Supplement
+u030000.png     unicode     CJK Unified Ideographs Extension G
+u031350.png     unicode     CJK Unified Ideographs Extension H
+u0e0000.png     unicode     Tags
+u0e0100.png     unicode     Variation Selectors Supplement
+u0f0000.png     unicode     Supplementary Private Use Area-A
+u100000.png     unicode     Supplementary Private Use Area-B
+csure000.png    pua         Tengwar
+csure080.png    pua         Cirth
+csure100.png    pua         Engsvanyali
+csure150.png    pua         Kinya
+csure1b0.png    pua         Ilianore
+csure1d0.png    pua         Syai
+csure200.png    pua         Verdurian
+csure270.png    pua         Aui
+csure290.png    pua         Amman-Iar
+csure2c0.png    pua         Streich
+csure2d0.png    pua         Xaini
+csure300.png    pua         Mizarian
+csure340.png    pua         Zirinka
+csure360.png    pua         Sarkai
+csure380.png    pua         Thelwik
+csure3b0.png    pua         Olaetyan
+csure400.png    pua         Niskloz
+csure430.png    pua         Kazat Akkorou
+csure450.png    pua         Kazvarad
+csure470.png    pua         Zarkhand
+csure490.png    pua         Rozhxh
+csure4c0.png    pua         Serivelna
+csure4f0.png    pua         Kelwathi
+csure500.png    pua         Saklor
+csure520.png    pua         Rynnan
+csure550.png    pua         Alzetjan
+csure580.png    pua         Telarasso
+csure5a0.png    pua         Ssuraki
+csure5c0.png    pua         Gargoyle
+csure5e0.png    pua         Ophidian
+csure600.png    pua         Ferengi
+csure630.png    pua         Seussian Latin Extensions
+csure650.png    pua         Sylabica
+csure680.png    pua         Ewellic
+csure6d0.png    pua         Amlin
+csure6f0.png    pua         Unifon Extended
+csure740.png    pua         Unifon
+csure770.png    pua         Solresol
+csure780.png    pua         Visible Speech
+csure800.png    pua         Monofon
+csure830.png    pua         Dni
+csure890.png    pua         Aurebesh
+csure8e0.png    pua         Tonal
+csure900.png    pua         Glaitha-A
+csure980.png    pua         Glaitha-B
+csurea00.png    pua         Lhenazi
+csureaa0.png    pua         Wanya
+csureb00.png    pua         Orokin
+csureb40.png    pua         Standard Galactic
+csureb60.png    pua         Braille Extended
+csureba0.png    pua         Cistercian Numerals
+csurebe0.png    pua         Kaktovik Numerals
+csurec00.png    pua         Cylenian
+csurec30.png    pua         Syrrin
+csured00.png    pua         Deini
+csured40.png    pua         Niji
+csured80.png    pua         Iranic
+csurf8a0.png    pua         Aiha
+csurf8d0.png    pua         Klingon
+csurf000.png    pua         Kinya Syllables
+csurf0e7.png    pua         Pikto
+csurf170.png    pua         Semtog
+csurf190.png    pua         Sitelen Pona
+csurf1b0.png    pua         Shidinn
+pua6ants.png    pua         Block Sextants
+pua6ants.png    pua         Block Sextants (Compatible with Unscii)
+pua6ants.png    pua         Block Sextants (Compatible with ZVBI)
+pua7seg.png     pua         Seven-Segment Display Patterns
+pua8ants.png    pua         Block Octants
+puaabepf.png    pua         Aliphbepf
+puaath.png      pua         Ath
+puabetty.png    pua         Betty Boop
+puaboxex.png    pua         Box Drawing Extended
+puac1pic.png    pua         C1 Control Pictures
+puac64os.png    pua         C64-OS Symbols
+puacamp.png     pua         Camp Duodecimal Numerals
+puacx16.png     pua         Commander X16 Symbols
+puadomex.png    pua         Domino Tiles Extended
+puaffxa.png     pua         Fairfax Presentation Variants-A
+puaffxb.png     pua         Fairfax Presentation Variants-B
+puagfigs.png    pua         Geomantic Figures
+puahex.png      pua         Hex Byte Pictures
+puakkf6.png     pua         Kreative Software Private Use-F6
+puakkf7.png     pua         Kreative Software Private Use-F7
+puakkf8.png     pua         Kreative Software Private Use-F8
+puakkff0.png    pua         Kreative Software Private Use-FF0
+puakkff1.png    pua         Kreative Software Private Use-FF1
+puakmkwi.png    pua         Kamakawi
+puakodo.png     pua         Kodo Symbols
+puamatha.png    pua         Mathematical Symbols Appendix
+puamod.png      pua         Modular Font Elements
+puamodex.png    pua         Modular Font Elements Extended
+puamouse.png    pua         Apple MouseText Characters
+puapatts.png    pua         Fill Patterns
+puapline.png    pua         Powerline Symbols
+puarylk.png     pua         Rayalaka Color Symbols
+puashade.png    pua         Shade Quadrants
+puasixel.png    pua         Sixel Graphics
+puaslca.png     pua         Symbols for Legacy Computing Appendix
+puatally.png    pua         Tally Marks
+puatveno.png    pua         Tahano Veno
+puavoyn.png     pua         Voynich
+pfaiha.png      pua         Aiha Presentation Forms
+pfewell.png     pua         Ewellic Presentation Forms
+pflatin.png     pua         Latin Presentation Forms
+pfnisk.png      pua         Niskloz Presentation Forms
+pfophid.png     pua         Ophidian Presentation Forms
+pfponaa.png     pua         Sitelen Pona Presentation Forms-A
+pfponab.png     pua         Sitelen Pona Presentation Forms-B
+pfteng.png      pua         Tengwar Presentation Forms
+windows.png     glyphlist   Windows Glyph List 4
+big5.png        encoding    Big5
+big5.png        encoding    Big5-HKSCS
+cybiko.png      encoding    Cybiko

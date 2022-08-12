@@ -6,11 +6,13 @@ public class GlyphListGlyphNameModel implements GlyphListModel {
 	private final List<String> glyphNames;
 	private final String name;
 	private final String url;
+	private final String iconGroup;
 	
-	public GlyphListGlyphNameModel(List<String> glyphNames, String name, String url) {
+	public GlyphListGlyphNameModel(List<String> glyphNames, String name, String url, String iconGroup) {
 		this.glyphNames = glyphNames;
 		this.name = name;
 		this.url = url;
+		this.iconGroup = iconGroup;
 	}
 	
 	@Override
@@ -36,6 +38,7 @@ public class GlyphListGlyphNameModel implements GlyphListModel {
 	@Override public int indexOfCodePoint(Integer codePoint) { return -1; }
 	@Override public String toString() { return name; }
 	@Override public String getURL() { return url; }
+	@Override public String getIconGroup() { return iconGroup; }
 	
 	@Override
 	public boolean equals(Object o) {

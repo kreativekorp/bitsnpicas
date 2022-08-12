@@ -10,6 +10,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLTreeCellRenderer;
 import com.kreative.unicode.data.Block;
 import com.kreative.unicode.data.BlockList;
 import com.kreative.unicode.data.Encoding;
@@ -28,6 +29,8 @@ public class GlyphListModelList extends JTree {
 		super(new GlyphListModelRootNode(font));
 		setRootVisible(false);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		setCellRenderer(new GLMLTreeCellRenderer());
+		setVisibleRowCount(16);
 	}
 	
 	public GlyphListModel getSelectedModel() {
@@ -83,7 +86,7 @@ public class GlyphListModelList extends JTree {
 				children.add(unicode);
 			}
 			for (GlyphList gl : GlyphLists.instance()) {
-				children.add(new GlyphListModelTreeNode(this, new GlyphListCodePointModel(gl, gl.getName(), null)));
+				children.add(new GlyphListModelTreeNode(this, new GlyphListCodePointModel(gl, gl.getName(), null, "glyphlist")));
 			}
 			for (Encoding enc : EncodingList.instance().encodings()) {
 				children.add(new GlyphListModelEncodingNode(this, enc));
@@ -93,12 +96,12 @@ public class GlyphListModelList extends JTree {
 	
 	private static class GlyphListModelEncodingNode extends GlyphListModelTreeNode {
 		public GlyphListModelEncodingNode(GlyphListModelTreeNode parent, Encoding encoding) {
-			super(parent, fromEncodingTable(encoding, false, encoding.getName()));
+			super(parent, fromEncodingTable(encoding, false, encoding.getName(), false));
 			for (int i = 0; i < 256; i++) {
 				EncodingTable s = encoding.getSubtable(i);
 				if (s != null) {
 					String n = "Subtable " + Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
-					GlyphListCodePointModel m = fromEncodingTable(s, true, n);
+					GlyphListCodePointModel m = fromEncodingTable(s, true, n, true);
 					if (m != null) children.add(new GlyphListModelEncodingNode(this, s, m));
 				}
 			}
@@ -109,12 +112,12 @@ public class GlyphListModelList extends JTree {
 				EncodingTable s = table.getSubtable(i);
 				if (s != null) {
 					String n = model.toString() + " " + Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
-					GlyphListCodePointModel m = fromEncodingTable(s, true, n);
+					GlyphListCodePointModel m = fromEncodingTable(s, true, n, true);
 					if (m != null) children.add(new GlyphListModelEncodingNode(this, s, m));
 				}
 			}
 		}
-		private static GlyphListCodePointModel fromEncodingTable(EncodingTable table, boolean nullOnEmpty, String name) {
+		private static GlyphListCodePointModel fromEncodingTable(EncodingTable table, boolean nullOnEmpty, String name, boolean subtable) {
 			Integer[] codePoints = new Integer[256];
 			for (int i = 0; i < 256; i++) {
 				String s = table.getSequence(i);
@@ -139,11 +142,14 @@ public class GlyphListModelList extends JTree {
 				}
 			}
 			if (nullOnEmpty) return null;
-			return new GlyphListCodePointModel(Arrays.asList(codePoints), name, null);
+			return new GlyphListCodePointModel(
+				Arrays.asList(codePoints), name, null,
+				(subtable ? "subtable" : "encoding")
+			);
 		}
 	}
 	
-	private static class GlyphListModelTreeNode implements TreeNode {
+	public static class GlyphListModelTreeNode implements TreeNode {
 		protected final GlyphListModelTreeNode parent;
 		protected final GlyphListModel model;
 		protected final List<GlyphListModelTreeNode> children;
