@@ -55,11 +55,17 @@ public class Main {
 		return f;
 	}
 	
+	private static String lastOpenDirectory = null;
 	public static KeyEditFrame openMapping() {
-		FileDialog fd = new FileDialog(new Frame(), "Open", FileDialog.LOAD);
+		Frame frame = new Frame();
+		FileDialog fd = new FileDialog(frame, "Open", FileDialog.LOAD);
+		if (lastOpenDirectory != null) fd.setDirectory(lastOpenDirectory);
 		fd.setVisible(true);
-		if (fd.getDirectory() == null || fd.getFile() == null) return null;
-		File file = new File(fd.getDirectory(), fd.getFile());
+		String ds = fd.getDirectory(), fs = fd.getFile();
+		fd.dispose();
+		frame.dispose();
+		if (ds == null || fs == null) return null;
+		File file = new File((lastOpenDirectory = ds), fs);
 		return openMapping(file);
 	}
 	
@@ -98,13 +104,17 @@ public class Main {
 		}
 	}
 	
+	private static String lastSaveDirectory = null;
 	public static File getSaveFile(String suffix) {
-		FileDialog fd = new FileDialog(new Frame(), "Save", FileDialog.SAVE);
+		Frame frame = new Frame();
+		FileDialog fd = new FileDialog(frame, "Save", FileDialog.SAVE);
+		if (lastSaveDirectory != null) fd.setDirectory(lastSaveDirectory);
 		fd.setVisible(true);
-		String parent = fd.getDirectory();
-		String name = fd.getFile();
-		if (parent == null || name == null) return null;
-		if (!name.toLowerCase().endsWith(suffix.toLowerCase())) name += suffix;
-		return new File(parent, name);
+		String ds = fd.getDirectory(), fs = fd.getFile();
+		fd.dispose();
+		frame.dispose();
+		if (ds == null || fs == null) return null;
+		if (!fs.toLowerCase().endsWith(suffix.toLowerCase())) fs += suffix;
+		return new File((lastSaveDirectory = ds), fs);
 	}
 }
