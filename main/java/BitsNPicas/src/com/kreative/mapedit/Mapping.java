@@ -102,10 +102,16 @@ public class Mapping {
 			in[pos] = (byte)ch;
 			ByteBuffer inb = ByteBuffer.wrap(in, 0, pos + 1);
 			CharBuffer outb = CharBuffer.wrap(out);
-			decoder.reset();
-			decoder.decode(inb, outb, false);
-			// Do NOT finish the decode so we can distinguish
-			// incomplete input from invalid input.
+			try {
+				decoder.reset();
+				decoder.decode(inb, outb, false);
+				// Do NOT finish the decode so we can distinguish
+				// incomplete input from invalid input.
+			} catch (Exception e) {
+				System.err.println("Failed to decode encoding " + name + "; it should be added to the list of broken charsets.");
+				e.printStackTrace();
+				continue;
+			}
 			if (outb.position() > 0) {
 				String s = new String(out, 0, outb.position());
 				if (s.contains("\uFFFF")) continue;
