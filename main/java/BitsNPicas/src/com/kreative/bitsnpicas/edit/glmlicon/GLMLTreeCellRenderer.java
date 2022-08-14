@@ -52,24 +52,28 @@ public class GLMLTreeCellRenderer extends DefaultTreeCellRenderer {
 				if (image != null) return image;
 			}
 		}
-		return UNKNOWN;
+		return getImage("unknown.png");
 	}
 	
-	private static final Image UNKNOWN = getImage("unknown.png");
+	private static final Map<String,Image> imageResources = new HashMap<String,Image>();
 	private static Image getImage(String name) {
-		return Toolkit.getDefaultToolkit().createImage(GLMLTreeCellRenderer.class.getResource(name));
+		Image image = imageResources.get(name);
+		if (image != null) return image;
+		URL res = GLMLTreeCellRenderer.class.getResource(name);
+		if (res == null) return null;
+		image = Toolkit.getDefaultToolkit().createImage(res);
+		if (image == null) return null;
+		imageResources.put(name, image);
+		return image;
 	}
 	
 	private static final Map<String,Map<String,Image>> mappedImages = new HashMap<String,Map<String,Image>>();
 	static {
-		Toolkit tk = Toolkit.getDefaultToolkit();
 		Scanner index = new Scanner(GLMLTreeCellRenderer.class.getResourceAsStream("index.txt"));
 		while (index.hasNextLine()) {
 			String[] line = index.nextLine().trim().split("\\s+", 3);
 			if (line.length != 3) continue;
-			URL res = GLMLTreeCellRenderer.class.getResource(line[0]);
-			if (res == null) continue;
-			Image image = tk.createImage(res);
+			Image image = getImage(line[0]);
 			if (image == null) continue;
 			Map<String,Image> submap = mappedImages.get(line[1]);
 			if (submap == null) mappedImages.put(line[1], (submap = new HashMap<String,Image>()));
