@@ -40,6 +40,7 @@ public class EncodingList {
 			if (name.equals("GB18030")) continue; // slow
 			if (name.startsWith("ISO-2022-")) continue; // broken
 			if (name.startsWith("UTF-")) continue; // 16 slow, 32 broken
+			if (name.equals("X-COMPOUND_TEXT")) continue; // so broken it just flat out crashes
 			if (name.startsWith("X-EUC")) continue; // slow
 			if (name.startsWith("X-IBM93")) continue; // broken
 			if (name.equals("X-IBM964")) continue; // slow
