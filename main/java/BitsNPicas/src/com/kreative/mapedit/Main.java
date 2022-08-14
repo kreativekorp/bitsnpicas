@@ -34,6 +34,11 @@ public class Main {
 			aacn.set(tk, "MapEdit");
 		} catch (Exception e) {}
 		
+		if (MapEditMenuBar.IS_MAC_OS) {
+			try { Class.forName("com.kreative.mapedit.mac.MacDummyWindow").newInstance(); }
+			catch (Exception e) { e.printStackTrace(); }
+		}
+		
 		if (args.length == 0) {
 			newMapping();
 		} else {

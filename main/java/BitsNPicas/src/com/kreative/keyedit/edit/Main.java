@@ -34,6 +34,11 @@ public class Main {
 			aacn.set(tk, "KeyEdit");
 		} catch (Exception e) {}
 		
+		if (OSUtils.IS_MAC_OS) {
+			try { Class.forName("com.kreative.keyedit.edit.mac.MacDummyWindow").newInstance(); }
+			catch (Exception e) { e.printStackTrace(); }
+		}
+		
 		if (args.length == 0) {
 			newMapping();
 		} else {

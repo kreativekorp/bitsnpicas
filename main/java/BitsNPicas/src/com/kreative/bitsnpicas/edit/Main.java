@@ -46,6 +46,11 @@ public class Main {
 			aacn.set(tk, "BitsNPicas");
 		} catch (Exception e) {}
 		
+		if (CommonMenuItems.IS_MAC_OS) {
+			try { Class.forName("com.kreative.bitsnpicas.edit.mac.MacDummyWindow").newInstance(); }
+			catch (Exception e) { e.printStackTrace(); }
+		}
+		
 		if (args.length == 0) {
 			newBitmapFont();
 		} else {
