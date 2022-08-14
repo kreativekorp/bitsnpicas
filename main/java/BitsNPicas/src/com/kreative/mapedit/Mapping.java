@@ -111,8 +111,10 @@ public class Mapping {
 				if (s.contains("\uFFFF")) continue;
 				CodePointSequence cps = new CodePointSequence(s);
 				root.setSequence(cps, in, 0, pos + 1);
-			} else {
+			} else if (pos + 1 < in.length) {
 				decode(decoder, in, pos + 1, out);
+			} else {
+				System.err.println("Failed to decode encoding " + name + "; it should be added to the list of broken charsets.");
 			}
 		}
 	}

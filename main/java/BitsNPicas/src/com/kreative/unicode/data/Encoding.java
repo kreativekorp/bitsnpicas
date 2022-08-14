@@ -145,8 +145,10 @@ public class Encoding extends EncodingTable implements Comparable<Encoding> {
 				String s = new String(out, 0, outb.position());
 				if (s.contains("\uFFFF")) continue;
 				setSequence(s, in, 0, pos + 1);
-			} else {
+			} else if (pos + 1 < in.length) {
 				decode(decoder, in, pos + 1, out);
+			} else {
+				System.err.println("Failed to decode encoding " + name + "; it should be added to the list of broken charsets.");
 			}
 		}
 	}
