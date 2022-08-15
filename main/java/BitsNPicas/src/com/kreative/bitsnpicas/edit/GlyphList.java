@@ -364,10 +364,8 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			lg.fillRect(0, 0, lbuf.getWidth(), lbuf.getHeight());
 			lg.setColor(fg);
 			lg.setFont(labelFont);
-			if (labelAntiAlias) {
-				lg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			}
+			lg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+			lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 			FontMetrics fm = lg.getFontMetrics();
 			int sw = fm.stringWidth(label);
 			if (labelFont == Resources.PSNAME_FONT) sw--;
@@ -387,9 +385,9 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			g.clipRect(x1 + 1, y + 1, x2 - x1 - 1, LABEL_HEIGHT - 1);
 			g.setColor(fg);
 			g.setFont(labelFont);
-			if (labelAntiAlias && g instanceof Graphics2D) {
-				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			if (g instanceof Graphics2D) {
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 			}
 			FontMetrics fm = g.getFontMetrics();
 			int sw = fm.stringWidth(label);
@@ -447,10 +445,8 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			gg.fillRect(0, 0, gbuf.getWidth(), gbuf.getHeight());
 			gg.setColor(fg);
 			gg.setFont(labelFont);
-			if (labelAntiAlias) {
-				gg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				gg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			}
+			gg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+			gg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 			FontMetrics fm = gg.getFontMetrics();
 			int gx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
 			int gy = ((cellSize - 3) - fm.getHeight()) / 2 + fm.getAscent();
@@ -468,9 +464,9 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			g.clipRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
 			g.setColor(fg);
 			g.setFont(labelFont);
-			if (labelAntiAlias && g instanceof Graphics2D) {
-				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			if (g instanceof Graphics2D) {
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, labelAntiAlias ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 			}
 			FontMetrics fm = g.getFontMetrics();
 			int gx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
