@@ -40,6 +40,8 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 	private int columnCount;
 	private int rowCount;
 	private boolean antiAlias;
+	private boolean bufferedLabels;
+	private boolean bufferedGlyphs;
 	private Dimension preferredSize;
 	private GlyphListModel model;
 	private final GlyphListSelection selection;
@@ -52,6 +54,8 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		this.columnCount = 16;
 		this.rowCount = 8;
 		this.antiAlias = CommonMenuItems.IS_MAC_OS;
+		this.bufferedLabels = false;
+		this.bufferedGlyphs = false;
 		this.preferredSize = null;
 		this.model = new GlyphListCodePointModel(new Block(0, 127, "Basic Latin"));
 		this.selection = new GlyphListSelection();
@@ -124,6 +128,24 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 	
 	public void setAntiAlias(boolean antiAlias) {
 		this.antiAlias = antiAlias;
+		this.repaint();
+	}
+	
+	public boolean getBufferedLabels() {
+		return this.bufferedLabels;
+	}
+	
+	public void setBufferedLabels(boolean bufferedLabels) {
+		this.bufferedLabels = bufferedLabels;
+		this.repaint();
+	}
+	
+	public boolean getBufferedGlyphs() {
+		return this.bufferedGlyphs;
+	}
+	
+	public void setBufferedGlyphs(boolean bufferedGlyphs) {
+		this.bufferedGlyphs = bufferedGlyphs;
 		this.repaint();
 	}
 	
@@ -238,8 +260,8 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		Insets insets = getInsets();
 		int w = getWidth() - insets.left - insets.right - 1;
 		int bufw = (w / columnCount) + 1;
-		BufferedImage lbuf = new BufferedImage(bufw, LABEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-		BufferedImage gbuf = new BufferedImage(bufw, cellSize, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage lbuf = bufferedLabels ? new BufferedImage(bufw, LABEL_HEIGHT, BufferedImage.TYPE_INT_ARGB) : null;
+		BufferedImage gbuf = bufferedGlyphs ? new BufferedImage(bufw, cellSize, BufferedImage.TYPE_INT_ARGB) : null;
 		double fa = font.getEmAscent2D();
 		double fh = fa + font.getEmDescent2D();
 		double scale = (fh <= 0) ? ((cellSize - 3) / 10.0) : ((cellSize - 3) / fh);
@@ -336,26 +358,48 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		Graphics g, Color bg, Color fg, String label, java.awt.Font labelFont,
 		boolean labelAntiAlias, int x1, int x2, int y, BufferedImage lbuf
 	) {
-		Graphics2D lg = lbuf.createGraphics();
-		lg.setColor(bg);
-		lg.fillRect(0, 0, lbuf.getWidth(), lbuf.getHeight());
-		lg.setColor(fg);
-		lg.setFont(labelFont);
-		if (labelAntiAlias) {
-			lg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		if (lbuf != null) {
+			Graphics2D lg = lbuf.createGraphics();
+			lg.setColor(bg);
+			lg.fillRect(0, 0, lbuf.getWidth(), lbuf.getHeight());
+			lg.setColor(fg);
+			lg.setFont(labelFont);
+			if (labelAntiAlias) {
+				lg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				lg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			}
+			FontMetrics fm = lg.getFontMetrics();
+			int sw = fm.stringWidth(label);
+			if (labelFont == Resources.PSNAME_FONT) sw--;
+			int lx = ((x2 - x1 - 1) - sw) / 2;
+			int ly = (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
+			lg.drawString(label, lx, ly);
+			lg.dispose();
+			g.drawImage(
+				lbuf, x1 + 1, y + 1, x2, y + LABEL_HEIGHT,
+				0, 0, x2 - x1 - 1, LABEL_HEIGHT - 1, null
+			);
+		} else {
+			java.awt.Font oldFont = g.getFont();
+			java.awt.Shape oldClip = g.getClip();
+			g.setColor(bg);
+			g.fillRect(x1 + 1, y + 1, x2 - x1 - 1, LABEL_HEIGHT - 1);
+			g.clipRect(x1 + 1, y + 1, x2 - x1 - 1, LABEL_HEIGHT - 1);
+			g.setColor(fg);
+			g.setFont(labelFont);
+			if (labelAntiAlias && g instanceof Graphics2D) {
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			}
+			FontMetrics fm = g.getFontMetrics();
+			int sw = fm.stringWidth(label);
+			if (labelFont == Resources.PSNAME_FONT) sw--;
+			int lx = ((x2 - x1 - 1) - sw) / 2;
+			int ly = (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
+			g.drawString(label, x1 + 1 + lx, y + 1 + ly);
+			g.setFont(oldFont);
+			g.setClip(oldClip);
 		}
-		FontMetrics fm = lg.getFontMetrics();
-		int sw = fm.stringWidth(label);
-		if (labelFont == Resources.PSNAME_FONT) sw--;
-		int lx = ((x2 - x1 - 1) - sw) / 2;
-		int ly = (LABEL_HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
-		lg.drawString(label, lx, ly);
-		lg.dispose();
-		g.drawImage(
-			lbuf, x1 + 1, y + 1, x2, y + LABEL_HEIGHT,
-			0, 0, x2 - x1 - 1, LABEL_HEIGHT - 1, null
-		);
 	}
 	
 	private void paintCellGlyph(
@@ -368,7 +412,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 			g.setColor(Color.gray);
 			g.drawLine(x1 + 1, y + LABEL_HEIGHT + 1, x2 - 1, y + cellSize + LABEL_HEIGHT - 1);
 			g.drawLine(x2 - 1, y + LABEL_HEIGHT + 1, x1 + 1, y + cellSize + LABEL_HEIGHT - 1);
-		} else {
+		} else if (gbuf != null) {
 			Graphics2D gg = gbuf.createGraphics();
 			gg.setColor(sel ? SystemColor.textHighlight : SystemColor.text);
 			gg.fillRect(0, 0, gbuf.getWidth(), gbuf.getHeight());
@@ -381,6 +425,15 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 				x2, y + LABEL_HEIGHT + cellSize,
 				0, 0, x2 - x1 - 1, cellSize - 1, null
 			);
+		} else {
+			java.awt.Shape oldClip = g.getClip();
+			g.setColor(sel ? SystemColor.textHighlight : SystemColor.text);
+			g.fillRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
+			g.clipRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
+			g.setColor(sel ? SystemColor.textHighlightText : SystemColor.textText);
+			double gx = Math.round(((x2 - x1 - 2) - glyph.getCharacterWidth2D() * scale) / 2);
+			glyph.paint(g, x1 + 1 + gx, y + LABEL_HEIGHT + 1 + ascent, scale);
+			g.setClip(oldClip);
 		}
 	}
 	
@@ -388,24 +441,44 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		Graphics g, Color bg, Color fg, String label, java.awt.Font labelFont,
 		boolean labelAntiAlias, int x1, int x2, int y, BufferedImage gbuf
 	) {
-		Graphics2D gg = gbuf.createGraphics();
-		gg.setColor(bg);
-		gg.fillRect(0, 0, gbuf.getWidth(), gbuf.getHeight());
-		gg.setColor(fg);
-		gg.setFont(labelFont);
-		if (labelAntiAlias) {
-			gg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			gg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		if (gbuf != null) {
+			Graphics2D gg = gbuf.createGraphics();
+			gg.setColor(bg);
+			gg.fillRect(0, 0, gbuf.getWidth(), gbuf.getHeight());
+			gg.setColor(fg);
+			gg.setFont(labelFont);
+			if (labelAntiAlias) {
+				gg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				gg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			}
+			FontMetrics fm = gg.getFontMetrics();
+			int gx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
+			int gy = ((cellSize - 3) - fm.getHeight()) / 2 + fm.getAscent();
+			gg.drawString(label, gx, gy);
+			g.drawImage(
+				gbuf, x1 + 1, y + LABEL_HEIGHT + 1,
+				x2, y + LABEL_HEIGHT + cellSize,
+				0, 0, x2 - x1 - 1, cellSize - 1, null
+			);
+		} else {
+			java.awt.Font oldFont = g.getFont();
+			java.awt.Shape oldClip = g.getClip();
+			g.setColor(bg);
+			g.fillRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
+			g.clipRect(x1 + 1, y + LABEL_HEIGHT + 1, x2 - x1 - 1, cellSize - 1);
+			g.setColor(fg);
+			g.setFont(labelFont);
+			if (labelAntiAlias && g instanceof Graphics2D) {
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			}
+			FontMetrics fm = g.getFontMetrics();
+			int gx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
+			int gy = ((cellSize - 3) - fm.getHeight()) / 2 + fm.getAscent();
+			g.drawString(label, x1 + 1 + gx, y + LABEL_HEIGHT + 1 + gy);
+			g.setFont(oldFont);
+			g.setClip(oldClip);
 		}
-		FontMetrics fm = gg.getFontMetrics();
-		int gx = ((x2 - x1 - 1) - fm.stringWidth(label)) / 2;
-		int gy = ((cellSize - 3) - fm.getHeight()) / 2 + fm.getAscent();
-		gg.drawString(label, gx, gy);
-		g.drawImage(
-			gbuf, x1 + 1, y + LABEL_HEIGHT + 1,
-			x2, y + LABEL_HEIGHT + cellSize,
-			0, 0, x2 - x1 - 1, cellSize - 1, null
-		);
 	}
 	
 	public Dimension getPreferredScrollableViewportSize() {
