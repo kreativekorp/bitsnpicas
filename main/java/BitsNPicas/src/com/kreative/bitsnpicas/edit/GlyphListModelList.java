@@ -28,6 +28,8 @@ public class GlyphListModelList extends JTree {
 	public GlyphListModelList(Font<?> font) {
 		super(new GlyphListModelRootNode(font));
 		setRootVisible(false);
+		setShowsRootHandles(true);
+		setLargeModel(true);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		setCellRenderer(new GLMLTreeCellRenderer());
 		setVisibleRowCount(16);

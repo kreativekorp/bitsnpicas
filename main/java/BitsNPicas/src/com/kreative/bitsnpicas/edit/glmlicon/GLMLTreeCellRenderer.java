@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.JViewport;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import com.kreative.bitsnpicas.edit.GlyphListModelList;
 
@@ -27,13 +28,23 @@ public class GLMLTreeCellRenderer extends DefaultTreeCellRenderer {
 		if (c instanceof JLabel) {
 			JLabel label = (JLabel)c;
 			Dimension d = label.getPreferredSize();
-			int tw = tree.getWidth();
+			int tw = getViewportWidth(tree);
 			if (d.width < tw) d.width = tw;
 			if (d.height < 24) d.height = 24;
 			label.setPreferredSize(d);
 			label.setIcon(new ImageIcon(getImageForTreeCell(value)));
 		}
 		return c;
+	}
+	
+	private static int getViewportWidth(Component c) {
+		while (c != null) {
+			if (c instanceof JViewport) {
+				return c.getWidth();
+			}
+			c = c.getParent();
+		}
+		return -1;
 	}
 	
 	private static Image getImageForTreeCell(Object value) {

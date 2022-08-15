@@ -51,7 +51,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		this.cellSize = 36;
 		this.columnCount = 16;
 		this.rowCount = 8;
-		this.antiAlias = false;
+		this.antiAlias = CommonMenuItems.IS_MAC_OS;
 		this.preferredSize = null;
 		this.model = new GlyphListCodePointModel(new Block(0, 127, "Basic Latin"));
 		this.selection = new GlyphListSelection();
