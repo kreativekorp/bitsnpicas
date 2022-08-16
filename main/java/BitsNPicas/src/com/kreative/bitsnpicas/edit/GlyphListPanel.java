@@ -2,16 +2,23 @@ package com.kreative.bitsnpicas.edit;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.util.List;
+import java.util.SortedSet;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.FontGlyph;
+import com.kreative.bitsnpicas.edit.GlyphListModelList.GlyphListModelTreeNode;
 
 public class GlyphListPanel<G extends FontGlyph> extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -52,8 +59,41 @@ public class GlyphListPanel<G extends FontGlyph> extends JPanel {
 		glyphList.addGlyphListListener(new GlyphListListener<G>() {
 			public void selectionChanged(GlyphList<G> gl, Font<G> font) {}
 			public void selectionOpened(GlyphList<G> gl, Font<G> font) {
-				for (GlyphLocator<G> loc : gl.getSelection()) {
-					Main.openGlyph(font, loc, gl, sm);
+				List<GlyphLocator<G>> selectedGlyphs = gl.getSelection();
+				if (
+					(selectedGlyphs.size() < 5) ||
+					(JOptionPane.showConfirmDialog(
+						GlyphListPanel.this,
+						"Are you sure you want to edit " + selectedGlyphs.size() + " glyphs?",
+						"Edit Glyphs",
+						JOptionPane.OK_CANCEL_OPTION
+					) == JOptionPane.OK_OPTION)
+				) {
+					for (GlyphLocator<G> loc : selectedGlyphs) {
+						Main.openGlyph(font, loc, gl, sm);
+					}
+				}
+				SortedSet<Integer> selectedIndices = gl.getSelectedIndices();
+				if (selectedIndices.size() == 1) {
+					int i = selectedIndices.first();
+					Integer cp = gl.getModel().getCodePoint(i);
+					if (cp != null && cp.intValue() == GlyphListModelList.SUBTABLE_MARKER) {
+						String name = "Subtable " + Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
+						TreePath path = modelList.getSelectionPath();
+						GlyphListModelTreeNode node = (GlyphListModelTreeNode)path.getLastPathComponent();
+						for (GlyphListModelTreeNode child : node.getChildren()) {
+							if (name.equals(child.toString())) {
+								path = path.pathByAddingChild(child);
+								modelList.setSelectionPath(path);
+								modelList.scrollPathToVisible(path);
+								JViewport vp = modelPane.getViewport();
+								Point p = vp.getViewPosition();
+								p.x = 0;
+								vp.setViewPosition(p);
+								return;
+							}
+						}
+					}
 				}
 			}
 			public void metricsChanged(GlyphList<G> gl, Font<G> font) {

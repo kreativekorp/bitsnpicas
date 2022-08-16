@@ -33,6 +33,8 @@ import com.kreative.unicode.fontmap.FontMapEntry;
 public class GlyphList<G extends FontGlyph> extends JComponent implements Scrollable {
 	private static final long serialVersionUID = 1L;
 	private static final int LABEL_HEIGHT = 18;
+	private static final Color SUBTABLE_BG = new Color(0xFFAA00);
+	private static final Color SUBTABLE_SELBG = new Color(0xCC7700);
 	
 	private final FontMapController fontMap;
 	private final Font<G> font;
@@ -177,6 +179,10 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		repaint();
 	}
 	
+	public SortedSet<Integer> getSelectedIndices() {
+		return selection.toSet();
+	}
+	
 	public void setSelectedIndices(Collection<Integer> indices, boolean shouldScroll) {
 		selection.clear();
 		int n = model.getCellCount();
@@ -299,22 +305,25 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 				} else {
 					Integer marker = model.getCodePoint(i);
 					if (marker != null) {
-						Color bg, fg;
+						Color selbg, bg, fg;
 						String ms;
 						switch (marker.intValue()) {
 							case GlyphListModelList.SEQUENCE_MARKER:
+								selbg = Color.gray;
 								bg = Color.lightGray;
 								fg = Color.black;
 								label = "Sequence";
 								ms = Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
 								break;
 							case GlyphListModelList.SUBTABLE_MARKER:
-								bg = Color.orange;
+								selbg = SUBTABLE_SELBG;
+								bg = SUBTABLE_BG;
 								fg = Color.black;
 								label = "Subtable";
 								ms = Integer.toHexString(0xFF00 | i).substring(2).toUpperCase();
 								break;
 							case GlyphListModelList.UNDEFINED_MARKER:
+								selbg = Color.black;
 								bg = Color.darkGray;
 								fg = Color.white;
 								label = "Undefined";
@@ -326,6 +335,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 								if (ch0 < 0x20 || ch0 > 0xFFFD || ch1 < 0x20 || ch1 > 0xFFFD) continue;
 								String cs0 = Integer.toHexString(0xFF0000 | ch0).substring(2).toUpperCase();
 								String cs1 = Integer.toHexString(0xFF0000 | ch1).substring(2).toUpperCase();
+								selbg = Color.gray;
 								bg = Color.lightGray;
 								fg = Color.black;
 								label = cs0 + "." + cs1;
@@ -336,7 +346,7 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 						labelAntiAlias = (Resources.PSNAME_FONT != null) ? false : antiAlias;
 						paintCellBackground(g, bg, x1, x2, y);
 						paintCellLabel(g, bg, fg, label, labelFont, labelAntiAlias, x1, x2, y, lbuf);
-						paintCellMarker(g, bg, fg, ms, markerFont, antiAlias, x1, x2, y, gbuf);
+						paintCellMarker(g, (sel.contains(i) ? selbg : bg), fg, ms, markerFont, antiAlias, x1, x2, y, gbuf);
 					}
 					continue;
 				}
