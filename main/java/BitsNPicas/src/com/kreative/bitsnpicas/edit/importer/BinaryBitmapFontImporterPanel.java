@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,6 +44,7 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 	private final BinaryBitmapFontImporter importer;
 	
 	private List<BufferedImage> previewImages;
+	private final RawImportEncodingList eList = new RawImportEncodingList();
 	private final EncodingTableModel eTableModel = new EncodingTableModel();
 	private final JTable eTable = new JTable(eTableModel);
 	private final NameDatabase ndb = NameDatabase.instance();
@@ -103,13 +106,15 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 		setColumnWidth(eTable.getColumnModel().getColumn(1), 80);
 		setColumnWidth(eTable.getColumnModel().getColumn(2), 80);
 		final JScrollPane eScrollPane = new JScrollPane(eTable);
+		final JPanel eListPanel = borderLayout(8, 8, new JLabel("Encoding:"), BorderLayout.LINE_START, eList, BorderLayout.CENTER);
+		final JPanel eTablePanel = borderLayout(4, 4, eListPanel, BorderLayout.PAGE_START, eScrollPane, BorderLayout.CENTER);
 		
 		final JButton openButton = new JButton("Create");
 		final JPanel buttonPanel = flowLayout(openButton);
 		
 		final JPanel mainPanel = new JPanel(new BorderLayout(12, 12));
 		mainPanel.add(settingsPanel, BorderLayout.LINE_START);
-		mainPanel.add(eScrollPane, BorderLayout.CENTER);
+		mainPanel.add(eTablePanel, BorderLayout.CENTER);
 		mainPanel.add(buttonPanel, BorderLayout.PAGE_END);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		setLayout(new GridLayout(1, 1, 0, 0));
@@ -188,6 +193,13 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 			}
 		});
 		
+		eList.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				eList.applySelectedEncoding(importer.encoding);
+				eTableModel.fireTableRowsUpdated(0, importer.encoding.size());
+			}
+		});
+		
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Main.openFonts(file, null, importer.importFont(data));
@@ -197,9 +209,17 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 	
 	private void updatePreview() {
 		previewImages = importer.preview(data);
+		List<Integer> selectedEncoding = eList.getSelectedEncoding();
 		if (importer.encoding == null) importer.encoding = new ArrayList<Integer>();
-		for (int es = importer.encoding.size(), ps = previewImages.size(); es < ps; importer.encoding.add(0xF0000 + es), es++);
-		for (int ps = previewImages.size(), es = importer.encoding.size(); ps < es; importer.encoding.remove(ps), es--);
+		for (int es = importer.encoding.size(), ps = previewImages.size(); es < ps; es++) {
+			importer.encoding.add(
+				(selectedEncoding != null && es < selectedEncoding.size())
+				? selectedEncoding.get(es) : -1
+			);
+		}
+		for (int ps = previewImages.size(), es = importer.encoding.size(); ps < es; es--) {
+			importer.encoding.remove(ps);
+		}
 		eTableModel.fireTableDataChanged();
 		eTable.setRowHeight(Math.max(16, importer.cellHeight + 4));
 		setColumnWidth(eTable.getColumnModel().getColumn(0), Math.max(20, importer.cellWidth + 8));
@@ -278,9 +298,11 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 					if (row < importer.encoding.size()) {
 						if (val == null || val.toString().length() == 0) {
 							importer.encoding.set(row, -1);
+							eList.setSelectedIndex(0);
 						} else try {
 							int e = Integer.parseInt(val.toString(), 16);
 							importer.encoding.set(row, e);
+							eList.setSelectedIndex(0);
 						} catch (NumberFormatException e) {
 							// ignored
 						}
@@ -291,9 +313,11 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 					if (row < importer.encoding.size()) {
 						if (val == null || val.toString().length() == 0) {
 							importer.encoding.set(row, -1);
+							eList.setSelectedIndex(0);
 						} else {
 							int e = val.toString().codePointAt(0);
 							importer.encoding.set(row, e);
+							eList.setSelectedIndex(0);
 						}
 					}
 					return;
@@ -302,10 +326,12 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 					if (row < importer.encoding.size()) {
 						if (val == null || val.toString().length() == 0) {
 							importer.encoding.set(row, -1);
+							eList.setSelectedIndex(0);
 						} else {
 							NameDatabase.NameEntry ne = ndb.find(val.toString());
 							if (ne == null) importer.encoding.set(row, -1);
 							else importer.encoding.set(row, ne.codePoint);
+							eList.setSelectedIndex(0);
 						}
 					}
 					return;
