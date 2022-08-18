@@ -103,6 +103,8 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 		
 		final JScrollPane previewPane = new JScrollPane(previewLabel);
 		previewPane.setPreferredSize(new Dimension(300, 200));
+		previewLabel.setHorizontalAlignment(JLabel.CENTER);
+		previewLabel.setVerticalAlignment(JLabel.CENTER);
 		
 		final JPanel leftPanel = borderLayout(12, 12, settingsPanel, BorderLayout.PAGE_START, previewPane, BorderLayout.CENTER);
 		

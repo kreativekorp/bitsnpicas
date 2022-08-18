@@ -16,7 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.JViewport;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import com.kreative.bitsnpicas.edit.GlyphListModelList;
+import com.kreative.bitsnpicas.edit.GlyphListModel;
+import com.kreative.bitsnpicas.edit.GlyphListModelList.GlyphListModelTreeNode;
 
 public class GLMLTreeCellRenderer extends DefaultTreeCellRenderer {
 	private static final long serialVersionUID = 1L;
@@ -48,19 +49,22 @@ public class GLMLTreeCellRenderer extends DefaultTreeCellRenderer {
 	}
 	
 	private static Image getImageForTreeCell(Object value) {
-		if (value instanceof GlyphListModelList.GlyphListModelTreeNode) {
-			String g = ((GlyphListModelList.GlyphListModelTreeNode)value).getModel().getIconGroup();
-			String n = value.toString();
-			if (g.equals("subtable")) {
-				try {
-					int v = Integer.parseInt(n.substring(n.length() - 2), 16);
-					if (subtableImages[v] != null) return subtableImages[v];
-				} catch (NumberFormatException nfe) {}
-			}
-			Map<String,Image> submap = mappedImages.get(g);
-			if (submap != null) {
-				Image image = submap.get(n);
-				if (image != null) return image;
+		if (value instanceof GlyphListModelTreeNode) {
+			GlyphListModel model = ((GlyphListModelTreeNode)value).getModel();
+			if (model != null) {
+				String group = model.getIconGroup();
+				String name = value.toString();
+				if (group.equals("subtable")) {
+					try {
+						int v = Integer.parseInt(name.substring(name.length() - 2), 16);
+						if (subtableImages[v] != null) return subtableImages[v];
+					} catch (NumberFormatException nfe) {}
+				}
+				Map<String,Image> submap = mappedImages.get(group);
+				if (submap != null) {
+					Image image = submap.get(name);
+					if (image != null) return image;
+				}
 			}
 		}
 		return getImage("unknown.png");
