@@ -262,6 +262,11 @@ public class PostTableEntry {
 			case 0x02db: return new PostTableEntry(224);
 			case 0x02dc: return new PostTableEntry("tilde");
 			case 0x02dd: return new PostTableEntry(223);
+			case 0x0300: return new PostTableEntry("gravecomb");
+			case 0x0301: return new PostTableEntry("acutecomb");
+			case 0x0303: return new PostTableEntry("tildecomb");
+			case 0x0309: return new PostTableEntry("hookabovecomb");
+			case 0x0323: return new PostTableEntry("dotbelowcomb");
 			case 0x0384: return new PostTableEntry("tonos");
 			case 0x0385: return new PostTableEntry("dieresistonos");
 			case 0x0386: return new PostTableEntry("Alphatonos");
@@ -585,7 +590,8 @@ public class PostTableEntry {
 			default:
 				String s = Integer.toHexString(ch).toUpperCase();
 				while (s.length() < 4) s = "0" + s;
-				return new PostTableEntry("uni" + s);
+				s = ((ch < 0x10000) ? "uni" : "u") + s;
+				return new PostTableEntry(s);
 		}
 	}
 	
