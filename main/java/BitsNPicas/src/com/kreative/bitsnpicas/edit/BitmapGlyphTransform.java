@@ -12,7 +12,7 @@ public abstract class BitmapGlyphTransform {
 		new Bold          ("Bold",            CTRL_SHIFT, KeyEvent.VK_B),
 		new Invert        ("Invert",          CTRL_SHIFT, KeyEvent.VK_N),
 		new FlipHorizontal("Flip Horizontal", CTRL_SHIFT, KeyEvent.VK_H),
-		new FlipVertical  ("Flip Vertical",   CTRL_SHIFT, KeyEvent.VK_V),
+		new FlipVertical  ("Flip Vertical",   CTRL_SHIFT, KeyEvent.VK_J),
 		null,
 		new Nudge(-1, 0, "Nudge Left",  CTRL_SHIFT, KeyEvent.VK_LEFT ),
 		new Nudge(+1, 0, "Nudge Right", CTRL_SHIFT, KeyEvent.VK_RIGHT),

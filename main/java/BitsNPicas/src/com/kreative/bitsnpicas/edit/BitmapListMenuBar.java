@@ -163,7 +163,8 @@ public class BitmapListMenuBar extends JMenuBar {
 			super("Edit");
 			add(new CutMenuItem(gl));
 			add(new CopyMenuItem(gl));
-			add(new PasteMenuItem(gl));
+			add(new PasteMenuItem(gl, false));
+			add(new PasteMenuItem(gl, true));
 			add(new ClearMenuItem(gl));
 			addSeparator();
 			add(new GlyphListMenuBar.SelectAllMenuItem(gl));
@@ -226,9 +227,12 @@ public class BitmapListMenuBar extends JMenuBar {
 	
 	public static final class PasteMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PasteMenuItem(final GlyphList<BitmapFontGlyph> gl) {
-			super("Paste");
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, CommonMenuItems.SHORTCUT_KEY));
+		public PasteMenuItem(final GlyphList<BitmapFontGlyph> gl, final boolean into) {
+			super(into ? "Paste Into" : "Paste");
+			setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_V,
+				CommonMenuItems.SHORTCUT_KEY | (into ? KeyEvent.SHIFT_MASK : 0)
+			));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
@@ -244,6 +248,7 @@ public class BitmapListMenuBar extends JMenuBar {
 								for (int i = 0, n = locators.size(); i < n; i++) {
 									BitmapFontGlyph glyph = new BitmapFontGlyph();
 									content[i % content.length].apply(glyph);
+									if (into) glyph = BitmapFontGlyph.compose(locators.get(i).getGlyph(), glyph);
 									locators.get(i).setGlyph(glyph);
 								}
 								if (locators.size() < content.length) {
@@ -258,6 +263,7 @@ public class BitmapListMenuBar extends JMenuBar {
 										indices.add(index);
 										BitmapFontGlyph glyph = new BitmapFontGlyph();
 										content[i].apply(glyph);
+										if (into) glyph = BitmapFontGlyph.compose(last.getGlyph(), glyph);
 										last.setGlyph(glyph);
 									}
 									gl.setSelectedIndices(indices, true);
@@ -273,6 +279,7 @@ public class BitmapListMenuBar extends JMenuBar {
 									BitmapFontGlyph glyph = new BitmapFontGlyph();
 									glyph.setToImage(0, -loc.getGlyphFont().getLineAscent(), image);
 									glyph.setCharacterWidth(image.getWidth());
+									if (into) glyph = BitmapFontGlyph.compose(loc.getGlyph(), glyph);
 									loc.setGlyph(glyph);
 								}
 								gl.glyphContentChanged();
@@ -308,6 +315,7 @@ public class BitmapListMenuBar extends JMenuBar {
 									BitmapFontGlyph glyph = new BitmapFontGlyph();
 									glyph.setToImage(0, -loc.getGlyphFont().getLineAscent(), image);
 									glyph.setCharacterWidth(image.getWidth());
+									if (into) glyph = BitmapFontGlyph.compose(loc.getGlyph(), glyph);
 									loc.setGlyph(glyph);
 								}
 								gl.glyphContentChanged();

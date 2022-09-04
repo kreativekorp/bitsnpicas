@@ -108,7 +108,8 @@ public class BitmapEditMenuBar extends JMenuBar {
 			addSeparator();
 			add(new CutMenuItem(panel));
 			add(new CopyMenuItem(panel));
-			add(new PasteMenuItem(panel));
+			add(new PasteMenuItem(panel, false));
+			add(new PasteMenuItem(panel, true));
 			add(new ClearMenuItem(panel));
 		}
 	}
@@ -177,9 +178,12 @@ public class BitmapEditMenuBar extends JMenuBar {
 	
 	public static final class PasteMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public PasteMenuItem(final BitmapEditPanel panel) {
-			super("Paste");
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, CommonMenuItems.SHORTCUT_KEY));
+		public PasteMenuItem(final BitmapEditPanel panel, final boolean into) {
+			super(into ? "Paste Into" : "Paste");
+			setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_V,
+				CommonMenuItems.SHORTCUT_KEY | (into ? KeyEvent.SHIFT_MASK : 0)
+			));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
@@ -188,7 +192,10 @@ public class BitmapEditMenuBar extends JMenuBar {
 							BitmapGlyphState[] content = (BitmapGlyphState[])cb.getData(BitmapGlyphListSelection.flavor);
 							if (content.length == 1) {
 								panel.getToolHandler().pushUndoState(null);
-								content[0].apply(panel.getGlyph());
+								BitmapFontGlyph glyph = new BitmapFontGlyph();
+								content[0].apply(glyph);
+								if (into) glyph = BitmapFontGlyph.compose(panel.getGlyph(), glyph);
+								new BitmapGlyphState(glyph).apply(panel.getGlyph());
 								panel.getGlyphComponent().glyphChanged();
 								return;
 							}
@@ -198,10 +205,11 @@ public class BitmapEditMenuBar extends JMenuBar {
 							BufferedImage image = SwingUtils.toBufferedImage(content);
 							if (image != null) {
 								panel.getToolHandler().pushUndoState(null);
-								Font<BitmapFontGlyph> font = panel.getGlyphFont();
-								BitmapFontGlyph glyph = panel.getGlyph();
-								glyph.setToImage(0, -font.getLineAscent(), image);
+								BitmapFontGlyph glyph = new BitmapFontGlyph();
+								glyph.setToImage(0, -panel.getGlyphFont().getLineAscent(), image);
 								glyph.setCharacterWidth(image.getWidth());
+								if (into) glyph = BitmapFontGlyph.compose(panel.getGlyph(), glyph);
+								new BitmapGlyphState(glyph).apply(panel.getGlyph());
 								panel.getGlyphComponent().glyphChanged();
 								return;
 							}
