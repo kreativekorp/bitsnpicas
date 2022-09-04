@@ -22,7 +22,7 @@ public class PostTableEntry {
 		} else switch (ch) {
 			case 0x0000: return new PostTableEntry(1);
 			case 0x000d: return new PostTableEntry(2);
-			case 0x00a0: return new PostTableEntry(172);
+			case 0x00a0: return new PostTableEntry("uni00A0"); // 172
 			case 0x00a1: return new PostTableEntry(163);
 			case 0x00a2: return new PostTableEntry(132);
 			case 0x00a3: return new PostTableEntry(133);
