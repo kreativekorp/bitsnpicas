@@ -193,8 +193,8 @@ public class ConvertBitmap {
 					}
 				} else {
 					try {
-						System.out.print(arg + "...");
 						File file = new File(arg);
+						System.out.print("Converting " + file.getName() + "...");
 						BitmapInputFormat format = BitmapInputFormat.forFile(file);
 						if (format == null) {
 							System.out.println(" FAILED: Unknown input format.");
@@ -590,6 +590,7 @@ public class ConvertBitmap {
 			for (String id : f.ids) {
 				if (format.equals(id)) {
 					File out = getOutputFile(o.dest, name, f.suffix);
+					System.out.print(" to " + out.getName() + "...");
 					BitmapFontExporter exporter = f.createExporter(o.oo);
 					if (f.macResFork) {
 						out.createNewFile();
