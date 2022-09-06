@@ -362,6 +362,7 @@ csure1b0.png    pua         Ilianore
 csure1d0.png    pua         Syai
 csure200.png    pua         Verdurian
 csure270.png    pua         Aui
+csure270.png    pua         aUI
 csure290.png    pua         Amman-Iar
 csure2c0.png    pua         Streich
 csure2d0.png    pua         Xaini
@@ -397,6 +398,7 @@ csure800.png    pua         Monofon
 csure830.png    pua         Dni
 csure890.png    pua         Aurebesh
 csure8e0.png    pua         Tonal
+csure8e0.png    pua         Tonal and Duodenal
 csure900.png    pua         Glaitha-A
 csure980.png    pua         Glaitha-B
 csurea00.png    pua         Lhenazi
@@ -498,6 +500,7 @@ puamodex.png    pua         Modular Font Elements Extended
 puamouse.png    pua         Apple MouseText Characters
 puamucy.png     pua         MUFI-CYFI Compatibility
 puamufia.png    pua         MUFI Compatibility-A
+puamufib.png    pua         MUFI Compatibility-B
 puamufic.png    pua         MUFI Compatibility-C
 puamufid.png    pua         MUFI Compatibility-D
 puamusic.png    pua         Musical Symbols Appendix
