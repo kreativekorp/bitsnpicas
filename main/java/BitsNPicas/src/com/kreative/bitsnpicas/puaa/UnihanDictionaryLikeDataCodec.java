@@ -7,9 +7,9 @@ public class UnihanDictionaryLikeDataCodec extends AbstractUnihanCodec {
 		super(
 			"Unihan_DictionaryLikeData.txt",
 			Arrays.asList(
+				"kAlternateTotalStrokes",
 				"kCangjie",
 				"kCheungBauer",
-				"kCihaiT",
 				"kFenn",
 				"kFourCornerCode",
 				"kFrequency",

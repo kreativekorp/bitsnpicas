@@ -8,6 +8,7 @@ public class UnihanDictionaryIndicesCodec extends AbstractUnihanCodec {
 			"Unihan_DictionaryIndices.txt",
 			Arrays.asList(
 				"kCheungBauerIndex",
+				"kCihaiT",
 				"kCowles",
 				"kDaeJaweon",
 				"kFennIndex",
