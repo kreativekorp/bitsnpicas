@@ -15,9 +15,11 @@ Launch the Bits'N'Picas JAR without any arguments or with the `edit` command to 
 `java -jar BitsNPicas.jar edit myfont.sfd`
 
 The input format is determined by the file extension of the input file. Supported input formats include:
-  *  `.kbits` - Bits'N'Picas native save format
-  *  `.sfd` - FontForge
+  *  `.kbitx` - Bits'N'Picas 2.x native save format
+  *  `.kbits` - Bits'N'Picas 1.x native save format
+  *  `.sfd` - FontForge (bitmaps only; outlines not supported)
   *  `.bdf` - X11 Bitmap Distribution Format
+  *  `.psf`, `.psfu`, `.psf.gz`, `.psfu.gz` - PC Screen Font
   *  `.suit` - Mac OS Classic font suitcase (in the resource fork)
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
@@ -31,6 +33,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.fnt`, `.ftx` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
   *  `.fnt`, `.rbf`, `.rb11`, `.rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat)
   *  `.fnt`, `.fntz`, `.fnty`, `.cyf` - [Cybiko Font Format](https://web.archive.org/web/20010701031854/http://groups.yahoo.com/group/CybikoDev/files/Pazera/font.txt)
+  *  `.fnt`, `.png` - Playdate Font Format
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
   *  `.sbf` - Sabriel Bitmap Font
@@ -56,9 +59,11 @@ Example:
 This will convert the bitmap strikes in the FontForge file `myfont.sfd` to outlines in a new TrueType font file `myfont.ttf`. If, for example, the bitmap strikes are 16 pixels in height, the generated outlines will perfectly match the pixel grid at a 16-point font size.
 
 The input format is determined by the file extension of the input file. Supported input formats include:
-  *  `.kbits` - Bits'N'Picas native save format
-  *  `.sfd` - FontForge
+  *  `.kbitx` - Bits'N'Picas 2.x native save format
+  *  `.kbits` - Bits'N'Picas 1.x native save format
+  *  `.sfd` - FontForge (bitmaps only; outlines not supported)
   *  `.bdf` - X11 Bitmap Distribution Format
+  *  `.psf`, `.psfu`, `.psf.gz`, `.psfu.gz` - PC Screen Font
   *  `.suit` - Mac OS Classic font suitcase (in the resource fork)
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
@@ -70,14 +75,18 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.fnt`, `.ftx` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
   *  `.fnt`, `.rbf`, `.rb11`, `.rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat)
   *  `.fnt`, `.fntz`, `.fnty`, `.cyf` - [Cybiko Font Format](https://web.archive.org/web/20010701031854/http://groups.yahoo.com/group/CybikoDev/files/Pazera/font.txt)
+  *  `.fnt`, `.png` - Playdate Font Format
   *  `.hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `.dsf` - [DOSStart! by Daniel L. Nice](https://web.archive.org/web/20120209004900/http://www.icdc.com/~dnice/dosstart.html)
   *  `.sbf` - Sabriel Bitmap Font
 
 The output format is determined by the `-f` option. Supported output formats include:
-  *  `kbits` or `kbnp` - Bits'N'Picas native save format
+  *  `kbitx` or `kbnp2` - Bits'N'Picas 2.x native save format
+  *  `kbits` or `kbnp1` - Bits'N'Picas 1.x native save format
   *  `ttf` or `truetype` - TrueType
+  *  `otb` - OpenType Bitmap
   *  `bdf` - X11 Bitmap Distribution Format
+  *  `psf`, `psf2`, `psf1`, `psfgz`, `psf2gz`, `psf1gz` - PC Screen Font
   *  `nfnt` or `suit` - Mac OS Classic font suitcase (in the resource fork)
   *  `dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `png` or `sfont` - SDL SFont
@@ -86,12 +95,14 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `cvt` or `geos` - GEOS font in Convert format (with MEGA option)
   *  `fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
   *  `u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
-  *  `fnt`, `fnt3` - Windows 3.x `.fnt` format (not the same as `.fon`)
+  *  `fnt` or `fnt3` - Windows 3.x `.fnt` format (not the same as `.fon`)
   *  `fnt2` - Windows 2.x `.fnt` format (also not the same as `.fon`)
   *  `fontx2`, `fontx`, or `dosv` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
   *  `rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat) for Rockbox 2.3 or above
   *  `rb11` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat) for Rockbox 2.2 or below and iPodLinux
   *  `cybiko` - [Cybiko Font Format](https://web.archive.org/web/20010701031854/http://groups.yahoo.com/group/CybikoDev/files/Pazera/font.txt)
+  *  `playdate`, `playdate-allinone`, `playdate-fnt` - Playdate font format, all-in-one (single .fnt file)
+  *  `playdate-separate`, `playdate-fnt+png` - Playdate font format, separate .fnt and .png files
   *  `hmzk` - [Mi Band 2 Font Format](https://github.com/Freeyourgadget/Gadgetbridge/wiki/Mi-Band-2-%28HMZK%29-Font-Format)
   *  `sbf` - Sabriel Bitmap Font
 
