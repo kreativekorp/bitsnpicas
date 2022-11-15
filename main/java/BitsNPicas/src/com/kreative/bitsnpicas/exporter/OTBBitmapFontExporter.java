@@ -303,7 +303,7 @@ public class OTBBitmapFontExporter implements BitmapFontExporter {
 	private static final Os2Table makeOs2Table(BitmapFont bf, ThingsToKeepTrackOf a, int xsize, int ysize, boolean extendWinMetrics) {
 		Collection<Integer> chars = bf.characters(false).keySet();
 		Os2Table os2Table = new Os2Table();
-		os2Table.averageCharWidth = a.averageWidth / a.numAverages;
+		if (a.numAverages > 0) os2Table.averageCharWidth = a.averageWidth / a.numAverages;
 		os2Table.weightClass = bf.isBoldStyle() ? Os2Table.WEIGHT_CLASS_BOLD : Os2Table.WEIGHT_CLASS_MEDIUM;
 		os2Table.widthClass = bf.isCondensedStyle() ? Os2Table.WIDTH_CLASS_CONDENSED : bf.isExtendedStyle() ? Os2Table.WIDTH_CLASS_EXPANDED : Os2Table.WIDTH_CLASS_MEDIUM;
 		os2Table.subscriptXSize = (bf.getEmAscent() + bf.getEmDescent()) * xsize;
