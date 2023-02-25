@@ -1,6 +1,6 @@
 SRCFILES := $(shell find src -name \*.java)
 RESFILES := $(shell find src -type f \! -name .\* \! -name \*.java | sed s/^src\\///)
-PACKAGES := $(shell find src -name \*.java | sed -E s/^src\\/\|\\/[^\\/]+$$//g | sort | uniq | tr / .)
+PACKAGES := $(shell find src -name \*.java | sed -E s/^src\\/\|\\/[^\\/]+$$//g | grep -v \\.java$$ | sort | uniq | tr / .)
 
 all: clean bin doc BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz KeyEdit.jar KeyEdit.app KeyEdit-src.tgz
 
@@ -198,7 +198,7 @@ KeyEdit-src.tgz: src
 	find src -name .DS_Store -delete
 	tar -czf KeyEdit-src.tgz LICENSE src/com/kreative/unicode src/com/kreative/keyedit
 
-install: BitsNPicas.jar MapEdit.jar KeyEdit.jar
+install: dep BitsNPicas.jar MapEdit.jar KeyEdit.jar
 	sudo mkdir -p /usr/local/lib/
 	sudo cp -f BitsNPicas.jar /usr/local/lib/bitsnpicas.jar
 	sudo cp -f MapEdit.jar /usr/local/lib/mapedit.jar
