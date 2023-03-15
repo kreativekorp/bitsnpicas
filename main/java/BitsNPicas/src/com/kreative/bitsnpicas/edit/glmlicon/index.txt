@@ -214,6 +214,7 @@ u010880.png     unicode     Nabataean
 u0108e0.png     unicode     Hatran
 u010900.png     unicode     Phoenician
 u010920.png     unicode     Lydian
+u010940.png     unicode     Sidetic
 u010980.png     unicode     Meroitic Hieroglyphs
 u0109a0.png     unicode     Meroitic Cursive
 u010a00.png     unicode     Kharoshthi
@@ -270,6 +271,7 @@ u011c00.png     unicode     Bhaiksuki
 u011c70.png     unicode     Marchen
 u011d00.png     unicode     Masaram Gondi
 u011d60.png     unicode     Gunjala Gondi
+u011db0.png     unicode     Tolong Siki
 u011ee0.png     unicode     Makasar
 u011f00.png     unicode     Kawi
 u011fb0.png     unicode     Lisu Supplement
@@ -288,6 +290,7 @@ u016a70.png     unicode     Tangsa
 u016ad0.png     unicode     Bassa Vah
 u016b00.png     unicode     Pahawh Hmong
 u016d40.png     unicode     Kirat Rai
+u016d80.png     unicode     Chisoi
 u016e40.png     unicode     Medefaidrin
 u016f00.png     unicode     Miao
 u016fe0.png     unicode     Ideographic Symbols and Punctuation
@@ -320,6 +323,8 @@ u01e100.png     unicode     Nyiakeng Puachue Hmong
 u01e290.png     unicode     Toto
 u01e2c0.png     unicode     Wancho
 u01e4d0.png     unicode     Nag Mundari
+u01e5d0.png     unicode     Ol Onal
+u01e6c0.png     unicode     Tai Yo
 u01e7e0.png     unicode     Ethiopic Extended-B
 u01e800.png     unicode     Mende Kikakui
 u01e900.png     unicode     Adlam
@@ -410,13 +415,16 @@ csureba0.png    pua         Cistercian Numerals
 csurebe0.png    pua         Kaktovik Numerals
 csurec00.png    pua         Cylenian
 csurec30.png    pua         Syrrin
+csurec70.png    pua         Graflect
 csured00.png    pua         Deini
 csured40.png    pua         Niji
 csured80.png    pua         Iranic
+csuredb0.png    pua         Tassarunese
 csurf8a0.png    pua         Aiha
 csurf8d0.png    pua         Klingon
 csurf000.png    pua         Kinya Syllables
 csurf0e7.png    pua         Pikto
+csurf16b.png    pua         Derani
 csurf170.png    pua         Semtog
 csurf190.png    pua         Sitelen Pona
 csurf1b0.png    pua         Shidinn
@@ -516,6 +524,7 @@ puapcdsm.png    pua         Playing Card Symbols
 puapenaa.png    pua         Partially Enclosed Alphanumerics-A
 puapenab.png    pua         Partially Enclosed Alphanumerics-B
 puaphona.png    pua         Phonetic Extensions Appendix
+puapico8.png    pua         PICO-8 Symbols
 puapicta.png    pua         Pictographs Appendix
 puapline.png    pua         Powerline Symbols
 puapunca.png    pua         Punctuation Appendix
@@ -532,6 +541,7 @@ puavexil.png    pua         Vexillological Symbols
 puavoyn.png     pua         Voynich
 puavsymb.png    pua         Various Symbols
 pfaiha.png      pua         Aiha Presentation Forms
+pfderani.png    pua         Derani Presentation Forms
 pfewell.png     pua         Ewellic Presentation Forms
 pflatin.png     pua         Latin Presentation Forms
 pfnisk.png      pua         Niskloz Presentation Forms
