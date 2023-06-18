@@ -84,7 +84,7 @@ public class BDFBitmapFontExporter implements BitmapFontExporter {
 		pw.println("FONTBOUNDINGBOX " + (bbr-bbl) + " " + (bbt+bbb) + " " + bbl + " " + (-bbb));
 		pw.println("STARTPROPERTIES " + props.size());
 		for (Map.Entry<String,String> e : props.entrySet()) {
-			pw.println(e.getKey() + " " + e.getValue());
+			pw.println(e.getKey() + " \"" + e.getValue().replaceAll("\"", "\"\"") + "\"");
 		}
 		pw.println("ENDPROPERTIES");
 		pw.println("CHARS " + cnt);
