@@ -266,6 +266,7 @@ u011a50.png     unicode     Soyombo
 u011ab0.png     unicode     Unified Canadian Aboriginal Syllabics Extended-A
 u011ac0.png     unicode     Pau Cin Hau
 u011b00.png     unicode     Devanagari Extended-A
+u011b60.png     unicode     Sharada Supplement
 u011bc0.png     unicode     Sunuwar
 u011c00.png     unicode     Bhaiksuki
 u011c70.png     unicode     Marchen
@@ -282,6 +283,7 @@ u012480.png     unicode     Early Dynastic Cuneiform
 u012f90.png     unicode     Cypro-Minoan
 u013000.png     unicode     Egyptian Hieroglyphs
 u013430.png     unicode     Egyptian Hieroglyph Format Controls
+u013460.png     unicode     Egyptian Hieroglyphs Extended-A
 u014400.png     unicode     Anatolian Hieroglyphs
 u016100.png     unicode     Gurung Khema
 u016800.png     unicode     Bamum Supplement
@@ -352,6 +354,7 @@ u02a700.png     unicode     CJK Unified Ideographs Extension C
 u02b740.png     unicode     CJK Unified Ideographs Extension D
 u02b820.png     unicode     CJK Unified Ideographs Extension E
 u02ceb0.png     unicode     CJK Unified Ideographs Extension F
+u02ebf0.png     unicode     CJK Unified Ideographs Extension I
 u02f800.png     unicode     CJK Compatibility Ideographs Supplement
 u030000.png     unicode     CJK Unified Ideographs Extension G
 u031350.png     unicode     CJK Unified Ideographs Extension H
@@ -412,14 +415,18 @@ csureb00.png    pua         Orokin
 csureb40.png    pua         Standard Galactic
 csureb60.png    pua         Braille Extended
 csureba0.png    pua         Cistercian Numerals
-csurebe0.png    pua         Kaktovik Numerals
+csurebe0.png    pua         Lapointe Hexadecimal Numerals
+csurebf0.png    pua         Martin Hexadecimal Numerals
 csurec00.png    pua         Cylenian
 csurec30.png    pua         Syrrin
 csurec70.png    pua         Graflect
+csurecf0.png    pua         Whitaker Hexadecimal Numerals
 csured00.png    pua         Deini
 csured40.png    pua         Niji
 csured80.png    pua         Iranic
 csuredb0.png    pua         Tassarunese
+csurede0.png    pua         Zese
+csuredf0.png    pua         Grawlixes
 csurf8a0.png    pua         Aiha
 csurf8d0.png    pua         Klingon
 csurf000.png    pua         Kinya Syllables
@@ -485,6 +492,7 @@ puahanaf.png    pua         Hanafuda
 puahex.png      pua         Hex Byte Pictures
 puahex.png      pua         Octets
 puakabuf.png    pua         Kabufuda
+puakakto.png    pua         Kaktovik Numerals
 puakanaa.png    pua         Kana Appendix-A
 puakanab.png    pua         Kana Appendix-B
 puakkf6.png     pua         Kreative Software Private Use-F6
