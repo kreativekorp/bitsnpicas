@@ -171,7 +171,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 		if (s.length() < 2) {
 			return s;
 		} else if (s.startsWith("\"") && s.endsWith("\"")) {
-			return s.substring(1, s.length() - 1);
+			return s.substring(1, s.length() - 1).replaceAll("\"\"", "\"");
 		} else {
 			return s;
 		}

@@ -9,7 +9,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
@@ -84,7 +83,7 @@ public class BDFBitmapFontExporter implements BitmapFontExporter {
 		pw.println("FONTBOUNDINGBOX " + (bbr-bbl) + " " + (bbt+bbb) + " " + bbl + " " + (-bbb));
 		pw.println("STARTPROPERTIES " + props.size());
 		for (Map.Entry<String,String> e : props.entrySet()) {
-			pw.println(e.getKey() + " \"" + e.getValue().replaceAll("\"", "\"\"") + "\"");
+			pw.println(e.getKey() + " " + enquote(e.getValue()));
 		}
 		pw.println("ENDPROPERTIES");
 		pw.println("CHARS " + cnt);
@@ -120,5 +119,10 @@ public class BDFBitmapFontExporter implements BitmapFontExporter {
 			}
 		}
 		pw.println("ENDFONT");
+	}
+	
+	private static String enquote(String s) {
+		if (s.matches("^-?[0-9]+$")) return s;
+		return "\"" + s.replaceAll("\"", "\"\"") + "\"";
 	}
 }
