@@ -7,25 +7,26 @@ public class UnihanDictionaryIndicesCodec extends AbstractUnihanCodec {
 		super(
 			"Unihan_DictionaryIndices.txt",
 			Arrays.asList(
-				"kCheungBauerIndex",
-				"kCihaiT",
-				"kCowles",
-				"kDaeJaweon",
-				"kFennIndex",
-				"kGSR",
-				"kHanYu",
-				"kIRGDaeJaweon",
-				"kIRGDaiKanwaZiten",
-				"kIRGHanyuDaZidian",
-				"kIRGKangXi",
-				"kKangXi",
-				"kKarlgren",
-				"kLau",
-				"kMatthews",
-				"kMeyerWempe",
-				"kMorohashi",
-				"kNelson",
-				"kSBGY"
+				"kCheungBauerIndex", // added in Unicode 5.0
+				"kCihaiT",           // moved in Unicode 15.0 (from DictionaryLikeData)
+				"kCowles",           //
+				"kDaeJaweon",        //
+				"kFennIndex",        //
+				"kGSR",              //
+				"kHanYu",            //
+				"kIRGDaeJaweon",     //
+				"kIRGDaiKanwaZiten", // removed in Unicode 15.1
+				"kIRGHanyuDaZidian", //
+				"kIRGKangXi",        //
+				"kKangXi",           //
+				"kKarlgren",         //
+				"kLau",              //
+				"kMatthews",         //
+				"kMeyerWempe",       //
+				"kMorohashi",        //
+				"kNelson",           //
+				"kSBGY",             //
+				"kSMSZD2003Index"    // added in Unicode 15.1
 			)
 		);
 	}

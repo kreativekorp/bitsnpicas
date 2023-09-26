@@ -203,9 +203,13 @@ install: dep BitsNPicas.jar MapEdit.jar KeyEdit.jar
 	sudo cp -f BitsNPicas.jar /usr/local/lib/bitsnpicas.jar
 	sudo cp -f MapEdit.jar /usr/local/lib/mapedit.jar
 	sudo cp -f KeyEdit.jar /usr/local/lib/keyedit.jar
+	sudo cp -f dep/KSFL.jar /usr/local/lib/KSFL.jar
+	sudo cp -f dep/ual.jar /usr/local/lib/ual.jar
 	sudo chmod -f 644 /usr/local/lib/bitsnpicas.jar
 	sudo chmod -f 644 /usr/local/lib/mapedit.jar
 	sudo chmod -f 644 /usr/local/lib/keyedit.jar
+	sudo chmod -f 644 /usr/local/lib/KSFL.jar
+	sudo chmod -f 644 /usr/local/lib/ual.jar
 	sudo mkdir -p /usr/local/bin/
 	sudo cp -f dep/bitsnpicas /usr/local/bin/bitsnpicas
 	sudo cp -f dep/mapedit /usr/local/bin/mapedit

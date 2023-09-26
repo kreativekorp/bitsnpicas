@@ -7,9 +7,11 @@ public class UnihanNumericValuesCodec extends AbstractUnihanCodec {
 		super(
 			"Unihan_NumericValues.txt",
 			Arrays.asList(
-				"kAccountingNumeric",
-				"kOtherNumeric",
-				"kPrimaryNumeric"
+				"kAccountingNumeric", //
+				"kOtherNumeric",      //
+				"kPrimaryNumeric",    //
+				"kVietnameseNumeric", // added in Unicode 15.1
+				"kZhuangNumeric"      // added in Unicode 15.1
 			)
 		);
 	}

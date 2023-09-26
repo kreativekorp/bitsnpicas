@@ -7,19 +7,21 @@ public class UnihanReadingsCodec extends AbstractUnihanCodec {
 		super(
 			"Unihan_Readings.txt",
 			Arrays.asList(
-				"kCantonese",
-				"kDefinition",
-				"kHangul",
-				"kHanyuPinlu",
-				"kHanyuPinyin",
-				"kJapaneseKun",
-				"kJapaneseOn",
-				"kKorean",
-				"kMandarin",
-				"kTGHZ2013",
-				"kTang",
-				"kVietnamese",
-				"kXHC1983"
+				"kCantonese",         //
+				"kDefinition",        //
+				"kHangul",            // added in Unicode 5.0
+				"kHanyuPinlu",        //
+				"kHanyuPinyin",       // added in Unicode 5.2
+				"kJapanese",          // added in Unicode 15.1
+				"kJapaneseKun",       //
+				"kJapaneseOn",        //
+				"kKorean",            //
+				"kMandarin",          //
+				"kSMSZD2003Readings", // added in Unicode 15.1
+				"kTang",              //
+				"kTGHZ2013",          // added in Unicode 13.0
+				"kVietnamese",        //
+				"kXHC1983"            // added in Unicode 5.1
 			)
 		);
 	}

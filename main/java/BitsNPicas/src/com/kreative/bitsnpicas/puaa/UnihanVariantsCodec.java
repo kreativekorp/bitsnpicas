@@ -7,12 +7,12 @@ public class UnihanVariantsCodec extends AbstractUnihanCodec {
 		super(
 			"Unihan_Variants.txt",
 			Arrays.asList(
-				"kSemanticVariant",
-				"kSimplifiedVariant",
-				"kSpecializedSemanticVariant",
-				"kSpoofingVariant",
-				"kTraditionalVariant",
-				"kZVariant"
+				"kSemanticVariant",            //
+				"kSimplifiedVariant",          //
+				"kSpecializedSemanticVariant", //
+				"kSpoofingVariant",            // added in Unicode 13.0
+				"kTraditionalVariant",         //
+				"kZVariant"                    //
 			)
 		);
 	}

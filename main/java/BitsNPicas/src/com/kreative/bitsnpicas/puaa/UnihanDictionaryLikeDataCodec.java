@@ -7,18 +7,19 @@ public class UnihanDictionaryLikeDataCodec extends AbstractUnihanCodec {
 		super(
 			"Unihan_DictionaryLikeData.txt",
 			Arrays.asList(
-				"kAlternateTotalStrokes",
-				"kCangjie",
-				"kCheungBauer",
-				"kFenn",
-				"kFourCornerCode",
-				"kFrequency",
-				"kGradeLevel",
-				"kHDZRadBreak",
-				"kHKGlyph",
-				"kPhonetic",
-				"kStrange",
-				"kUnihanCore2020"
+				"kAlternateTotalStrokes", // added in Unicode 15.0
+				"kCangjie",               //
+				"kCheungBauer",           // added in Unicode 5.0
+				"kFenn",                  //
+				"kFourCornerCode",        // added in Unicode 5.0
+				"kFrequency",             //
+				"kGradeLevel",            //
+				"kHDZRadBreak",           //
+				"kHKGlyph",               //
+				"kMojiJoho",              // added in Unicode 15.1
+				"kPhonetic",              //
+				"kStrange",               // added in Unicode 14.0
+				"kUnihanCore2020"         // added in Unicode 13.0
 			)
 		);
 	}

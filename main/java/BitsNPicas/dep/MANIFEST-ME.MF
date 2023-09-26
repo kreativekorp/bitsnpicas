@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Created-By: 1.1.1 (Kreative Software)
+Created-By: 1.1.2 (Kreative Software)
 Main-Class: com.kreative.mapedit.Main
 Class-Path: KSFL.jar ual.jar dep/KSFL.jar dep/ual.jar
