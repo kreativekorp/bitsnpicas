@@ -121,7 +121,7 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 		
 		// Read the fnt file.
 		while (scan.hasNextLine()) {
-			String line = scan.nextLine().trim();
+			String line = scan.nextLine();
 			Matcher plm = PROPERTY_LINE.matcher(line);
 			if (plm.matches()) {
 				String key = plm.group(2);
@@ -160,7 +160,7 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 				continue;
 			}
 			if (line.startsWith("--")) continue;
-			String[] fields = line.split("\\s+");
+			String[] fields = line.contains("\t") ? line.split("\t+") : line.split("\\s+");
 			if (fields.length != 2) continue;
 			int width;
 			try { width = Integer.parseInt(fields[1]); }
