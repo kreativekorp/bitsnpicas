@@ -33,8 +33,8 @@ public class BitmapEditPanel extends GlyphEditPanel<BitmapFontGlyph> {
 		return toolHandler;
 	}
 	
-	public void setGlyph(GlyphLocator<BitmapFontGlyph> locator) {
-		super.setGlyph(locator);
+	public void setGlyph(GlyphLocator<BitmapFontGlyph> locator, Class<BitmapFontGlyph> glyphClass) {
+		super.setGlyph(locator, glyphClass);
 		this.toolHandler.clearHistory();
 	}
 	

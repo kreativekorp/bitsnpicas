@@ -58,8 +58,21 @@ public class GlyphEditPanel<G extends FontGlyph> extends JPanel {
 		return locator;
 	}
 	
-	public void setGlyph(GlyphLocator<G> locator) {
-		this.glyphComponent.setGlyph(locator.getGlyphFont(), locator.getGlyph());
+	public void setGlyph(GlyphLocator<G> locator, Class<G> glyphClass) {
+		if (locator == null) return;
+		Font<G> font = locator.getGlyphFont();
+		G glyph = locator.getGlyph();
+		if (glyph == null) {
+			if (glyphClass == null) return;
+			try {
+				glyph = glyphClass.newInstance();
+				locator.setGlyph(glyph);
+				this.glyphList.glyphRepertoireChanged();
+			} catch (Exception ex) {
+				return;
+			}
+		}
+		this.glyphComponent.setGlyph(font, glyph);
 		this.locator = locator;
 	}
 }

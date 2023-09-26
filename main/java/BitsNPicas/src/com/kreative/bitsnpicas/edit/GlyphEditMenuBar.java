@@ -134,19 +134,8 @@ public class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					GlyphLocator<G> loc = panel.getGlyphLocator().getPrevious();
-					if (loc == null) return;
-					if (loc.getGlyph() == null) {
-						try {
-							G g = glyphClass.newInstance();
-							loc.setGlyph(g);
-							panel.getGlyphList().glyphRepertoireChanged();
-						} catch (Exception ex) {
-							return;
-						}
-					}
-					panel.setGlyph(loc);
-					frame.setTitle(loc.toString());
+					panel.setGlyph(panel.getGlyphLocator().getPrevious(), glyphClass);
+					frame.setTitle(panel.getGlyphLocator().toString());
 				}
 			});
 		}
@@ -159,19 +148,8 @@ public class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, CommonMenuItems.SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					GlyphLocator<G> loc = panel.getGlyphLocator().getNext();
-					if (loc == null) return;
-					if (loc.getGlyph() == null) {
-						try {
-							G g = glyphClass.newInstance();
-							loc.setGlyph(g);
-							panel.getGlyphList().glyphRepertoireChanged();
-						} catch (Exception ex) {
-							return;
-						}
-					}
-					panel.setGlyph(loc);
-					frame.setTitle(loc.toString());
+					panel.setGlyph(panel.getGlyphLocator().getNext(), glyphClass);
+					frame.setTitle(panel.getGlyphLocator().toString());
 				}
 			});
 		}
@@ -184,10 +162,8 @@ public class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					GlyphLocator<G> loc = panel.getGlyphLocator().getPreviousDefined();
-					if (loc == null) return;
-					panel.setGlyph(loc);
-					frame.setTitle(loc.toString());
+					panel.setGlyph(panel.getGlyphLocator().getPreviousDefined(), null);
+					frame.setTitle(panel.getGlyphLocator().toString());
 				}
 			});
 		}
@@ -200,10 +176,8 @@ public class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					GlyphLocator<G> loc = panel.getGlyphLocator().getNextDefined();
-					if (loc == null) return;
-					panel.setGlyph(loc);
-					frame.setTitle(loc.toString());
+					panel.setGlyph(panel.getGlyphLocator().getNextDefined(), null);
+					frame.setTitle(panel.getGlyphLocator().toString());
 				}
 			});
 		}
