@@ -2,9 +2,9 @@ SRCFILES := $(shell find src -name \*.java)
 RESFILES := $(shell find src -type f \! -name .\* \! -name \*.java | sed s/^src\\///)
 PACKAGES := $(shell find src -name \*.java | sed -E s/^src\\/\|\\/[^\\/]+$$//g | grep -v \\.java$$ | sort | uniq | tr / .)
 
-all: clean bin doc BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz KeyEdit.jar KeyEdit.app KeyEdit-src.tgz
+all: clean bin doc BitsNPicas.jar BitsNPicas.app BitsNPicas.app.zip BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit.app.zip MapEdit-src.tgz KeyEdit.jar KeyEdit.app KeyEdit.app.zip KeyEdit-src.tgz
 
-eclipseall: eclipseclean BitsNPicas.jar BitsNPicas.app BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit-src.tgz KeyEdit.jar KeyEdit.app KeyEdit-src.tgz
+eclipseall: eclipseclean BitsNPicas.jar BitsNPicas.app BitsNPicas.app.zip BitsNPicas-src.tgz MapEdit.jar MapEdit.app MapEdit.app.zip MapEdit-src.tgz KeyEdit.jar KeyEdit.app KeyEdit.app.zip KeyEdit-src.tgz
 
 clean:
 	rm -rf bin
@@ -12,23 +12,29 @@ clean:
 	rm -rf BitsNPicas*.jar
 	rm -rf BitsNPicas*.tgz
 	rm -rf BitsNPicas*.app
+	rm -rf BitsNPicas*.zip
 	rm -rf MapEdit*.jar
 	rm -rf MapEdit*.tgz
 	rm -rf MapEdit*.app
+	rm -rf MapEdit*.zip
 	rm -rf KeyEdit*.jar
 	rm -rf KeyEdit*.tgz
 	rm -rf KeyEdit*.app
+	rm -rf KeyEdit*.zip
 
 eclipseclean:
 	rm -rf BitsNPicas*.jar
 	rm -rf BitsNPicas*.tgz
 	rm -rf BitsNPicas*.app
+	rm -rf BitsNPicas*.zip
 	rm -rf MapEdit*.jar
 	rm -rf MapEdit*.tgz
 	rm -rf MapEdit*.app
+	rm -rf MapEdit*.zip
 	rm -rf KeyEdit*.jar
 	rm -rf KeyEdit*.tgz
 	rm -rf KeyEdit*.app
+	rm -rf KeyEdit*.zip
 
 bin: src
 	mkdir -p bin
@@ -79,6 +85,9 @@ BitsNPicas-MacOS11.0.app: dep BitsNPicas.jar
 	cp -f dep/kbnp*.icns dep/dmov*.icns dep/movr*.icns BitsNPicas-MacOS11.0.app/Contents/Resources
 	cp -f dep/*.jar BitsNPicas-MacOS11.0.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas-MacOS11.0.app/Contents/Resources/Java
+
+BitsNPicas.app.zip: BitsNPicas.app
+	zip -r BitsNPicas.app.zip BitsNPicas*.app
 
 BitsNPicas.dmg: BitsNPicas.app
 	mkdir -p dmgtmp
@@ -132,6 +141,9 @@ MapEdit-MacOS11.0.app: dep MapEdit.jar
 	cp -f dep/ual.jar MapEdit-MacOS11.0.app/Contents/Resources/Java
 	cp -f MapEdit.jar MapEdit-MacOS11.0.app/Contents/Resources/Java
 
+MapEdit.app.zip: MapEdit.app
+	zip -r MapEdit.app.zip MapEdit*.app
+
 MapEdit.dmg: MapEdit.app
 	mkdir -p dmgtmp
 	cp -R MapEdit-Pre10.15.app dmgtmp
@@ -183,6 +195,9 @@ KeyEdit-MacOS11.0.app: dep KeyEdit.jar
 	cp -f dep/keyedit*.icns KeyEdit-MacOS11.0.app/Contents/Resources
 	cp -f dep/ual.jar KeyEdit-MacOS11.0.app/Contents/Resources/Java
 	cp -f KeyEdit.jar KeyEdit-MacOS11.0.app/Contents/Resources/Java
+
+KeyEdit.app.zip: KeyEdit.app
+	zip -r KeyEdit.app.zip KeyEdit*.app
 
 KeyEdit.dmg: KeyEdit.app
 	mkdir -p dmgtmp
