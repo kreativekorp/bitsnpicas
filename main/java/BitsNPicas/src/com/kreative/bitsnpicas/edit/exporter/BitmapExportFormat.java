@@ -128,9 +128,9 @@ public enum BitmapExportFormat {
 			}
 		}
 	},
-	MOUSEPAINT("MousePaint", ".fnt", "encoding", "MouseDesk") {
+	MGTK("MGTK (Apple II MouseGraphics ToolKit)", ".fnt", "encoding", "MouseDesk") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return new MousePaintBitmapFontExporter(o.getSelectedEncoding());
+			return new MGTKBitmapFontExporter(o.getSelectedEncoding());
 		}
 	},
 	RB12("RB12 (Rockbox 2.3 or above)", ".fnt", "none") {

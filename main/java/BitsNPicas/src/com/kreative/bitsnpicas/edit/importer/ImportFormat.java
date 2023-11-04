@@ -135,14 +135,17 @@ public enum ImportFormat {
 			});
 		}
 	},
-	MOUSEPAINT {
+	MGTK {
 		public boolean recognize(FileProxy fp) {
-			return fp.hasExtension(".mpf", ".fnt") && (fp.startsWith(0) || fp.startsWith(0x80));
+			return (
+				fp.hasExtension(".mgf", ".mpf", ".fnt") &&
+				(fp.startsWith(0) || fp.startsWith(0x80))
+			);
 		}
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("MouseDesk", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
-					return new MousePaintBitmapFontImporter(encoding);
+					return new MGTKBitmapFontImporter(encoding);
 				}
 			});
 		}
@@ -227,14 +230,14 @@ public enum ImportFormat {
 			return new ImageBitmapFontImporterFrame(file);
 		}
 	},
-	MOUSEPAINT_EXTENSIONLESS {
+	MGTK_NOEXT {
 		public boolean recognize(FileProxy fp) {
 			return fp.startsWith(0) || fp.startsWith(0x80);
 		}
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("MouseDesk", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
-					return new MousePaintBitmapFontImporter(encoding);
+					return new MGTKBitmapFontImporter(encoding);
 				}
 			});
 		}

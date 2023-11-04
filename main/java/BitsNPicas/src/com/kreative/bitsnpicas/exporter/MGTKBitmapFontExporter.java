@@ -11,14 +11,14 @@ import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.unicode.data.GlyphList;
 
-public class MousePaintBitmapFontExporter implements BitmapFontExporter {
+public class MGTKBitmapFontExporter implements BitmapFontExporter {
 	private GlyphList encoding;
 	
-	public MousePaintBitmapFontExporter() {
+	public MGTKBitmapFontExporter() {
 		this.encoding = null;
 	}
 	
-	public MousePaintBitmapFontExporter(GlyphList encoding) {
+	public MGTKBitmapFontExporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

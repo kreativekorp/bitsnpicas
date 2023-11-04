@@ -121,12 +121,15 @@ public enum BitmapInputFormat {
 			return new FONTXBitmapFontImporter(EncodingList.instance().getGlyphList(sben), dben);
 		}
 	},
-	MOUSEPAINT(BitmapFont.NAME_FAMILY) {
+	MGTK(BitmapFont.NAME_FAMILY) {
 		public boolean recognize(FileProxy fp) {
-			return fp.hasExtension(".mpf", ".fnt") && (fp.startsWith(0) || fp.startsWith(0x80));
+			return (
+				fp.hasExtension(".mgf", ".mpf", ".fnt") &&
+				(fp.startsWith(0) || fp.startsWith(0x80))
+			);
 		}
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new MousePaintBitmapFontImporter(o.getEncoding());
+			return new MGTKBitmapFontImporter(o.getEncoding());
 		}
 	},
 	ROCKBOX(BitmapFont.NAME_FAMILY) {
@@ -195,12 +198,12 @@ public enum BitmapInputFormat {
 			return new NFNTBitmapFontImporter(o.getEncoding());
 		}
 	},
-	MOUSEPAINT_EXTENSIONLESS(BitmapFont.NAME_FAMILY) {
+	MGTK_NOEXT(BitmapFont.NAME_FAMILY) {
 		public boolean recognize(FileProxy fp) {
 			return fp.startsWith(0) || fp.startsWith(0x80);
 		}
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new MousePaintBitmapFontImporter(o.getEncoding());
+			return new MGTKBitmapFontImporter(o.getEncoding());
 		}
 	};
 	

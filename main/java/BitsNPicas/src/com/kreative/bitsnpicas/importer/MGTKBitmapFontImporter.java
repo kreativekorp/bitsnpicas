@@ -12,14 +12,14 @@ import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.unicode.data.GlyphList;
 
-public class MousePaintBitmapFontImporter implements BitmapFontImporter {
+public class MGTKBitmapFontImporter implements BitmapFontImporter {
 	private GlyphList encoding;
 	
-	public MousePaintBitmapFontImporter() {
+	public MGTKBitmapFontImporter() {
 		this.encoding = null;
 	}
 	
-	public MousePaintBitmapFontImporter(GlyphList encoding) {
+	public MGTKBitmapFontImporter(GlyphList encoding) {
 		this.encoding = encoding;
 	}
 	

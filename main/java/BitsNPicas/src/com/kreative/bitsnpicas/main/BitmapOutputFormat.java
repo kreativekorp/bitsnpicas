@@ -147,9 +147,9 @@ public enum BitmapOutputFormat {
 			}
 		}
 	},
-	MOUSEPAINT(".fnt", "mpf", "mousepaint") {
+	MGTK(".fnt", "mgtk", "mgf", "mpf", "mousepaint") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new MousePaintBitmapFontExporter(o.getEncoding());
+			return new MGTKBitmapFontExporter(o.getEncoding());
 		}
 	},
 	RB12(".fnt", "rb12") {
