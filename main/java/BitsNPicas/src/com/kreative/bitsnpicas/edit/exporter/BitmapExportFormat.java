@@ -128,6 +128,11 @@ public enum BitmapExportFormat {
 			}
 		}
 	},
+	MOUSEPAINT("MousePaint", ".fnt", "encoding", "MouseDesk") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new MousePaintBitmapFontExporter(o.getSelectedEncoding());
+		}
+	},
 	RB12("RB12 (Rockbox 2.3 or above)", ".fnt", "none") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new RockboxBitmapFontExporter(RockboxBitmapFontExporter.RB12);

@@ -108,6 +108,12 @@ public class FileProxy {
 		}
 	}
 	
+	public byte[] getStartBytes(int len) {
+		checkContents(len);
+		if (contents == null || contents.length < len) return null;
+		return contents;
+	}
+	
 	public boolean isImage() {
 		if (checkedImage) return image != null;
 		try {

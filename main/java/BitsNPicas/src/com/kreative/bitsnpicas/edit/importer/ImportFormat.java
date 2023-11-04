@@ -110,7 +110,9 @@ public enum ImportFormat {
 	},
 	FNT {
 		public boolean recognize(FileProxy fp) {
-			return fp.hasExtension(".fnt") && fp.startsWith(0);
+			if (!fp.hasExtension(".fnt")) return false;
+			byte[] b = fp.getStartBytes(2);
+			return b != null && b[0] == 0 && b[1] >= 1 && b[1] <= 3;
 		}
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("CP1252", file, new EncodingSelectionImporter() {
@@ -129,6 +131,18 @@ public enum ImportFormat {
 			return new DualEncodingSelectionFrame("CP437", dben, file, new DualEncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList sbenc, String dbenc) {
 					return new FONTXBitmapFontImporter(sbenc, dbenc);
+				}
+			});
+		}
+	},
+	MOUSEPAINT {
+		public boolean recognize(FileProxy fp) {
+			return fp.hasExtension(".mpf", ".fnt") && (fp.startsWith(0) || fp.startsWith(0x80));
+		}
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("MouseDesk", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(GlyphList encoding) {
+					return new MousePaintBitmapFontImporter(encoding);
 				}
 			});
 		}
@@ -211,6 +225,18 @@ public enum ImportFormat {
 		public boolean recognize(FileProxy fp) { return fp.isImage(); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new ImageBitmapFontImporterFrame(file);
+		}
+	},
+	MOUSEPAINT_EXTENSIONLESS {
+		public boolean recognize(FileProxy fp) {
+			return fp.startsWith(0) || fp.startsWith(0x80);
+		}
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("MouseDesk", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(GlyphList encoding) {
+					return new MousePaintBitmapFontImporter(encoding);
+				}
+			});
 		}
 	};
 	

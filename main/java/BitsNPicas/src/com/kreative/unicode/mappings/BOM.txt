@@ -60,6 +60,7 @@ MacRoman.txt
 MacRomanian.txt
 MacTurkish.txt
 MacVT100.txt
+MouseDesk.txt
 U8MAppleII.txt
 U8MAtariST.txt
 U8MATASCII.txt

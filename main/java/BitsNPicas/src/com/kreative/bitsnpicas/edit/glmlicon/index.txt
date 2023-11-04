@@ -677,6 +677,7 @@ macos.png       encoding    MacThai
 macos.png       encoding    MacTurkish
 macos.png       encoding    MacUkraine
 macos.png       encoding    MacVT100
+apple2.png      encoding    MouseDesk
 jis.png         encoding    Shift_JIS
 tis.png         encoding    TIS-620
 apple2.png      encoding    U8/M Apple II
@@ -715,6 +716,7 @@ apple2.png      encoding    x-apple2gs-emoji
 apple2.png      encoding    x-apple2gs-linux
 apple2.png      encoding    x-apple2gs-mod
 apple2.png      encoding    x-apple2gs-pua
+apple2.png      encoding    x-apple2-mousedesk
 atarist.png     encoding    x-atarist
 atarist.png     encoding    x-atarist-video
 atari8.png      encoding    x-atascii

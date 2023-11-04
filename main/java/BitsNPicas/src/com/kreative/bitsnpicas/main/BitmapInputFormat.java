@@ -101,7 +101,9 @@ public enum BitmapInputFormat {
 	},
 	FNT(BitmapFont.NAME_FAMILY_AND_STYLE) {
 		public boolean recognize(FileProxy fp) {
-			return fp.hasExtension(".fnt") && fp.startsWith(0);
+			if (!fp.hasExtension(".fnt")) return false;
+			byte[] b = fp.getStartBytes(2);
+			return b != null && b[0] == 0 && b[1] >= 1 && b[1] <= 3;
 		}
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new FNTBitmapFontImporter(o.getEncoding());
@@ -117,6 +119,14 @@ public enum BitmapInputFormat {
 			String dben = o.fontxDoubleByteEncoding;
 			if (dben == null || dben.length() == 0) dben = "CP943";
 			return new FONTXBitmapFontImporter(EncodingList.instance().getGlyphList(sben), dben);
+		}
+	},
+	MOUSEPAINT(BitmapFont.NAME_FAMILY) {
+		public boolean recognize(FileProxy fp) {
+			return fp.hasExtension(".mpf", ".fnt") && (fp.startsWith(0) || fp.startsWith(0x80));
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new MousePaintBitmapFontImporter(o.getEncoding());
 		}
 	},
 	ROCKBOX(BitmapFont.NAME_FAMILY) {
@@ -183,6 +193,14 @@ public enum BitmapInputFormat {
 		}
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new NFNTBitmapFontImporter(o.getEncoding());
+		}
+	},
+	MOUSEPAINT_EXTENSIONLESS(BitmapFont.NAME_FAMILY) {
+		public boolean recognize(FileProxy fp) {
+			return fp.startsWith(0) || fp.startsWith(0x80);
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new MousePaintBitmapFontImporter(o.getEncoding());
 		}
 	};
 	

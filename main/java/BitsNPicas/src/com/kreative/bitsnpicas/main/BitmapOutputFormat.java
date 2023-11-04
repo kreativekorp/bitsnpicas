@@ -147,6 +147,11 @@ public enum BitmapOutputFormat {
 			}
 		}
 	},
+	MOUSEPAINT(".fnt", "mpf", "mousepaint") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new MousePaintBitmapFontExporter(o.getEncoding());
+		}
+	},
 	RB12(".fnt", "rb12") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new RockboxBitmapFontExporter(RockboxBitmapFontExporter.RB12);
