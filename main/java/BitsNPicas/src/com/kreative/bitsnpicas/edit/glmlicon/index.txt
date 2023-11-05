@@ -678,6 +678,17 @@ macos.png       encoding    MacTurkish
 macos.png       encoding    MacUkraine
 macos.png       encoding    MacVT100
 apple2.png      encoding    MouseDesk
+apple2.png      encoding    MouseDesk (da)
+apple2.png      encoding    MouseDesk (de)
+apple2.png      encoding    MouseDesk (en)
+apple2.png      encoding    MouseDesk (epo)
+apple2.png      encoding    MouseDesk (es)
+apple2.png      encoding    MouseDesk (fr)
+apple2.png      encoding    MouseDesk (it)
+apple2.png      encoding    MouseDesk (nl)
+apple2.png      encoding    MouseDesk (pt)
+apple2.png      encoding    MouseDesk (qmk)
+apple2.png      encoding    MouseDesk (sv)
 jis.png         encoding    Shift_JIS
 tis.png         encoding    TIS-620
 apple2.png      encoding    U8/M Apple II
@@ -717,6 +728,17 @@ apple2.png      encoding    x-apple2gs-linux
 apple2.png      encoding    x-apple2gs-mod
 apple2.png      encoding    x-apple2gs-pua
 apple2.png      encoding    x-apple2-mousedesk
+apple2.png      encoding    x-apple2-mousedesk-da
+apple2.png      encoding    x-apple2-mousedesk-de
+apple2.png      encoding    x-apple2-mousedesk-en
+apple2.png      encoding    x-apple2-mousedesk-epo
+apple2.png      encoding    x-apple2-mousedesk-es
+apple2.png      encoding    x-apple2-mousedesk-fr
+apple2.png      encoding    x-apple2-mousedesk-it
+apple2.png      encoding    x-apple2-mousedesk-nl
+apple2.png      encoding    x-apple2-mousedesk-pt
+apple2.png      encoding    x-apple2-mousedesk-qmk
+apple2.png      encoding    x-apple2-mousedesk-sv
 atarist.png     encoding    x-atarist
 atarist.png     encoding    x-atarist-video
 atari8.png      encoding    x-atascii

@@ -61,6 +61,17 @@ MacRomanian.txt
 MacTurkish.txt
 MacVT100.txt
 MouseDesk.txt
+MouseDesk.da.txt
+MouseDesk.de.txt
+MouseDesk.en.txt
+MouseDesk.epo.txt
+MouseDesk.es.txt
+MouseDesk.fr.txt
+MouseDesk.it.txt
+MouseDesk.nl.txt
+MouseDesk.pt.txt
+MouseDesk.qmk.txt
+MouseDesk.sv.txt
 U8MAppleII.txt
 U8MAtariST.txt
 U8MATASCII.txt
