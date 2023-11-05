@@ -178,6 +178,10 @@ public enum ImportFormat {
 			return new PlaydateBitmapFontImporter();
 		}
 	},
+	HRCG {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".set"); }
+		public FontImporter<?> createImporter() { return new HRCGBitmapFontImporter(); }
+	},
 	HMZK {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".hmzk"); }
 		public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }

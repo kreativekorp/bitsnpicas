@@ -177,6 +177,11 @@ public enum BitmapOutputFormat {
 			return new PlaydateBitmapFontExporter(true);
 		}
 	},
+	HRCG(".set", "hrcg", "set") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new HRCGBitmapFontExporter();
+		}
+	},
 	HMZK(".hmzk", "hmzk") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new HMZKBitmapFontExporter();

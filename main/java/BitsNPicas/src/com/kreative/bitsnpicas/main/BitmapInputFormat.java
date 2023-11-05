@@ -156,6 +156,12 @@ public enum BitmapInputFormat {
 			return new PlaydateBitmapFontImporter();
 		}
 	},
+	HRCG(BitmapFont.NAME_FAMILY) {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".set"); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new HRCGBitmapFontImporter();
+		}
+	},
 	HMZK(BitmapFont.NAME_FAMILY) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".hmzk"); }
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {

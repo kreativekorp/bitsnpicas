@@ -153,6 +153,11 @@ public enum BitmapExportFormat {
 			return new PlaydateBitmapFontExporter(o.getPlaydateSeparate());
 		}
 	},
+	HRCG("HRCG (Apple II Hi-Res Character Generator)", ".set", "none") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new HRCGBitmapFontExporter();
+		}
+	},
 	HMZK("HMZK (Mi Band 2)", ".hmzk", "none") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new HMZKBitmapFontExporter();

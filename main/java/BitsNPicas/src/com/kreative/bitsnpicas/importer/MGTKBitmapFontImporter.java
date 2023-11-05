@@ -44,9 +44,11 @@ public class MGTKBitmapFontImporter implements BitmapFontImporter {
 		in.close();
 		
 		String name = file.getName();
-		if (name.toLowerCase().endsWith(".mpf")) {
+		if (name.toLowerCase().endsWith(".fnt")) {
 			name = name.substring(0, name.length() - 4);
-		} else if (name.toLowerCase().endsWith(".fnt")) {
+		} else if (name.toLowerCase().endsWith(".mgf")) {
+			name = name.substring(0, name.length() - 4);
+		} else if (name.toLowerCase().endsWith(".mpf")) {
 			name = name.substring(0, name.length() - 4);
 		}
 		f.setName(Font.NAME_FAMILY, name);
