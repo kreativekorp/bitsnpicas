@@ -891,3 +891,11 @@ speccy.png      encoding    x-zxspectrum-latin1
 speccy.png      encoding    x-zxspectrum-latin5
 speccy.png      encoding    x-zxspectrum-latin9
 speccy.png      encoding    x-zxspectrum-pua
+u000000.png     encoding    Start From U+0000
+u000000.png     encoding    Start From U+0020
+u00e000.png     encoding    Start From U+E000
+u00e000.png     encoding    Start From U+E020
+u00e000.png     encoding    Start From U+F000
+u00e000.png     encoding    Start From U+F020
+u0f0000.png     encoding    Start From U+F0000
+u100000.png     encoding    Start From U+100000

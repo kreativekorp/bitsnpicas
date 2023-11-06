@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.Main;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -25,10 +26,12 @@ public class DualEncodingSelectionPanel extends JPanel {
 	public DualEncodingSelectionPanel(final String sben, final String dben, final File file, final DualEncodingSelectionImporter importer) {
 		final JComboBox sbe = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		sbe.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(sbe);
 		sbe.setSelectedItem(EncodingList.instance().getGlyphList(sben));
 		
 		final JComboBox dbe = new JComboBox(Charset.availableCharsets().keySet().toArray());
 		dbe.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(dbe);
 		dbe.setSelectedItem(dben);
 		
 		final JPanel labelPanel = new JPanel(new GridLayout(0, 1, 4, 4));

@@ -18,6 +18,7 @@ import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.BitmapListFrame;
 import com.kreative.bitsnpicas.edit.GlyphListFrame;
 import com.kreative.bitsnpicas.edit.Main;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -27,6 +28,7 @@ public class EncodingSelectionPanel extends JPanel {
 	public EncodingSelectionPanel(final String encodingName, final File file, final EncodingSelectionImporter importer) {
 		final JComboBox encoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		encoding.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(encoding);
 		encoding.setSelectedItem(EncodingList.instance().getGlyphList(encodingName));
 		
 		final JPanel encodingPanel = new JPanel(new BorderLayout(12, 12));

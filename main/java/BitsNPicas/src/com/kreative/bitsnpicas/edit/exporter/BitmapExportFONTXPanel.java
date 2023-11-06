@@ -9,6 +9,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -37,6 +38,8 @@ public class BitmapExportFONTXPanel extends JPanel {
 		
 		singleByteEncoding.setEditable(false);
 		doubleByteEncoding.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(singleByteEncoding);
+		new GLMLListCellRenderer("encoding").apply(doubleByteEncoding);
 		singleByteEncoding.setSelectedItem(EncodingList.instance().getGlyphList("CP437"));
 		doubleByteEncoding.setSelectedItem(Charset.forName("CP943").displayName());
 		JPanel ep = new JPanel(new GridLayout(0, 1, 4, 4));

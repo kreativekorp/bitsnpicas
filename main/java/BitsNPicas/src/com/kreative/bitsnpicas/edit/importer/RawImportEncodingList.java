@@ -4,6 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 
 public class RawImportEncodingList extends JComboBox {
@@ -12,6 +13,7 @@ public class RawImportEncodingList extends JComboBox {
 	public RawImportEncodingList() {
 		super(getEncodingList());
 		setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(this);
 		setSelectedIndex(7);
 	}
 	

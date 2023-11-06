@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.Main;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -27,11 +28,13 @@ public class PSFEncodingSelectionPanel extends JPanel {
 		lea.add("None"); lea.addAll(EncodingList.instance().glyphLists());
 		final JComboBox le = new JComboBox(lea.toArray());
 		le.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(le);
 		
 		final ArrayList<Object> hea = new ArrayList<Object>();
 		hea.add("None"); hea.addAll(EncodingList.instance().glyphLists());
 		final JComboBox he = new JComboBox(hea.toArray());
 		he.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(he);
 		
 		final ArrayList<Object> sea = new ArrayList<Object>();
 		sea.add(new PuaBaseOption(    "None",       -1));

@@ -11,6 +11,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -39,6 +40,7 @@ public class BitmapExportMacPanel extends JPanel {
 		macFontIdAuto.setSelected(true);
 		macFontSizeAutoAny.setSelected(true);
 		macEncoding.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(macEncoding);
 		ButtonGroup macFontIdGroup = new ButtonGroup();
 		macFontIdGroup.add(macFontIdAuto);
 		macFontIdGroup.add(macFontIdManual);

@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -47,12 +48,14 @@ public class BitmapExportPSFPanel extends JPanel {
 		lea.addAll(EncodingList.instance().glyphLists());
 		this.lowEncoding = new JComboBox(lea.toArray());
 		this.lowEncoding.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(lowEncoding);
 		
 		ArrayList<Object> hea = new ArrayList<Object>();
 		hea.add("U+0100 - U+01FF");
 		hea.addAll(EncodingList.instance().glyphLists());
 		this.highEncoding = new JComboBox(hea.toArray());
 		this.highEncoding.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(highEncoding);
 		
 		this.useLowEncoding = new JCheckBox("Include $000-$0FF");
 		this.useHighEncoding = new JCheckBox("Include $100-$1FF");

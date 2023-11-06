@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -25,6 +26,7 @@ public class BitmapExportU8MPanel extends JPanel {
 		this.u8mLoadAddress = new JTextField("$A000");
 		
 		u8mEncoding.setEditable(false);
+		new GLMLListCellRenderer("encoding").apply(u8mEncoding);
 		u8mLoadAddress.setEnabled(false);
 		JPanel u8mLabelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		u8mLabelPanel.add(u8mHasLoadAddress);
