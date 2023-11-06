@@ -29,7 +29,11 @@ public class GlyphListFrame<G extends FontGlyph> extends JFrame {
 		makeUI();
 	}
 	
-	public void makeUI() {
+	public GlyphListPanel<G> getPanel() {
+		return panel;
+	}
+	
+	private void makeUI() {
 		setJMenuBar(mb);
 		setContentPane(panel);
 		pack();

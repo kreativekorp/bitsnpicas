@@ -29,6 +29,10 @@ public class BitmapListFrame extends JFrame {
 		makeUI();
 	}
 	
+	public GlyphListPanel<BitmapFontGlyph> getPanel() {
+		return panel;
+	}
+	
 	private void makeUI() {
 		setJMenuBar(mb);
 		setContentPane(panel);

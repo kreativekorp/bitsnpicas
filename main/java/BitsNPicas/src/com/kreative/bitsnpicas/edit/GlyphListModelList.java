@@ -1,11 +1,14 @@
 package com.kreative.bitsnpicas.edit;
 
+import java.awt.Container;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JTree;
+import javax.swing.JViewport;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -43,14 +46,45 @@ public class GlyphListModelList extends JTree {
 		return ((GlyphListModelTreeNode)o).getModel();
 	}
 	
+	public String getSelectedModelName() {
+		TreePath path = getSelectionPath();
+		if (path == null) return null;
+		Object o = path.getLastPathComponent();
+		if (!(o instanceof GlyphListModelTreeNode)) return null;
+		return ((GlyphListModelTreeNode)o).getModel().toString();
+	}
+	
 	public void setSelectedModel(GlyphListModel model, boolean shouldScroll) {
 		Object root = getModel().getRoot();
 		if (!(root instanceof GlyphListModelTreeNode)) return;
 		GlyphListModelTreeNode r = (GlyphListModelTreeNode)root;
 		TreePath path = findGlyphListModel(model, r, new TreePath(r));
-		if (path != null) {
-			setSelectionPath(path);
-			if (shouldScroll) scrollPathToVisible(path);
+		if (path != null) setSelectionPath(path, shouldScroll);
+	}
+	
+	public void setSelectedModelName(String name, boolean shouldScroll) {
+		Object root = getModel().getRoot();
+		if (!(root instanceof GlyphListModelTreeNode)) return;
+		GlyphListModelTreeNode r = (GlyphListModelTreeNode)root;
+		TreePath path = findGlyphListModelName(name, r, new TreePath(r));
+		if (path != null) setSelectionPath(path, shouldScroll);
+	}
+	
+	private void setSelectionPath(TreePath path, boolean shouldScroll) {
+		setSelectionPath(path);
+		if (shouldScroll) {
+			scrollPathToVisible(path);
+			Container c = getParent();
+			while (c != null) {
+				if (c instanceof JViewport) {
+					JViewport port = (JViewport)c;
+					Point pos = port.getViewPosition();
+					pos.x = 0;
+					port.setViewPosition(pos);
+					break;
+				}
+				c = c.getParent();
+			}
 		}
 	}
 	
@@ -63,11 +97,27 @@ public class GlyphListModelList extends JTree {
 		return null;
 	}
 	
+	private TreePath findGlyphListModelName(String name, GlyphListModelTreeNode node, TreePath parent) {
+		if (hasModelName(name, node)) return parent;
+		for (GlyphListModelTreeNode child : node.getChildren()) {
+			TreePath path = findGlyphListModelName(name, child, parent.pathByAddingChild(child));
+			if (path != null) return path;
+		}
+		return null;
+	}
+	
 	private static boolean hasModel(GlyphListModel model, GlyphListModelTreeNode node) {
 		GlyphListModel other = node.getModel();
 		if (model == null) return (other == null);
 		if (other == null) return (model == null);
 		return model.equals(other);
+	}
+	
+	private static boolean hasModelName(String name, GlyphListModelTreeNode node) {
+		GlyphListModel other = node.getModel();
+		if (name == null) return (other == null);
+		if (other == null) return (name == null);
+		return name.equals(other.toString());
 	}
 	
 	private static class GlyphListModelRootNode extends GlyphListModelTreeNode {

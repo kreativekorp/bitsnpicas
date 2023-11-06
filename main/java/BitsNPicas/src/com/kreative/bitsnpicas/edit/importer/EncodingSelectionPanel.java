@@ -10,10 +10,13 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.edit.BitmapListFrame;
+import com.kreative.bitsnpicas.edit.GlyphListFrame;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
@@ -47,7 +50,12 @@ public class EncodingSelectionPanel extends JPanel {
 					GlyphList enc = (GlyphList)(encoding.getSelectedItem());
 					Font<?>[] fonts = importer.createImporter(enc).importFont(file);
 					if (fonts != null && fonts.length > 0) {
-						Main.openFonts(file, null, fonts);
+						JFrame frame = Main.openFonts(file, null, fonts);
+						if (frame instanceof GlyphListFrame) {
+							((GlyphListFrame<?>)frame).getPanel().getModelList().setSelectedModelName(enc.getName(), true);
+						} else if (frame instanceof BitmapListFrame) {
+							((BitmapListFrame)frame).getPanel().getModelList().setSelectedModelName(enc.getName(), true);
+						}
 					} else {
 						JOptionPane.showMessageDialog(
 							null, "The selected file did not contain any fonts.",

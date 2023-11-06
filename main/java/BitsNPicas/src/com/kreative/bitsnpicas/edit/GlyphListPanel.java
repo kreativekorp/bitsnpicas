@@ -111,6 +111,10 @@ public class GlyphListPanel<G extends FontGlyph> extends JPanel {
 		im.put(KeyStroke.getKeyStroke("RIGHT"), "none");
 	}
 	
+	public GlyphListModelList getModelList() {
+		return modelList;
+	}
+	
 	public GlyphList<G> getGlyphList() {
 		return glyphList;
 	}
