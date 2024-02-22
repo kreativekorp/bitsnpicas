@@ -21,6 +21,7 @@ import com.kreative.bitsnpicas.GlyphPair;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.PointSizeGenerator;
+import com.kreative.bitsnpicas.edit.TimestampGlyphGenerator;
 import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
@@ -531,22 +532,11 @@ public class ConvertBitmap {
 		}
 		if (o.timestampCodepoint != null) {
 			GregorianCalendar now = new GregorianCalendar();
-			int y = now.get(GregorianCalendar.YEAR);
-			int m = now.get(GregorianCalendar.MONTH) + 1;
-			int d = now.get(GregorianCalendar.DAY_OF_MONTH);
-			BitmapFontGlyph[] glyphs = {
-				font.getCharacter(0x10FF40 + ((y / 1000) % 10)),
-				font.getCharacter(0x10FF50 + ((y /  100) % 10)),
-				font.getCharacter(0x10FF60 + ((y /   10) % 10)),
-				font.getCharacter(0x10FF70 + ((y /    1) % 10)),
-				font.getCharacter(0x10FF80 + ((m /   10) % 10)),
-				font.getCharacter(0x10FF90 + ((m /    1) % 10)),
-				font.getCharacter(0x10FFA0 + ((d /   10) % 10)),
-				font.getCharacter(0x10FFB0 + ((d /    1) % 10)),
-				font.getCharacter(0x10FFC0)
-			};
-			BitmapFontGlyph glyph = BitmapFontGlyph.compose(glyphs);
-			if (glyph != null) font.putCharacter(o.timestampCodepoint, glyph);
+			BitmapFontGlyph[] glyphs = TimestampGlyphGenerator.getTimestampGlyphs(font, now);
+			if (glyphs != null) {
+				BitmapFontGlyph glyph = BitmapFontGlyph.compose(glyphs);
+				font.putCharacter(o.timestampCodepoint, glyph);
+			}
 		}
 		if (!o.subsetRemap.isEmpty()) {
 			font.subsetRemap(o.subsetRemap);

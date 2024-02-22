@@ -18,7 +18,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -177,8 +176,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new GlyphListMenuBar.EditMenuItem(gl));
 			add(new GlyphListMenuBar.DeleteMenuItem(gl));
 			addSeparator();
-			add(new GenerateUnifontHexGlyphMenuItem(gl));
-			add(new GenerateTimestampGlyphMenuItem(gl));
+			add(new GenerateMenu(gl));
 			addSeparator();
 			add(new CommonMenuItems.FontMapMenuItem());
 		}
@@ -397,85 +395,27 @@ public class BitmapListMenuBar extends JMenuBar {
 		}
 	}
 	
-	public static final class GenerateUnifontHexGlyphMenuItem extends JMenuItem {
+	public static final class GenerateMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public GenerateUnifontHexGlyphMenuItem(final GlyphList<BitmapFontGlyph> gl) {
-			super("Generate Unifont Hex Glyph");
-			addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
-					if (locators.isEmpty()) {
-						Toolkit.getDefaultToolkit().beep();
-						return;
-					}
-					for (GlyphLocator<BitmapFontGlyph> loc : locators) {
-						if (loc.isCodePoint()) {
-							loc.setGlyph(UnifontHexGlyphGenerator.createGlyph(loc.getCodePoint()));
-						}
-					}
-					gl.glyphContentChanged();
-				}
-			});
+		public GenerateMenu(final GlyphList<BitmapFontGlyph> gl) {
+			super("Generate");
+			add(new GenerateMenuItem(new UnifontHexGlyphGenerator(), gl));
+			add(new GenerateMenuItem(new TimestampGlyphGenerator(), gl));
+			add(new GenerateMenuItem(new SitelenPonaCartoucheGlyphGenerator(), gl));
 		}
 	}
 	
-	public static final class GenerateTimestampGlyphMenuItem extends JMenuItem {
+	public static final class GenerateMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public GenerateTimestampGlyphMenuItem(final GlyphList<BitmapFontGlyph> gl) {
-			super("Generate Timestamp Glyph");
+		public GenerateMenuItem(final GlyphGenerator<BitmapFontGlyph> gen, final GlyphList<BitmapFontGlyph> gl) {
+			super(gen.getName());
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
-					if (locators.isEmpty()) {
-						Toolkit.getDefaultToolkit().beep();
-						return;
+					switch (gen.generate(gl.getGlyphFont(), gl.getSelection())) {
+						case NO_CHANGE: Toolkit.getDefaultToolkit().beep(); return;
+						case CONTENT_CHANGED: gl.glyphContentChanged(); return;
+						case REPERTOIRE_CHANGED: gl.glyphRepertoireChanged(); return;
 					}
-					Font<BitmapFontGlyph> font = gl.getGlyphFont();
-					GregorianCalendar now = new GregorianCalendar();
-					int y = now.get(GregorianCalendar.YEAR);
-					int m = now.get(GregorianCalendar.MONTH) + 1;
-					int d = now.get(GregorianCalendar.DAY_OF_MONTH);
-					BitmapFontGlyph[] namedGlyphs = {
-						font.getNamedGlyph("timestamp.ch" + ((y / 1000) % 10)),
-						font.getNamedGlyph("timestamp.cl" + ((y /  100) % 10)),
-						font.getNamedGlyph("timestamp.yh" + ((y /   10) % 10)),
-						font.getNamedGlyph("timestamp.yl" + ((y /    1) % 10)),
-						font.getNamedGlyph("timestamp.mh" + ((m /   10) % 10)),
-						font.getNamedGlyph("timestamp.ml" + ((m /    1) % 10)),
-						font.getNamedGlyph("timestamp.dh" + ((d /   10) % 10)),
-						font.getNamedGlyph("timestamp.dl" + ((d /    1) % 10)),
-						font.getNamedGlyph("timestamp"),
-					};
-					for (BitmapFontGlyph g : namedGlyphs) {
-						if (g != null) {
-							for (GlyphLocator<BitmapFontGlyph> loc : locators) {
-								loc.setGlyph(BitmapFontGlyph.compose(namedGlyphs));
-							}
-							gl.glyphContentChanged();
-							return;
-						}
-					}
-					BitmapFontGlyph[] mappedGlyphs = {
-						font.getCharacter(0x10FF40 + ((y / 1000) % 10)),
-						font.getCharacter(0x10FF50 + ((y /  100) % 10)),
-						font.getCharacter(0x10FF60 + ((y /   10) % 10)),
-						font.getCharacter(0x10FF70 + ((y /    1) % 10)),
-						font.getCharacter(0x10FF80 + ((m /   10) % 10)),
-						font.getCharacter(0x10FF90 + ((m /    1) % 10)),
-						font.getCharacter(0x10FFA0 + ((d /   10) % 10)),
-						font.getCharacter(0x10FFB0 + ((d /    1) % 10)),
-						font.getCharacter(0x10FFC0)
-					};
-					for (BitmapFontGlyph g : mappedGlyphs) {
-						if (g != null) {
-							for (GlyphLocator<BitmapFontGlyph> loc : locators) {
-								loc.setGlyph(BitmapFontGlyph.compose(mappedGlyphs));
-							}
-							gl.glyphContentChanged();
-							return;
-						}
-					}
-					Toolkit.getDefaultToolkit().beep();
 				}
 			});
 		}

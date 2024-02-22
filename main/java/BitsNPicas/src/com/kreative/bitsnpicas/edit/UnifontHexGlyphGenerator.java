@@ -1,8 +1,22 @@
 package com.kreative.bitsnpicas.edit;
 
+import java.util.List;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.Font;
 
-public class UnifontHexGlyphGenerator {
+public class UnifontHexGlyphGenerator extends GlyphGenerator<BitmapFontGlyph> {
+	public String getName() { return "Unifont Hex Glyph"; }
+	public Class<BitmapFontGlyph> getGlyphClass() { return BitmapFontGlyph.class; }
+	public Result generate(Font<BitmapFontGlyph> font, List<GlyphLocator<BitmapFontGlyph>> locators) {
+		if (locators.isEmpty()) return Result.NO_CHANGE;
+		for (GlyphLocator<BitmapFontGlyph> loc : locators) {
+			if (loc.isCodePoint()) {
+				loc.setGlyph(createGlyph(loc.getCodePoint()));
+			}
+		}
+		return Result.CONTENT_CHANGED;
+	}
+	
 	public static BitmapFontGlyph createGlyph(int cp) {
 		int offset = (cp < 0x10000) ? 1 : 0;
 		return new BitmapFontGlyph(createGlyphData(cp), offset, 16, 13);
