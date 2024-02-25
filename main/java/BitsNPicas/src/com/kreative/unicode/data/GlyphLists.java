@@ -97,7 +97,9 @@ public class GlyphLists extends AbstractList<GlyphList> {
 	}
 	
 	private static GlyphList readBinaryStream(InputStream in) {
-		try {
+		if (in == null) {
+			return null;
+		} else try {
 			DataInputStream din = new DataInputStream(in);
 			String name = din.readUTF();
 			int[] codePoints = new int[din.readUnsignedShort()];

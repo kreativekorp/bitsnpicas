@@ -3,6 +3,7 @@ package com.kreative.unicode.data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,7 +56,9 @@ public class EncodingList {
 		
 		for (String filename : BOM.getResourceNames()) {
 			String name = UnicodeUtils.stripExtension(filename);
-			Encoding enc = new Encoding(name, BOM.getResource(filename));
+			InputStream res = BOM.getResource(filename);
+			if (res == null) continue;
+			Encoding enc = new Encoding(name, res);
 			add(enc, encodings, encodingMap, glyphLists, glyphListMap, true);
 		}
 		
