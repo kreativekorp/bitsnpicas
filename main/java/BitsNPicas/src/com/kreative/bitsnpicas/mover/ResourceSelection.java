@@ -6,12 +6,11 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.kreative.bitsnpicas.MacUtility;
-import com.kreative.rsrc.MacResourceArray;
+import com.kreative.unicode.ttflib.DfontFile;
 
 public class ResourceSelection implements ClipboardOwner, Transferable {
 	// I has a flavor.
@@ -45,22 +44,21 @@ public class ResourceSelection implements ClipboardOwner, Transferable {
 			tempRoot.deleteOnExit();
 			List<File> fileList = new ArrayList<File>();
 			for (ResourceBundle res : resources) {
-				MacResourceArray rp = new MacResourceArray();
-				MoverFile mf = new MoverFile(rp); mf.add(res);
-				File tempFile = new File(tempRoot, res.name);
-				tempFile.createNewFile();
+				DfontFile rsrc = new DfontFile();
+				MoverFile mf = new MoverFile(rsrc); mf.add(res);
 				try {
-					File fork = MacUtility.getResourceFork(tempFile);
-					FileOutputStream out = new FileOutputStream(fork);
-					out.write(rp.getBytes());
-					out.flush(); out.close();
-					MacUtility.setTypeAndCreator(tempFile, res.moverType, "movr");
+					File tmp = new File(tempRoot, res.name);
+					tmp.deleteOnExit();
+					tmp.createNewFile();
+					rsrc.write(MacUtility.getResourceFork(tmp));
+					MacUtility.setTypeAndCreator(tmp, res.moverType, "movr");
+					fileList.add(tmp);
 				} catch (IOException e) {
-					FileOutputStream out = new FileOutputStream(tempFile);
-					out.write(rp.getBytes());
-					out.flush(); out.close();
+					File tmp = new File(tempRoot, res.name + ".dfont");
+					tmp.deleteOnExit();
+					rsrc.write(tmp);
+					fileList.add(tmp);
 				}
-				fileList.add(tempFile);
 			}
 			return fileList;
 		} else {

@@ -41,12 +41,12 @@ bin: src
 ifeq ($(origin JAVACFLAGS), undefined)
 	$(eval JAVACFLAGS = $(shell dep/minJavaVerOpts))
 endif
-	javac $(JAVACFLAGS) -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(SRCFILES) -d bin
+	javac $(JAVACFLAGS) -classpath dep/ual.jar -sourcepath src $(SRCFILES) -d bin
 	$(foreach res,$(RESFILES),cp src/$(res) bin/$(res);)
 
 doc: src
 	mkdir -p doc
-	javadoc $(JAVADOCFLAGS) -classpath dep/KSFL.jar:dep/ual.jar -sourcepath src $(PACKAGES) -d doc
+	javadoc $(JAVADOCFLAGS) -classpath dep/ual.jar -sourcepath src $(PACKAGES) -d doc
 
 BitsNPicas.jar: bin
 	export COPYFILE_DISABLE=true
@@ -218,12 +218,10 @@ install: dep BitsNPicas.jar MapEdit.jar KeyEdit.jar
 	sudo cp -f BitsNPicas.jar /usr/local/lib/bitsnpicas.jar
 	sudo cp -f MapEdit.jar /usr/local/lib/mapedit.jar
 	sudo cp -f KeyEdit.jar /usr/local/lib/keyedit.jar
-	sudo cp -f dep/KSFL.jar /usr/local/lib/KSFL.jar
 	sudo cp -f dep/ual.jar /usr/local/lib/ual.jar
 	sudo chmod -f 644 /usr/local/lib/bitsnpicas.jar
 	sudo chmod -f 644 /usr/local/lib/mapedit.jar
 	sudo chmod -f 644 /usr/local/lib/keyedit.jar
-	sudo chmod -f 644 /usr/local/lib/KSFL.jar
 	sudo chmod -f 644 /usr/local/lib/ual.jar
 	sudo mkdir -p /usr/local/bin/
 	sudo cp -f dep/bitsnpicas /usr/local/bin/bitsnpicas

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.ImageIcon;
-import com.kreative.rsrc.MacResource;
+import com.kreative.unicode.ttflib.DfontResource;
 
 public class ResourceBundle implements Cloneable, Comparable<ResourceBundle> {
 	public final ImageIcon icon;
@@ -15,7 +15,7 @@ public class ResourceBundle implements Cloneable, Comparable<ResourceBundle> {
 	public final String name;
 	public final int id;
 	public final FONDResource fond;
-	public final Set<MacResource> resources;
+	public final Set<DfontResource> resources;
 	
 	public ResourceBundle(ImageIcon icon, String moverType, String name, int id) {
 		this.icon = icon;
@@ -23,7 +23,7 @@ public class ResourceBundle implements Cloneable, Comparable<ResourceBundle> {
 		this.name = name;
 		this.id = id;
 		this.fond = null;
-		this.resources = new HashSet<MacResource>();
+		this.resources = new HashSet<DfontResource>();
 	}
 	
 	public ResourceBundle(ImageIcon icon, String moverType, FONDResource fond) {
@@ -32,12 +32,12 @@ public class ResourceBundle implements Cloneable, Comparable<ResourceBundle> {
 		this.name = fond.toString();
 		this.id = fond.id;
 		this.fond = fond;
-		this.resources = new HashSet<MacResource>();
+		this.resources = new HashSet<DfontResource>();
 	}
 	
 	public int length() {
 		int length = ((fond != null) ? fond.length() : 0);
-		for (MacResource res : resources) length += res.data.length;
+		for (DfontResource res : resources) length += res.getData().length;
 		return length;
 	}
 	
@@ -50,12 +50,11 @@ public class ResourceBundle implements Cloneable, Comparable<ResourceBundle> {
 		} else {
 			copy = new ResourceBundle(icon, moverType, name, id);
 		}
-		for (MacResource res : resources) {
-			MacResource resCopy = new MacResource(
-				res.type, res.id, res.getAttributes(),
-				res.name, res.data
-			);
-			copy.resources.add(resCopy);
+		for (DfontResource res : resources) {
+			copy.resources.add(new DfontResource(
+				res.getType(), res.getId(), res.getAttributes(),
+				res.getName(), res.getData(), 0, res.getData().length
+			));
 		}
 		return copy;
 	}

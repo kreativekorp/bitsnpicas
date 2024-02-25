@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -13,18 +14,18 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.edit.CommonMenuItems;
 import com.kreative.bitsnpicas.edit.Main;
-import com.kreative.rsrc.SoundResource;
+import com.kreative.unicode.ttflib.DfontResource;
 
 public class SoundMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
-	public SoundMenuBar(final Window window, final SoundResource snd) {
+	public SoundMenuBar(final Window window, final DfontResource snd) {
 		add(new FileMenu(window, snd));
 	}
 	
 	public static class FileMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public FileMenu(final Window window, final SoundResource snd) {
+		public FileMenu(final Window window, final DfontResource snd) {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
 			add(new CommonMenuItems.OpenMenuItem());
@@ -41,55 +42,71 @@ public class SoundMenuBar extends JMenuBar {
 	
 	public static class SaveWavMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public SaveWavMenuItem(final SoundResource snd) {
+		public SaveWavMenuItem(final DfontResource snd) {
 			super("Save as WAV...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, CommonMenuItems.SHORTCUT_KEY));
-			final byte[] wavData = snd.toWav();
-			if (wavData == null) setEnabled(false);
-			else addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					File file = Main.getSaveFile(".wav");
-					if (file == null) return;
-					try {
-						FileOutputStream out = new FileOutputStream(file);
-						out.write(wavData);
-						out.flush();
-						out.close();
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(
-							null, "An error occurred while saving this file.",
-							"Save", JOptionPane.ERROR_MESSAGE
-						);
-					}
+			try {
+				SoundResource sr = new SoundResource(snd.getData());
+				final byte[] wavData = sr.toWav();
+				if (wavData != null) {
+					addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							File file = Main.getSaveFile(".wav");
+							if (file == null) return;
+							try {
+								FileOutputStream out = new FileOutputStream(file);
+								out.write(wavData);
+								out.flush();
+								out.close();
+							} catch (Exception ex) {
+								JOptionPane.showMessageDialog(
+									null, "An error occurred while saving this file.",
+									"Save", JOptionPane.ERROR_MESSAGE
+								);
+							}
+						}
+					});
+				} else {
+					setEnabled(false);
 				}
-			});
+			} catch (IOException ioe) {
+				setEnabled(false);
+			}
 		}
 	}
 	
 	public static class SaveAiffMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public SaveAiffMenuItem(final SoundResource snd) {
+		public SaveAiffMenuItem(final DfontResource snd) {
 			super("Save as AIFF...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
-			final byte[] aiffData = snd.toAiff();
-			if (aiffData == null) setEnabled(false);
-			else addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					File file = Main.getSaveFile(".aiff");
-					if (file == null) return;
-					try {
-						FileOutputStream out = new FileOutputStream(file);
-						out.write(aiffData);
-						out.flush();
-						out.close();
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(
-							null, "An error occurred while saving this file.",
-							"Save", JOptionPane.ERROR_MESSAGE
-						);
-					}
+			try {
+				SoundResource sr = new SoundResource(snd.getData());
+				final byte[] aiffData = sr.toAiff();
+				if (aiffData != null) {
+					addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							File file = Main.getSaveFile(".aiff");
+							if (file == null) return;
+							try {
+								FileOutputStream out = new FileOutputStream(file);
+								out.write(aiffData);
+								out.flush();
+								out.close();
+							} catch (Exception ex) {
+								JOptionPane.showMessageDialog(
+									null, "An error occurred while saving this file.",
+									"Save", JOptionPane.ERROR_MESSAGE
+								);
+							}
+						}
+					});
+				} else {
+					setEnabled(false);
 				}
-			});
+			} catch (IOException ioe) {
+				setEnabled(false);
+			}
 		}
 	}
 }

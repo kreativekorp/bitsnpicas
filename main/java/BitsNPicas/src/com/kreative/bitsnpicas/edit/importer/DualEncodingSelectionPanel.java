@@ -80,11 +80,6 @@ public class DualEncodingSelectionPanel extends JPanel {
 						null, "An error occurred while reading the selected file.",
 						"Open", JOptionPane.ERROR_MESSAGE
 					);
-				} catch (NoClassDefFoundError nce) {
-					JOptionPane.showMessageDialog(
-						null, "The selected file requires KSFL, but KSFL is not in the classpath.",
-						"Open", JOptionPane.ERROR_MESSAGE
-					);
 				}
 			}
 		});

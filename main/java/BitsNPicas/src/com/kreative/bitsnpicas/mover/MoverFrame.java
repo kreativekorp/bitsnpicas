@@ -1,12 +1,10 @@
 package com.kreative.bitsnpicas.mover;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import javax.swing.JFrame;
 import com.kreative.bitsnpicas.MacUtility;
-import com.kreative.rsrc.MacResourceArray;
+import com.kreative.unicode.ttflib.DfontFile;
 
 public class MoverFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -15,9 +13,9 @@ public class MoverFrame extends JFrame {
 	private final MoverPanel panel;
 	private final MoverMenuBar mb;
 	
-	public MoverFrame(File fork, MacResourceArray rp, MoverFile mf) {
+	public MoverFrame(File fork, DfontFile rsrc, MoverFile mf) {
 		File file = (fork == null) ? null : MacUtility.getDataFork(fork);
-		this.sm = new SaveManager(this, file, fork, rp);
+		this.sm = new SaveManager(this, file, fork, rsrc);
 		this.panel = new MoverPanel(this, file, mf, sm);
 		this.mb = new MoverMenuBar(this, sm, panel.getTable());
 		
@@ -31,17 +29,12 @@ public class MoverFrame extends JFrame {
 	}
 	
 	public static MoverFrame forNewFile() throws IOException {
-		MacResourceArray rp = new MacResourceArray();
-		return new MoverFrame(null, rp, new MoverFile(rp));
+		DfontFile rsrc = new DfontFile();
+		return new MoverFrame(null, rsrc, new MoverFile(rsrc));
 	}
 	
 	public static MoverFrame forFile(File file) throws IOException {
-		FileInputStream in = new FileInputStream(file);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		int read; byte[] buf = new byte[65536];
-		while ((read = in.read(buf)) > 0) out.write(buf, 0, read);
-		out.flush(); out.close(); in.close();
-		MacResourceArray rp = new MacResourceArray(out.toByteArray());
-		return new MoverFrame(file, rp, new MoverFile(rp));
+		DfontFile rsrc = new DfontFile(file);
+		return new MoverFrame(file, rsrc, new MoverFile(rsrc));
 	}
 }

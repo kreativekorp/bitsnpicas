@@ -1,14 +1,11 @@
 package com.kreative.bitsnpicas.main;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.mover.MoverFile;
 import com.kreative.bitsnpicas.mover.ResourceBundle;
-import com.kreative.rsrc.MacResourceArray;
-import com.kreative.rsrc.MacResourceFile;
-import com.kreative.rsrc.MacResourceProvider;
+import com.kreative.unicode.ttflib.DfontFile;
 
 public class SplitSuit {
 	public static void main(String[] args) {
@@ -45,24 +42,24 @@ public class SplitSuit {
 						File file = new File(arg);
 						File rsrc = new File(new File(file, "..namedfork"), "rsrc");
 						File parent = ((outputDir != null) ? outputDir : file.getParentFile());
-						MacResourceProvider rp; int count = 0;
-						if ((rp = open(file)) != null) { count += process(parent, inRes, rp); rp.close(); }
-						if ((rp = open(rsrc)) != null) { count += process(parent, inRes, rp); rp.close(); }
+						DfontFile rp; int count = 0;
+						if ((rp = open(file)) != null) count += process(parent, inRes, rp);
+						if ((rp = open(rsrc)) != null) count += process(parent, inRes, rp);
 						System.out.println((count > 0) ? " DONE" : " ERROR: No items found.");
 					} catch (IOException e) {
-						System.out.println(" ERROR: " + e.getClass().getSimpleName() + ": " + e.getMessage());
+						System.out.println(" ERROR: " + e);
 					}
 				}
 			}
 		}
 	}
 	
-	private static MacResourceProvider open(File file) {
-		try { return new MacResourceFile(file, "r", MacResourceFile.CREATE_NEVER); }
+	private static DfontFile open(File file) {
+		try { return new DfontFile(file); }
 		catch (IOException ioe) { return null; }
 	}
 	
-	private static int process(File parent, boolean inRes, MacResourceProvider rp) throws IOException {
+	private static int process(File parent, boolean inRes, DfontFile rp) throws IOException {
 		MoverFile mf = new MoverFile(rp);
 		for (int i = 0, n = mf.size(); i < n; i++) {
 			export(parent, inRes, mf.get(i));
@@ -71,27 +68,16 @@ public class SplitSuit {
 	}
 	
 	private static void export(File parent, boolean inRes, ResourceBundle rb) throws IOException {
-		File file, rsrc;
-		if (inRes) {
-			file = new File(parent, rb.name);
-			file.createNewFile();
-			rsrc = new File(new File(file, "..namedfork"), "rsrc");
-		} else {
-			file = new File(parent, rb.name + ".dfont");
-			rsrc = file;
-		}
-		
-		MacResourceArray rp = new MacResourceArray();
+		DfontFile rp = new DfontFile();
 		MoverFile mf = new MoverFile(rp);
 		mf.add(rb);
-		rp.close();
-		
-		FileOutputStream out = new FileOutputStream(rsrc);
-		out.write(rp.getBytes());
-		out.flush();
-		out.close();
-		
-		if (inRes) MacUtility.setTypeAndCreator(file, rb.moverType, "movr");
+		if (inRes) {
+			File file = new File(parent, rb.name); file.createNewFile();
+			rp.write(new File(new File(file, "..namedfork"), "rsrc"));
+			MacUtility.setTypeAndCreator(file, rb.moverType, "movr");
+		} else {
+			rp.write(new File(parent, rb.name + ".dfont"));
+		}
 	}
 	
 	private static void printHelp() {

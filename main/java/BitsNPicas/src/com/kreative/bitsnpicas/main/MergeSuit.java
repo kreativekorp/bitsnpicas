@@ -1,13 +1,10 @@
 package com.kreative.bitsnpicas.main;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.mover.MoverFile;
-import com.kreative.rsrc.MacResourceArray;
-import com.kreative.rsrc.MacResourceFile;
-import com.kreative.rsrc.MacResourceProvider;
+import com.kreative.unicode.ttflib.DfontFile;
 
 public class MergeSuit {
 	public static void main(String[] args) {
@@ -21,7 +18,7 @@ public class MergeSuit {
 			try { inRes = System.getProperty("os.name").toUpperCase().contains("MAC OS"); }
 			catch (Exception e) { inRes = false; }
 			
-			MacResourceArray outrp = new MacResourceArray();
+			DfontFile outrp = new DfontFile();
 			MoverFile outmf;
 			try { outmf = new MoverFile(outrp); }
 			catch (IOException e) { e.printStackTrace(); return; }
@@ -48,12 +45,12 @@ public class MergeSuit {
 						System.out.print(arg + "...");
 						File file = new File(arg);
 						File rsrc = new File(new File(file, "..namedfork"), "rsrc");
-						MacResourceProvider inrp; int count = 0;
-						if ((inrp = open(file)) != null) { count += process(outmf, inrp); inrp.close(); }
-						if ((inrp = open(rsrc)) != null) { count += process(outmf, inrp); inrp.close(); }
+						DfontFile inrp; int count = 0;
+						if ((inrp = open(file)) != null) count += process(outmf, inrp);
+						if ((inrp = open(rsrc)) != null) count += process(outmf, inrp);
 						System.out.println((count > 0) ? " READ" : " ERROR: No items found.");
 					} catch (IOException e) {
-						System.out.println(" ERROR: " + e.getClass().getSimpleName() + ": " + e.getMessage());
+						System.out.println(" ERROR: " + e);
 					}
 				}
 			}
@@ -72,34 +69,26 @@ public class MergeSuit {
 			}
 			try {
 				System.out.print(outputFile.getName() + "...");
-				
-				File rsrc;
 				if (inRes) {
 					outputFile.createNewFile();
-					rsrc = new File(new File(outputFile, "..namedfork"), "rsrc");
+					outrp.write(new File(new File(outputFile, "..namedfork"), "rsrc"));
+					MacUtility.setTypeAndCreator(outputFile, "FFIL", "DMOV");
 				} else {
-					rsrc = outputFile;
+					outrp.write(outputFile);
 				}
-				
-				FileOutputStream out = new FileOutputStream(rsrc);
-				out.write(outrp.getBytes());
-				out.flush();
-				out.close();
-				
-				if (inRes) MacUtility.setTypeAndCreator(outputFile, "FFIL", "DMOV");
 				System.out.println(" DONE");
 			} catch (IOException ioe) {
-				System.out.println(" ERROR: " + ioe.getClass().getSimpleName() + ": " + ioe.getMessage());
+				System.out.println(" ERROR: " + ioe);
 			}
 		}
 	}
 	
-	private static MacResourceProvider open(File file) {
-		try { return new MacResourceFile(file, "r", MacResourceFile.CREATE_NEVER); }
+	private static DfontFile open(File file) {
+		try { return new DfontFile(file); }
 		catch (IOException ioe) { return null; }
 	}
 	
-	private static int process(MoverFile outmf, MacResourceProvider inrp) throws IOException {
+	private static int process(MoverFile outmf, DfontFile inrp) throws IOException {
 		MoverFile inmf = new MoverFile(inrp);
 		for (int i = 0, n = inmf.size(); i < n; i++) {
 			outmf.add(inmf.get(i));

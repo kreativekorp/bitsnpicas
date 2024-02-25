@@ -21,12 +21,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import com.kreative.rsrc.SoundResource;
+import com.kreative.unicode.ttflib.DfontResource;
 
 public class SoundPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public SoundPanel(final SoundResource snd) {
+	public SoundPanel(final DfontResource snd) {
 		JLabel iconLabel = new JLabel(new ImageIcon(SoundPanel.class.getResource("Sound.png")));
 		iconLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		
@@ -46,25 +46,33 @@ public class SoundPanel extends JPanel {
 		setLayout(new GridLayout());
 		add(mainPanel);
 		
-		final byte[] aiffData = snd.toAiff();
-		final byte[] wavData = snd.toWav();
-		if (aiffData == null && wavData == null) playButton.setEnabled(false);
-		else playButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (aiffData != null) {
-					try { playSound(aiffData); return; }
-					catch (UnsupportedAudioFileException ex) {}
-				}
-				if (wavData != null) {
-					try { playSound(wavData); return; }
-					catch (UnsupportedAudioFileException ex) {}
-				}
-				JOptionPane.showMessageDialog(
-					null, "Could not produce audio in a supported format.",
-					"Play Sound", JOptionPane.ERROR_MESSAGE
-				);
+		try {
+			SoundResource sr = new SoundResource(snd.getData());
+			final byte[] aiffData = sr.toAiff();
+			final byte[] wavData = sr.toWav();
+			if (aiffData != null || wavData != null) {
+				playButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (aiffData != null) {
+							try { playSound(aiffData); return; }
+							catch (UnsupportedAudioFileException ex) {}
+						}
+						if (wavData != null) {
+							try { playSound(wavData); return; }
+							catch (UnsupportedAudioFileException ex) {}
+						}
+						JOptionPane.showMessageDialog(
+							null, "Could not produce audio in a supported format.",
+							"Play Sound", JOptionPane.ERROR_MESSAGE
+						);
+					}
+				});
+			} else {
+				playButton.setEnabled(false);
 			}
-		});
+		} catch (IOException e) {
+			playButton.setEnabled(false);
+		}
 	}
 	
 	private static void playSound(byte[] stuff) throws UnsupportedAudioFileException {

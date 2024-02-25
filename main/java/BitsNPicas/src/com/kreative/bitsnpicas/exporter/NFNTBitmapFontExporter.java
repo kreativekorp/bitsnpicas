@@ -9,9 +9,9 @@ import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.mover.FONDEntry;
 import com.kreative.bitsnpicas.mover.FONDResource;
-import com.kreative.ksfl.*;
-import com.kreative.rsrc.*;
 import com.kreative.unicode.data.GlyphList;
+import com.kreative.unicode.ttflib.DfontFile;
+import com.kreative.unicode.ttflib.DfontResource;
 
 public class NFNTBitmapFontExporter implements BitmapFontExporter {
 	private IDGenerator idgen;
@@ -161,16 +161,18 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 			nfntIn.writeByte(offsets[i]);
 			nfntIn.writeByte(widths[i]);
 		}
+		byte[] nfntData = nfntOut.toByteArray();
 		
 		// make FOND
 		FONDResource fond = new FONDResource(name, id);
 		fond.entries.add(new FONDEntry(size, font.getMacStyle(), id));
+		byte[] fondData = fond.toByteArray();
 		
 		// make resource fork
-		MacResourceArray rp = new MacResourceArray();
-		rp.add(new MacResource(KSFLConstants.FOND, (short)id, name, fond.toByteArray()));
-		rp.add(new MacResource(KSFLConstants.NFNT, (short)id, name, nfntOut.toByteArray()));
-		return rp.getBytes();
+		DfontFile rsrc = new DfontFile();
+		rsrc.addResource(new DfontResource("FOND", id, 0x60, name, fondData, 0, fondData.length));
+		rsrc.addResource(new DfontResource("NFNT", id, 0x60, name, nfntData, 0, nfntData.length));
+		return rsrc.write();
 	}
 	
 	public void exportFontToFile(BitmapFont font, File file) throws IOException {

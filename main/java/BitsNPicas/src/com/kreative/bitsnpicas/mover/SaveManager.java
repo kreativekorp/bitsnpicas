@@ -4,7 +4,6 @@ import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JFrame;
 import com.kreative.bitsnpicas.MacUtility;
@@ -12,7 +11,7 @@ import com.kreative.bitsnpicas.edit.CommonMenuItems;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.edit.SaveChangesDialog;
 import com.kreative.bitsnpicas.edit.SaveInterface;
-import com.kreative.rsrc.MacResourceArray;
+import com.kreative.unicode.ttflib.DfontFile;
 
 public class SaveManager extends WindowAdapter implements SaveInterface {
 	private JFrame frame;
@@ -20,11 +19,11 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 	private File fork;
 	private String type;
 	private String creator;
-	private MacResourceArray rp;
+	private DfontFile rsrc;
 	private MoverInfoPanel ip;
 	private boolean changed;
 	
-	public SaveManager(JFrame frame, File file, File fork, MacResourceArray rp) {
+	public SaveManager(JFrame frame, File file, File fork, DfontFile rsrc) {
 		this.frame = frame;
 		this.file = file;
 		this.fork = fork;
@@ -39,7 +38,7 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 			this.creator = "DMOV";
 		}
 		
-		this.rp = rp;
+		this.rsrc = rsrc;
 		this.changed = false;
 		updateWindow();
 	}
@@ -80,10 +79,7 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 	
 	private boolean write() {
 		try {
-			FileOutputStream out = new FileOutputStream(fork);
-			out.write(rp.getBytes());
-			out.flush();
-			out.close();
+			rsrc.write(fork);
 			return true;
 		} catch (IOException e) {
 			return false;

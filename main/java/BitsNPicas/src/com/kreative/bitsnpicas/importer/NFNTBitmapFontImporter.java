@@ -9,9 +9,9 @@ import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.mover.FONDEntry;
 import com.kreative.bitsnpicas.mover.MoverFile;
 import com.kreative.bitsnpicas.mover.ResourceBundle;
-import com.kreative.ksfl.*;
-import com.kreative.rsrc.*;
 import com.kreative.unicode.data.GlyphList;
+import com.kreative.unicode.ttflib.DfontFile;
+import com.kreative.unicode.ttflib.DfontResource;
 
 public class NFNTBitmapFontImporter implements BitmapFontImporter {
 	private GlyphList encoding;
@@ -25,33 +25,20 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	public BitmapFont[] importFont(byte[] data) throws IOException {
-		MacResourceProvider rp = new MacResourceArray(data);
-		BitmapFont[] fonts = importFont(rp);
-		rp.close();
-		return fonts;
+		return importFont(new DfontFile(data));
 	}
 	
 	public BitmapFont[] importFont(File file) throws IOException {
-		MacResourceProvider rp = new MacResourceFile(file, "r", MacResourceFile.CREATE_NEVER);
-		BitmapFont[] fonts = importFont(rp);
-		rp.close();
-		return fonts;
+		return importFont(new DfontFile(file));
 	}
 	
 	public BitmapFont[] importFont(InputStream is) throws IOException {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		byte[] buf = new byte[65536]; int read;
-		while ((read = is.read(buf)) >= 0) bos.write(buf, 0, read);
-		bos.close();
-		MacResourceProvider rp = new MacResourceArray(bos.toByteArray());
-		BitmapFont[] fonts = importFont(rp);
-		rp.close();
-		return fonts;
+		return importFont(new DfontFile(is));
 	}
 	
-	public BitmapFont[] importFont(MacResourceProvider rp) throws IOException {
+	public BitmapFont[] importFont(DfontFile rsrc) throws IOException {
 		List<BitmapFont> fonts = new ArrayList<BitmapFont>();
-		MoverFile mf = new MoverFile(rp);
+		MoverFile mf = new MoverFile(rsrc);
 		for (int i = 0, n = mf.size(); i < n; i++) {
 			for (BitmapFont font : importFont(mf.get(i))) {
 				fonts.add(font);
@@ -63,22 +50,19 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 	public BitmapFont[] importFont(ResourceBundle rb) throws IOException {
 		List<BitmapFont> fonts = new ArrayList<BitmapFont>();
 		if (rb.fond != null) {
-			Map<Short,byte[]> resData = new HashMap<Short,byte[]>();
-			for (MacResource res : rb.resources) {
+			Map<Integer,byte[]> resData = new HashMap<Integer,byte[]>();
+			for (DfontResource res : rb.resources) {
 				if (
-					res.type == KSFLConstants.NFNT ||
-					(
-						res.type == KSFLConstants.FONT &&
-						!resData.containsKey(res.id)
-					)
+					res.getTypeString().equals("NFNT") ||
+					(res.getTypeString().equals("FONT") && !resData.containsKey(res.getId()))
 				) {
-					resData.put(res.id, res.data);
+					resData.put(res.getId(), res.getData());
 				}
 			}
 			for (FONDEntry e : rb.fond.entries) {
 				if (e.size != 0) {
 					fonts.add(importFont(
-						resData.get((short)e.id), rb.fond.id,
+						resData.get(e.id), rb.fond.id,
 						e.size, e.style, rb.fond.name
 					));
 				}

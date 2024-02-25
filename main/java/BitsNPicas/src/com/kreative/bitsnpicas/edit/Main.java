@@ -126,12 +126,6 @@ public class Main {
 				"Open", JOptionPane.ERROR_MESSAGE
 			);
 			return null;
-		} catch (NoClassDefFoundError e) {
-			JOptionPane.showMessageDialog(
-				null, "The selected file requires KSFL, but KSFL is not in the classpath.",
-				"Open", JOptionPane.ERROR_MESSAGE
-			);
-			return null;
 		}
 	}
 	
@@ -266,12 +260,6 @@ public class Main {
 			} catch (IOException ioe) {
 				JOptionPane.showMessageDialog(
 					null, "An error occurred while saving this file.",
-					"Save", JOptionPane.ERROR_MESSAGE
-				);
-				return false;
-			} catch (NoClassDefFoundError e) {
-				JOptionPane.showMessageDialog(
-					null, "The selected format requires KSFL, but KSFL is not in the classpath.",
 					"Save", JOptionPane.ERROR_MESSAGE
 				);
 				return false;

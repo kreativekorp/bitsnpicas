@@ -43,10 +43,8 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.importer.NFNTBitmapFontImporter;
-import com.kreative.ksfl.KSFLConstants;
-import com.kreative.rsrc.MacResource;
-import com.kreative.rsrc.MacResourceFile;
-import com.kreative.rsrc.SoundResource;
+import com.kreative.unicode.ttflib.DfontFile;
+import com.kreative.unicode.ttflib.DfontResource;
 
 public class MoverTable extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -62,6 +60,7 @@ public class MoverTable extends JTable {
 		setDefaultRenderer(Integer.class, new MyCellRenderer());
 		setDefaultRenderer(String.class, new MyCellRenderer());
 		setIntercellSpacing(new Dimension(0,1));
+		setShowGrid(false);
 		setRowHeight(19);
 		this.ip = ip;
 		
@@ -172,10 +171,9 @@ public class MoverTable extends JTable {
 		if (ip.readOnly()) return;
 		MoverTableModel model = getMoverModel();
 		MoverFile outmf = model.getMoverFile();
-		MacResourceFile rp = new MacResourceFile(f, "r", MacResourceFile.CREATE_NEVER);
-		MoverFile inmf = new MoverFile(rp);
+		DfontFile rsrc = new DfontFile(f);
+		MoverFile inmf = new MoverFile(rsrc);
 		for (int i = 0, n = inmf.size(); i < n; i++) outmf.add(inmf.get(i));
-		rp.close();
 		model.refresh();
 	}
 	
@@ -193,9 +191,9 @@ public class MoverTable extends JTable {
 				}
 			}
 			if (rb.moverType.equals("tfil")) {
-				for (MacResource res : rb.resources) {
+				for (DfontResource res : rb.resources) {
 					try {
-						new TrueTypeFrame(res.data).setVisible(true);
+						new TrueTypeFrame(res.getData()).setVisible(true);
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (FontFormatException e) {
@@ -204,14 +202,13 @@ public class MoverTable extends JTable {
 				}
 			}
 			if (rb.moverType.equals("sfil")) {
-				for (MacResource res : rb.resources) {
-					SoundResource snd = res.shallowRecast(SoundResource.class);
-					new SoundFrame(snd).setVisible(true);
+				for (DfontResource res : rb.resources) {
+					new SoundFrame(res).setVisible(true);
 				}
 			}
 			if (rb.moverType.equals("kfil")) {
-				for (MacResource res : rb.resources) {
-					if (res.type == KSFLConstants.KCHR) {
+				for (DfontResource res : rb.resources) {
+					if (res.getTypeString().equals("KCHR")) {
 						new KeyboardFrame(res, ip.getSelectedEncoding()).setVisible(true);
 					}
 				}
