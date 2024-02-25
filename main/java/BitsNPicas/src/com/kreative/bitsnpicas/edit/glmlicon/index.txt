@@ -300,6 +300,7 @@ u017000.png     unicode     Tangut
 u018800.png     unicode     Tangut Components
 u018b00.png     unicode     Khitan Small Script
 u018d00.png     unicode     Tangut Supplement
+u018d80.png     unicode     Tangut Components Supplement
 u01aff0.png     unicode     Kana Extended-B
 u01b000.png     unicode     Kana Supplement
 u01b100.png     unicode     Kana Extended-A
@@ -308,6 +309,7 @@ u01b170.png     unicode     Nushu
 u01bc00.png     unicode     Duployan
 u01bca0.png     unicode     Shorthand Format Controls
 u01cc00.png     unicode     Symbols for Legacy Computing Supplement
+u01cec0.png     unicode     Miscellaneous Symbols Supplement
 u01cf00.png     unicode     Znamenny Musical Notation
 u01d000.png     unicode     Byzantine Musical Symbols
 u01d100.png     unicode     Musical Symbols
@@ -435,6 +437,7 @@ csurf16b.png    pua         Derani
 csurf170.png    pua         Semtog
 csurf190.png    pua         Sitelen Pona
 csurf1b0.png    pua         Shidinn
+csurf1c4.png    pua         Titi Pula
 pua6ants.png    pua         Block Sextants
 pua6ants.png    pua         Block Sextants (Compatible with Unscii)
 pua6ants.png    pua         Block Sextants (Compatible with ZVBI)
@@ -491,6 +494,7 @@ puagstsa.png    pua         Geometric Shapes and Technical Symbols Appendix
 puahanaf.png    pua         Hanafuda
 puahex.png      pua         Hex Byte Pictures
 puahex.png      pua         Octets
+puajgnsm.png    pua         Jurgenschmidt
 puakabuf.png    pua         Kabufuda
 puakakto.png    pua         Kaktovik Numerals
 puakanaa.png    pua         Kana Appendix-A
@@ -558,6 +562,7 @@ pfponaa.png     pua         Sitelen Pona Presentation Forms-A
 pfponab.png     pua         Sitelen Pona Presentation Forms-B
 pfponac.png     pua         Sitelen Pona Presentation Forms-C
 pfteng.png      pua         Tengwar Presentation Forms
+pftones.png     pua         Modifier Tone Letter Presentation Forms
 kreative.png    glyphlist   Kreative Glyph List 1
 windows.png     glyphlist   Windows Glyph List 4
 atarist.png     encoding    Atari ST
