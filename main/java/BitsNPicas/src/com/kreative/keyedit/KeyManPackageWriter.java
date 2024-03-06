@@ -46,13 +46,19 @@ public class KeyManPackageWriter {
 		
 		FileOutputStream fos = new FileOutputStream(packageFile);
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"), true);
-		write(pw, km, kmxFileName, jsFileName, kvkFileName, welcomeFileName, readmeFileName);
+		write(
+			pw, km, kmxFileName, jsFileName, kvkFileName, welcomeFileName, readmeFileName,
+			((km.htmlSquareChars == null || km.htmlSquareChars.isEmpty()) ? null : "KreativeSquare.ttf")
+		);
 		pw.flush();
 		pw.close();
 		fos.close();
 	}
 	
-	public static void write(PrintWriter out, KeyboardMapping km, String kmxFileName, String jsFileName, String kvkFileName, String welcomeFileName, String readmeFileName) {
+	public static void write(
+		PrintWriter out, KeyboardMapping km, String kmxFileName, String jsFileName,
+		String kvkFileName, String welcomeFileName, String readmeFileName, String... extras
+	) {
 		out.print("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n");
 		out.print("<Package>\r\n");
 		out.print("  <System>\r\n");
@@ -82,7 +88,8 @@ public class KeyManPackageWriter {
 		out.print("    <WebSite URL=" + aquote(km.keymanWebSite) + ">" + quote(km.keymanWebSite) + "</WebSite>\r\n");
 		out.print("  </Info>\r\n");
 		out.print("  <Files>\r\n");
-		if (kmxFileName != null) {
+		
+		if (kmxFileName != null && kmxFileName.length() > 0) {
 			out.print("    <File>\r\n");
 			out.print("      <Name>" + quote(kmxFileName) + "</Name>\r\n");
 			out.print("      <Description></Description>\r\n");
@@ -90,7 +97,8 @@ public class KeyManPackageWriter {
 			out.print("      <FileType>.kmx</FileType>\r\n");
 			out.print("    </File>\r\n");
 		}
-		if (jsFileName != null) {
+		
+		if (jsFileName != null && jsFileName.length() > 0) {
 			out.print("    <File>\r\n");
 			out.print("      <Name>" + quote(jsFileName) + "</Name>\r\n");
 			out.print("      <Description></Description>\r\n");
@@ -98,7 +106,8 @@ public class KeyManPackageWriter {
 			out.print("      <FileType>.js</FileType>\r\n");
 			out.print("    </File>\r\n");
 		}
-		if (kvkFileName != null) {
+		
+		if (kvkFileName != null && kvkFileName.length() > 0) {
 			out.print("    <File>\r\n");
 			out.print("      <Name>" + quote(kvkFileName) + "</Name>\r\n");
 			out.print("      <Description></Description>\r\n");
@@ -106,7 +115,8 @@ public class KeyManPackageWriter {
 			out.print("      <FileType>.kvk</FileType>\r\n");
 			out.print("    </File>\r\n");
 		}
-		if (welcomeFileName != null) {
+		
+		if (welcomeFileName != null && welcomeFileName.length() > 0) {
 			out.print("    <File>\r\n");
 			out.print("      <Name>" + quote(welcomeFileName) + "</Name>\r\n");
 			out.print("      <Description></Description>\r\n");
@@ -114,7 +124,8 @@ public class KeyManPackageWriter {
 			out.print("      <FileType>.htm</FileType>\r\n");
 			out.print("    </File>\r\n");
 		}
-		if (readmeFileName != null) {
+		
+		if (readmeFileName != null && readmeFileName.length() > 0) {
 			out.print("    <File>\r\n");
 			out.print("      <Name>" + quote(readmeFileName) + "</Name>\r\n");
 			out.print("      <Description></Description>\r\n");
@@ -122,6 +133,22 @@ public class KeyManPackageWriter {
 			out.print("      <FileType>.htm</FileType>\r\n");
 			out.print("    </File>\r\n");
 		}
+		
+		if (extras != null && extras.length > 0) {
+			for (String extra : extras) {
+				if (extra != null && extra.length() > 0) {
+					String[] parts = extra.split("[\\\\/.]");
+					String ext = parts[parts.length - 1];
+					out.print("    <File>\r\n");
+					out.print("      <Name>" + quote(extra) + "</Name>\r\n");
+					out.print("      <Description></Description>\r\n");
+					out.print("      <CopyLocation>0</CopyLocation>\r\n");
+					out.print("      <FileType>." + ext + "</FileType>\r\n");
+					out.print("    </File>\r\n");
+				}
+			}
+		}
+		
 		out.print("  </Files>\r\n");
 		out.print("  <Keyboards>\r\n");
 		out.print("    <Keyboard>\r\n");

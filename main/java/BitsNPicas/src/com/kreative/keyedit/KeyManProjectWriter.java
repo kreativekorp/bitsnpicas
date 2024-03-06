@@ -49,7 +49,8 @@ public class KeyManProjectWriter {
 			"build\\" + basename.replaceAll("[^A-Za-z0-9_]", "_").toLowerCase() + ".js",
 			"build\\" + basename + ".kvk",
 			"source\\welcome.htm",
-			"source\\readme.htm"
+			"source\\readme.htm",
+			((km.htmlSquareChars == null || km.htmlSquareChars.isEmpty()) ? null : "source\\KreativeSquare.ttf")
 		);
 		out.flush();
 		out.close();
@@ -87,7 +88,7 @@ public class KeyManProjectWriter {
 		PrintWriter out, KeyboardMapping km, String buildPath, String kmnPath, String kpsPath,
 		String historyMdPath, String licenseMdPath, String readmeMdPath, String keyboardInfoPath,
 		String icoPath, String kmxPath, String jsPath, String kvkPath,
-		String welcomeHtmPath, String readmeHtmPath
+		String welcomeHtmPath, String readmeHtmPath, String... extras
 	) {
 		String kmnID = newid();
 		String kpsID = newid();
@@ -112,7 +113,9 @@ public class KeyManProjectWriter {
 			out.print("      <Details>\r\n");
 			out.print("        <Name>" + xquote(km.getKeymanNameNotEmpty()) + "</Name>\r\n");
 			out.print("        <Copyright>" + xquote(km.getKeymanCopyrightNotEmpty()) + "</Copyright>\r\n");
-			out.print("        <Message>" + xquote(km.keymanMessage) + "</Message>\r\n");
+			if (km.keymanMessage != null && km.keymanMessage.length() > 0) {
+				out.print("        <Message>" + xquote(km.keymanMessage) + "</Message>\r\n");
+			}
 			out.print("      </Details>\r\n");
 			out.print("    </File>\r\n");
 		}
@@ -235,6 +238,23 @@ public class KeyManProjectWriter {
 			out.print("      <FileType>.htm</FileType>\r\n");
 			out.print("      <ParentFileID>" + kpsID + "</ParentFileID>\r\n");
 			out.print("    </File>\r\n");
+		}
+		
+		if (extras != null && extras.length > 0) {
+			for (String extra : extras) {
+				if (extra != null && extra.length() > 0) {
+					String[] parts = extra.split("[\\\\/.]");
+					String ext = parts[parts.length - 1];
+					out.print("    <File>\r\n");
+					out.print("      <ID>" + newid() + "</ID>\r\n");
+					out.print("      <Filename>" + xquote(basename(extra)) + "</Filename>\r\n");
+					out.print("      <Filepath>" + xquote(basepath(extra)) + "</Filepath>\r\n");
+					out.print("      <FileVersion></FileVersion>\r\n");
+					out.print("      <FileType>." + xquote(ext) + "</FileType>\r\n");
+					out.print("      <ParentFileID>" + kpsID + "</ParentFileID>\r\n");
+					out.print("    </File>\r\n");
+				}
+			}
 		}
 		
 		out.print("  </Files>\r\n");
