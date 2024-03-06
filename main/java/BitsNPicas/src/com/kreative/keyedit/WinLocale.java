@@ -859,4 +859,13 @@ public enum WinLocale {
 		}
 		return def;
 	}
+	
+	public static WinLocale forName(String name, WinLocale def) {
+		for (WinLocale locale : values()) {
+			if (locale.name.equalsIgnoreCase(name)) {
+				return locale;
+			}
+		}
+		return def;
+	}
 }

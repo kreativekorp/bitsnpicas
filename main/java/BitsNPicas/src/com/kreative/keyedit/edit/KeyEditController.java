@@ -104,6 +104,30 @@ public class KeyEditController {
 		return f;
 	}
 	
+	public int[] getLongPressOutput(Key key, boolean alt, boolean shift) {
+		return kmp.getKeyMappingPanel(key).getLongPressOutput(alt, shift);
+	}
+	
+	public void setLongPressOutput(Key key, boolean alt, boolean shift, int[] lpo) {
+		KeyMapping km = kmp.getKeyMappingPanel(key).getKeyMapping();
+		if (alt) {
+			if (shift) km.altShiftedLongPressOutput = lpo;
+			else km.altUnshiftedLongPressOutput = lpo;
+		} else {
+			if (shift) km.shiftedLongPressOutput = lpo;
+			else km.unshiftedLongPressOutput = lpo;
+		}
+		for (KeyEditListener l : listeners) l.keyMappingChanged();
+	}
+	
+	public LongPressTableFrame getLongPressTableFrame(Key key, boolean alt, boolean shift) {
+		Promise<int[]> autoLPO = new MyAutoLongPressOutputPromise(key, alt, shift);
+		int[] lpo = getLongPressOutput(key, alt, shift);
+		LongPressTableFrame f = new LongPressTableFrame(parent, autoLPO, lpo);
+		f.addListener(new MyLongPressTableListener(key, alt, shift));
+		return f;
+	}
+	
 	public void swapAlt(Key key) {
 		kmp.getKeyMappingPanel(key).getKeyMapping().swapAlt();
 		for (KeyEditListener l : listeners) l.keyMappingChanged();
@@ -143,6 +167,8 @@ public class KeyEditController {
 				case KeyEvent.VK_DELETE:
 					if (e.isMetaDown() || e.isControlDown()) {
 						setDeadKey(key, alt, shift, null);
+					} else if (e.isAltDown() || e.isAltGraphDown()) {
+						setLongPressOutput(key, alt, shift, null);
 					} else {
 						setOutput(key, alt, shift, -1);
 					}
@@ -150,6 +176,8 @@ public class KeyEditController {
 				case KeyEvent.VK_ENTER:
 					if (e.isMetaDown() || e.isControlDown()) {
 						getDeadKeyTableFrame(key, alt, shift).setVisible(true);
+					} else if (e.isAltDown() || e.isAltGraphDown()) {
+						getLongPressTableFrame(key, alt, shift).setVisible(true);
 					} else {
 						getKeyMappingFrame(key, alt, shift).setVisible(true);
 					}
@@ -189,6 +217,34 @@ public class KeyEditController {
 		}
 		public void keyMappingChanged() {
 			for (KeyEditListener l : listeners) l.keyMappingChanged();
+		}
+	}
+	
+	private class MyAutoLongPressOutputPromise implements Promise<int[]> {
+		private final Key key;
+		private final boolean alt;
+		private final boolean shift;
+		private MyAutoLongPressOutputPromise(Key key, boolean alt, boolean shift) {
+			this.key = key;
+			this.alt = alt;
+			this.shift = shift;
+		}
+		public int[] resolve() {
+			return kmp.getKeyboardMapping().getAutoLongPressOutput(getOutput(key, alt, shift));
+		}
+	}
+	
+	private class MyLongPressTableListener implements LongPressTableListener {
+		private final Key key;
+		private final boolean alt;
+		private final boolean shift;
+		private MyLongPressTableListener(Key key, boolean alt, boolean shift) {
+			this.key = key;
+			this.alt = alt;
+			this.shift = shift;
+		}
+		public void longPressOutputChanged(int[] lpo) {
+			setLongPressOutput(key, alt, shift, lpo);
 		}
 	}
 }

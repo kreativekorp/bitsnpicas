@@ -15,6 +15,10 @@ public class KeyMapping {
 	public DeadKeyTable ctrlDeadKey;
 	public DeadKeyTable altUnshiftedDeadKey;
 	public DeadKeyTable altShiftedDeadKey;
+	public int[] unshiftedLongPressOutput;
+	public int[] shiftedLongPressOutput;
+	public int[] altUnshiftedLongPressOutput;
+	public int[] altShiftedLongPressOutput;
 	
 	public KeyMapping(Key key) {
 		this.commandOutput = key.defaultUnshifted;
@@ -31,6 +35,10 @@ public class KeyMapping {
 		this.ctrlDeadKey = null;
 		this.altUnshiftedDeadKey = null;
 		this.altShiftedDeadKey = null;
+		this.unshiftedLongPressOutput = null;
+		this.shiftedLongPressOutput = null;
+		this.altUnshiftedLongPressOutput = null;
+		this.altShiftedLongPressOutput = null;
 	}
 	
 	public void swapAlt() {

@@ -130,7 +130,7 @@ public enum KeyboardFormat {
 			WinWriter.write(f, km);
 		}
 	},
-	KEYMAN{
+	KEYMAN {
 		@Override
 		public String getName() {
 			return "Keyman Developer (kmn)";
@@ -164,6 +164,150 @@ public enum KeyboardFormat {
 		@Override
 		public void write(File f, KeyboardMapping km) throws IOException {
 			KeyManWriter.write(f, km);
+		}
+	},
+	KEYMAN_VISUAL {
+		@Override
+		public String getName() {
+			return "Keyman Developer (kvks)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".kvks";
+		}
+		@Override
+		public boolean recognizesInputFormatName(String s) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFormatName(String s) {
+			return s.equalsIgnoreCase(".kvks")
+			    || s.equalsIgnoreCase("kvks")
+			    || s.equalsIgnoreCase("keymanvisual");
+		}
+		@Override
+		public boolean recognizesInputFile(File f) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFile(File f) {
+			return f.getName().toLowerCase().endsWith(".kvks");
+		}
+		@Override
+		public KeyboardMapping read(File f) throws IOException {
+			throw new IOException("Keyman import unsupported.");
+		}
+		@Override
+		public void write(File f, KeyboardMapping km) throws IOException {
+			KeyManVisualWriter.write(f, km);
+		}
+	},
+	KEYMAN_TOUCH {
+		@Override
+		public String getName() {
+			return "Keyman Developer (keyman-touch-layout)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".keyman-touch-layout";
+		}
+		@Override
+		public boolean recognizesInputFormatName(String s) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFormatName(String s) {
+			return s.equalsIgnoreCase(".keyman-touch-layout")
+			    || s.equalsIgnoreCase("keyman-touch-layout")
+			    || s.equalsIgnoreCase("keymantouch");
+		}
+		@Override
+		public boolean recognizesInputFile(File f) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFile(File f) {
+			return f.getName().toLowerCase().endsWith(".keyman-touch-layout");
+		}
+		@Override
+		public KeyboardMapping read(File f) throws IOException {
+			throw new IOException("Keyman import unsupported.");
+		}
+		@Override
+		public void write(File f, KeyboardMapping km) throws IOException {
+			KeyManTouchWriter.write(f, km);
+		}
+	},
+	KEYMAN_PACKAGE {
+		@Override
+		public String getName() {
+			return "Keyman Developer Package (kps)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".kps";
+		}
+		@Override
+		public boolean recognizesInputFormatName(String s) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFormatName(String s) {
+			return s.equalsIgnoreCase(".kps")
+			    || s.equalsIgnoreCase("kps")
+			    || s.equalsIgnoreCase("keymanpackage");
+		}
+		@Override
+		public boolean recognizesInputFile(File f) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFile(File f) {
+			return f.getName().toLowerCase().endsWith(".kps");
+		}
+		@Override
+		public KeyboardMapping read(File f) throws IOException {
+			throw new IOException("Keyman import unsupported.");
+		}
+		@Override
+		public void write(File f, KeyboardMapping km) throws IOException {
+			KeyManPackageWriter.write(f, km, null);
+		}
+	},
+	KEYMAN_PROJECT {
+		@Override
+		public String getName() {
+			return "Keyman Developer Project (kpj)";
+		}
+		@Override
+		public String getSuffix() {
+			return ".kpj";
+		}
+		@Override
+		public boolean recognizesInputFormatName(String s) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFormatName(String s) {
+			return s.equalsIgnoreCase(".kpj")
+			    || s.equalsIgnoreCase("kpj")
+			    || s.equalsIgnoreCase("keymanproject");
+		}
+		@Override
+		public boolean recognizesInputFile(File f) {
+			return false;
+		}
+		@Override
+		public boolean recognizesOutputFile(File f) {
+			return f.getName().toLowerCase().endsWith(".kpj");
+		}
+		@Override
+		public KeyboardMapping read(File f) throws IOException {
+			throw new IOException("Keyman import unsupported.");
+		}
+		@Override
+		public void write(File f, KeyboardMapping km) throws IOException {
+			KeyManProjectWriter.write(f, km);
 		}
 	},
 	XKB {

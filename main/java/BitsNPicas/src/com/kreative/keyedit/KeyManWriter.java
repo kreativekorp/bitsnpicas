@@ -12,16 +12,24 @@ import java.util.TreeMap;
 
 public class KeyManWriter {
 	public static void write(File file, KeyboardMapping km) throws IOException {
-		String iname = stripSuffix(file.getName(), ".kmn");
-		File ifile = new File(file.getParentFile(), iname + ".ico");
+		String basename = stripSuffix(file.getName(), ".kmn");
+		File icoFile = new File(file.getParentFile(), basename + ".ico");
+		File kvksFile = new File(file.getParentFile(), basename + ".kvks");
+		File ktlFile = new File(file.getParentFile(), basename + ".keyman-touch-layout");
 		FileOutputStream fos = new FileOutputStream(file);
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"), true);
-		write(pw, km, ifile.getName());
+		write(
+			pw, km,
+			((km.icon != null) ? icoFile.getName() : null),
+			(kvksFile.exists() ? kvksFile.getName() : null),
+			(ktlFile.exists() ? ktlFile.getName() : null),
+			false
+		);
 		pw.flush();
 		pw.close();
 		fos.close();
 		if (km.icon != null) {
-			FileOutputStream ifos = new FileOutputStream(ifile);
+			FileOutputStream ifos = new FileOutputStream(icoFile);
 			DataOutputStream idos = new DataOutputStream(ifos);
 			WinIconDir ico = new WinIconDir();
 			ico.add(newIcoSize(km.icon, 8, ColorTables.createWindowsBase()));
@@ -34,18 +42,52 @@ public class KeyManWriter {
 		}
 	}
 	
-	public static void write(PrintWriter out, KeyboardMapping km, String iconFileName) {
+	public static void write(PrintWriter out, KeyboardMapping km, String icoFileName, String kvksFileName, String ktlFileName, boolean handleCaps) {
 		out.print("\uFEFF");
-		if (km.xkbComment != null && km.xkbComment.length() > 0) {
+		
+		if (km.keymanComments != null && km.keymanComments.length() > 0) {
+			String[] lines = km.keymanComments.replaceAll("\r\n","\n").replaceAll("\r","\n").split("\n");
+			for (String line : lines) out.print("c " + line + "\r\n");
+			out.print("\r\n");
+		} else if (km.xkbComment != null && km.xkbComment.length() > 0) {
 			String[] lines = km.xkbComment.replaceAll("\r\n","\n").replaceAll("\r","\n").split("\n");
 			for (String line : lines) out.print("c " + line + "\r\n");
 			out.print("\r\n");
 		}
 		
-		out.print("store(&VERSION) '8.0'\r\n");
-		if (km.name != null) out.print("store(&NAME) " + quote(km.name) + "\r\n");
-		if (km.winCopyright != null) out.print("store(&COPYRIGHT) " + quote(km.winCopyright) + "\r\n");
-		if (km.icon != null) out.print("store(&BITMAP) " + quote(iconFileName) + "\r\n");
+		out.print("store(&VERSION) '10.0'\r\n");
+		out.print("store(&NAME) " + quote(km.getKeymanNameNotEmpty()) + "\r\n");
+		out.print("store(&COPYRIGHT) " + quote(km.getKeymanCopyrightNotEmpty()) + "\r\n");
+		out.print("store(&KEYBOARDVERSION) " + quote(km.getKeymanVersionNotEmpty()) + "\r\n");
+		
+		if (km.keymanTargets != null && km.keymanTargets.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			boolean first = true;
+			for (KeyManTarget t : KeyManTarget.values()) {
+				if (km.keymanTargets.contains(t)) {
+					if (first) first = false;
+					else sb.append(" ");
+					sb.append(t);
+				}
+			}
+			out.print("store(&TARGETS) " + quote(sb.toString()) + "\r\n");
+		}
+		
+		if (icoFileName != null) out.print("store(&BITMAP) " + quote(icoFileName) + "\r\n");
+		if (kvksFileName != null) out.print("store(&VISUALKEYBOARD) " + quote(kvksFileName) + "\r\n");
+		if (ktlFileName != null) out.print("store(&LAYOUTFILE) " + quote(ktlFileName) + "\r\n");
+		
+		if (km.keymanMessage != null && km.keymanMessage.length() > 0) {
+			out.print("store(&MESSAGE) " + quote(km.keymanMessage) + "\r\n");
+		}
+		if (km.keymanRightToLeft) {
+			out.print("store(&KMW_RTL) '1'\r\n");
+		}
+		if (km.keymanWebHelpText != null && km.keymanWebHelpText.length() > 0) {
+			out.print("store(&KMW_HELPTEXT) " + quote(km.keymanWebHelpText) + "\r\n");
+		}
+		
+		out.print("\r\n");
 		out.print("begin Unicode > use(main)\r\n");
 		out.print("\r\n");
 		
@@ -55,25 +97,39 @@ public class KeyManWriter {
 			KeyMapping m = km.map.get(k.key);
 			writeKeyMapping(out, km, "SHIFT RALT " + k.id, m.altShiftedOutput, m.altShiftedDeadKey, deadKeys);
 		}
-		for (KeyManKey k : KeyManKey.KEYS) {
-			KeyMapping m = km.map.get(k.key);
-			writeKeyMapping(out, km, "CAPS RALT " + k.id, m.altCapsLockMapping, m.altUnshiftedOutput, m.altUnshiftedDeadKey, m.altShiftedOutput, m.altShiftedDeadKey, deadKeys);
-		}
-		for (KeyManKey k : KeyManKey.KEYS) {
-			KeyMapping m = km.map.get(k.key);
-			writeKeyMapping(out, km, "NCAPS RALT " + k.id, m.altUnshiftedOutput, m.altUnshiftedDeadKey, deadKeys);
+		if (handleCaps) {
+			for (KeyManKey k : KeyManKey.KEYS) {
+				KeyMapping m = km.map.get(k.key);
+				writeKeyMapping(out, km, "CAPS RALT " + k.id, m.altCapsLockMapping, m.altUnshiftedOutput, m.altUnshiftedDeadKey, m.altShiftedOutput, m.altShiftedDeadKey, deadKeys);
+			}
+			for (KeyManKey k : KeyManKey.KEYS) {
+				KeyMapping m = km.map.get(k.key);
+				writeKeyMapping(out, km, "NCAPS RALT " + k.id, m.altUnshiftedOutput, m.altUnshiftedDeadKey, deadKeys);
+			}
+		} else {
+			for (KeyManKey k : KeyManKey.KEYS) {
+				KeyMapping m = km.map.get(k.key);
+				writeKeyMapping(out, km, "RALT " + k.id, m.altUnshiftedOutput, m.altUnshiftedDeadKey, deadKeys);
+			}
 		}
 		for (KeyManKey k : KeyManKey.KEYS) {
 			KeyMapping m = km.map.get(k.key);
 			writeKeyMapping(out, km, "SHIFT " + k.id, m.shiftedOutput, m.shiftedDeadKey, deadKeys);
 		}
-		for (KeyManKey k : KeyManKey.KEYS) {
-			KeyMapping m = km.map.get(k.key);
-			writeKeyMapping(out, km, "CAPS " + k.id, m.capsLockMapping, m.unshiftedOutput, m.unshiftedDeadKey, m.shiftedOutput, m.shiftedDeadKey, deadKeys);
-		}
-		for (KeyManKey k : KeyManKey.KEYS) {
-			KeyMapping m = km.map.get(k.key);
-			writeKeyMapping(out, km, "NCAPS " + k.id, m.unshiftedOutput, m.unshiftedDeadKey, deadKeys);
+		if (handleCaps) {
+			for (KeyManKey k : KeyManKey.KEYS) {
+				KeyMapping m = km.map.get(k.key);
+				writeKeyMapping(out, km, "CAPS " + k.id, m.capsLockMapping, m.unshiftedOutput, m.unshiftedDeadKey, m.shiftedOutput, m.shiftedDeadKey, deadKeys);
+			}
+			for (KeyManKey k : KeyManKey.KEYS) {
+				KeyMapping m = km.map.get(k.key);
+				writeKeyMapping(out, km, "NCAPS " + k.id, m.unshiftedOutput, m.unshiftedDeadKey, deadKeys);
+			}
+		} else {
+			for (KeyManKey k : KeyManKey.KEYS) {
+				KeyMapping m = km.map.get(k.key);
+				writeKeyMapping(out, km, k.id, m.unshiftedOutput, m.unshiftedDeadKey, deadKeys);
+			}
 		}
 		
 		for (Map.Entry<String,DeadKeyTable> dke : deadKeys.entrySet()) {

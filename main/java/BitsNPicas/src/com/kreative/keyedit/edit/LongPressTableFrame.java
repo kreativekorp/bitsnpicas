@@ -12,18 +12,17 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import com.kreative.keyedit.KeyboardMapping;
 
-public class LayoutInfoFrame extends JDialog {
+public class LongPressTableFrame extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
-	private final LayoutInfoPanel panel;
-	private final List<KeyEditListener> listeners;
+	private final LongPressTablePanel panel;
+	private final List<LongPressTableListener> listeners;
 	
-	public LayoutInfoFrame(Frame parent, KeyboardMapping km) {
-		super(parent, "Layout Info");
-		this.panel = new LayoutInfoPanel(km);
-		this.listeners = new ArrayList<KeyEditListener>();
+	public LongPressTableFrame(Frame parent, Promise<int[]> autoLPO, int[] lpo) {
+		super(parent, "Edit Long Press Output");
+		this.panel = new LongPressTablePanel(autoLPO, lpo);
+		this.listeners = new ArrayList<LongPressTableListener>();
 		
 		JButton cancelButton = new JButton("Cancel");
 		JButton okButton = new JButton("OK");
@@ -46,26 +45,26 @@ public class LayoutInfoFrame extends JDialog {
 		});
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panel.commit();
+				int[] lpo = panel.getLongPressOutput();
 				dispose();
-				for (KeyEditListener l : listeners) l.metadataChanged();
+				for (LongPressTableListener l : listeners) l.longPressOutputChanged(lpo);
 			}
 		});
 		
-		setSize(1200, 720);
+		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	
-	public void addListener(KeyEditListener listener) {
+	public void addListener(LongPressTableListener listener) {
 		if (listener != null) listeners.add(listener);
 	}
 	
-	public void removeListener(KeyEditListener listener) {
+	public void removeListener(LongPressTableListener listener) {
 		if (listener != null) listeners.remove(listener);
 	}
 	
-	public KeyEditListener[] getListeners() {
-		return listeners.toArray(new KeyEditListener[listeners.size()]);
+	public LongPressTableListener[] getListeners() {
+		return listeners.toArray(new LongPressTableListener[listeners.size()]);
 	}
 }

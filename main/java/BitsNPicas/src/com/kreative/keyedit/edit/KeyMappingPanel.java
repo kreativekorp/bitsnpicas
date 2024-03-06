@@ -24,8 +24,12 @@ import com.kreative.unicode.fontmap.FontMapEntry;
 public class KeyMappingPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
+	private static final Color BG_LD = new Color(0xFFFFCC00);
+	private static final Color FG_LD = Color.black;
 	private static final Color BG_DK = new Color(0xFFFFDD55);
 	private static final Color FG_DK = Color.black;
+	private static final Color BG_LP = new Color(0xFFFFEEAA);
+	private static final Color FG_LP = Color.black;
 	private static final Color BG_NG = new Color(0xFFDDDDDD);
 	private static final Color FG_NG = new Color(0xFFDDDDDD);
 	private static final Color BG_CC = new Color(204, 255, 204);
@@ -104,9 +108,19 @@ public class KeyMappingPanel extends JPanel {
 			field.setFont(defaultFont);
 		}
 		
-		if (getDeadKey(alt, shift) != null) {
+		int[] lpo = getLongPressOutput(alt, shift);
+		boolean hasLongPress = (lpo != null && lpo.length > 0);
+		boolean hasDeadKey = (getDeadKey(alt, shift) != null);
+		
+		if (hasDeadKey && hasLongPress) {
+			field.setBackground(BG_LD);
+			field.setForeground(FG_LD);
+		} else if (hasDeadKey) {
 			field.setBackground(BG_DK);
 			field.setForeground(FG_DK);
+		} else if (hasLongPress) {
+			field.setBackground(BG_LP);
+			field.setForeground(FG_LP);
 		} else if (output <= 0) {
 			field.setBackground(BG_NG);
 			field.setForeground(FG_NG);
@@ -148,6 +162,11 @@ public class KeyMappingPanel extends JPanel {
 	public DeadKeyTable getDeadKey(boolean alt, boolean shift) {
 		return alt ? (shift ? km.altShiftedDeadKey : km.altUnshiftedDeadKey)
 		           : (shift ? km.shiftedDeadKey : km.unshiftedDeadKey);
+	}
+	
+	public int[] getLongPressOutput(boolean alt, boolean shift) {
+		return alt ? (shift ? km.altShiftedLongPressOutput : km.altUnshiftedLongPressOutput)
+		           : (shift ? km.shiftedLongPressOutput : km.unshiftedLongPressOutput);
 	}
 	
 	public void addListener(KeyMappingPanelListener listener) {

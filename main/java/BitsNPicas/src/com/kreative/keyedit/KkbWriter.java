@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ public class KkbWriter {
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		out.println("<!DOCTYPE keyboardMapping PUBLIC \"-//Kreative//DTD KreativeKeyboard 1.0//EN\" \"http://www.kreativekorp.com/dtd/kkbx.dtd\">");
 		out.println("<keyboardMapping>");
+		
 		out.println(wrap("\t", "name", km.name));
 		out.println(wrap("\t", "winIdentifier", km.winIdentifier));
 		out.println(wrap("\t", "winCopyright", km.winCopyright));
@@ -37,15 +39,7 @@ public class KkbWriter {
 		out.println(wrap("\t", "macIdNumber", "id", Integer.toString(km.macIdNumber)));
 		out.println(wrap("\t", "xkbPath", km.xkbPath));
 		out.println(wrap("\t", "xkbLabel", km.xkbLabel));
-		
-		if (km.xkbComment != null) {
-			out.println("\t<xkbComment>");
-			for (String line : km.xkbComment.split("\r\n|\r|\n")) {
-				out.println("\t\t" + xmlEncode(line));
-			}
-			out.println("\t</xkbComment>");
-		}
-		
+		writeBlock(out, "\t", "xkbComment", km.xkbComment);
 		out.println(wrap("\t", "xkbUseKeySym", "for", (km.xkbUseKeySym ? "unicode" : "ascii")));
 		
 		if (km.xkbAltGrKey != null && km.xkbAltGrKey != XkbAltGrKey.none) {
@@ -57,6 +51,8 @@ public class KkbWriter {
 			String include = "compose(" + km.xkbComposeKey.name() + ")";
 			out.println(wrap("\t", "xkbComposeKey", "include", include));
 		}
+		
+		writeKeymanConfig(out, km);
 		
 		if (km.icon != null) {
 			try {
@@ -92,30 +88,32 @@ public class KkbWriter {
 		}
 		
 		writeHTMLConfig(out, km);
+		
 		out.println("</keyboardMapping>");
 	}
 	
 	private static void write(PrintWriter out, Key k, KeyMapping km) {
 		out.println(wrap("\t\t", "keyMapping", "key", k.name().toLowerCase(), false));
-		write(out, "unshifted", km.unshiftedOutput, km.unshiftedDeadKey);
-		write(out, "shifted", km.shiftedOutput, km.shiftedDeadKey);
+		write(out, "unshifted", km.unshiftedOutput, km.unshiftedDeadKey, km.unshiftedLongPressOutput);
+		write(out, "shifted", km.shiftedOutput, km.shiftedDeadKey, km.shiftedLongPressOutput);
 		out.println(wrap("\t\t\t", "capsLock", "mapsTo", caps(km.capsLockMapping, "unshifted", "shifted", "auto")));
-		write(out, "altUnshifted", km.altUnshiftedOutput, km.altUnshiftedDeadKey);
-		write(out, "altShifted", km.altShiftedOutput, km.altShiftedDeadKey);
+		write(out, "altUnshifted", km.altUnshiftedOutput, km.altUnshiftedDeadKey, km.altUnshiftedLongPressOutput);
+		write(out, "altShifted", km.altShiftedOutput, km.altShiftedDeadKey, km.altShiftedLongPressOutput);
 		out.println(wrap("\t\t\t", "altCapsLock", "mapsTo", caps(km.altCapsLockMapping, "altUnshifted", "altShifted", "auto")));
-		write(out, "ctrl", km.ctrlOutput, km.ctrlDeadKey);
-		write(out, "command", km.commandOutput, km.commandDeadKey);
+		write(out, "ctrl", km.ctrlOutput, km.ctrlDeadKey, null);
+		write(out, "command", km.commandOutput, km.commandDeadKey, null);
 		out.println("\t\t</keyMapping>");
 	}
 	
-	private static void write(PrintWriter out, String state, int output, DeadKeyTable dkt) {
+	private static void write(PrintWriter out, String state, int output, DeadKeyTable dkt, int[] lpo) {
 		if (output > 0) {
-			out.println(wrap("\t\t\t", state, "output", hex(output,4), dkt == null));
+			out.println(wrap("\t\t\t", state, "output", hex(output,4), dkt == null && lpo == null));
 		} else {
-			out.println(wrap("\t\t\t", state, dkt == null));
+			out.println(wrap("\t\t\t", state, dkt == null && lpo == null));
 		}
-		if (dkt != null) {
-			write(out, dkt);
+		if (dkt != null || lpo != null) {
+			if (dkt != null) write(out, dkt);
+			if (lpo != null) write(out, lpo);
 			out.println("\t\t\t</" + state + ">");
 		}
 	}
@@ -145,6 +143,67 @@ public class KkbWriter {
 			out.println("\t\t\t\t\t</deadKeyMap>");
 		}
 		out.println("\t\t\t\t</deadKey>");
+	}
+	
+	private static void write(PrintWriter out, int[] lpo) {
+		out.println("\t\t\t\t<longPressOutput>");
+		for (int output : lpo) {
+			out.println(wrap("\t\t\t\t\t", "longPressEntry", "output", hex(output,4)));
+		}
+		out.println("\t\t\t\t</longPressOutput>");
+	}
+	
+	private static void writeKeymanConfig(PrintWriter out, KeyboardMapping km) {
+		if (!any(
+			km.keymanIdentifier, km.keymanName, km.keymanCopyright, km.keymanMessage,
+			km.keymanWebHelpText, km.keymanVersion, km.keymanComments, km.keymanAuthor,
+			km.keymanEmailAddress, km.keymanWebSite, km.keymanRightToLeft, km.keymanKey102,
+			km.keymanDisplayUnderlying, km.keymanUseAltGr, km.keymanTargets, km.keymanPlatforms,
+			km.keymanLanguages, km.keymanDescription, km.keymanLicenseType, km.keymanLicenseText,
+			km.keymanReadme, km.keymanHistory
+		)) return;
+		
+		out.println(wrap("\t", "keymanIdentifier", km.keymanIdentifier));
+		out.println(wrap("\t", "keymanName", km.keymanName));
+		out.println(wrap("\t", "keymanCopyright", km.keymanCopyright));
+		out.println(wrap("\t", "keymanMessage", km.keymanMessage));
+		out.println(wrap("\t", "keymanWebHelpText", km.keymanWebHelpText));
+		out.println(wrap("\t", "keymanVersion", km.keymanVersion));
+		writeBlock(out, "\t", "keymanComments", km.keymanComments);
+		out.println(wrap("\t", "keymanAuthor", km.keymanAuthor));
+		out.println(wrap("\t", "keymanEmailAddress", km.keymanEmailAddress));
+		out.println(wrap("\t", "keymanWebSite", km.keymanWebSite));
+		out.println(wrap("\t", "keymanRightToLeft", "value", (km.keymanRightToLeft ? "true" : "false")));
+		out.println(wrap("\t", "keymanKey102", "value", (km.keymanKey102 ? "true" : "false")));
+		out.println(wrap("\t", "keymanDisplayUnderlying", "value", (km.keymanDisplayUnderlying ? "true" : "false")));
+		out.println(wrap("\t", "keymanUseAltGr", "value", (km.keymanUseAltGr ? "true" : "false")));
+		
+		out.print("\t<keymanTargets");
+		for (KeyManTarget t : KeyManTarget.values()) {
+			if (km.keymanTargets.contains(t)) {
+				out.print(" " + t + "=\"true\"");
+			}
+		}
+		out.println("/>");
+		
+		out.print("\t<keymanPlatforms");
+		for (KeyManPlatform p : KeyManPlatform.values()) {
+			if (km.keymanPlatforms.contains(p)) {
+				out.print(" " + p + "=\"true\"");
+			}
+		}
+		out.println("/>");
+		
+		out.println("\t<keymanLanguages>");
+		for (Map.Entry<String,String> e : km.keymanLanguages.entrySet()) {
+			out.println(wrap("\t\t", "keymanLanguage", "tag", e.getKey(), "name", e.getValue()));
+		}
+		out.println("\t</keymanLanguages>");
+		
+		writeBlock(out, "\t", "keymanDescription", km.keymanDescription);
+		writeBlock(out, "\t", "keymanLicense", "type", km.keymanLicenseType, km.keymanLicenseText);
+		writeBlock(out, "\t", "keymanReadme", km.keymanReadme);
+		writeBlock(out, "\t", "keymanHistory", km.keymanHistory);
 	}
 	
 	private static void writeHTMLConfig(PrintWriter out, KeyboardMapping km) {
@@ -232,6 +291,26 @@ public class KkbWriter {
 		out.println(prefix + "]]></" + tag + ">");
 	}
 	
+	private static void writeBlock(PrintWriter out, String prefix, String tag, String content) {
+		if (content != null && content.length() > 0) {
+			out.println(prefix + "<" + tag + ">");
+			for (String line : content.split("\r\n|\r|\n")) {
+				out.println(prefix + "\t" + xmlEncode(line));
+			}
+			out.println(prefix + "</" + tag + ">");
+		}
+	}
+	
+	private static void writeBlock(PrintWriter out, String prefix, String tag, String attr, String value, String content) {
+		if (content != null && content.length() > 0) {
+			out.println(wrap(prefix, tag, attr, value, false));
+			for (String line : content.split("\r\n|\r|\n")) {
+				out.println(prefix + "\t" + xmlEncode(line));
+			}
+			out.println(prefix + "</" + tag + ">");
+		}
+	}
+	
 	public static String formatRanges(BitSet bs) {
 		if (bs == null || bs.isEmpty()) return null;
 		int[] lastRange = null;
@@ -305,5 +384,17 @@ public class KkbWriter {
 			i += Character.charCount(ch);
 		}
 		return sb.toString();
+	}
+	
+	private static boolean any(Object... objects) {
+		for (Object o : objects) {
+			if (o == null) continue;
+			else if (o instanceof String) { if (((String)o).length() > 0) return true; }
+			else if (o instanceof Boolean) { if (((Boolean)o).booleanValue()) return true; }
+			else if (o instanceof Collection) { if (((Collection<?>)o).size() > 0) return true; }
+			else if (o instanceof Map) { if (((Map<?,?>)o).size() > 0) return true; }
+			else throw new IllegalArgumentException();
+		}
+		return false;
 	}
 }

@@ -1,11 +1,11 @@
 <!--
-	Date: 2020/08/19 00:32:10 PDT
+	Date: 2024/03/04 23:28:00 PDT
 	Author: Rebecca Bettencourt <support@kreativekorp.com>
 -->
 
 <!-- Keyboard Mapping -->
 
-<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,icon?,macIconVersion?,keyMappings,macActionIds?,html?)>
+<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,keymanIdentifier?,keymanName?,keymanCopyright?,keymanMessage?,keymanWebHelpText?,keymanVersion?,keymanComments?,keymanAuthor?,keymanEmailAddress?,keymanWebSite?,keymanRightToLeft?,keymanKey102?,keymanDisplayUnderlying?,keymanUseAltGr?,keymanTargets?,keymanPlatforms?,keymanLanguages?,keymanDescription?,keymanLicense?,keymanReadme?,keymanHistory?,icon?,macIconVersion?,keyMappings,macActionIds?,html?)>
 
 <!ELEMENT name (#PCDATA)>
 
@@ -48,6 +48,74 @@
 <!ELEMENT xkbComposeKey EMPTY>
 <!ATTLIST xkbComposeKey include CDATA #REQUIRED>
 
+<!ELEMENT keymanIdentifier (#PCDATA)>
+
+<!ELEMENT keymanName (#PCDATA)>
+
+<!ELEMENT keymanCopyright (#PCDATA)>
+
+<!ELEMENT keymanMessage (#PCDATA)>
+
+<!ELEMENT keymanWebHelpText (#PCDATA)>
+
+<!ELEMENT keymanVersion (#PCDATA)>
+
+<!ELEMENT keymanComments (#PCDATA)>
+
+<!ELEMENT keymanAuthor (#PCDATA)>
+
+<!ELEMENT keymanEmailAddress (#PCDATA)>
+
+<!ELEMENT keymanWebSite (#PCDATA)>
+
+<!ELEMENT keymanRightToLeft EMPTY>
+<!ATTLIST keymanRightToLeft value (true|false) #REQUIRED>
+
+<!ELEMENT keymanKey102 EMPTY>
+<!ATTLIST keymanKey102 value (true|false) #REQUIRED>
+
+<!ELEMENT keymanDisplayUnderlying EMPTY>
+<!ATTLIST keymanDisplayUnderlying value (true|false) #REQUIRED>
+
+<!ELEMENT keymanUseAltGr EMPTY>
+<!ATTLIST keymanUseAltGr value (true|false) #REQUIRED>
+
+<!ELEMENT keymanTargets EMPTY>
+<!ATTLIST keymanTargets
+  any (true|false) #IMPLIED
+  windows (true|false) #IMPLIED
+  macosx (true|false) #IMPLIED
+  linux (true|false) #IMPLIED
+  web (true|false) #IMPLIED
+  iphone (true|false) #IMPLIED
+  ipad (true|false) #IMPLIED
+  androidphone (true|false) #IMPLIED
+  androidtablet (true|false) #IMPLIED
+  mobile (true|false) #IMPLIED
+  desktop (true|false) #IMPLIED
+  tablet (true|false) #IMPLIED
+>
+
+<!ELEMENT keymanPlatforms EMPTY>
+<!ATTLIST keymanPlatforms
+  tablet (true|false) #IMPLIED
+  phone (true|false) #IMPLIED
+  desktop (true|false) #IMPLIED
+>
+
+<!ELEMENT keymanLanguages (keymanLanguage*)>
+<!ELEMENT keymanLanguage EMPTY>
+<!ATTLIST keymanLanguage tag CDATA #REQUIRED name CDATA #REQUIRED>
+
+<!ELEMENT keymanDescription (#PCDATA)>
+
+<!ELEMENT keymanLicense (#PCDATA)>
+<!ATTLIST keymanLicense type CDATA #REQUIRED>
+
+<!ELEMENT keymanReadme (#PCDATA)>
+
+<!ELEMENT keymanHistory (#PCDATA)>
+
 <!ELEMENT icon (#PCDATA)>
 
 <!ELEMENT macIconVersion EMPTY>
@@ -64,19 +132,19 @@
 <!ELEMENT keyMapping (unshifted?,shifted?,capsLock?,altUnshifted?,altShifted?,altCapsLock?,ctrl?,command?)>
 <!ATTLIST keyMapping key CDATA #REQUIRED>
 
-<!ELEMENT unshifted (deadKey?)>
+<!ELEMENT unshifted (deadKey?,longPressOutput?)>
 <!ATTLIST unshifted output CDATA #IMPLIED>
 
-<!ELEMENT shifted (deadKey?)>
+<!ELEMENT shifted (deadKey?,longPressOutput?)>
 <!ATTLIST shifted output CDATA #IMPLIED>
 
 <!ELEMENT capsLock EMPTY>
 <!ATTLIST capsLock mapsTo (unshifted|shifted|auto) #REQUIRED>
 
-<!ELEMENT altUnshifted (deadKey?)>
+<!ELEMENT altUnshifted (deadKey?,longPressOutput?)>
 <!ATTLIST altUnshifted output CDATA #IMPLIED>
 
-<!ELEMENT altShifted (deadKey?)>
+<!ELEMENT altShifted (deadKey?,longPressOutput?)>
 <!ATTLIST altShifted output CDATA #IMPLIED>
 
 <!ELEMENT altCapsLock EMPTY>
@@ -110,6 +178,12 @@
 <!ELEMENT deadKeyMap (deadKeyEntry*)>
 <!ELEMENT deadKeyEntry EMPTY>
 <!ATTLIST deadKeyEntry input CDATA #REQUIRED output CDATA #REQUIRED>
+
+<!-- Long Press Options -->
+
+<!ELEMENT longPressOutput (longPressEntry*)>
+<!ELEMENT longPressEntry EMPTY>
+<!ATTLIST longPressEntry output CDATA #REQUIRED>
 
 <!-- HTML Configuration -->
 

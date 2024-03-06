@@ -20,14 +20,14 @@ public class KeyInfoPanel extends JPanel {
 	private final KeyMapping km;
 	private final KeyEditController controller;
 	private final OutputPanel uop;
-	private final JButton uadd, uedit, udel;
+	private final JButton uadd, uedit, udel, ulpo;
 	private final OutputPanel sop;
-	private final JButton sadd, sedit, sdel;
+	private final JButton sadd, sedit, sdel, slpo;
 	private final JComboBox caps;
 	private final OutputPanel auop;
-	private final JButton auadd, auedit, audel;
+	private final JButton auadd, auedit, audel, aulpo;
 	private final OutputPanel asop;
-	private final JButton asadd, asedit, asdel;
+	private final JButton asadd, asedit, asdel, aslpo;
 	private final JComboBox acaps;
 	private final OutputPanel ctrl;
 	private final OutputPanel cmd;
@@ -40,20 +40,24 @@ public class KeyInfoPanel extends JPanel {
 		this.uadd = new JButton("Add");
 		this.uedit = new JButton("Edit");
 		this.udel = new JButton("Delete");
+		this.ulpo = new JButton("Edit Long Press Output");
 		this.sop = new OutputPanel(km.shiftedOutput);
 		this.sadd = new JButton("Add");
 		this.sedit = new JButton("Edit");
 		this.sdel = new JButton("Delete");
+		this.slpo = new JButton("Edit Long Press Output");
 		this.caps = new JComboBox(new String[] {"Auto", "Unshifted", "Shifted"});
 		this.caps.setSelectedIndex(km.capsLockMapping.ordinal());
 		this.auop = new OutputPanel(km.altUnshiftedOutput);
 		this.auadd = new JButton("Add");
 		this.auedit = new JButton("Edit");
 		this.audel = new JButton("Delete");
+		this.aulpo = new JButton("Edit Long Press Output");
 		this.asop = new OutputPanel(km.altShiftedOutput);
 		this.asadd = new JButton("Add");
 		this.asedit = new JButton("Edit");
 		this.asdel = new JButton("Delete");
+		this.aslpo = new JButton("Edit Long Press Output");
 		this.acaps = new JComboBox(new String[] {"Auto", "Alt Unshifted", "Alt Shifted"});
 		this.acaps.setSelectedIndex(km.altCapsLockMapping.ordinal());
 		this.ctrl = new OutputPanel(km.ctrlOutput);
@@ -90,8 +94,14 @@ public class KeyInfoPanel extends JPanel {
 			new JPanel(),
 			new JPanel()
 		);
+		JPanel lpobtns = verticalStack(
+			ulpo, slpo, new JPanel(),
+			aulpo, aslpo, new JPanel(),
+			new JPanel(), new JPanel()
+		);
 		JPanel left = leftSxS(labels, fields, 8);
-		JPanel right = leftSxS(dklbls, dkbtns, 8);
+		JPanel right1 = leftSxS(dklbls, dkbtns, 8);
+		JPanel right = rightSxS(right1, lpobtns, 8);
 		JPanel panel = topAlign(rightSxS(left, right, 8));
 		
 		setLayout(new GridLayout(1,1,0,0));
@@ -100,15 +110,19 @@ public class KeyInfoPanel extends JPanel {
 		uadd.addActionListener(new EditDeadKeyActionListener(false, false));
 		uedit.addActionListener(new EditDeadKeyActionListener(false, false));
 		udel.addActionListener(new DeleteDeadKeyActionListener(false, false));
+		ulpo.addActionListener(new EditLongPressActionListener(false, false));
 		sadd.addActionListener(new EditDeadKeyActionListener(false, true));
 		sedit.addActionListener(new EditDeadKeyActionListener(false, true));
 		sdel.addActionListener(new DeleteDeadKeyActionListener(false, true));
+		slpo.addActionListener(new EditLongPressActionListener(false, true));
 		auadd.addActionListener(new EditDeadKeyActionListener(true, false));
 		auedit.addActionListener(new EditDeadKeyActionListener(true, false));
 		audel.addActionListener(new DeleteDeadKeyActionListener(true, false));
+		aulpo.addActionListener(new EditLongPressActionListener(true, false));
 		asadd.addActionListener(new EditDeadKeyActionListener(true, true));
 		asedit.addActionListener(new EditDeadKeyActionListener(true, true));
 		asdel.addActionListener(new DeleteDeadKeyActionListener(true, true));
+		aslpo.addActionListener(new EditLongPressActionListener(true, true));
 	}
 	
 	private static JLabel l(String label, String tooltip) {
@@ -208,6 +222,18 @@ public class KeyInfoPanel extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			controller.setDeadKey(key, alt, shift, null);
+		}
+	}
+	
+	private class EditLongPressActionListener implements ActionListener {
+		private final boolean alt;
+		private final boolean shift;
+		public EditLongPressActionListener(boolean alt, boolean shift) {
+			this.alt = alt;
+			this.shift = shift;
+		}
+		public void actionPerformed(ActionEvent e) {
+			controller.getLongPressTableFrame(key, alt, shift).setVisible(true);
 		}
 	}
 }

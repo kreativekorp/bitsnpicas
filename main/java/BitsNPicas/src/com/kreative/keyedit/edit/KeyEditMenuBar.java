@@ -184,6 +184,7 @@ public class KeyEditMenuBar extends JMenuBar {
 			add(new EditKeyMenuItem(ctrl));
 			add(new EditDeadKeyMenuItem(ctrl));
 			add(new DeleteDeadKeyMenuItem(ctrl));
+			add(new EditLongPressOutputMenuItem(ctrl));
 			addSeparator();
 			add(new BulkActionMenu(ctrl));
 			addSeparator();
@@ -327,6 +328,23 @@ public class KeyEditMenuBar extends JMenuBar {
 					boolean alt = ctrl.isAltSelected();
 					boolean shift = ctrl.isShiftSelected();
 					ctrl.setDeadKey(key, alt, shift, null);
+				}
+			});
+		}
+	}
+	
+	public static class EditLongPressOutputMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public EditLongPressOutputMenuItem(final KeyEditController ctrl) {
+			super("Edit Long Press Output");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Key key = ctrl.getSelectedKey();
+					if (key == null) return;
+					boolean alt = ctrl.isAltSelected();
+					boolean shift = ctrl.isShiftSelected();
+					ctrl.getLongPressTableFrame(key, alt, shift).setVisible(true);
 				}
 			});
 		}

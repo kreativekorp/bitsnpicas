@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -107,6 +108,66 @@ public class KkbReader {
 					km.xkbAltGrKey = XkbAltGrKey.forInclude(parseString(cattr, "include"));
 				} else if (ctype.equalsIgnoreCase("xkbComposeKey")) {
 					km.xkbComposeKey = XkbComposeKey.forInclude(parseString(cattr, "include"));
+				} else if (ctype.equalsIgnoreCase("keymanIdentifier")) {
+					km.keymanIdentifier = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanName")) {
+					km.keymanName = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanCopyright")) {
+					km.keymanCopyright = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanMessage")) {
+					km.keymanMessage = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanWebHelpText")) {
+					km.keymanWebHelpText = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanVersion")) {
+					km.keymanVersion = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanComments")) {
+					km.keymanComments = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("keymanAuthor")) {
+					km.keymanAuthor = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanEmailAddress")) {
+					km.keymanEmailAddress = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanWebSite")) {
+					km.keymanWebSite = textContent(child);
+				} else if (ctype.equalsIgnoreCase("keymanRightToLeft")) {
+					km.keymanRightToLeft = parseBoolean(cattr, "value", "true", "false", km.keymanRightToLeft);
+				} else if (ctype.equalsIgnoreCase("keymanKey102")) {
+					km.keymanKey102 = parseBoolean(cattr, "value", "true", "false", km.keymanKey102);
+				} else if (ctype.equalsIgnoreCase("keymanDisplayUnderlying")) {
+					km.keymanDisplayUnderlying = parseBoolean(cattr, "value", "true", "false", km.keymanDisplayUnderlying);
+				} else if (ctype.equalsIgnoreCase("keymanUseAltGr")) {
+					km.keymanUseAltGr = parseBoolean(cattr, "value", "true", "false", km.keymanUseAltGr);
+				} else if (ctype.equalsIgnoreCase("keymanTargets")) {
+					for (KeyManTarget t : KeyManTarget.values()) {
+						parseBoolean(cattr, t.toString(), "true", "false", t, km.keymanTargets);
+					}
+				} else if (ctype.equalsIgnoreCase("keymanPlatforms")) {
+					for (KeyManPlatform p : KeyManPlatform.values()) {
+						parseBoolean(cattr, p.toString(), "true", "false", p, km.keymanPlatforms);
+					}
+				} else if (ctype.equalsIgnoreCase("keymanLanguages")) {
+					for (Node gchild : getChildren(child)) {
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("keymanLanguage")) {
+							NamedNodeMap gcattr = gchild.getAttributes();
+							String tag = parseString(gcattr, "tag");
+							if (tag != null && tag.length() > 0) {
+								String name = parseString(gcattr, "name");
+								if (name == null || name.length() == 0) name = tag;
+								km.keymanLanguages.put(tag, name);
+							}
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
+					}
+				} else if (ctype.equalsIgnoreCase("keymanDescription")) {
+					km.keymanDescription = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("keymanLicense")) {
+					km.keymanLicenseType = parseString(cattr, "type");
+					km.keymanLicenseText = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("keymanReadme")) {
+					km.keymanReadme = stripCommonLeadingWhitespace(textContent(child));
+				} else if (ctype.equalsIgnoreCase("keymanHistory")) {
+					km.keymanHistory = stripCommonLeadingWhitespace(textContent(child));
 				} else if (ctype.equalsIgnoreCase("icon")) {
 					String data = textContent(child);
 					if (data != null) {
@@ -163,28 +224,60 @@ public class KkbReader {
 				if (ctype.equalsIgnoreCase("unshifted")) {
 					map.unshiftedOutput = parseHex(cattr, "output", -1);
 					map.unshiftedDeadKey = null;
+					map.unshiftedLongPressOutput = null;
 					for (Node gchild : getChildren(child)) {
-						map.unshiftedDeadKey = parseDeadKey(gchild);
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("deadKey")) {
+							map.unshiftedDeadKey = parseDeadKey(gchild);
+						} else if (gctype.equalsIgnoreCase("longPressOutput")) {
+							map.unshiftedLongPressOutput = parseLongPressOutput(gchild);
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
 					}
 				} else if (ctype.equalsIgnoreCase("shifted")) {
 					map.shiftedOutput = parseHex(cattr, "output", -1);
 					map.shiftedDeadKey = null;
+					map.shiftedLongPressOutput = null;
 					for (Node gchild : getChildren(child)) {
-						map.shiftedDeadKey = parseDeadKey(gchild);
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("deadKey")) {
+							map.shiftedDeadKey = parseDeadKey(gchild);
+						} else if (gctype.equalsIgnoreCase("longPressOutput")) {
+							map.shiftedLongPressOutput = parseLongPressOutput(gchild);
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
 					}
 				} else if (ctype.equalsIgnoreCase("capsLock")) {
 					map.capsLockMapping = parseCapsLock(cattr, "mapsTo", "unshifted", "shifted");
 				} else if (ctype.equalsIgnoreCase("altUnshifted")) {
 					map.altUnshiftedOutput = parseHex(cattr, "output", -1);
 					map.altUnshiftedDeadKey = null;
+					map.altUnshiftedLongPressOutput = null;
 					for (Node gchild : getChildren(child)) {
-						map.altUnshiftedDeadKey = parseDeadKey(gchild);
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("deadKey")) {
+							map.altUnshiftedDeadKey = parseDeadKey(gchild);
+						} else if (gctype.equalsIgnoreCase("longPressOutput")) {
+							map.altUnshiftedLongPressOutput = parseLongPressOutput(gchild);
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
 					}
 				} else if (ctype.equalsIgnoreCase("altShifted")) {
 					map.altShiftedOutput = parseHex(cattr, "output", -1);
 					map.altShiftedDeadKey = null;
+					map.altShiftedLongPressOutput = null;
 					for (Node gchild : getChildren(child)) {
-						map.altShiftedDeadKey = parseDeadKey(gchild);
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("deadKey")) {
+							map.altShiftedDeadKey = parseDeadKey(gchild);
+						} else if (gctype.equalsIgnoreCase("longPressOutput")) {
+							map.altShiftedLongPressOutput = parseLongPressOutput(gchild);
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
 					}
 				} else if (ctype.equalsIgnoreCase("altCapsLock")) {
 					map.altCapsLockMapping = parseCapsLock(cattr, "mapsTo", "altUnshifted", "altShifted");
@@ -192,13 +285,23 @@ public class KkbReader {
 					map.ctrlOutput = parseHex(cattr, "output", -1);
 					map.ctrlDeadKey = null;
 					for (Node gchild : getChildren(child)) {
-						map.ctrlDeadKey = parseDeadKey(gchild);
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("deadKey")) {
+							map.ctrlDeadKey = parseDeadKey(gchild);
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
 					}
 				} else if (ctype.equalsIgnoreCase("command")) {
 					map.commandOutput = parseHex(cattr, "output", -1);
 					map.commandDeadKey = null;
 					for (Node gchild : getChildren(child)) {
-						map.commandDeadKey = parseDeadKey(gchild);
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("deadKey")) {
+							map.commandDeadKey = parseDeadKey(gchild);
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
 					}
 				} else {
 					throw new IOException("Unknown element: " + ctype);
@@ -245,6 +348,29 @@ public class KkbReader {
 				}
 			}
 			return dkt;
+		} else {
+			throw new IOException("Unknown element: " + type);
+		}
+	}
+	
+	private static int[] parseLongPressOutput(Node node) throws IOException {
+		String type = node.getNodeName();
+		if (type.equalsIgnoreCase("longPressOutput")) {
+			List<Integer> lpo = new ArrayList<Integer>();
+			for (Node child : getChildren(node)) {
+				String ctype = child.getNodeName();
+				if (ctype.equalsIgnoreCase("longPressEntry")) {
+					NamedNodeMap cattr = child.getAttributes();
+					Integer output = parseHex(cattr, "output", null);
+					if (output != null) lpo.add(output);
+				} else {
+					throw new IOException("Unknown element: " + ctype);
+				}
+			}
+			int n = lpo.size();
+			int[] output = new int[n];
+			for (int i = 0; i < n; i++) output[i] = lpo.get(i);
+			return output;
 		} else {
 			throw new IOException("Unknown element: " + type);
 		}
@@ -389,6 +515,17 @@ public class KkbReader {
 		if (text.equalsIgnoreCase(unshifted)) return CapsLockMapping.UNSHIFTED;
 		if (text.equalsIgnoreCase(shifted)) return CapsLockMapping.SHIFTED;
 		return CapsLockMapping.AUTO;
+	}
+	
+	private static <E extends Enum<E>> void parseBoolean(NamedNodeMap attr, String key, String trueValue, String falseValue, E value, EnumSet<E> set) {
+		if (attr == null) return;
+		Node node = attr.getNamedItem(key);
+		if (node == null) return;
+		String text = node.getTextContent();
+		if (text == null) return;
+		text = text.trim();
+		if (text.equalsIgnoreCase(trueValue)) set.add(value);
+		if (text.equalsIgnoreCase(falseValue)) set.remove(value);
 	}
 	
 	private static boolean parseBoolean(NamedNodeMap attr, String key, String trueValue, String falseValue, boolean def) {

@@ -34,6 +34,9 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import com.kreative.keyedit.HTMLWriterUtility;
+import com.kreative.keyedit.KeyManPlatform;
+import com.kreative.keyedit.KeyManTarget;
+import com.kreative.keyedit.KeyManWriterUtility;
 import com.kreative.keyedit.KeyboardMapping;
 import com.kreative.keyedit.KkbReader;
 import com.kreative.keyedit.KkbWriter;
@@ -69,6 +72,35 @@ public class LayoutInfoPanel extends JPanel {
 	private final JScrollPane macActionIdsPane;
 	private final JButton macActionIdsAdd;
 	private final JButton macActionIdsDelete;
+	private final JTextField keymanIdentifier;
+	private final JTextField keymanName;
+	private final JTextField keymanCopyright;
+	private final JTextField keymanMessage;
+	private final JTextField keymanWebHelpText;
+	private final JTextField keymanVersion;
+	private final JTextArea keymanComments;
+	private final JTextField keymanAuthor;
+	private final JTextField keymanEmailAddress;
+	private final JTextField keymanWebSite;
+	private final JCheckBox keymanRightToLeft;
+	private final JCheckBox keymanKey102;
+	private final JCheckBox keymanDisplayUnderlying;
+	private final JCheckBox keymanUseAltGr;
+	private final JCheckBox[] keymanTargets;
+	private final JCheckBox[] keymanPlatforms;
+	private final KeyManLanguageTableModel keymanLanguagesModel;
+	private final JTable keymanLanguagesTable;
+	private final JScrollPane keymanLanguagesPane;
+	private final JButton keymanLanguagesAdd;
+	private final JButton keymanLanguagesDelete;
+	private final JTextField keymanDescription;
+	private final JTextField keymanLicenseType;
+	private final JTextArea keymanLicenseText;
+	private final JButton keymanLicenseDefault;
+	private final JTextArea keymanReadme;
+	private final JButton keymanReadmeDefault;
+	private final JTextArea keymanHistory;
+	private final JButton keymanHistoryDefault;
 	private final JTextField htmlTitle;
 	private final JTextArea htmlStyle;
 	private final JTextField htmlH1;
@@ -146,6 +178,60 @@ public class LayoutInfoPanel extends JPanel {
 		this.xkbComposeKey.setEditable(false);
 		this.xkbComposeKey.setMaximumRowCount(32);
 		this.xkbComposeKey.setSelectedItem(km.xkbComposeKey);
+		
+		this.keymanIdentifier = new JTextField(km.keymanIdentifier);
+		this.keymanName = new JTextField(km.keymanName);
+		this.keymanCopyright = new JTextField(km.keymanCopyright);
+		this.keymanMessage = new JTextField(km.keymanMessage);
+		this.keymanWebHelpText = new JTextField(km.keymanWebHelpText);
+		this.keymanVersion = new JTextField(km.keymanVersion);
+		this.keymanComments = new JTextArea(km.keymanComments);
+		this.keymanAuthor = new JTextField(km.keymanAuthor);
+		this.keymanEmailAddress = new JTextField(km.keymanEmailAddress);
+		this.keymanWebSite = new JTextField(km.keymanWebSite);
+		this.keymanRightToLeft = new JCheckBox("Keyboard is right-to-left");
+		this.keymanRightToLeft.setSelected(km.keymanRightToLeft);
+		this.keymanKey102 = new JCheckBox("Display 102nd Key (as on European keyboards)");
+		this.keymanKey102.setSelected(km.keymanKey102);
+		this.keymanDisplayUnderlying = new JCheckBox("Display underlying layout characters");
+		this.keymanDisplayUnderlying.setSelected(km.keymanDisplayUnderlying);
+		this.keymanUseAltGr = new JCheckBox("Distinguish between left and right Ctrl/Alt");
+		this.keymanUseAltGr.setSelected(km.keymanUseAltGr);
+		
+		KeyManTarget[] targets = KeyManTarget.values();
+		this.keymanTargets = new JCheckBox[targets.length];
+		for (int i = 0; i < targets.length; i++) {
+			this.keymanTargets[i] = new JCheckBox(targets[i].toString());
+			this.keymanTargets[i].setSelected(km.keymanTargets.contains(targets[i]));
+		}
+		
+		KeyManPlatform[] platforms = KeyManPlatform.values();
+		this.keymanPlatforms = new JCheckBox[platforms.length];
+		for (int i = 0; i < platforms.length; i++) {
+			this.keymanPlatforms[i] = new JCheckBox(platforms[i].toString());
+			this.keymanPlatforms[i].setSelected(km.keymanPlatforms.contains(platforms[i]));
+		}
+		
+		this.keymanLanguagesModel = new KeyManLanguageTableModel(km.keymanLanguages);
+		this.keymanLanguagesTable = new JTable(this.keymanLanguagesModel);
+		this.keymanLanguagesPane = scrollWrap(this.keymanLanguagesTable);
+		this.keymanLanguagesAdd = square(new JButton("+"));
+		this.keymanLanguagesAdd.addActionListener(new AddKeyManLanguageActionListener(keymanLanguagesModel, keymanLanguagesTable, keymanLanguagesPane));
+		this.keymanLanguagesDelete = square(new JButton("\u2212"));
+		this.keymanLanguagesDelete.addActionListener(new DeleteKeyManLanguageActionListener(keymanLanguagesModel, keymanLanguagesTable));
+		setColumnWidth(keymanLanguagesTable, 0, 80);
+		
+		this.keymanDescription = new JTextField(km.keymanDescription);
+		this.keymanLicenseType = mono(new JTextField(km.keymanLicenseType, 8));
+		this.keymanLicenseText = mono(new JTextArea(km.keymanLicenseText));
+		this.keymanLicenseDefault = new JButton("Generate Default License");
+		this.keymanLicenseDefault.addActionListener(new KeymanDefaultActionListener("keyman-license.md", keymanLicenseText));
+		this.keymanReadme = mono(new JTextArea(km.keymanReadme));
+		this.keymanReadmeDefault = new JButton("Generate Default Readme");
+		this.keymanReadmeDefault.addActionListener(new KeymanDefaultActionListener("keyman-readme.md", keymanReadme));
+		this.keymanHistory = mono(new JTextArea(km.keymanHistory));
+		this.keymanHistoryDefault = new JButton("Generate Default History");
+		this.keymanHistoryDefault.addActionListener(new KeymanDefaultActionListener("keyman-history.md", keymanHistory));
 		
 		this.icon = size(new BufferedImageWell(km.icon), 36, 36);
 		
@@ -231,6 +317,29 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel xkbField2 = leftAlign(verticalStack(xkbAltGrKey, xkbComposeKey));
 		JPanel xkbPanel = verticalSxS(leftSxS(xkbLabel1, xkbField1, 8), xkbCommnt, leftSxS(xkbLabel2, xkbField2, 8), 8);
 		
+		JPanel kmnLabels = verticalStack("ID:", "Name:", "Copyright:", "Message:", "Web Help Text:", "Keyboard Version:", "Author:", "Email Address:", "Web Site:");
+		JPanel kmnFields = verticalStack(keymanIdentifier, keymanName, keymanCopyright, keymanMessage, keymanWebHelpText, keymanVersion, keymanAuthor, keymanEmailAddress, keymanWebSite);
+		JPanel kmnCommts = topSxS(new JLabel("Comments:"), scrollWrap(keymanComments), 4);
+		JPanel kmnPanelL = topSxS(leftSxS(kmnLabels, kmnFields, 8), kmnCommts, 8);
+		JPanel kmnChecks = verticalStack(keymanRightToLeft, keymanKey102, keymanDisplayUnderlying, keymanUseAltGr);
+		JPanel kmnTarget = topSxS(new JLabel("Targets:"), scrollWrap(topAlign(verticalStack(0, keymanTargets))), 4);
+		JPanel kmnPlatfm = topSxS(new JLabel("Platforms:"), scrollWrap(topAlign(verticalStack(0, keymanPlatforms))), 4);
+		JPanel kmnTgtPfm = horizontalStack(12, kmnTarget, kmnPlatfm);
+		JPanel kmnLangsB = leftAlign(horizontalStack(keymanLanguagesAdd, keymanLanguagesDelete));
+		JPanel kmnLangsP = verticalSxS(new JLabel("Languages:"), keymanLanguagesPane, kmnLangsB, 4);
+		JPanel kmnPanelR = topSxS(kmnChecks, verticalStack(8, kmnTgtPfm, kmnLangsP), 8);
+		JPanel kmnPanel = horizontalStack(12, kmnPanelL, kmnPanelR);
+		
+		JPanel kmnRMDesc = leftSxS(new JLabel("Description:"), keymanDescription, 8);
+		JPanel kmnRMText = verticalSxS(new JLabel("Readme Markdown:"), scrollWrap(keymanReadme), leftAlign(keymanReadmeDefault), 4);
+		JPanel kmnRMPane = topSxS(kmnRMDesc, kmnRMText, 8);
+		
+		JPanel kmnLicTyp = leftSxS(new JLabel("License Type:"), leftAlign(keymanLicenseType), 8);
+		JPanel kmnLicTxt = verticalSxS(new JLabel("License Markdown:"), scrollWrap(keymanLicenseText), leftAlign(keymanLicenseDefault), 4);
+		JPanel kmnLicPnl = topSxS(kmnLicTyp, kmnLicTxt, 8);
+		
+		JPanel kmnHistP = verticalSxS(new JLabel("History Markdown:"), scrollWrap(keymanHistory), leftAlign(keymanHistoryDefault), 4);
+		
 		JPanel htmHLabel = verticalStack("Title:", "H1:", "H2:");
 		JPanel htmHField = verticalStack(htmlTitle, htmlH1, htmlH2);
 		JPanel htmStyles = topSxS(new JLabel("Stylesheet:"), scrollWrap(htmlStyle), 4);
@@ -252,10 +361,14 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel htmPanelI = verticalSxS(new JLabel("Installation instructions HTML:"), scrollWrap(htmlInstall), leftAlign(htmlInstallDefault), 4);
 		JPanel htmPanel4 = topSxS(new JLabel("Footer HTML:"), scrollWrap(htmlBody4), 4);
 		
-		JTabbedPane tabs = new JTabbedPane();
+		JTabbedPane tabs = new JTabbedPane(JTabbedPane.LEFT);
 		tabs.add("Windows (MSKLC)", addBorder(winPanel, 20));
 		tabs.add("Mac OS X", addBorder(macPanel, 20));
 		tabs.add("Linux (XKB)", addBorder(xkbPanel, 20));
+		tabs.add("Keyman", addBorder(kmnPanel, 20));
+		tabs.add("Keyman Readme", addBorder(kmnRMPane, 20));
+		tabs.add("Keyman License", addBorder(kmnLicPnl, 20));
+		tabs.add("Keyman History", addBorder(kmnHistP, 20));
 		tabs.add("HTML Header", addBorder(htmPanelH, 20));
 		tabs.add("HTML Layout", addBorder(htmPanelL, 20));
 		tabs.add("HTML Body 1", addBorder(htmPanel1, 20));
@@ -290,8 +403,20 @@ public class LayoutInfoPanel extends JPanel {
 		return p;
 	}
 	
+	private static JPanel verticalStack(int gap, Component... comps) {
+		JPanel p = new JPanel(new GridLayout(0,1,gap,gap));
+		for (Component c : comps) p.add(c);
+		return p;
+	}
+	
 	private static JPanel horizontalStack(Component... comps) {
 		JPanel p = new JPanel(new GridLayout(1,0,4,4));
+		for (Component c : comps) p.add(c);
+		return p;
+	}
+	
+	private static JPanel horizontalStack(int gap, Component... comps) {
+		JPanel p = new JPanel(new GridLayout(1,0,gap,gap));
 		for (Component c : comps) p.add(c);
 		return p;
 	}
@@ -312,6 +437,12 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel p = new JPanel(new BorderLayout(gap, gap));
 		p.add(l, BorderLayout.LINE_START);
 		p.add(c, BorderLayout.CENTER);
+		return p;
+	}
+	
+	private static JPanel topAlign(Component c) {
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(c, BorderLayout.PAGE_START);
 		return p;
 	}
 	
@@ -389,6 +520,31 @@ public class LayoutInfoPanel extends JPanel {
 		km.xkbComment = this.xkbComment.getText();
 		km.xkbAltGrKey = (XkbAltGrKey)this.xkbAltGrKey.getSelectedItem();
 		km.xkbComposeKey = (XkbComposeKey)this.xkbComposeKey.getSelectedItem();
+		km.keymanIdentifier = this.keymanIdentifier.getText();
+		km.keymanName = this.keymanName.getText();
+		km.keymanCopyright = this.keymanCopyright.getText();
+		km.keymanMessage = this.keymanMessage.getText();
+		km.keymanWebHelpText = this.keymanWebHelpText.getText();
+		km.keymanVersion = this.keymanVersion.getText();
+		km.keymanComments = this.keymanComments.getText();
+		km.keymanAuthor = this.keymanAuthor.getText();
+		km.keymanEmailAddress = this.keymanEmailAddress.getText();
+		km.keymanWebSite = this.keymanWebSite.getText();
+		km.keymanRightToLeft = this.keymanRightToLeft.isSelected();
+		km.keymanKey102 = this.keymanKey102.isSelected();
+		km.keymanDisplayUnderlying = this.keymanDisplayUnderlying.isSelected();
+		km.keymanUseAltGr = this.keymanUseAltGr.isSelected();
+		KeyManTarget[] targets = KeyManTarget.values();
+		for (int i = 0; i < targets.length; i++) {
+			if (this.keymanTargets[i].isSelected()) km.keymanTargets.add(targets[i]);
+			else km.keymanTargets.remove(targets[i]);
+		}
+		KeyManPlatform[] platforms = KeyManPlatform.values();
+		for (int i = 0; i < platforms.length; i++) {
+			if (this.keymanPlatforms[i].isSelected()) km.keymanPlatforms.add(platforms[i]);
+			else km.keymanPlatforms.remove(platforms[i]);
+		}
+		this.keymanLanguagesModel.toMap(km.keymanLanguages);
 		km.icon = this.icon.getImage();
 		try { km.macIconVersion = Integer.parseInt(this.macIconVersion.getText(), 16); }
 		catch (NumberFormatException nfe) { km.macIconVersion = null; }
@@ -426,6 +582,28 @@ public class LayoutInfoPanel extends JPanel {
             if (overLimit > 0) text = text.substring(0, text.length() - overLimit);
             if (text.length() > 0) super.replace(fb, offset, length, text, a); 
         }
+	}
+	
+	private class KeymanDefaultActionListener implements ActionListener {
+		private final String template;
+		private final JTextArea textArea;
+		private KeymanDefaultActionListener(String template, JTextArea textArea) {
+			this.template = template;
+			this.textArea = textArea;
+		}
+		public void actionPerformed(ActionEvent e) {
+			StringBuffer sb = new StringBuffer();
+			Scanner scan = KeyManWriterUtility.getTemplate(template);
+			while (scan.hasNextLine()) {
+				if (sb.length() > 0) sb.append("\n");
+				sb.append(KeyManWriterUtility.replaceFields(scan.nextLine(), km));
+			}
+			scan.close();
+			textArea.setText(sb.toString());
+			if (textArea == keymanLicenseText) {
+				keymanLicenseType.setText("mit");
+			}
+		}
 	}
 	
 	private class HTMLInstallDefaultActionListener implements ActionListener {
@@ -505,6 +683,43 @@ public class LayoutInfoPanel extends JPanel {
 		private final CodePointClassTableModel model;
 		private final JTable table;
 		private DeleteCodePointClassActionListener(CodePointClassTableModel model, JTable table) {
+			this.model = model;
+			this.table = table;
+		}
+		public void actionPerformed(ActionEvent e) {
+			int[] rows = table.getSelectedRows();
+			for (int i = rows.length - 1; i >= 0; i--) {
+				model.deleteEntry(rows[i]);
+			}
+		}
+	}
+	
+	private static class AddKeyManLanguageActionListener implements ActionListener {
+		private final KeyManLanguageTableModel model;
+		private final JTable table;
+		private final JScrollPane pane;
+		private AddKeyManLanguageActionListener(KeyManLanguageTableModel model, JTable table, JScrollPane pane) {
+			this.model = model;
+			this.table = table;
+			this.pane = pane;
+		}
+		public void actionPerformed(ActionEvent e) {
+			final int i = model.getRowCount();
+			model.addEntry("en", "English");
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					table.getSelectionModel().setSelectionInterval(i, i);
+					JScrollBar vsb = pane.getVerticalScrollBar();
+					vsb.setValue(vsb.getMaximum());
+				}
+			});
+		}
+	}
+	
+	private static class DeleteKeyManLanguageActionListener implements ActionListener {
+		private final KeyManLanguageTableModel model;
+		private final JTable table;
+		private DeleteKeyManLanguageActionListener(KeyManLanguageTableModel model, JTable table) {
 			this.model = model;
 			this.table = table;
 		}
