@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -202,6 +203,41 @@ public class KeyboardMapping {
 			}
 		}
 		return true;
+	}
+	
+	public void getAllOutputs(Collection<Integer> all, boolean includeDeadKeys, boolean includeLongPress) {
+		for (KeyMapping km : map.values()) {
+			for (int output : new int[] {
+				km.unshiftedOutput, km.shiftedOutput,
+				km.altUnshiftedOutput, km.altShiftedOutput
+			}) {
+				if (output > 0) all.add(output);
+			}
+			if (includeDeadKeys) {
+				for (DeadKeyTable dead : new DeadKeyTable[] {
+					km.unshiftedDeadKey, km.shiftedDeadKey,
+					km.altUnshiftedDeadKey, km.altShiftedDeadKey
+				}) {
+					if (dead != null) {
+						if (dead.winTerminator > 0) all.add(dead.winTerminator);
+						if (dead.macTerminator > 0) all.add(dead.macTerminator);
+						for (int o : dead.keyMap.values()) if (o > 0) all.add(o);
+					}
+				}
+			}
+			if (includeLongPress) {
+				for (int[] lpo : new int[][] {
+					km.unshiftedLongPressOutput, km.shiftedLongPressOutput,
+					km.altUnshiftedLongPressOutput, km.altShiftedLongPressOutput
+				}) {
+					if (lpo != null) {
+						for (int o : lpo) {
+							if (o > 0) all.add(o);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public List<Integer> getAutoLongPressOutput(List<Integer> list, int cp) {
