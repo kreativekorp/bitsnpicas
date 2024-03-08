@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.kreative.unicode.data.NameResolver;
 
 public final class KeyManWriterUtility {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -65,5 +66,46 @@ public final class KeyManWriterUtility {
 				sb.append(" * " + s + "\n");
 			}
 		}
+	}
+	
+	public static String keymanIdString(int output, DeadKeyTable dead) {
+		if (dead != null) {
+			if      (dead.macTerminator > 0) output = dead.macTerminator;
+			else if (dead.winTerminator > 0) output = dead.winTerminator;
+			else if (dead.xkbOutput     > 0) output = dead.xkbOutput;
+		}
+		
+		if (output <= 0) return "";
+		
+		String skId = Integer.toHexString(output);
+		while (skId.length() < 4) skId = "0" + skId;
+		return "U_" + skId.toUpperCase();
+	}
+	
+	public static String keymanDisplayString(int output, DeadKeyTable dead) {
+		if (dead != null) {
+			if      (dead.macTerminator > 0) output = dead.macTerminator;
+			else if (dead.winTerminator > 0) output = dead.winTerminator;
+			else if (dead.xkbOutput     > 0) output = dead.xkbOutput;
+		}
+		
+		if (output <= 0) return "";
+		switch (output) {
+			case 0x00AD: return "(-)";
+			case 0x02DE: return "◌˞";
+		}
+		
+		String s = String.valueOf(Character.toChars(output));
+		NameResolver r = NameResolver.instance(output);
+		if (r.getCategory(output).startsWith("M")) {
+			// Combining Mark
+			s = "◌" + s;
+			String ccc = r.getCombiningClass(output);
+			if (ccc.equals("233") || ccc.equals("234")) {
+				// Double Combining Mark
+				s = s + "◌";
+			}
+		}
+		return s;
 	}
 }

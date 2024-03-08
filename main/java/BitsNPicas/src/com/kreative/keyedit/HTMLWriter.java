@@ -13,10 +13,10 @@ import java.util.Scanner;
 import com.kreative.unicode.data.NameResolver;
 
 public class HTMLWriter {
-	public static void write(File file, KeyboardMapping km) throws IOException {
+	public static void write(File file, KeyboardMapping km, boolean install) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"), true);
-		write(pw, km);
+		write(pw, km, install);
 		pw.flush();
 		pw.close();
 		fos.close();
@@ -32,7 +32,7 @@ public class HTMLWriter {
 		}
 	}
 	
-	public static void write(PrintWriter out, KeyboardMapping km) {
+	public static void write(PrintWriter out, KeyboardMapping km, boolean install) {
 		out.println("<!DOCTYPE HTML>");
 		out.println("<html>");
 		out.println("\t<head>");
@@ -49,7 +49,7 @@ public class HTMLWriter {
 		out.println("\t</head>");
 		out.println("\t<body class=\"center\">");
 		String h1 = (km.htmlH1 == null || km.htmlH1.length() == 0) ? (km.getNameNotEmpty() + " Keyboard Layout") : km.htmlH1;
-		String h2 = (km.htmlH2 == null || km.htmlH2.length() == 0) ? "for Mac OS X, Linux, and Windows" : km.htmlH2;
+		String h2 = (km.htmlH2 == null || km.htmlH2.length() == 0) ? (install ? "for Mac OS X, Linux, and Windows" : "for Keyman") : km.htmlH2;
 		out.println("\t\t<h1>" + HTMLWriterUtility.htmlSpecialChars(h1) + "</h1>");
 		out.println("\t\t<h2>" + HTMLWriterUtility.htmlSpecialChars(h2) + "</h2>");
 		writeInline(out, "\t\t", km.htmlBody1);
@@ -57,11 +57,13 @@ public class HTMLWriter {
 		writeInline(out, "\t\t", km.htmlBody2);
 		writeKeyboard(out, km);
 		writeInline(out, "\t\t", km.htmlBody3);
-		if (km.htmlInstall != null && km.htmlInstall.length() > 0) {
-			writeInline(out, "\t\t", km.htmlInstall);
-		} else {
-			String rn = km.isWindowsNativeCompatible() ? "install.html" : "install-nonbmp.html";
-			writeResource(out, "\t\t", rn, km);
+		if (install) {
+			if (km.htmlInstall != null && km.htmlInstall.length() > 0) {
+				writeInline(out, "\t\t", km.htmlInstall);
+			} else {
+				String rn = km.isWindowsNativeCompatible() ? "install.html" : "install-nonbmp.html";
+				writeResource(out, "\t\t", rn, km);
+			}
 		}
 		writeInline(out, "\t\t", km.htmlBody4);
 		out.println("\t\t<script>");

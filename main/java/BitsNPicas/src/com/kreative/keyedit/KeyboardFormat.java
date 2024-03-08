@@ -382,7 +382,7 @@ public enum KeyboardFormat {
 		}
 		@Override
 		public void write(File f, KeyboardMapping km) throws IOException {
-			HTMLWriter.write(f, km);
+			HTMLWriter.write(f, km, true);
 		}
 	};
 	

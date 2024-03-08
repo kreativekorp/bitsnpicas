@@ -58,23 +58,8 @@ public class KeyManVisualWriter {
 	}
 	
 	private static void writeKeyMapping(PrintWriter out, String keyCode, int output, DeadKeyTable dead) {
-		int cp = getCP(output, dead);
-		if (cp > 0) {
-			String qs = quote(String.valueOf(Character.toChars(cp)));
-			out.print("      <key vkey=\"" + keyCode + "\">" + qs + "</key>\r\n");
-		}
-	}
-	
-	private static int getCP(int output, DeadKeyTable dead) {
-		if (dead != null) {
-			if (dead.winTerminator > 0) {
-				return dead.winTerminator;
-			}
-		}
-		if (output > 0) {
-			return output;
-		}
-		return -1;
+		String qs = quote(KeyManWriterUtility.keymanDisplayString(output, dead));
+		out.print("      <key vkey=\"" + keyCode + "\">" + qs + "</key>\r\n");
 	}
 	
 	private static String quote(String s) {
