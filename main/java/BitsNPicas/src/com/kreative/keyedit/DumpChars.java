@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.TreeSet;
+import com.kreative.unicode.data.NameResolver;
 
 public class DumpChars {
 	public static void main(String[] args) throws IOException {
@@ -13,6 +14,7 @@ public class DumpChars {
 		ArrayList<File> inFiles = new ArrayList<File>();
 		boolean includeDeadKeys = true;
 		boolean includeLongPress = false;
+		boolean verbose = false;
 		boolean parseOptions = true;
 		
 		int argi = 0;
@@ -33,6 +35,10 @@ public class DumpChars {
 					includeLongPress = true;
 				} else if (arg.equals("-L")) {
 					includeLongPress = false;
+				} else if (arg.equals("-v")) {
+					verbose = true;
+				} else if (arg.equals("-V")) {
+					verbose = false;
 				} else {
 					System.err.println("Unknown option: "+ arg);
 					return;
@@ -62,7 +68,20 @@ public class DumpChars {
 		}
 		
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"), true);
-		for (int output : all) if (output >= 32) out.print(Character.toChars(output));
-		out.println();
+		for (int output : all) {
+			if (output >= 32) {
+				if (verbose) {
+					String h = Integer.toHexString(output);
+					while (h.length() < 4) h = "0" + h;
+					out.print("U+" + h.toUpperCase() + "\t");
+				}
+				out.print(Character.toChars(output));
+				if (verbose) {
+					String n = NameResolver.instance(output).getName(output);
+					out.println("\t" + n);
+				}
+			}
+		}
+		if (!verbose) out.println();
 	}
 }

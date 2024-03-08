@@ -1,13 +1,24 @@
 package com.kreative.keyedit.edit;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.awt.SystemColor;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.BitSet;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 import java.util.TreeSet;
 import javax.swing.BorderFactory;
@@ -29,6 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -44,6 +56,7 @@ import com.kreative.keyedit.KkbWriter;
 import com.kreative.keyedit.WinLocale;
 import com.kreative.keyedit.XkbAltGrKey;
 import com.kreative.keyedit.XkbComposeKey;
+import com.kreative.unicode.data.NameResolver;
 
 public class LayoutInfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -94,6 +107,10 @@ public class LayoutInfoPanel extends JPanel {
 	private final JScrollPane keymanLanguagesPane;
 	private final JButton keymanLanguagesAdd;
 	private final JButton keymanLanguagesDelete;
+	private final JButton keymanLanguagesClear;
+	private final JButton keymanLanguagesCopy;
+	private final JButton keymanLanguagesPaste;
+	private final JButton keymanLanguagesSort;
 	private final JTextField keymanDescription;
 	private final JTextField keymanLicenseType;
 	private final JTextArea keymanLicenseText;
@@ -131,6 +148,7 @@ public class LayoutInfoPanel extends JPanel {
 	private final JButton htmlCpLabelsDelete;
 	private final JCheckBox charsIncludeDeadKeys;
 	private final JCheckBox charsIncludeLongPress;
+	private final JCheckBox charsVerbose;
 	private final JTextArea chars;
 	
 	public LayoutInfoPanel(KeyboardMapping km) {
@@ -154,9 +172,8 @@ public class LayoutInfoPanel extends JPanel {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				int i = winLocaleTable.getSelectedRow();
-				int n = winLocaleTable.getRowCount() - 1;
-				JScrollBar vsb = winLocalePane.getVerticalScrollBar();
-				vsb.setValue(vsb.getMaximum() * i / n);
+				Rectangle r = winLocaleTable.getCellRect(i, 0, true);
+				winLocaleTable.scrollRectToVisible(r);
 			}
 		});
 		
@@ -218,11 +235,20 @@ public class LayoutInfoPanel extends JPanel {
 		
 		this.keymanLanguagesModel = new KeyManLanguageTableModel(km.keymanLanguages);
 		this.keymanLanguagesTable = new JTable(this.keymanLanguagesModel);
+		this.keymanLanguagesTable.setDefaultRenderer(String.class, new KeyManLanguageTableCellRenderer(keymanLanguagesModel));
 		this.keymanLanguagesPane = scrollWrap(this.keymanLanguagesTable);
 		this.keymanLanguagesAdd = square(new JButton("+"));
 		this.keymanLanguagesAdd.addActionListener(new AddKeyManLanguageActionListener(keymanLanguagesModel, keymanLanguagesTable, keymanLanguagesPane));
 		this.keymanLanguagesDelete = square(new JButton("\u2212"));
 		this.keymanLanguagesDelete.addActionListener(new DeleteKeyManLanguageActionListener(keymanLanguagesModel, keymanLanguagesTable));
+		this.keymanLanguagesClear = new JButton("Clear All");
+		this.keymanLanguagesClear.addActionListener(new ClearKeyManLanguageActionListener(keymanLanguagesModel));
+		this.keymanLanguagesCopy = new JButton("Copy All");
+		this.keymanLanguagesCopy.addActionListener(new CopyKeyManLanguageActionListener(keymanLanguagesModel));
+		this.keymanLanguagesPaste = new JButton("Paste All");
+		this.keymanLanguagesPaste.addActionListener(new PasteKeyManLanguageActionListener(keymanLanguagesModel));
+		this.keymanLanguagesSort = new JButton("Sort All");
+		this.keymanLanguagesSort.addActionListener(new SortKeyManLanguageActionListener(keymanLanguagesModel));
 		setColumnWidth(keymanLanguagesTable, 0, 80);
 		
 		this.keymanDescription = new JTextField(km.keymanDescription);
@@ -303,6 +329,8 @@ public class LayoutInfoPanel extends JPanel {
 		this.charsIncludeDeadKeys.addActionListener(new UpdateCharsActionListener());
 		this.charsIncludeLongPress = new JCheckBox("Include Long Press");
 		this.charsIncludeLongPress.addActionListener(new UpdateCharsActionListener());
+		this.charsVerbose = new JCheckBox("Show Details");
+		this.charsVerbose.addActionListener(new UpdateCharsActionListener());
 		this.chars = mono(new JTextArea());
 		this.chars.setEditable(false);
 		this.chars.setLineWrap(true);
@@ -339,7 +367,7 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel kmnTarget = topSxS(new JLabel("Targets:"), scrollWrap(topAlign(verticalStack(0, keymanTargets))), 4);
 		JPanel kmnPlatfm = topSxS(new JLabel("Platforms:"), scrollWrap(topAlign(verticalStack(0, keymanPlatforms))), 4);
 		JPanel kmnTgtPfm = horizontalStack(12, kmnTarget, kmnPlatfm);
-		JPanel kmnLangsB = leftAlign(horizontalStack(keymanLanguagesAdd, keymanLanguagesDelete));
+		JPanel kmnLangsB = leftAlign(leftSxS(horizontalStack(keymanLanguagesAdd, keymanLanguagesDelete), horizontalStack(keymanLanguagesClear, keymanLanguagesCopy, keymanLanguagesPaste, keymanLanguagesSort), 4));
 		JPanel kmnLangsP = verticalSxS(new JLabel("Languages:"), keymanLanguagesPane, kmnLangsB, 4);
 		JPanel kmnPanelR = topSxS(kmnChecks, verticalStack(8, kmnTgtPfm, kmnLangsP), 8);
 		JPanel kmnPanel = horizontalStack(12, kmnPanelL, kmnPanelR);
@@ -375,7 +403,7 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel htmPanelI = verticalSxS(new JLabel("Installation instructions HTML:"), scrollWrap(htmlInstall), leftAlign(htmlInstallDefault), 4);
 		JPanel htmPanel4 = topSxS(new JLabel("Footer HTML:"), scrollWrap(htmlBody4), 4);
 		
-		JPanel charsBtns = horizontalStack(new JLabel("Characters generated by layout:"), charsIncludeDeadKeys, charsIncludeLongPress);
+		JPanel charsBtns = horizontalStack(new JLabel("Characters generated by layout:"), charsIncludeDeadKeys, charsIncludeLongPress, charsVerbose);
 		JPanel charsPnl = topSxS(charsBtns, scrollWrap(chars), 4);
 		
 		JTabbedPane tabs = new JTabbedPane(JTabbedPane.LEFT);
@@ -717,6 +745,46 @@ public class LayoutInfoPanel extends JPanel {
 		}
 	}
 	
+	private static class KeyManLanguageTableCellRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		private final KeyManLanguageTableModel model;
+		private KeyManLanguageTableCellRenderer(KeyManLanguageTableModel model) {
+			this.model = model;
+		}
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean sel, boolean focus, int row, int col) {
+			Component c = super.getTableCellRendererComponent(table, value, sel, focus, row, col);
+			if (!sel) {
+				Object v0 = model.getValueAt(row, 0);
+				Object v1 = model.getValueAt(row, 1);
+				if (v0 == null || v1 == null) {
+					c.setBackground(Color.red);
+					c.setForeground(Color.white);
+				} else {
+					String s0 = v0.toString();
+					String s1 = v1.toString();
+					if (s0 == null || s1 == null || s0.trim().length() == 0 || s1.trim().length() == 0) {
+						c.setBackground(Color.red);
+						c.setForeground(Color.white);
+					} else {
+						WinLocale loc0 = WinLocale.forTag(s0, null);
+						WinLocale loc1 = WinLocale.forName(s1, null);
+						if (loc0 != loc1) {
+							c.setBackground(Color.orange);
+							c.setForeground(Color.black);
+						} else if (loc0 == null) {
+							c.setBackground(Color.yellow);
+							c.setForeground(Color.black);
+						} else {
+							c.setBackground(SystemColor.text);
+							c.setForeground(SystemColor.textText);
+						}
+					}
+				}
+			}
+			return c;
+		}
+	}
+	
 	private static class AddKeyManLanguageActionListener implements ActionListener {
 		private final KeyManLanguageTableModel model;
 		private final JTable table;
@@ -754,12 +822,129 @@ public class LayoutInfoPanel extends JPanel {
 		}
 	}
 	
+	private static class ClearKeyManLanguageActionListener implements ActionListener {
+		private final KeyManLanguageTableModel model;
+		private ClearKeyManLanguageActionListener(KeyManLanguageTableModel model) {
+			this.model = model;
+		}
+		public void actionPerformed(ActionEvent e) {
+			model.clearEntries();
+		}
+	}
+	
+	private static class CopyKeyManLanguageActionListener implements ActionListener {
+		private final KeyManLanguageTableModel model;
+		private CopyKeyManLanguageActionListener(KeyManLanguageTableModel model) {
+			this.model = model;
+		}
+		public void actionPerformed(ActionEvent e) {
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0, n = model.getRowCount(); i < n; i++) {
+				sb.append(model.getValueAt(i, 0));
+				sb.append('\t');
+				sb.append(model.getValueAt(i, 1));
+				sb.append('\n');
+			}
+			Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+			StringSelection sel = new StringSelection(sb.toString());
+			cb.setContents(sel, sel);
+		}
+	}
+	
+	private static class PasteKeyManLanguageActionListener implements ActionListener {
+		private final KeyManLanguageTableModel model;
+		private PasteKeyManLanguageActionListener(KeyManLanguageTableModel model) {
+			this.model = model;
+		}
+		public void actionPerformed(ActionEvent e) {
+			Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+			if (cb.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+				try {
+					String s = cb.getData(DataFlavor.stringFlavor).toString();
+					s = s.replace("\r\n|\r|\n", "\n");
+					
+					// Parse copied data from hyperglot
+					s = s.replaceAll("ISO code: (\\w+)(\nautonym: .+(\n.+)*)?\nname: (.+)(\n.+)*", "$1\t$4");
+					
+					LinkedHashMap<String,String> langs = new LinkedHashMap<String,String>();
+					lines: for (String line : s.trim().split("\n")) {
+						if ((line = line.trim()).length() > 0) {
+							WinLocale loc = WinLocale.forTag(line, null);
+							if (loc != null) { langs.put(loc.tag, loc.name); continue lines; }
+							loc = WinLocale.forName(line, null);
+							if (loc != null) { langs.put(loc.tag, loc.name); continue lines; }
+							
+							String[] tabbed = line.split("\t");
+							String[] space2 = line.split("\\s+", 2);
+							String[] spaced = line.split("\\s+");
+							
+							for (String[] fields : Arrays.asList(tabbed, space2, spaced)) {
+								for (String field : fields) {
+									if ((field = field.trim()).length() > 0) {
+										loc = WinLocale.forTag(field, null);
+										if (loc != null) { langs.put(loc.tag, loc.name); continue lines; }
+										loc = WinLocale.forName(field, null);
+										if (loc != null) { langs.put(loc.tag, loc.name); continue lines; }
+									}
+								}
+							}
+							
+							for (String[] fields : Arrays.asList(tabbed, space2, spaced)) {
+								if (fields.length == 2) {
+									langs.put(fields[0].trim(), fields[1].trim());
+									continue lines;
+								}
+							}
+							
+							langs.put(line, line);
+						}
+					}
+					
+					if (!langs.isEmpty()) {
+						model.clearEntries();
+						model.addEntries(langs);
+						return;
+					}
+				}
+				catch (UnsupportedFlavorException e1) {}
+				catch (IOException e1) {}
+			}
+			Toolkit.getDefaultToolkit().beep();
+		}
+	}
+	
+	private static class SortKeyManLanguageActionListener implements ActionListener {
+		private final KeyManLanguageTableModel model;
+		private SortKeyManLanguageActionListener(KeyManLanguageTableModel model) {
+			this.model = model;
+		}
+		public void actionPerformed(ActionEvent e) {
+			model.sortEntries();
+		}
+	}
+	
 	private class UpdateCharsActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			boolean includeDeadKeys = charsIncludeDeadKeys.isSelected();
+			boolean includeLongPress = charsIncludeLongPress.isSelected();
+			boolean verbose = charsVerbose.isSelected();
 			TreeSet<Integer> all = new TreeSet<Integer>();
-			km.getAllOutputs(all, charsIncludeDeadKeys.isSelected(), charsIncludeLongPress.isSelected());
+			km.getAllOutputs(all, includeDeadKeys, includeLongPress);
 			StringBuffer sb = new StringBuffer();
-			for (int output : all) if (output >= 32) sb.append(Character.toChars(output));
+			for (int output : all) {
+				if (output >= 32) {
+					if (verbose) {
+						String h = Integer.toHexString(output);
+						while (h.length() < 4) h = "0" + h;
+						sb.append("U+" + h.toUpperCase() + "\t");
+					}
+					sb.append(Character.toChars(output));
+					if (verbose) {
+						String n = NameResolver.instance(output).getName(output);
+						sb.append("\t" + n + "\n");
+					}
+				}
+			}
 			chars.setText(sb.toString());
 		}
 	}

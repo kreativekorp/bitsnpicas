@@ -1,6 +1,8 @@
 package com.kreative.keyedit.edit;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.AbstractTableModel;
@@ -46,6 +48,42 @@ public class KeyManLanguageTableModel extends AbstractTableModel {
 			i += 1;
 			entries.add(i, e);
 			fireTableRowsUpdated(i - 1, i);
+		}
+	}
+	
+	public void addEntries(Map<String,String> entries) {
+		if (entries != null && entries.size() > 0) {
+			int i = this.entries.size();
+			int j = i + entries.size() - 1;
+			for (Map.Entry<String,String> e : entries.entrySet()) {
+				Entry entry = new Entry();
+				entry.tag = e.getKey();
+				entry.name = e.getValue();
+				this.entries.add(entry);
+			}
+			fireTableRowsInserted(i, j);
+		}
+	}
+	
+	public void clearEntries() {
+		int i = entries.size();
+		if (i > 0) {
+			entries.clear();
+			fireTableRowsDeleted(0, i - 1);
+		}
+	}
+	
+	public void sortEntries() {
+		int i = entries.size();
+		if (i > 0) {
+			Collections.sort(entries, new Comparator<Entry>() {
+				public int compare(Entry a, Entry b) {
+					String as = (a.name != null) ? a.name : "";
+					String bs = (b.name != null) ? b.name : "";
+					return as.compareToIgnoreCase(bs);
+				}
+			});
+			fireTableRowsUpdated(0, i - 1);
 		}
 	}
 	
