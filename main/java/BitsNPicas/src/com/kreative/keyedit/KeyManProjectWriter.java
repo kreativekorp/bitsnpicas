@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -35,6 +36,16 @@ public class KeyManProjectWriter {
 		writeReadme(new File(parentFile, "README.md"), km);
 		writeKeyboardInfo(new File(parentFile, basename + ".keyboard_info"), km);
 		
+		ArrayList<String> extras = new ArrayList<String>();
+		if (!(km.htmlSquareChars == null || km.htmlSquareChars.isEmpty())) {
+			extras.add("source\\KreativeSquare.ttf");
+		}
+		if (!(km.keymanAttachments == null || km.keymanAttachments.isEmpty())) {
+			for (String name : km.keymanAttachments.keySet()) {
+				extras.add("source\\" + name);
+			}
+		}
+		
 		PrintWriter out = open(projectFile);
 		writeProject(
 			out, km, "$PROJECTPATH\\build",
@@ -50,7 +61,7 @@ public class KeyManProjectWriter {
 			"build\\" + basename + ".kvk",
 			"source\\welcome.htm",
 			"source\\readme.htm",
-			((km.htmlSquareChars == null || km.htmlSquareChars.isEmpty()) ? null : "source\\KreativeSquare.ttf")
+			extras.toArray(new String[extras.size()])
 		);
 		out.flush();
 		out.close();

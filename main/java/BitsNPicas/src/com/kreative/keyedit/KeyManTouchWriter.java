@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class KeyManTouchWriter {
 	public static void write(File file, KeyboardMapping km) throws IOException {
@@ -44,6 +45,9 @@ public class KeyManTouchWriter {
 	private static void writeLayout(StringBuffer out, String prefix, String key, KeyboardMapping km) {
 		out.append(prefix + quote(key) + ": {\n");
 		out.append(prefix + "  \"displayUnderlying\": false,\n");
+		if (km.keymanFontFamily != null && km.keymanFontFamily.length() > 0) {
+			out.append(prefix + "  \"font\": " + quote(km.keymanFontFamily) + ",\n");
+		}
 		out.append(prefix + "  \"layer\": [\n");
 		String layerPrefix = prefix + "    ";
 		writeLayer(out, layerPrefix, "default", false, false, km);
@@ -85,7 +89,7 @@ public class KeyManTouchWriter {
 		writeKeyMapping(out, keyPrefix, "K_0", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_HYPHEN", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_EQUAL", 0, 100, shift, alt, km);
-		writeKeyMapping(out, keyPrefix, "K_BKSP", "*BkSp*", null, 0, 100, 1, null);
+		writeKeyMapping(out, keyPrefix, "K_BKSP", "*BkSp*", null, null, 0, 100, 1, null);
 		out.append(prefix + "  ],\n");
 		out.append(prefix + "},\n");
 	}
@@ -107,7 +111,7 @@ public class KeyManTouchWriter {
 		writeKeyMapping(out, keyPrefix, "K_P", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_LBRKT", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_RBRKT", 0, 100, shift, alt, km);
-		writeKeyMapping(out, keyPrefix, "T_0", null, null, 0, 40, 10, null);
+		writeKeyMapping(out, keyPrefix, "T_0", null, null, null, 0, 40, 10, null);
 		out.append(prefix + "  ],\n");
 		out.append(prefix + "},\n");
 	}
@@ -143,7 +147,7 @@ public class KeyManTouchWriter {
 		if (km.keymanKey102) {
 			writeKeyMapping(out, keyPrefix, "K_oE2", 0, 160, shift, alt, km);
 		} else {
-			writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, 0, 160, 1, nextLayer);
+			writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, null, 0, 160, 1, nextLayer);
 		}
 		writeKeyMapping(out, keyPrefix, "K_Z", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_X", 0, 100, shift, alt, km);
@@ -155,7 +159,7 @@ public class KeyManTouchWriter {
 		writeKeyMapping(out, keyPrefix, "K_COMMA", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_PERIOD", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_SLASH", 0, 100, shift, alt, km);
-		writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, 0, 155, 1, nextLayer);
+		writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, null, 0, 155, 1, nextLayer);
 		out.append(prefix + "  ],\n");
 		out.append(prefix + "},\n");
 	}
@@ -166,11 +170,11 @@ public class KeyManTouchWriter {
 		out.append(prefix + "  \"key\": [\n");
 		String keyPrefix = prefix + "    ";
 		String nextLayer = alt ? (shift ? "shift" : "default") : (shift ? "shift-alt" : "alt");
-		writeKeyMapping(out, keyPrefix, "K_LCONTROL", "alt", null, 0, 130, 1, nextLayer);
-		writeKeyMapping(out, keyPrefix, "K_LOPT", "*Menu*", null, 0, 140, 1, null);
+		writeKeyMapping(out, keyPrefix, "K_LCONTROL", "alt", null, null, 0, 130, 1, nextLayer);
+		writeKeyMapping(out, keyPrefix, "K_LOPT", "*Menu*", null, null, 0, 140, 1, null);
 		// writeKeyMapping(out, keyPrefix, "K_SPACE", 0, 930, shift, alt, km);
-		writeKeyMapping(out, keyPrefix, "K_SPACE", null, null, 0, 930, 0, null);
-		writeKeyMapping(out, keyPrefix, "K_ENTER", "*Enter*", null, 0, 235, 1, null);
+		writeKeyMapping(out, keyPrefix, "K_SPACE", null, null, null, 0, 930, 0, null);
+		writeKeyMapping(out, keyPrefix, "K_ENTER", "*Enter*", null, null, 0, 235, 1, null);
 		out.append(prefix + "  ],\n");
 		out.append(prefix + "},\n");
 	}
@@ -182,9 +186,9 @@ public class KeyManTouchWriter {
 		int output = alt ? (shift ? m.altShiftedOutput : m.altUnshiftedOutput) : (shift ? m.shiftedOutput : m.unshiftedOutput);
 		boolean isSpace = (id.equals("K_SPACE") && output == 32 && dead == null);
 		String kmId = isSpace ? id : KeyManWriterUtility.keymanIdString(output, dead);
-		String kmText = isSpace ? null : KeyManWriterUtility.keymanDisplayString(output, dead);
+		String kmText = isSpace ? null : KeyManWriterUtility.keymanDisplayString(output, dead, km.keymanCpLabels);
 		List<Integer> sk = getSK(lpo, output, dead, km);
-		writeKeyMapping(out, prefix, kmId, kmText, sk, pad, width, 0, null);
+		writeKeyMapping(out, prefix, kmId, kmText, sk, km.keymanCpLabels, pad, width, 0, null);
 	}
 	
 	private static List<Integer> getSK(int[] lpo, int output, DeadKeyTable dead, KeyboardMapping km) {
@@ -203,14 +207,14 @@ public class KeyManTouchWriter {
 		return sk;
 	}
 	
-	private static void writeKeyMapping(StringBuffer out, String prefix, String id, String text, List<Integer> sk, int pad, int width, int sp, String nextlayer) {
+	private static void writeKeyMapping(StringBuffer out, String prefix, String id, String text, List<Integer> sk, Map<Integer,String> cpLabels, int pad, int width, int sp, String nextlayer) {
 		out.append(prefix + "{\n");
 		if (id != null) out.append(prefix + "  \"id\": " + quote(id) + ",\n");
 		if (text != null) out.append(prefix + "  \"text\": " + quote(text) + ",\n");
 		if (sk != null && sk.size() > 0) {
 			out.append(prefix + "  \"sk\": [\n");
 			for (int cp : sk) {
-				String skText = quote(KeyManWriterUtility.keymanDisplayString(cp, null));
+				String skText = quote(KeyManWriterUtility.keymanDisplayString(cp, null, cpLabels));
 				String skId = quote(KeyManWriterUtility.keymanIdString(cp, null));
 				out.append(prefix + "    {\n");
 				out.append(prefix + "      \"text\": " + skText + ",\n");

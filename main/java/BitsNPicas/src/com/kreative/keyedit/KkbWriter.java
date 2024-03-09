@@ -159,7 +159,8 @@ public class KkbWriter {
 			km.keymanWebHelpText, km.keymanVersion, km.keymanComments, km.keymanAuthor,
 			km.keymanEmailAddress, km.keymanWebSite, km.keymanRightToLeft, km.keymanKey102,
 			km.keymanDisplayUnderlying, km.keymanUseAltGr, km.keymanTargets, km.keymanPlatforms,
-			km.keymanLanguages, km.keymanDescription, km.keymanLicenseType, km.keymanLicenseText,
+			km.keymanLanguages, km.keymanAttachments, km.keymanCpLabels, km.keymanFontFamily,
+			km.keymanDescription, km.keymanLicenseType, km.keymanLicenseText,
 			km.keymanReadme, km.keymanHistory
 		)) return;
 		
@@ -199,6 +200,35 @@ public class KkbWriter {
 			out.println(wrap("\t\t", "keymanLanguage", "tag", e.getKey(), "name", e.getValue()));
 		}
 		out.println("\t</keymanLanguages>");
+		
+		if (km.keymanAttachments != null && !km.keymanAttachments.isEmpty()) {
+			out.println("\t<keymanAttachments>");
+			for (Map.Entry<String,byte[]> e : km.keymanAttachments.entrySet()) {
+				try {
+					StringBuffer sb = new StringBuffer();
+					Base64OutputStream b64 = new Base64OutputStream(sb);
+					b64.write(e.getValue());
+					b64.flush();
+					b64.close();
+					out.println(wrap("\t\t", "attachment", "name", e.getKey(), false) + sb.toString() + "</attachment>");
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+			}
+			out.println("\t</keymanAttachments>");
+		}
+		
+		if (km.keymanCpLabels != null && !km.keymanCpLabels.isEmpty()) {
+			out.println("\t<keymanCpLabels>");
+			for (Map.Entry<Integer,String> e : km.keymanCpLabels.entrySet()) {
+				out.println(wrap("\t\t", "cpLabel", "cp", hex(e.getKey(),4), "label", e.getValue()));
+			}
+			out.println("\t</keymanCpLabels>");
+		}
+		
+		if (km.keymanFontFamily != null && km.keymanFontFamily.length() > 0) {
+			out.println(wrap("\t", "keymanFont", "family", km.keymanFontFamily));
+		}
 		
 		writeBlock(out, "\t", "keymanDescription", km.keymanDescription);
 		writeBlock(out, "\t", "keymanLicense", "type", km.keymanLicenseType, km.keymanLicenseText);

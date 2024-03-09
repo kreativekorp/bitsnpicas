@@ -5,7 +5,7 @@
 
 <!-- Keyboard Mapping -->
 
-<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,keymanIdentifier?,keymanName?,keymanCopyright?,keymanMessage?,keymanWebHelpText?,keymanVersion?,keymanComments?,keymanAuthor?,keymanEmailAddress?,keymanWebSite?,keymanRightToLeft?,keymanKey102?,keymanDisplayUnderlying?,keymanUseAltGr?,keymanTargets?,keymanPlatforms?,keymanLanguages?,keymanDescription?,keymanLicense?,keymanReadme?,keymanHistory?,icon?,macIconVersion?,keyMappings,macActionIds?,html?)>
+<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,keymanIdentifier?,keymanName?,keymanCopyright?,keymanMessage?,keymanWebHelpText?,keymanVersion?,keymanComments?,keymanAuthor?,keymanEmailAddress?,keymanWebSite?,keymanRightToLeft?,keymanKey102?,keymanDisplayUnderlying?,keymanUseAltGr?,keymanTargets?,keymanPlatforms?,keymanLanguages?,keymanAttachments?,keymanCpLabels?,keymanFont?,keymanDescription?,keymanLicense?,keymanReadme?,keymanHistory?,icon?,macIconVersion?,keyMappings,macActionIds?,html?)>
 
 <!ELEMENT name (#PCDATA)>
 
@@ -107,6 +107,17 @@
 <!ELEMENT keymanLanguage EMPTY>
 <!ATTLIST keymanLanguage tag CDATA #REQUIRED name CDATA #REQUIRED>
 
+<!ELEMENT keymanAttachments (attachment*)>
+<!ELEMENT attachment (#PCDATA)>
+<!ATTLIST attachment name CDATA #REQUIRED>
+
+<!ELEMENT keymanCpLabels (cpLabel*)>
+<!ELEMENT cpLabel EMPTY>
+<!ATTLIST cpLabel cp CDATA #REQUIRED label CDATA #REQUIRED>
+
+<!ELEMENT keymanFont EMPTY>
+<!ATTLIST keymanFont family CDATA #REQUIRED>
+
 <!ELEMENT keymanDescription (#PCDATA)>
 
 <!ELEMENT keymanLicense (#PCDATA)>
@@ -207,5 +218,3 @@
 <!ELEMENT span EMPTY>
 <!ATTLIST span class CDATA #REQUIRED chars CDATA #REQUIRED>
 <!ELEMENT cpLabels (cpLabel*)>
-<!ELEMENT cpLabel EMPTY>
-<!ATTLIST cpLabel cp CDATA #REQUIRED label CDATA #REQUIRED>

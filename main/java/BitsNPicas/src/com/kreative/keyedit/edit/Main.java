@@ -61,7 +61,7 @@ public class Main {
 	}
 	
 	private static String lastOpenDirectory = null;
-	public static KeyEditFrame openMapping() {
+	public static File getOpenFile() {
 		Frame frame = new Frame();
 		FileDialog fd = new FileDialog(frame, "Open", FileDialog.LOAD);
 		if (lastOpenDirectory != null) fd.setDirectory(lastOpenDirectory);
@@ -70,7 +70,12 @@ public class Main {
 		fd.dispose();
 		frame.dispose();
 		if (ds == null || fs == null) return null;
-		File file = new File((lastOpenDirectory = ds), fs);
+		return new File((lastOpenDirectory = ds), fs);
+	}
+	
+	public static KeyEditFrame openMapping() {
+		File file = getOpenFile();
+		if (file == null) return null;
 		return openMapping(file);
 	}
 	

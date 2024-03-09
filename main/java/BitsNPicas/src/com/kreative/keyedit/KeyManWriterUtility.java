@@ -2,6 +2,7 @@ package com.kreative.keyedit;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,7 +83,7 @@ public final class KeyManWriterUtility {
 		return "U_" + skId.toUpperCase();
 	}
 	
-	public static String keymanDisplayString(int output, DeadKeyTable dead) {
+	public static String keymanDisplayString(int output, DeadKeyTable dead, Map<Integer,String> cpLabels) {
 		if (dead != null) {
 			if      (dead.macTerminator > 0) output = dead.macTerminator;
 			else if (dead.winTerminator > 0) output = dead.winTerminator;
@@ -90,6 +91,7 @@ public final class KeyManWriterUtility {
 		}
 		
 		if (output <= 0) return "";
+		if (cpLabels.containsKey(output)) return cpLabels.get(output);
 		switch (output) {
 			case 0x00AD: return "(-)";
 			case 0x02DE: return "◌˞";

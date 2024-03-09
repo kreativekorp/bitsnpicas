@@ -48,6 +48,9 @@ public class KeyboardMapping {
 	public final EnumSet<KeyManTarget> keymanTargets;
 	public final EnumSet<KeyManPlatform> keymanPlatforms;
 	public final Map<String,String> keymanLanguages;
+	public final Map<String,byte[]> keymanAttachments;
+	public final Map<Integer,String> keymanCpLabels;
+	public String keymanFontFamily;
 	public String keymanDescription;
 	public String keymanLicenseType;
 	public String keymanLicenseText;
@@ -83,6 +86,8 @@ public class KeyboardMapping {
 		this.keymanTargets = EnumSet.noneOf(KeyManTarget.class);
 		this.keymanPlatforms = EnumSet.noneOf(KeyManPlatform.class);
 		this.keymanLanguages = new LinkedHashMap<String,String>();
+		this.keymanAttachments = new TreeMap<String,byte[]>();
+		this.keymanCpLabels = new TreeMap<Integer,String>();
 	}
 	
 	public String getNameNotEmpty() {

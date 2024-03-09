@@ -15,6 +15,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -29,6 +30,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -111,6 +114,17 @@ public class LayoutInfoPanel extends JPanel {
 	private final JButton keymanLanguagesCopy;
 	private final JButton keymanLanguagesPaste;
 	private final JButton keymanLanguagesSort;
+	private final KeyManAttachmentListModel keymanAttachmentsModel;
+	private final JList keymanAttachmentsList;
+	private final JScrollPane keymanAttachmentsPane;
+	private final JButton keymanAttachmentsAdd;
+	private final JButton keymanAttachmentsDelete;
+	private final CodePointLabelTableModel keymanCpLabelsModel;
+	private final JTable keymanCpLabelsTable;
+	private final JScrollPane keymanCpLabelsPane;
+	private final JButton keymanCpLabelsAdd;
+	private final JButton keymanCpLabelsDelete;
+	private final JTextField keymanFontFamily;
 	private final JTextField keymanDescription;
 	private final JTextField keymanLicenseType;
 	private final JTextArea keymanLicenseText;
@@ -251,6 +265,26 @@ public class LayoutInfoPanel extends JPanel {
 		this.keymanLanguagesSort.addActionListener(new SortKeyManLanguageActionListener(keymanLanguagesModel));
 		setColumnWidth(keymanLanguagesTable, 0, 80);
 		
+		this.keymanAttachmentsModel = new KeyManAttachmentListModel(km.keymanAttachments);
+		this.keymanAttachmentsList = new JList(this.keymanAttachmentsModel);
+		this.keymanAttachmentsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.keymanAttachmentsPane = scrollWrap(this.keymanAttachmentsList);
+		this.keymanAttachmentsAdd = square(new JButton("+"));
+		this.keymanAttachmentsAdd.addActionListener(new AddKeyManAttachmentActionListener(keymanAttachmentsModel, keymanAttachmentsList, keymanAttachmentsPane));
+		this.keymanAttachmentsDelete = square(new JButton("\u2212"));
+		this.keymanAttachmentsDelete.addActionListener(new DeleteKeyManAttachmentActionListener(keymanAttachmentsModel, keymanAttachmentsList));
+		
+		this.keymanCpLabelsModel = new CodePointLabelTableModel(km.keymanCpLabels, "Label");
+		this.keymanCpLabelsTable = new JTable(this.keymanCpLabelsModel);
+		this.keymanCpLabelsPane = scrollWrap(this.keymanCpLabelsTable);
+		this.keymanCpLabelsAdd = square(new JButton("+"));
+		this.keymanCpLabelsAdd.addActionListener(new AddCodePointLabelActionListener(keymanCpLabelsModel, keymanCpLabelsTable, keymanCpLabelsPane));
+		this.keymanCpLabelsDelete = square(new JButton("\u2212"));
+		this.keymanCpLabelsDelete.addActionListener(new DeleteCodePointLabelActionListener(keymanCpLabelsModel, keymanCpLabelsTable));
+		setColumnWidth(keymanCpLabelsTable, 0, 80);
+		setColumnWidth(keymanCpLabelsTable, 1, 80);
+		
+		this.keymanFontFamily = new JTextField(km.keymanFontFamily);
 		this.keymanDescription = new JTextField(km.keymanDescription);
 		this.keymanLicenseType = mono(new JTextField(km.keymanLicenseType, 8));
 		this.keymanLicenseText = mono(new JTextArea(km.keymanLicenseText));
@@ -372,6 +406,15 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel kmnPanelR = topSxS(kmnChecks, verticalStack(8, kmnTgtPfm, kmnLangsP), 8);
 		JPanel kmnPanel = horizontalStack(12, kmnPanelL, kmnPanelR);
 		
+		JPanel kmnFontFm = leftSxS(new JLabel("Font Family:"), keymanFontFamily, 8);
+		JPanel kmnCpLabs = topSxS(new JLabel("Code Point Labels:"), keymanCpLabelsPane, 4);
+		JPanel kmnCpBtns = leftAlign(horizontalStack(keymanCpLabelsAdd, keymanCpLabelsDelete));
+		JPanel kmnAttLst = topSxS(new JLabel("Attachments:"), keymanAttachmentsPane, 4);
+		JPanel kmnAttBtn = leftAlign(horizontalStack(keymanAttachmentsAdd, keymanAttachmentsDelete));
+		JPanel kmnFontP1 = verticalSxS(kmnFontFm, kmnCpLabs, kmnCpBtns, 8);
+		JPanel kmnFontP2 = bottomSxS(kmnAttLst, kmnAttBtn, 8);
+		JPanel kmnFontP = horizontalStack(12, kmnFontP1, kmnFontP2);
+		
 		JPanel kmnRMDesc = leftSxS(new JLabel("Description:"), keymanDescription, 8);
 		JPanel kmnRMText = verticalSxS(new JLabel("Readme Markdown:"), scrollWrap(keymanReadme), leftAlign(keymanReadmeDefault), 4);
 		JPanel kmnRMPane = topSxS(kmnRMDesc, kmnRMText, 8);
@@ -411,6 +454,7 @@ public class LayoutInfoPanel extends JPanel {
 		tabs.add("Mac OS X", addBorder(macPanel, 20));
 		tabs.add("Linux (XKB)", addBorder(xkbPanel, 20));
 		tabs.add("Keyman", addBorder(kmnPanel, 20));
+		tabs.add("Keyman Font", addBorder(kmnFontP, 20));
 		tabs.add("Keyman Readme", addBorder(kmnRMPane, 20));
 		tabs.add("Keyman License", addBorder(kmnLicPnl, 20));
 		tabs.add("Keyman History", addBorder(kmnHistP, 20));
@@ -496,6 +540,13 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel p = new JPanel(new BorderLayout(gap, gap));
 		p.add(t, BorderLayout.PAGE_START);
 		p.add(c, BorderLayout.CENTER);
+		return p;
+	}
+	
+	private static JPanel bottomSxS(Component c, Component b, int gap) {
+		JPanel p = new JPanel(new BorderLayout(gap, gap));
+		p.add(c, BorderLayout.CENTER);
+		p.add(b, BorderLayout.PAGE_END);
 		return p;
 	}
 	
@@ -591,6 +642,9 @@ public class LayoutInfoPanel extends JPanel {
 			else km.keymanPlatforms.remove(platforms[i]);
 		}
 		this.keymanLanguagesModel.toMap(km.keymanLanguages);
+		this.keymanAttachmentsModel.toMap(km.keymanAttachments);
+		this.keymanCpLabelsModel.toMap(km.keymanCpLabels);
+		km.keymanFontFamily = this.keymanFontFamily.getText();
 		km.keymanDescription = this.keymanDescription.getText();
 		km.keymanLicenseType = this.keymanLicenseType.getText();
 		km.keymanLicenseText = this.keymanLicenseText.getText();
@@ -920,6 +974,52 @@ public class LayoutInfoPanel extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			model.sortEntries();
+		}
+	}
+	
+	private static class AddKeyManAttachmentActionListener implements ActionListener {
+		private final KeyManAttachmentListModel model;
+		private final JList list;
+		private final JScrollPane pane;
+		private AddKeyManAttachmentActionListener(KeyManAttachmentListModel model, JList list, JScrollPane pane) {
+			this.model = model;
+			this.list = list;
+			this.pane = pane;
+		}
+		public void actionPerformed(ActionEvent e) {
+			File file = Main.getOpenFile();
+			if (file == null) return;
+			try {
+				final int i = model.getSize();
+				model.addEntry(file);
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						list.setSelectedIndex(i);
+						JScrollBar vsb = pane.getVerticalScrollBar();
+						vsb.setValue(vsb.getMaximum());
+					}
+				});
+			} catch (IOException ioe) {
+				JOptionPane.showMessageDialog(
+					null, "An error occurred while reading the selected file.",
+					"Open", JOptionPane.ERROR_MESSAGE
+				);
+			}
+		}
+	}
+	
+	private static class DeleteKeyManAttachmentActionListener implements ActionListener {
+		private final KeyManAttachmentListModel model;
+		private final JList list;
+		private DeleteKeyManAttachmentActionListener(KeyManAttachmentListModel model, JList list) {
+			this.model = model;
+			this.list = list;
+		}
+		public void actionPerformed(ActionEvent e) {
+			int[] rows = list.getSelectedIndices();
+			for (int i = rows.length - 1; i >= 0; i--) {
+				model.deleteEntry(rows[i]);
+			}
 		}
 	}
 	

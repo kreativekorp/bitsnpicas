@@ -1,5 +1,6 @@
 package com.kreative.keyedit;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -159,6 +160,46 @@ public class KkbReader {
 							throw new IOException("Unknown element: " + gctype);
 						}
 					}
+				} else if (ctype.equalsIgnoreCase("keymanAttachments")) {
+					for (Node gchild : getChildren(child)) {
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("attachment")) {
+							NamedNodeMap gcattr = gchild.getAttributes();
+							String name = parseString(gcattr, "name");
+							String data = textContent(gchild);
+							if (name != null && data != null) {
+								try {
+									ByteArrayOutputStream ba = new ByteArrayOutputStream();
+									Base64InputStream b64 = new Base64InputStream(data);
+									byte[] buf = new byte[65536]; int n;
+									while ((n = b64.read(buf)) > 0) ba.write(buf, 0, n);
+									b64.close();
+									ba.close();
+									km.keymanAttachments.put(name, ba.toByteArray());
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
+					}
+				} else if (ctype.equalsIgnoreCase("keymanCpLabels")) {
+					for (Node gchild : getChildren(child)) {
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("cpLabel")) {
+							NamedNodeMap gcattr = gchild.getAttributes();
+							Integer cp = parseHex(gcattr, "cp", null);
+							String label = parseString(gcattr, "label");
+							if (cp != null && label != null) {
+								km.keymanCpLabels.put(cp, label);
+							}
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
+					}
+				} else if (ctype.equalsIgnoreCase("keymanFont")) {
+					km.keymanFontFamily = parseString(cattr, "family");
 				} else if (ctype.equalsIgnoreCase("keymanDescription")) {
 					km.keymanDescription = stripCommonLeadingWhitespace(textContent(child));
 				} else if (ctype.equalsIgnoreCase("keymanLicense")) {

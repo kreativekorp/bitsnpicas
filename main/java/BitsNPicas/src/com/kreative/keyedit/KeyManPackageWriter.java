@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class KeyManPackageWriter {
@@ -44,11 +45,25 @@ public class KeyManPackageWriter {
 		KeyManTouchWriter.write(ktlFile, km);
 		KeyManWriter.write(kmnFile, km);
 		
+		ArrayList<String> extras = new ArrayList<String>();
+		if (!(km.htmlSquareChars == null || km.htmlSquareChars.isEmpty())) {
+			extras.add("KreativeSquare.ttf");
+		}
+		if (!(km.keymanAttachments == null || km.keymanAttachments.isEmpty())) {
+			for (Map.Entry<String,byte[]> e : km.keymanAttachments.entrySet()) {
+				FileOutputStream fos = new FileOutputStream(new File(parentFile, e.getKey()));
+				fos.write(e.getValue());
+				fos.flush();
+				fos.close();
+				extras.add(e.getKey());
+			}
+		}
+		
 		FileOutputStream fos = new FileOutputStream(packageFile);
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"), true);
 		write(
 			pw, km, kmxFileName, jsFileName, kvkFileName, welcomeFileName, readmeFileName,
-			((km.htmlSquareChars == null || km.htmlSquareChars.isEmpty()) ? null : "KreativeSquare.ttf")
+			extras.toArray(new String[extras.size()])
 		);
 		pw.flush();
 		pw.close();
