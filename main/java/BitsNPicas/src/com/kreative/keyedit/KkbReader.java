@@ -200,6 +200,10 @@ public class KkbReader {
 					}
 				} else if (ctype.equalsIgnoreCase("keymanFont")) {
 					km.keymanFontFamily = parseString(cattr, "family");
+				} else if (ctype.equalsIgnoreCase("keymanOSKFont")) {
+					km.keymanOSKFontFile = parseString(cattr, "file");
+				} else if (ctype.equalsIgnoreCase("keymanDisplayFont")) {
+					km.keymanDisplayFontFile = parseString(cattr, "file");
 				} else if (ctype.equalsIgnoreCase("keymanDescription")) {
 					km.keymanDescription = stripCommonLeadingWhitespace(textContent(child));
 				} else if (ctype.equalsIgnoreCase("keymanLicense")) {

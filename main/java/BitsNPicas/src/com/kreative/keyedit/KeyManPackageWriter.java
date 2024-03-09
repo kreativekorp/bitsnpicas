@@ -170,6 +170,12 @@ public class KeyManPackageWriter {
 		out.print("      <Name>" + quote(km.getKeymanNameNotEmpty()) + "</Name>\r\n");
 		out.print("      <ID>" + quote(km.getKeymanIdentifierNotEmpty()) + "</ID>\r\n");
 		out.print("      <Version>" + quote(km.getKeymanVersionNotEmpty()) + "</Version>\r\n");
+		if (km.keymanOSKFontFile != null && km.keymanOSKFontFile.length() > 0) {
+			out.print("      <OSKFont>" + quote(km.keymanOSKFontFile) + "</OSKFont>\r\n");
+		}
+		if (km.keymanDisplayFontFile != null && km.keymanDisplayFontFile.length() > 0) {
+			out.print("      <DisplayFont>" + quote(km.keymanDisplayFontFile) + "</DisplayFont>\r\n");
+		}
 		out.print("      <Languages>\r\n");
 		if (km.keymanLanguages.isEmpty()) {
 			out.print("        <Language ID=\"en\">English</Language>\r\n");

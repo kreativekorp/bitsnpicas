@@ -160,8 +160,8 @@ public class KkbWriter {
 			km.keymanEmailAddress, km.keymanWebSite, km.keymanRightToLeft, km.keymanKey102,
 			km.keymanDisplayUnderlying, km.keymanUseAltGr, km.keymanTargets, km.keymanPlatforms,
 			km.keymanLanguages, km.keymanAttachments, km.keymanCpLabels, km.keymanFontFamily,
-			km.keymanDescription, km.keymanLicenseType, km.keymanLicenseText,
-			km.keymanReadme, km.keymanHistory
+			km.keymanOSKFontFile, km.keymanDisplayFontFile, km.keymanDescription,
+			km.keymanLicenseType, km.keymanLicenseText, km.keymanReadme, km.keymanHistory
 		)) return;
 		
 		out.println(wrap("\t", "keymanIdentifier", km.keymanIdentifier));
@@ -228,6 +228,12 @@ public class KkbWriter {
 		
 		if (km.keymanFontFamily != null && km.keymanFontFamily.length() > 0) {
 			out.println(wrap("\t", "keymanFont", "family", km.keymanFontFamily));
+		}
+		if (km.keymanOSKFontFile != null && km.keymanOSKFontFile.length() > 0) {
+			out.println(wrap("\t", "keymanOSKFont", "file", km.keymanOSKFontFile));
+		}
+		if (km.keymanDisplayFontFile != null && km.keymanDisplayFontFile.length() > 0) {
+			out.println(wrap("\t", "keymanDisplayFont", "file", km.keymanDisplayFontFile));
 		}
 		
 		writeBlock(out, "\t", "keymanDescription", km.keymanDescription);

@@ -51,6 +51,8 @@ public class KeyboardMapping {
 	public final Map<String,byte[]> keymanAttachments;
 	public final Map<Integer,String> keymanCpLabels;
 	public String keymanFontFamily;
+	public String keymanOSKFontFile;
+	public String keymanDisplayFontFile;
 	public String keymanDescription;
 	public String keymanLicenseType;
 	public String keymanLicenseText;
@@ -151,7 +153,7 @@ public class KeyboardMapping {
 	
 	public String getKeymanCopyrightNotEmpty() {
 		if (keymanCopyright != null && keymanCopyright.length() > 0) return keymanCopyright;
-		return getWinCopyrightNotEmpty();
+		return getWinCopyrightNotEmpty().replaceAll("[(][Cc][)]", "©");
 	}
 	
 	public String getKeymanVersionNotEmpty() {
