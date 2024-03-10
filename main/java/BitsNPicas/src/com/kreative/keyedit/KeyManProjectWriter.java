@@ -274,7 +274,7 @@ public class KeyManProjectWriter {
 	
 	public static void writeKeyboardInfo(PrintWriter out, KeyboardMapping km) {
 		out.print("{\r\n");
-		out.print("    \"license\": " + jquote(getLicenseType(km)) + "\r\n");
+		out.print("    \"license\": " + jquote(getLicenseType(km)) + ",\r\n");
 		out.print("    \"languages\": [\r\n");
 		if (km.keymanLanguages == null || km.keymanLanguages.isEmpty()) {
 			out.print("        \"en\"\r\n");
