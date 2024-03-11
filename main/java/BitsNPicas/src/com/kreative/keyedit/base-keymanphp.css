@@ -1,0 +1,12 @@
+th, td {
+	padding: 1pt 12pt 1pt 0pt;
+	text-align: left;
+}
+.hidden {
+	display: none !important;
+}
+code {
+	font-size: 10pt;
+	font-weight: bold;
+	padding: 4px;
+}

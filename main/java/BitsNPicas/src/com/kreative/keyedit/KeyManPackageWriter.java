@@ -39,8 +39,8 @@ public class KeyManPackageWriter {
 		File welcomeFile = new File(parentFile, welcomeFileName);
 		File readmeFile = new File(parentFile, readmeFileName);
 		
-		HTMLWriter.write(readmeFile, km, false);
-		HTMLWriter.write(welcomeFile, km, false);
+		HTMLWriter.writeKeymanHTM(readmeFile, km);
+		HTMLWriter.writeKeymanHTM(welcomeFile, km);
 		KeyManVisualWriter.write(kvksFile, km);
 		KeyManTouchWriter.write(ktlFile, km);
 		KeyManWriter.write(kmnFile, km);

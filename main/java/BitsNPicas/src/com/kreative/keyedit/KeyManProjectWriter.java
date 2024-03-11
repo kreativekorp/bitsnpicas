@@ -31,6 +31,9 @@ public class KeyManProjectWriter {
 		File packageFile = new File(sourceFile, basename + ".kps");
 		KeyManPackageWriter.write(sourceFile, packageFile, basename, km, "..\\build\\");
 		
+		File helpFile = new File(sourceFile, "help"); helpFile.mkdir();
+		HTMLWriter.writeKeymanPHP(new File(helpFile, basename + ".php"), km);
+		
 		writeHistory(new File(parentFile, "HISTORY.md"), km);
 		writeLicense(new File(parentFile, "LICENSE.md"), km);
 		writeReadme(new File(parentFile, "README.md"), km);

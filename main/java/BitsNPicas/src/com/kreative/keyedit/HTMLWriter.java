@@ -13,10 +13,22 @@ import java.util.Scanner;
 import com.kreative.unicode.data.NameResolver;
 
 public class HTMLWriter {
-	public static void write(File file, KeyboardMapping km, boolean install) throws IOException {
+	public static void writeStandalone(File file, KeyboardMapping km) throws IOException {
+		write(file, km, true, false);
+	}
+	
+	public static void writeKeymanHTM(File file, KeyboardMapping km) throws IOException {
+		write(file, km, false, false);
+	}
+	
+	public static void writeKeymanPHP(File file, KeyboardMapping km) throws IOException {
+		write(file, km, false, true);
+	}
+	
+	private static void write(File file, KeyboardMapping km, boolean install, boolean keymanPHP) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"), true);
-		write(pw, km, install);
+		write(pw, km, install, keymanPHP);
 		pw.flush();
 		pw.close();
 		fos.close();
@@ -32,48 +44,83 @@ public class HTMLWriter {
 		}
 	}
 	
-	public static void write(PrintWriter out, KeyboardMapping km, boolean install) {
-		out.println("<!DOCTYPE HTML>");
-		out.println("<html>");
-		out.println("\t<head>");
-		out.println("\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
-		String t = (km.htmlTitle == null || km.htmlTitle.length() == 0) ? (km.getNameNotEmpty() + " Keyboard Layout") : km.htmlTitle;
-		out.println("\t\t<title>" + HTMLWriterUtility.htmlSpecialChars(t) + "</title>");
-		out.println("\t\t<style>");
-		writeResource(out, "\t\t\t", "base.css", km);
-		writeResource(out, "\t\t\t", "keyboard.css", km);
-		if (km.htmlOutlineChars != null && !km.htmlOutlineChars.isEmpty()) writeResource(out, "\t\t\t", "outline.css", km);
-		if (km.htmlSquareChars != null && !km.htmlSquareChars.isEmpty()) writeResource(out, "\t\t\t", "ksquare.css", km);
-		writeInline(out, "\t\t\t", km.htmlStyle);
-		out.println("\t\t</style>");
-		out.println("\t</head>");
-		out.println("\t<body class=\"center\">");
-		String h1 = (km.htmlH1 == null || km.htmlH1.length() == 0) ? (km.getNameNotEmpty() + " Keyboard Layout") : km.htmlH1;
-		String h2 = (km.htmlH2 == null || km.htmlH2.length() == 0) ? (install ? "for Mac OS X, Linux, and Windows" : "for Keyman") : km.htmlH2;
-		out.println("\t\t<h1>" + HTMLWriterUtility.htmlSpecialChars(h1) + "</h1>");
-		out.println("\t\t<h2>" + HTMLWriterUtility.htmlSpecialChars(h2) + "</h2>");
-		writeInline(out, "\t\t", km.htmlBody1);
-		out.println("\t\t<h3>The Layout</h3>");
-		writeInline(out, "\t\t", km.htmlBody2);
-		writeKeyboard(out, km);
-		writeInline(out, "\t\t", km.htmlBody3);
-		if (install) {
-			if (km.htmlInstall != null && km.htmlInstall.length() > 0) {
-				writeInline(out, "\t\t", km.htmlInstall);
-			} else {
-				String rn = km.isWindowsNativeCompatible() ? "install.html" : "install-nonbmp.html";
-				writeResource(out, "\t\t", rn, km);
-			}
-		}
-		writeInline(out, "\t\t", km.htmlBody4);
-		out.println("\t\t<script>");
-		writeResource(out, "\t\t\t", "prep.js", km);
-		out.println("\t\t</script>");
-		out.println("\t</body>");
-		out.println("</html>");
+	public static void writeStandalone(PrintWriter out, KeyboardMapping km) {
+		write(out, km, true, false);
 	}
 	
-	public static void writeKeyboard(PrintWriter out, KeyboardMapping km) {
+	public static void writeKeymanHTM(PrintWriter out, KeyboardMapping km) {
+		write(out, km, false, false);
+	}
+	
+	public static void writeKeymanPHP(PrintWriter out, KeyboardMapping km) {
+		write(out, km, false, true);
+	}
+	
+	private static void write(PrintWriter out, KeyboardMapping km, boolean install, boolean keymanPHP) {
+		String t = (km.htmlTitle == null || km.htmlTitle.length() == 0) ? (km.getNameNotEmpty() + " Keyboard Layout") : km.htmlTitle;
+		String h1 = (km.htmlH1 == null || km.htmlH1.length() == 0) ? (km.getNameNotEmpty() + " Keyboard Layout") : km.htmlH1;
+		String h2 = (km.htmlH2 == null || km.htmlH2.length() == 0) ? (install ? "for Mac OS X, Linux, and Windows" : "for Keyman") : km.htmlH2;
+		String prefix;
+		
+		if (keymanPHP) {
+			out.println("<?php");
+			out.println("  $pagetitle = '" + t.replace("\\", "\\\\").replace("'", "\\'") + "';");
+			out.println("  $pagename = '" + h1.replace("\\", "\\\\").replace("'", "\\'") + "';");
+			out.println("  $pagestyle = <<<END");
+			writeResource(out, "\t", "base-keymanphp.css", km);
+			writeResource(out, "\t", "keyboard.css", km);
+			if (km.htmlOutlineChars != null && !km.htmlOutlineChars.isEmpty()) writeResource(out, "\t", "outline.css", km);
+			if (km.htmlSquareChars != null && !km.htmlSquareChars.isEmpty()) writeResource(out, "\t", "ksquare.css", km);
+			writeInline(out, "\t", km.htmlStyle);
+			out.println("END;");
+			out.println("  require_once('header.php');");
+			out.println("?>");
+			prefix = "";
+		} else {
+			out.println("<!DOCTYPE HTML>");
+			out.println("<html>");
+			out.println("\t<head>");
+			out.println("\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+			out.println("\t\t<title>" + HTMLWriterUtility.htmlSpecialChars(t) + "</title>");
+			out.println("\t\t<style>");
+			writeResource(out, "\t\t\t", "base.css", km);
+			writeResource(out, "\t\t\t", "keyboard.css", km);
+			if (km.htmlOutlineChars != null && !km.htmlOutlineChars.isEmpty()) writeResource(out, "\t\t\t", "outline.css", km);
+			if (km.htmlSquareChars != null && !km.htmlSquareChars.isEmpty()) writeResource(out, "\t\t\t", "ksquare.css", km);
+			writeInline(out, "\t\t\t", km.htmlStyle);
+			out.println("\t\t</style>");
+			out.println("\t</head>");
+			out.println("\t<body class=\"center\">");
+			out.println("\t\t<h1>" + HTMLWriterUtility.htmlSpecialChars(h1) + "</h1>");
+			prefix = "\t\t";
+		}
+		
+		out.println(prefix + "<h2>" + HTMLWriterUtility.htmlSpecialChars(h2) + "</h2>");
+		writeInline(out, prefix, km.htmlBody1);
+		out.println(prefix + "<h3>The Layout</h3>");
+		writeInline(out, prefix, km.htmlBody2);
+		writeKeyboard(out, km);
+		writeInline(out, prefix, km.htmlBody3);
+		if (install) {
+			if (km.htmlInstall != null && km.htmlInstall.length() > 0) {
+				writeInline(out, prefix, km.htmlInstall);
+			} else {
+				String rn = km.isWindowsNativeCompatible() ? "install.html" : "install-nonbmp.html";
+				writeResource(out, prefix, rn, km);
+			}
+		}
+		writeInline(out, prefix, km.htmlBody4);
+		out.println(prefix + "<script>");
+		writeResource(out, prefix + "\t", "prep.js", km);
+		out.println(prefix + "</script>");
+		
+		if (!keymanPHP) {
+			out.println("\t</body>");
+			out.println("</html>");
+		}
+	}
+	
+	private static void writeKeyboard(PrintWriter out, KeyboardMapping km) {
 		out.println("\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"k\">");
 		
 		out.println("\t\t\t<tr>");
