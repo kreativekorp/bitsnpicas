@@ -159,8 +159,8 @@ public class KkbWriter {
 			km.keymanWebHelpText, km.keymanVersion, km.keymanComments, km.keymanAuthor,
 			km.keymanEmailAddress, km.keymanWebSite, km.keymanRightToLeft, km.keymanKey102,
 			km.keymanDisplayUnderlying, km.keymanUseAltGr, km.keymanTargets, km.keymanPlatforms,
-			km.keymanLanguages, km.keymanAttachments, km.keymanCpLabels, km.keymanFontFamily,
-			km.keymanOSKFontFile, km.keymanDisplayFontFile, km.keymanDescription,
+			km.keymanLanguages, km.keymanAttachments, km.keymanFileIds, km.keymanCpLabels,
+			km.keymanFontFamily, km.keymanOSKFontFile, km.keymanDisplayFontFile, km.keymanDescription,
 			km.keymanLicenseType, km.keymanLicenseText, km.keymanReadme, km.keymanHistory
 		)) return;
 		
@@ -217,6 +217,14 @@ public class KkbWriter {
 				}
 			}
 			out.println("\t</keymanAttachments>");
+		}
+		
+		if (km.keymanFileIds != null && !km.keymanFileIds.isEmpty()) {
+			out.println("\t<keymanFileIds>");
+			for (Map.Entry<String,String> e : km.keymanFileIds.entrySet()) {
+				out.println(wrap("\t\t", "fileId", "name", e.getKey(), "id", e.getValue()));
+			}
+			out.println("\t</keymanFileIds>");
 		}
 		
 		if (km.keymanCpLabels != null && !km.keymanCpLabels.isEmpty()) {

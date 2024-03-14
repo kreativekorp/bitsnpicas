@@ -53,6 +53,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import com.kreative.keyedit.HTMLWriterUtility;
 import com.kreative.keyedit.KeyManPlatform;
+import com.kreative.keyedit.KeyManProjectWriter;
 import com.kreative.keyedit.KeyManTarget;
 import com.kreative.keyedit.KeyManWriterUtility;
 import com.kreative.keyedit.KeyboardMapping;
@@ -704,6 +705,7 @@ public class LayoutInfoPanel extends JPanel {
 		}
 		this.keymanLanguagesModel.toMap(km.keymanLanguages);
 		this.keymanAttachmentsModel.toMap(km.keymanAttachments);
+		KeyManProjectWriter.updateFileIds(km);
 		this.keymanCpLabelsModel.toMap(km.keymanCpLabels);
 		km.keymanFontFamily = this.keymanFontFamily.getText();
 		km.keymanOSKFontFile = (

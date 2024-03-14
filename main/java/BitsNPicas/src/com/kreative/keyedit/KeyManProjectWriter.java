@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class KeyManProjectWriter {
 	public static void write(File file, KeyboardMapping km) throws IOException {
@@ -70,6 +70,22 @@ public class KeyManProjectWriter {
 		out.close();
 	}
 	
+	public static void updateFileIds(KeyboardMapping km) {
+		ArrayList<String> keys = new ArrayList<String>(Arrays.asList(
+			"*.kmn", "*.kps", "HISTORY.md", "LICENSE.md", "README.md",
+			"*.keyboard_info", "*.ico", "*.kmx", "*.js", "*.kvk",
+			"welcome.htm", "readme.htm"
+		));
+		if (!(km.htmlSquareChars == null || km.htmlSquareChars.isEmpty())) {
+			keys.add("KreativeSquare.ttf");
+		}
+		if (!(km.keymanAttachments == null || km.keymanAttachments.isEmpty())) {
+			keys.addAll(km.keymanAttachments.keySet());
+		}
+		km.keymanFileIds.keySet().retainAll(keys);
+		for (String key : keys) km.getKeymanFileId(key);
+	}
+	
 	public static void writeKeyboardInfo(File file, KeyboardMapping km) throws IOException {
 		PrintWriter out = open(file);
 		writeKeyboardInfo(out, km);
@@ -104,8 +120,8 @@ public class KeyManProjectWriter {
 		String icoPath, String kmxPath, String jsPath, String kvkPath,
 		String welcomeHtmPath, String readmeHtmPath, String... extras
 	) {
-		String kmnID = newid();
-		String kpsID = newid();
+		String kmnID = km.getKeymanFileId("*.kmn");
+		String kpsID = km.getKeymanFileId("*.kps");
 		out.print("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n");
 		out.print("<KeymanDeveloperProject>\r\n");
 		out.print("  <Options>\r\n");
@@ -150,7 +166,7 @@ public class KeyManProjectWriter {
 		
 		if (historyMdPath != null && historyMdPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("HISTORY.md") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(historyMdPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(historyMdPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -160,7 +176,7 @@ public class KeyManProjectWriter {
 		
 		if (licenseMdPath != null && licenseMdPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("LICENSE.md") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(licenseMdPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(licenseMdPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -170,7 +186,7 @@ public class KeyManProjectWriter {
 		
 		if (readmeMdPath != null && readmeMdPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("README.md") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(readmeMdPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(readmeMdPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -180,7 +196,7 @@ public class KeyManProjectWriter {
 		
 		if (keyboardInfoPath != null && keyboardInfoPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("*.keyboard_info") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(keyboardInfoPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(keyboardInfoPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -190,7 +206,7 @@ public class KeyManProjectWriter {
 		
 		if (icoPath != null && icoPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("*.ico") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(icoPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(icoPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -201,7 +217,7 @@ public class KeyManProjectWriter {
 		
 		if (kmxPath != null && kmxPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("*.kmx") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(kmxPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(kmxPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -212,7 +228,7 @@ public class KeyManProjectWriter {
 		
 		if (jsPath != null && jsPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("*.js") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(jsPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(jsPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -223,7 +239,7 @@ public class KeyManProjectWriter {
 		
 		if (kvkPath != null && kvkPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("*.kvk") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(kvkPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(kvkPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -234,7 +250,7 @@ public class KeyManProjectWriter {
 		
 		if (welcomeHtmPath != null && welcomeHtmPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("welcome.htm") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(welcomeHtmPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(welcomeHtmPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -245,7 +261,7 @@ public class KeyManProjectWriter {
 		
 		if (readmeHtmPath != null && readmeHtmPath.length() > 0) {
 			out.print("    <File>\r\n");
-			out.print("      <ID>" + newid() + "</ID>\r\n");
+			out.print("      <ID>" + km.getKeymanFileId("readme.htm") + "</ID>\r\n");
 			out.print("      <Filename>" + xquote(basename(readmeHtmPath)) + "</Filename>\r\n");
 			out.print("      <Filepath>" + xquote(basepath(readmeHtmPath)) + "</Filepath>\r\n");
 			out.print("      <FileVersion></FileVersion>\r\n");
@@ -260,7 +276,7 @@ public class KeyManProjectWriter {
 					String[] parts = extra.split("[\\\\/.]");
 					String ext = parts[parts.length - 1];
 					out.print("    <File>\r\n");
-					out.print("      <ID>" + newid() + "</ID>\r\n");
+					out.print("      <ID>" + km.getKeymanFileId(basename(extra)) + "</ID>\r\n");
 					out.print("      <Filename>" + xquote(basename(extra)) + "</Filename>\r\n");
 					out.print("      <Filepath>" + xquote(basepath(extra)) + "</Filepath>\r\n");
 					out.print("      <FileVersion></FileVersion>\r\n");
@@ -328,10 +344,6 @@ public class KeyManProjectWriter {
 			}
 			scan.close();
 		}
-	}
-	
-	private static String newid() {
-		return "id_" + UUID.randomUUID().toString().replace("-", "");
 	}
 	
 	private static String basename(String path) {

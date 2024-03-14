@@ -186,6 +186,20 @@ public class KkbReader {
 							throw new IOException("Unknown element: " + gctype);
 						}
 					}
+				} else if (ctype.equalsIgnoreCase("keymanFileIds")) {
+					for (Node gchild : getChildren(child)) {
+						String gctype = gchild.getNodeName();
+						if (gctype.equalsIgnoreCase("fileId")) {
+							NamedNodeMap gcattr = gchild.getAttributes();
+							String name = parseString(gcattr, "name");
+							String id = parseString(gcattr, "id");
+							if (name != null && id != null) {
+								km.keymanFileIds.put(name, id);
+							}
+						} else {
+							throw new IOException("Unknown element: " + gctype);
+						}
+					}
 				} else if (ctype.equalsIgnoreCase("keymanCpLabels")) {
 					for (Node gchild : getChildren(child)) {
 						String gctype = gchild.getNodeName();
