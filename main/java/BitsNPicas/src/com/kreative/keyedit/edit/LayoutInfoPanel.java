@@ -105,6 +105,7 @@ public class LayoutInfoPanel extends JPanel {
 	private final JCheckBox keymanKey102;
 	private final JCheckBox keymanDisplayUnderlying;
 	private final JCheckBox keymanUseAltGr;
+	private final JCheckBox keymanIgnoreCaps;
 	private final JCheckBox[] keymanTargets;
 	private final JCheckBox[] keymanPlatforms;
 	private final KeyManLanguageTableModel keymanLanguagesModel;
@@ -236,6 +237,8 @@ public class LayoutInfoPanel extends JPanel {
 		this.keymanDisplayUnderlying.setSelected(km.keymanDisplayUnderlying);
 		this.keymanUseAltGr = new JCheckBox("Distinguish between left and right Ctrl/Alt");
 		this.keymanUseAltGr.setSelected(km.keymanUseAltGr);
+		this.keymanIgnoreCaps = new JCheckBox("Disable Caps Lock");
+		this.keymanIgnoreCaps.setSelected(km.keymanIgnoreCaps);
 		
 		KeyManTarget[] targets = KeyManTarget.values();
 		this.keymanTargets = new JCheckBox[targets.length];
@@ -409,7 +412,7 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel kmnFields = verticalStack(keymanIdentifier, keymanName, keymanCopyright, keymanMessage, keymanWebHelpText, keymanVersion, keymanAuthor, keymanEmailAddress, keymanWebSite);
 		JPanel kmnCommts = topSxS(new JLabel("Comments:"), scrollWrap(keymanComments), 4);
 		JPanel kmnPanelL = topSxS(leftSxS(kmnLabels, kmnFields, 8), kmnCommts, 8);
-		JPanel kmnChecks = verticalStack(keymanRightToLeft, keymanKey102, keymanDisplayUnderlying, keymanUseAltGr);
+		JPanel kmnChecks = verticalStack(keymanRightToLeft, keymanKey102, keymanDisplayUnderlying, keymanUseAltGr, keymanIgnoreCaps);
 		JPanel kmnTarget = topSxS(new JLabel("Targets:"), scrollWrap(topAlign(verticalStack(0, keymanTargets))), 4);
 		JPanel kmnPlatfm = topSxS(new JLabel("Platforms:"), scrollWrap(topAlign(verticalStack(0, keymanPlatforms))), 4);
 		JPanel kmnTgtPfm = horizontalStack(12, kmnTarget, kmnPlatfm);
@@ -688,6 +691,7 @@ public class LayoutInfoPanel extends JPanel {
 		km.keymanKey102 = this.keymanKey102.isSelected();
 		km.keymanDisplayUnderlying = this.keymanDisplayUnderlying.isSelected();
 		km.keymanUseAltGr = this.keymanUseAltGr.isSelected();
+		km.keymanIgnoreCaps = this.keymanIgnoreCaps.isSelected();
 		KeyManTarget[] targets = KeyManTarget.values();
 		for (int i = 0; i < targets.length; i++) {
 			if (this.keymanTargets[i].isSelected()) km.keymanTargets.add(targets[i]);

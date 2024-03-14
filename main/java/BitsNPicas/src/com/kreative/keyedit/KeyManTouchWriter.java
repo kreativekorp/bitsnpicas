@@ -147,7 +147,7 @@ public class KeyManTouchWriter {
 		if (km.keymanKey102) {
 			writeKeyMapping(out, keyPrefix, "K_oE2", 0, 160, shift, alt, km);
 		} else {
-			writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, null, 0, 160, 1, nextLayer);
+			writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, null, 0, 160, (shift ? 2 : 1), nextLayer);
 		}
 		writeKeyMapping(out, keyPrefix, "K_Z", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_X", 0, 100, shift, alt, km);
@@ -159,7 +159,7 @@ public class KeyManTouchWriter {
 		writeKeyMapping(out, keyPrefix, "K_COMMA", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_PERIOD", 0, 100, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_SLASH", 0, 100, shift, alt, km);
-		writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, null, 0, 155, 1, nextLayer);
+		writeKeyMapping(out, keyPrefix, "K_SHIFT", (shift ? "*Shifted*" : "*Shift*"), null, null, 0, 155, (shift ? 2 : 1), nextLayer);
 		out.append(prefix + "  ],\n");
 		out.append(prefix + "},\n");
 	}
@@ -170,7 +170,7 @@ public class KeyManTouchWriter {
 		out.append(prefix + "  \"key\": [\n");
 		String keyPrefix = prefix + "    ";
 		String nextLayer = alt ? (shift ? "shift" : "default") : (shift ? "shift-alt" : "alt");
-		writeKeyMapping(out, keyPrefix, "K_LCONTROL", "alt", null, null, 0, 130, 1, nextLayer);
+		writeKeyMapping(out, keyPrefix, "K_LCONTROL", "alt", null, null, 0, 130, (alt ? 2 : 1), nextLayer);
 		writeKeyMapping(out, keyPrefix, "K_LOPT", "*Menu*", null, null, 0, 140, 1, null);
 		// writeKeyMapping(out, keyPrefix, "K_SPACE", 0, 930, shift, alt, km);
 		writeKeyMapping(out, keyPrefix, "K_SPACE", null, null, null, 0, 930, 0, null);

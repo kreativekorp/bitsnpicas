@@ -45,6 +45,7 @@ public class KeyboardMapping {
 	public boolean keymanKey102 = false;
 	public boolean keymanDisplayUnderlying = false;
 	public boolean keymanUseAltGr = false;
+	public boolean keymanIgnoreCaps = false;
 	public final EnumSet<KeyManTarget> keymanTargets;
 	public final EnumSet<KeyManPlatform> keymanPlatforms;
 	public final Map<String,String> keymanLanguages;

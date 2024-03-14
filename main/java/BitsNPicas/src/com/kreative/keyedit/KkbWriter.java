@@ -178,6 +178,7 @@ public class KkbWriter {
 		out.println(wrap("\t", "keymanKey102", "value", (km.keymanKey102 ? "true" : "false")));
 		out.println(wrap("\t", "keymanDisplayUnderlying", "value", (km.keymanDisplayUnderlying ? "true" : "false")));
 		out.println(wrap("\t", "keymanUseAltGr", "value", (km.keymanUseAltGr ? "true" : "false")));
+		out.println(wrap("\t", "keymanIgnoreCaps", "value", (km.keymanIgnoreCaps ? "true" : "false")));
 		
 		out.print("\t<keymanTargets");
 		for (KeyManTarget t : KeyManTarget.values()) {

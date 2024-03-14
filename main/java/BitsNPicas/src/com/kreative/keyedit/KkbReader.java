@@ -137,6 +137,8 @@ public class KkbReader {
 					km.keymanDisplayUnderlying = parseBoolean(cattr, "value", "true", "false", km.keymanDisplayUnderlying);
 				} else if (ctype.equalsIgnoreCase("keymanUseAltGr")) {
 					km.keymanUseAltGr = parseBoolean(cattr, "value", "true", "false", km.keymanUseAltGr);
+				} else if (ctype.equalsIgnoreCase("keymanIgnoreCaps")) {
+					km.keymanIgnoreCaps = parseBoolean(cattr, "value", "true", "false", km.keymanIgnoreCaps);
 				} else if (ctype.equalsIgnoreCase("keymanTargets")) {
 					for (KeyManTarget t : KeyManTarget.values()) {
 						parseBoolean(cattr, t.toString(), "true", "false", t, km.keymanTargets);
