@@ -159,6 +159,9 @@ public class LayoutInfoPanel extends JPanel {
 	private final JScrollPane htmlCpLabelsPane;
 	private final JButton htmlCpLabelsAdd;
 	private final JButton htmlCpLabelsDelete;
+	private final KeyManAttachmentPanel winAttachments;
+	private final KeyManAttachmentPanel macAttachments;
+	private final KeyManAttachmentPanel xkbAttachments;
 	private final JCheckBox charsIncludeDeadKeys;
 	private final JCheckBox charsIncludeLongPress;
 	private final JCheckBox charsVerbose;
@@ -365,6 +368,10 @@ public class LayoutInfoPanel extends JPanel {
 		setColumnWidth(htmlCpLabelsTable, 0, 80);
 		setColumnWidth(htmlCpLabelsTable, 1, 80);
 		
+		this.winAttachments = new KeyManAttachmentPanel(km.winAttachments);
+		this.macAttachments = new KeyManAttachmentPanel(km.macAttachments);
+		this.xkbAttachments = new KeyManAttachmentPanel(km.xkbAttachments);
+		
 		this.charsIncludeDeadKeys = new JCheckBox("Include Dead Keys");
 		this.charsIncludeDeadKeys.setSelected(true);
 		this.charsIncludeDeadKeys.addActionListener(new UpdateCharsActionListener());
@@ -385,20 +392,23 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel winFields = verticalStack(leftAlign(winIdentifier), winCopyright, winCompany);
 		JPanel winLocSel = topSxS(new JLabel("Locale:"), winLocalePane, 4);
 		JPanel winChecks = verticalStack(winAltGrEnable, winShiftLock, winLrmRlm);
-		JPanel winPanel = verticalSxS(leftSxS(winLabels, winFields, 8), winLocSel, winChecks, 8);
+		JPanel winPanel1 = verticalSxS(leftSxS(winLabels, winFields, 8), winLocSel, winChecks, 8);
+		JPanel winPanel = left2Right1(winPanel1, winAttachments, 20);
 		
 		JPanel macLabels = verticalStack("Group Number:", "ID Number:", "Icon Version:");
 		JPanel macFields = verticalStack(leftAlign(macGroupNumber), leftAlign(macIdNumber), leftAlign(macIconVersion));
 		JPanel macActIDs = topSxS(new JLabel("Action IDs:"), macActionIdsPane, 4);
 		JPanel macButton = leftAlign(horizontalStack(macActionIdsAdd, macActionIdsDelete));
-		JPanel macPanel = verticalSxS(leftSxS(macLabels, macFields, 8), macActIDs, macButton, 8);
+		JPanel macPanel1 = verticalSxS(leftSxS(macLabels, macFields, 8), macActIDs, macButton, 8);
+		JPanel macPanel = left2Right1(macPanel1, macAttachments, 20);
 		
 		JPanel xkbLabel1 = verticalStack("Path:", "Label:");
 		JPanel xkbField1 = verticalStack(xkbPath, leftAlign(xkbLabel));
 		JPanel xkbCommnt = topSxS(new JLabel("Comment:"), scrollWrap(xkbComment), 4);
 		JPanel xkbLabel2 = verticalStack("AltGr Key:", "Compose Key:");
 		JPanel xkbField2 = leftAlign(verticalStack(xkbAltGrKey, xkbComposeKey));
-		JPanel xkbPanel = verticalSxS(leftSxS(xkbLabel1, xkbField1, 8), xkbCommnt, leftSxS(xkbLabel2, xkbField2, 8), 8);
+		JPanel xkbPanel1 = verticalSxS(leftSxS(xkbLabel1, xkbField1, 8), xkbCommnt, leftSxS(xkbLabel2, xkbField2, 8), 8);
+		JPanel xkbPanel = left2Right1(xkbPanel1, xkbAttachments, 20);
 		
 		JPanel kmnLabels = verticalStack("ID:", "Name:", "Copyright:", "Message:", "Web Help Text:", "Keyboard Version:", "Author:", "Email Address:", "Web Site:");
 		JPanel kmnFields = verticalStack(keymanIdentifier, keymanName, keymanCopyright, keymanMessage, keymanWebHelpText, keymanVersion, keymanAuthor, keymanEmailAddress, keymanWebSite);
@@ -411,7 +421,7 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel kmnLangsB = leftAlign(leftSxS(horizontalStack(keymanLanguagesAdd, keymanLanguagesDelete), horizontalStack(keymanLanguagesClear, keymanLanguagesCopy, keymanLanguagesPaste, keymanLanguagesSort), 4));
 		JPanel kmnLangsP = verticalSxS(new JLabel("Languages:"), keymanLanguagesPane, kmnLangsB, 4);
 		JPanel kmnPanelR = topSxS(kmnChecks, verticalStack(8, kmnTgtPfm, kmnLangsP), 8);
-		JPanel kmnPanel = horizontalStack(12, kmnPanelL, kmnPanelR);
+		JPanel kmnPanel = horizontalStack(20, kmnPanelL, kmnPanelR);
 		
 		JPanel kmnFontLb = verticalStack("Editor Font:", "OSK Font:", "Display Font:");
 		JPanel kmnFontFd = verticalStack(keymanFontFamily, keymanOSKFontFile, keymanDisplayFontFile);
@@ -419,7 +429,7 @@ public class LayoutInfoPanel extends JPanel {
 		JPanel kmnCpLabs = topSxS(new JLabel("Code Point Labels:"), keymanCpLabelsPane, 4);
 		JPanel kmnCpBtns = leftAlign(horizontalStack(keymanCpLabelsAdd, keymanCpLabelsDelete));
 		JPanel kmnFontP1 = verticalSxS(kmnFontFm, kmnCpLabs, kmnCpBtns, 8);
-		JPanel kmnFontP = horizontalStack(12, kmnFontP1, keymanAttachments);
+		JPanel kmnFontP = left2Right1(kmnFontP1, keymanAttachments, 20);
 		
 		JPanel kmnRMDesc = leftSxS(new JLabel("Description:"), keymanDescription, 8);
 		JPanel kmnRMText = verticalSxS(new JLabel("Readme Markdown:"), scrollWrap(keymanReadme), leftAlign(keymanReadmeDefault), 4);
@@ -544,6 +554,17 @@ public class LayoutInfoPanel extends JPanel {
 		return p;
 	}
 	
+	private static JPanel left2Right1(JComponent l, JComponent r, int gap) {
+		JPanel p = new JPanel(new FixedGridBagLayout());
+		FixedGridBagConstraints gbc = new FixedGridBagConstraints();
+		gbc.gridwidth = 2;
+		p.add(addBorder(l, 0, 0, 0, gap/2), gbc);
+		gbc.gridx = 2;
+		gbc.gridwidth = 1;
+		p.add(addBorder(r, 0, gap/2, 0, 0), gbc);
+		return p;
+	}
+	
 	private static JPanel topAlign(Component c) {
 		JPanel p = new JPanel(new BorderLayout());
 		p.add(c, BorderLayout.PAGE_START);
@@ -567,6 +588,11 @@ public class LayoutInfoPanel extends JPanel {
 	
 	private static <C extends JComponent> C addBorder(C c, int b) {
 		c.setBorder(BorderFactory.createEmptyBorder(b, b, b, b));
+		return c;
+	}
+	
+	private static <C extends JComponent> C addBorder(C c, int t, int l, int b, int r) {
+		c.setBorder(BorderFactory.createEmptyBorder(t, l, b, r));
 		return c;
 	}
 	
@@ -727,6 +753,9 @@ public class LayoutInfoPanel extends JPanel {
 		this.htmlTdClassesModel.toMap(km.htmlTdClasses);
 		this.htmlSpanClassesModel.toMap(km.htmlSpanClasses);
 		this.htmlCpLabelsModel.toMap(km.htmlCpLabels);
+		this.winAttachments.toMap(km.winAttachments);
+		this.macAttachments.toMap(km.macAttachments);
+		this.xkbAttachments.toMap(km.xkbAttachments);
 	}
 	
 	private class LimitingDocumentFilter extends DocumentFilter {

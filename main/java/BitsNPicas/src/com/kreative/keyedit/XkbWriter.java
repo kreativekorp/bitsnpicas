@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 
@@ -16,10 +17,21 @@ public class XkbWriter {
 		dir.mkdir();
 		appendEvdev(dir, km);
 		writeSymbols(dir, km);
+		
 		if (km.icon != null) {
 			File icon = unixNewFile(dir, km.getXkbPathNotEmpty() + ".png");
 			ImageIO.write(km.icon, "png", icon);
 		}
+		
+		if (!(km.xkbAttachments == null || km.xkbAttachments.isEmpty())) {
+			for (Map.Entry<String,byte[]> e : km.xkbAttachments.entrySet()) {
+				FileOutputStream fos = new FileOutputStream(unixNewFile(dir, e.getKey()));
+				fos.write(e.getValue());
+				fos.flush();
+				fos.close();
+			}
+		}
+		
 		writeInstall(new File(dir, "install.py"), km.getXkbPathNotEmpty(), km.getNameNotEmpty());
 	}
 	

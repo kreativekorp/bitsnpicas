@@ -20,6 +20,7 @@ public class MacWriter {
 		pw.flush();
 		pw.close();
 		fos.close();
+		
 		if (km.icon != null) {
 			String iname = stripSuffix(file.getName(), ".keylayout");
 			File ifile = new File(file.getParentFile(), iname + ".icns");
@@ -32,6 +33,16 @@ public class MacWriter {
 			idos.flush();
 			idos.close();
 			ifos.close();
+		}
+		
+		if (!(km.macAttachments == null || km.macAttachments.isEmpty())) {
+			File parentFile = file.getParentFile();
+			for (Map.Entry<String,byte[]> e : km.macAttachments.entrySet()) {
+				fos = new FileOutputStream(new File(parentFile, e.getKey()));
+				fos.write(e.getValue());
+				fos.flush();
+				fos.close();
+			}
 		}
 	}
 	

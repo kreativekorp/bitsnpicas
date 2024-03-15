@@ -20,6 +20,16 @@ public class WinWriter {
 		pw.flush();
 		pw.close();
 		fos.close();
+		
+		if (!(km.winAttachments == null || km.winAttachments.isEmpty())) {
+			File parentFile = file.getParentFile();
+			for (Map.Entry<String,byte[]> e : km.winAttachments.entrySet()) {
+				fos = new FileOutputStream(new File(parentFile, e.getKey()));
+				fos.write(e.getValue());
+				fos.flush();
+				fos.close();
+			}
+		}
 	}
 	
 	public static void write(PrintWriter out, KeyboardMapping km) {

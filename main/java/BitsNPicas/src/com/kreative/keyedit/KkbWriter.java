@@ -88,6 +88,9 @@ public class KkbWriter {
 		}
 		
 		writeHTMLConfig(out, km);
+		writeAttachments(out, "winAttachments", km.winAttachments);
+		writeAttachments(out, "macAttachments", km.macAttachments);
+		writeAttachments(out, "xkbAttachments", km.xkbAttachments);
 		
 		out.println("</keyboardMapping>");
 	}
@@ -202,22 +205,7 @@ public class KkbWriter {
 		}
 		out.println("\t</keymanLanguages>");
 		
-		if (km.keymanAttachments != null && !km.keymanAttachments.isEmpty()) {
-			out.println("\t<keymanAttachments>");
-			for (Map.Entry<String,byte[]> e : km.keymanAttachments.entrySet()) {
-				try {
-					StringBuffer sb = new StringBuffer();
-					Base64OutputStream b64 = new Base64OutputStream(sb);
-					b64.write(e.getValue());
-					b64.flush();
-					b64.close();
-					out.println(wrap("\t\t", "attachment", "name", e.getKey(), false) + sb.toString() + "</attachment>");
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-			out.println("\t</keymanAttachments>");
-		}
+		writeAttachments(out, "keymanAttachments", km.keymanAttachments);
 		
 		if (km.keymanFileIds != null && !km.keymanFileIds.isEmpty()) {
 			out.println("\t<keymanFileIds>");
@@ -326,6 +314,28 @@ public class KkbWriter {
 		}
 		
 		if (wroteHeader) out.println("\t</html>");
+	}
+	
+	private static void writeAttachments(PrintWriter out, String tag, Map<String,byte[]> attachments) {
+		if (attachments != null && !attachments.isEmpty()) {
+			out.println("\t<" + tag + ">");
+			for (Map.Entry<String,byte[]> e : attachments.entrySet()) {
+				try {
+					StringBuffer sb = new StringBuffer();
+					Base64OutputStream b64 = new Base64OutputStream(sb);
+					b64.write(e.getValue());
+					b64.flush();
+					b64.close();
+					out.println(
+						wrap("\t\t", "attachment", "name", e.getKey(), false) +
+						sb.toString() + "</attachment>"
+					);
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+			}
+			out.println("\t</" + tag + ">");
+		}
 	}
 	
 	private static void writeCDATA(PrintWriter out, String prefix, String tag, String content) {

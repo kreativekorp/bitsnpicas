@@ -79,6 +79,9 @@ public class KeyboardMapping {
 	public final Map<String,BitSet> htmlTdClasses;
 	public final Map<String,BitSet> htmlSpanClasses;
 	public final Map<Integer,String> htmlCpLabels;
+	public final Map<String,byte[]> winAttachments;
+	public final Map<String,byte[]> macAttachments;
+	public final Map<String,byte[]> xkbAttachments;
 	
 	public KeyboardMapping() {
 		TreeMap<Key,KeyMapping> map = new TreeMap<Key,KeyMapping>();
@@ -94,6 +97,9 @@ public class KeyboardMapping {
 		this.keymanAttachments = new TreeMap<String,byte[]>();
 		this.keymanFileIds = new TreeMap<String,String>();
 		this.keymanCpLabels = new TreeMap<Integer,String>();
+		this.winAttachments = new TreeMap<String,byte[]>();
+		this.macAttachments = new TreeMap<String,byte[]>();
+		this.xkbAttachments = new TreeMap<String,byte[]>();
 	}
 	
 	public String getNameNotEmpty() {

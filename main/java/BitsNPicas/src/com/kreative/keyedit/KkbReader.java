@@ -163,29 +163,7 @@ public class KkbReader {
 						}
 					}
 				} else if (ctype.equalsIgnoreCase("keymanAttachments")) {
-					for (Node gchild : getChildren(child)) {
-						String gctype = gchild.getNodeName();
-						if (gctype.equalsIgnoreCase("attachment")) {
-							NamedNodeMap gcattr = gchild.getAttributes();
-							String name = parseString(gcattr, "name");
-							String data = textContent(gchild);
-							if (name != null && data != null) {
-								try {
-									ByteArrayOutputStream ba = new ByteArrayOutputStream();
-									Base64InputStream b64 = new Base64InputStream(data);
-									byte[] buf = new byte[65536]; int n;
-									while ((n = b64.read(buf)) > 0) ba.write(buf, 0, n);
-									b64.close();
-									ba.close();
-									km.keymanAttachments.put(name, ba.toByteArray());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-							}
-						} else {
-							throw new IOException("Unknown element: " + gctype);
-						}
-					}
+					parseAttachments(child, km.keymanAttachments);
 				} else if (ctype.equalsIgnoreCase("keymanFileIds")) {
 					for (Node gchild : getChildren(child)) {
 						String gctype = gchild.getNodeName();
@@ -262,6 +240,12 @@ public class KkbReader {
 					}
 				} else if (ctype.equalsIgnoreCase("html")) {
 					parseHTMLConfig(child, km);
+				} else if (ctype.equalsIgnoreCase("winAttachments")) {
+					parseAttachments(child, km.winAttachments);
+				} else if (ctype.equalsIgnoreCase("macAttachments")) {
+					parseAttachments(child, km.macAttachments);
+				} else if (ctype.equalsIgnoreCase("xkbAttachments")) {
+					parseAttachments(child, km.xkbAttachments);
 				} else {
 					throw new IOException("Unknown element: " + ctype);
 				}
@@ -505,6 +489,32 @@ public class KkbReader {
 			}
 		} else {
 			throw new IOException("Unknown element: " + type);
+		}
+	}
+	
+	private static void parseAttachments(Node node, Map<String,byte[]> attachments) throws IOException {
+		for (Node child : getChildren(node)) {
+			String ctype = child.getNodeName();
+			if (ctype.equalsIgnoreCase("attachment")) {
+				NamedNodeMap cattr = child.getAttributes();
+				String name = parseString(cattr, "name");
+				String data = textContent(child);
+				if (name != null && data != null) {
+					try {
+						ByteArrayOutputStream ba = new ByteArrayOutputStream();
+						Base64InputStream b64 = new Base64InputStream(data);
+						byte[] buf = new byte[65536]; int n;
+						while ((n = b64.read(buf)) > 0) ba.write(buf, 0, n);
+						b64.close();
+						ba.close();
+						attachments.put(name, ba.toByteArray());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				throw new IOException("Unknown element: " + ctype);
+			}
 		}
 	}
 	

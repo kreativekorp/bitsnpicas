@@ -5,7 +5,7 @@
 
 <!-- Keyboard Mapping -->
 
-<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,keymanIdentifier?,keymanName?,keymanCopyright?,keymanMessage?,keymanWebHelpText?,keymanVersion?,keymanComments?,keymanAuthor?,keymanEmailAddress?,keymanWebSite?,keymanRightToLeft?,keymanKey102?,keymanDisplayUnderlying?,keymanUseAltGr?,keymanIgnoreCaps?,keymanTargets?,keymanPlatforms?,keymanLanguages?,keymanAttachments?,keymanFileIds?,keymanCpLabels?,keymanFont?,keymanOSKFont?,keymanDisplayFont?,keymanDescription?,keymanLicense?,keymanReadme?,keymanHistory?,icon?,macIconVersion?,keyMappings,macActionIds?,html?)>
+<!ELEMENT keyboardMapping (name,winIdentifier?,winCopyright?,winCompany?,winLocale?,winAltGrEnable?,winShiftLock?,winLrmRlm?,macGroupNumber?,macIdNumber?,xkbPath?,xkbLabel?,xkbComment?,xkbUseKeySym?,xkbAltGrKey?,xkbComposeKey?,keymanIdentifier?,keymanName?,keymanCopyright?,keymanMessage?,keymanWebHelpText?,keymanVersion?,keymanComments?,keymanAuthor?,keymanEmailAddress?,keymanWebSite?,keymanRightToLeft?,keymanKey102?,keymanDisplayUnderlying?,keymanUseAltGr?,keymanIgnoreCaps?,keymanTargets?,keymanPlatforms?,keymanLanguages?,keymanAttachments?,keymanFileIds?,keymanCpLabels?,keymanFont?,keymanOSKFont?,keymanDisplayFont?,keymanDescription?,keymanLicense?,keymanReadme?,keymanHistory?,icon?,macIconVersion?,keyMappings,macActionIds?,html?,winAttachments?,macAttachments?,xkbAttachments?)>
 
 <!ELEMENT name (#PCDATA)>
 
@@ -231,3 +231,9 @@
 <!ELEMENT span EMPTY>
 <!ATTLIST span class CDATA #REQUIRED chars CDATA #REQUIRED>
 <!ELEMENT cpLabels (cpLabel*)>
+
+<!-- Attachments -->
+
+<!ELEMENT winAttachments (attachment*)>
+<!ELEMENT macAttachments (attachment*)>
+<!ELEMENT xkbAttachments (attachment*)>
