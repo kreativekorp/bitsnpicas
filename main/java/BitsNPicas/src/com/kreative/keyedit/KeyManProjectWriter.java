@@ -293,7 +293,7 @@ public class KeyManProjectWriter {
 	
 	public static void writeKeyboardInfo(PrintWriter out, KeyboardMapping km) {
 		out.print("{\r\n");
-		out.print("    \"license\": " + jquote(getLicenseType(km)) + ",\r\n");
+		out.print("    \"license\": " + jquote(km.getKeymanLicenseTypeNotEmpty()) + ",\r\n");
 		out.print("    \"languages\": [\r\n");
 		if (km.keymanLanguages == null || km.keymanLanguages.isEmpty()) {
 			out.print("        \"en\"\r\n");
@@ -353,16 +353,6 @@ public class KeyManProjectWriter {
 	
 	private static String basepath(String path) {
 		return path.replaceAll("[\\\\/]", "\\\\");
-	}
-	
-	private static String getLicenseType(KeyboardMapping km) {
-		if (km.keymanLicenseType != null && km.keymanLicenseType.length() > 0) {
-			return km.keymanLicenseType;
-		}
-		if (km.keymanLicenseText != null && km.keymanLicenseText.length() > 0) {
-			return "unknown";
-		}
-		return "mit";
 	}
 	
 	private static String xquote(String s) {

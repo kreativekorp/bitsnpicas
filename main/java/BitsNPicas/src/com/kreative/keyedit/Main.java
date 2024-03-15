@@ -18,6 +18,8 @@ public class Main {
 				ConvertKeyboard.main(args);
 			} else if (arg0.equals("kkbcopy")) {
 				KkbCopy.main(args);
+			} else if (arg0.equals("kkbinfo")) {
+				KkbInfo.main(args);
 			} else if (arg0.equals("kkblint")) {
 				KkbLint.main(args);
 			} else if (arg0.equals("maccopy")) {
