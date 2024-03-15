@@ -47,19 +47,9 @@ public class KeyManAttachmentListModel extends AbstractListModel {
 		fireIntervalRemoved(this, i, i);
 	}
 	
-	public void moveEntry(int i, int dir) {
-		if (dir < 0 && i > 0) {
-			Entry e = entries.remove(i);
-			i -= 1;
-			entries.add(i, e);
-			fireContentsChanged(this, i, i + 1);
-		}
-		if (dir > 0 && i < (entries.size() - 1)) {
-			Entry e = entries.remove(i);
-			i += 1;
-			entries.add(i, e);
-			fireContentsChanged(this, i - 1, i);
-		}
+	public void renameEntry(int i, String name) {
+		entries.get(i).name = name;
+		fireContentsChanged(this, i, i);
 	}
 	
 	public void toMap(Map<String,byte[]> map) {
