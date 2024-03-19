@@ -42,13 +42,13 @@ public class KeyManVisualWriter {
 			writeKeyMapping(out, k.id, m.shiftedOutput, m.shiftedDeadKey, km.keymanCpLabels);
 		}
 		out.print("    </layer>\r\n");
-		out.print("    <layer shift=\"A\">\r\n");
+		out.print("    <layer shift=\"RA\">\r\n");
 		for (KeyManKey k : KeyManKey.KEYS) {
 			KeyMapping m = km.map.get(k.key);
 			writeKeyMapping(out, k.id, m.altUnshiftedOutput, m.altUnshiftedDeadKey, km.keymanCpLabels);
 		}
 		out.print("    </layer>\r\n");
-		out.print("    <layer shift=\"SA\">\r\n");
+		out.print("    <layer shift=\"SRA\">\r\n");
 		for (KeyManKey k : KeyManKey.KEYS) {
 			KeyMapping m = km.map.get(k.key);
 			writeKeyMapping(out, k.id, m.altShiftedOutput, m.altShiftedDeadKey, km.keymanCpLabels);
