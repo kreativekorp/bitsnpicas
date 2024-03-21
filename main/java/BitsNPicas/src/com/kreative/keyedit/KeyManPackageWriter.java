@@ -180,7 +180,14 @@ public class KeyManPackageWriter {
 		if (km.keymanLanguages.isEmpty()) {
 			out.print("        <Language ID=\"en\">English</Language>\r\n");
 		} else for (Map.Entry<String,String> e : km.keymanLanguages.entrySet()) {
-			out.print("        <Language ID=" + aquote(e.getKey()) + ">" + quote(e.getValue()) + "</Language>\r\n");
+			String id = e.getKey();
+			if (id.equals("und-fonipa")) {
+				// Hack recommended by SIL to work around bugs in Windows.
+				if (km.keymanLanguages.containsKey("und-Latn")) continue;
+				id = "und-Latn";
+			}
+			String name = e.getValue();
+			out.print("        <Language ID=" + aquote(id) + ">" + quote(name) + "</Language>\r\n");
 		}
 		out.print("      </Languages>\r\n");
 		out.print("    </Keyboard>\r\n");

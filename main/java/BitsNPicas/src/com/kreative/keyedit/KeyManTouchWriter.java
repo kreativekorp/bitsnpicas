@@ -31,7 +31,6 @@ public class KeyManTouchWriter {
 		out.append("{\n");
 		if (km.keymanPlatforms == null || km.keymanPlatforms.isEmpty()) {
 			writeLayout(out, "  ", "tablet", km);
-			writeLayout(out, "  ", "phone", km);
 		} else {
 			for (KeyManPlatform p : KeyManPlatform.values()) {
 				if (km.keymanPlatforms.contains(p)) {
