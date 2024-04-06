@@ -1,13 +1,16 @@
 package com.kreative.keyedit.edit;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -15,6 +18,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -68,6 +74,38 @@ public class BufferedImageWell extends JLabel {
 				}
 			}
 		});
+		new DropTarget(this, new DropTargetListener() {
+			public void dragEnter(DropTargetDragEvent e) {}
+			public void dragExit(DropTargetEvent e) {}
+			public void dragOver(DropTargetDragEvent e) {}
+			public void dropActionChanged(DropTargetDragEvent e) {}
+			public void drop(DropTargetDropEvent e) {
+				e.acceptDrop(e.getDropAction());
+				Transferable t = e.getTransferable();
+				try {
+					if (t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+						Image image = (Image)t.getTransferData(DataFlavor.imageFlavor);
+						if (image != null) {
+							setImage(SwingUtils.toBufferedImage(image));
+							e.dropComplete(true);
+							return;
+						}
+					}
+					if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+						List<?> list = (List<?>)t.getTransferData(DataFlavor.javaFileListFlavor);
+						if (list != null && list.size() == 1) {
+							BufferedImage image = ImageIO.read((File)list.get(0));
+							if (image != null) {
+								setImage(image);
+								e.dropComplete(true);
+								return;
+							}
+						}
+					}
+				} catch (Exception e2) {}
+				e.dropComplete(false);
+			}
+		});
 	}
 	
 	public BufferedImage getImage() {
@@ -87,34 +125,19 @@ public class BufferedImageWell extends JLabel {
 	public void copy() {
 		if (image != null) {
 			Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-			cb.setContents(new ImageSelection(image), new ClipboardOwner() {
-				public void lostOwnership(Clipboard cb, Transferable t) {}
-			});
+			ImageSelection sel = new ImageSelection(image);
+			cb.setContents(sel, sel);
 		}
 	}
 	
 	public void paste() {
 		try {
-			long start = System.currentTimeMillis();
 			Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
 			if (cb.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
 				Object data = cb.getData(DataFlavor.imageFlavor);
 				if (data instanceof Image) {
 					Image image = (Image)data;
-					int width = image.getWidth(null);
-					int height = image.getHeight(null);
-					while (width < 0 || height < 0) {
-						if ((System.currentTimeMillis() - start) > 1000) return;
-						width = image.getWidth(null);
-						height = image.getHeight(null);
-					}
-					BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-					Graphics2D g = bi.createGraphics();
-					while (!g.drawImage(image, 0, 0, null)) {
-						if ((System.currentTimeMillis() - start) > 1000) return;
-					}
-					g.dispose();
-					setImage(bi);
+					setImage(SwingUtils.toBufferedImage(image));
 				}
 			}
 		} catch (Exception ex) {
