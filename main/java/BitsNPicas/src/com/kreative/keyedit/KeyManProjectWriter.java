@@ -7,7 +7,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Scanner;
+import com.kreative.unicode.ttflib.NameTable;
+import com.kreative.unicode.ttflib.TtfFile;
 
 public class KeyManProjectWriter {
 	public static void write(File file, KeyboardMapping km) throws IOException {
@@ -294,20 +298,47 @@ public class KeyManProjectWriter {
 	public static void writeKeyboardInfo(PrintWriter out, KeyboardMapping km) {
 		out.print("{\r\n");
 		out.print("    \"license\": " + jquote(km.getKeymanLicenseTypeNotEmpty()) + ",\r\n");
-		out.print("    \"languages\": [\r\n");
-		if (km.keymanLanguages == null || km.keymanLanguages.isEmpty()) {
-			out.print("        \"en\"\r\n");
-		} else {
-			out.print("        ");
+		String displayFont = ttfName(km.keymanDisplayFontFile, km.keymanAttachments);
+		String oskFont = ttfName(km.keymanOSKFontFile, km.keymanAttachments);
+		Collection<String> languages = (
+			(km.keymanLanguages == null || km.keymanLanguages.isEmpty()) ?
+			Arrays.asList("en") : km.keymanLanguages.keySet()
+		);
+		if (displayFont != null || oskFont != null) {
+			out.print("    \"languages\": {\r\n");
 			boolean first = true;
-			for (String lang : km.keymanLanguages.keySet()) {
+			for (String lang : languages) {
+				if (first) first = false;
+				else out.print(",\r\n");
+				out.print("        " + jquote(lang) + ": {\r\n");
+				if (displayFont != null) {
+					out.print("            \"font\": {\r\n");
+					out.print("                \"family\": " + jquote(displayFont) + ",\r\n");
+					out.print("                \"source\": " + jquote(km.keymanDisplayFontFile) + "\r\n");
+					out.print("            }");
+				}
+				if (displayFont != null && oskFont != null) {
+					out.print(",\r\n");
+				}
+				if (oskFont != null) {
+					out.print("            \"oskFont\": {\r\n");
+					out.print("                \"family\": " + jquote(oskFont) + ",\r\n");
+					out.print("                \"source\": " + jquote(km.keymanOSKFontFile) + "\r\n");
+					out.print("            }");
+				}
+				out.print("\r\n        }");
+			}
+			out.print("\r\n    },\r\n");
+		} else {
+			out.print("    \"languages\": [\r\n        ");
+			boolean first = true;
+			for (String lang : languages) {
 				if (first) first = false;
 				else out.print(", ");
 				out.print(jquote(lang));
 			}
-			out.print("\r\n");
+			out.print("\r\n    ],\r\n");
 		}
-		out.print("    ],\r\n");
 		out.print("    \"description\": " + jquote(km.getKeymanDescriptionNotEmpty()) + "\r\n");
 		out.print("}\r\n");
 	}
@@ -370,6 +401,20 @@ public class KeyManProjectWriter {
 			return s.substring(0, s.length() - suffix.length());
 		} else {
 			return s;
+		}
+	}
+	
+	private static String ttfName(String key, Map<String,byte[]> dataMap) {
+		if (key == null || key.length() == 0) return null;
+		if (dataMap == null || dataMap.isEmpty()) return null;
+		byte[] data = dataMap.get(key);
+		if (data == null || data.length == 0) return null;
+		try {
+			TtfFile ttf = new TtfFile(data);
+			NameTable name = ttf.getTableAs(NameTable.class, "name");
+			return name.getName(1);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 }
