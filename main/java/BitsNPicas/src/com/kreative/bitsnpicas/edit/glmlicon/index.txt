@@ -294,6 +294,7 @@ u016b00.png     unicode     Pahawh Hmong
 u016d40.png     unicode     Kirat Rai
 u016d80.png     unicode     Chisoi
 u016e40.png     unicode     Medefaidrin
+u016ea0.png     unicode     Beria Erfe
 u016f00.png     unicode     Miao
 u016fe0.png     unicode     Ideographic Symbols and Punctuation
 u017000.png     unicode     Tangut
@@ -367,6 +368,7 @@ u100000.png     unicode     Supplementary Private Use Area-B
 csure000.png    pua         Tengwar
 csure080.png    pua         Cirth
 csure100.png    pua         Engsvanyali
+csure100.png    pua         Engsvanyáli
 csure150.png    pua         Kinya
 csure1b0.png    pua         Ilianore
 csure1d0.png    pua         Syai
@@ -438,6 +440,10 @@ csurf170.png    pua         Semtog
 csurf190.png    pua         Sitelen Pona
 csurf1b0.png    pua         Shidinn
 csurf1c4.png    pua         Titi Pula
+csurf1c8.png    pua         Sitelen Pona Radicals
+csurf200.png    pua         Sadalian
+csurf268.png    pua         Quikscript
+csurf270.png    pua         Hacm
 pua6ants.png    pua         Block Sextants
 pua6ants.png    pua         Block Sextants (Compatible with Unscii)
 pua6ants.png    pua         Block Sextants (Compatible with ZVBI)
@@ -466,7 +472,9 @@ puac1pic.png    pua         Control Pictures Supplement
 puac64os.png    pua         C64-OS Symbols
 puacamp.png     pua         Camp Duodecimal Numerals
 puacardo.png    pua         Cardo Compatibility
+puachesa.png    pua         Chess Symbols Appendix-A
 puachesa.png    pua         Chess Symbols Extended-A
+puachesb.png    pua         Chess Symbols Appendix-B
 puachesb.png    pua         Chess Symbols Extended-B
 puachess.png    pua         Chess Symbols Appendix
 puachess.png    pua         Chess Symbols Extended
@@ -477,6 +485,7 @@ puacpicb.png    pua         Control Pictures Appendix-B
 puacvrep.png    pua         Code Value Presentation Glyphs
 puacx16.png     pua         Commander X16 Symbols
 puacyfi.png     pua         CYFI Compatibility
+puacyrxa.png    pua         Cyrillic Extended Appendix
 puadivin.png    pua         Divine Symbols
 puadomex.png    pua         Domino Tiles Appendix
 puadomex.png    pua         Domino Tiles Extended
@@ -512,6 +521,8 @@ puakodo.png     pua         Genji-mon Symbols
 pualatxa.png    pua         Latin Extended Appendix-A
 pualatxb.png    pua         Latin Extended Appendix-B
 pualaund.png    pua         Laundry Symbols
+puamahj.png     pua         Mahjong Tiles Appendix
+puamasax.png    pua         Mathematical Alphanumeric Symbols Appendix
 puamatha.png    pua         Mathematical Symbols Appendix
 puameter.png    pua         Metrical Symbols
 puamgame.png    pua         Miscellaneous Game Symbols
@@ -528,6 +539,7 @@ puamusil.png    pua         MUFI-SIL Compatibility
 puanishi.png    pua         Nishiki Shell Surfaces
 puanumfm.png    pua         Number Forms Appendix
 puaornda.png    pua         Ornamental Dingbats Appendix
+puap8num.png    pua         PICO-8 Number Forms
 puapatts.png    pua         Fill Patterns
 puapcdex.png    pua         Playing Cards Appendix
 puapcdex.png    pua         Playing Cards Extension
@@ -561,6 +573,7 @@ pfophid.png     pua         Ophidian Presentation Forms
 pfponaa.png     pua         Sitelen Pona Presentation Forms-A
 pfponab.png     pua         Sitelen Pona Presentation Forms-B
 pfponac.png     pua         Sitelen Pona Presentation Forms-C
+pfponad.png     pua         Sitelen Pona Presentation Forms-D
 pfteng.png      pua         Tengwar Presentation Forms
 pftones.png     pua         Modifier Tone Letter Presentation Forms
 kreative.png    glyphlist   Kreative Glyph List 1
