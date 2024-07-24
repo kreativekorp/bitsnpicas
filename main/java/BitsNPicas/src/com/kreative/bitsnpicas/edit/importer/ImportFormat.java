@@ -73,6 +73,16 @@ public enum ImportFormat {
 			return MoverFrame.forFile(file);
 		}
 	},
+	NFNT {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".nfnt"); }
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(GlyphList encoding) {
+					return new NFNTBitmapFontImporter.FlatFile(encoding);
+				}
+			});
+		}
+	},
 	SRFONT {
 		public boolean recognize(FileProxy fp) {
 			return (
@@ -232,6 +242,18 @@ public enum ImportFormat {
 		public boolean recognize(FileProxy fp) { return fp.isImage(); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new ImageBitmapFontImporterFrame(file);
+		}
+	},
+	NFNT_NOEXT {
+		public boolean recognize(FileProxy fp) {
+			return fp.startsWith(0x90, 0x00);
+		}
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(GlyphList encoding) {
+					return new NFNTBitmapFontImporter.FlatFile(encoding);
+				}
+			});
 		}
 	},
 	MGTK_NOEXT {

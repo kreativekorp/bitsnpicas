@@ -2,6 +2,8 @@ package com.kreative.bitsnpicas.importer;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
@@ -13,65 +15,124 @@ import com.kreative.unicode.data.GlyphList;
 import com.kreative.unicode.ttflib.DfontFile;
 import com.kreative.unicode.ttflib.DfontResource;
 
-public class NFNTBitmapFontImporter implements BitmapFontImporter {
-	private GlyphList encoding;
+public abstract class NFNTBitmapFontImporter implements BitmapFontImporter {
+	protected GlyphList encoding;
+	protected NFNTBitmapFontImporter() { this.encoding = null; }
+	protected NFNTBitmapFontImporter(GlyphList encoding) { this.encoding = encoding; }
 	
-	public NFNTBitmapFontImporter() {
-		this.encoding = null;
-	}
-	
-	public NFNTBitmapFontImporter(GlyphList encoding) {
-		this.encoding = encoding;
-	}
-	
-	public BitmapFont[] importFont(byte[] data) throws IOException {
-		return importFont(new DfontFile(data));
-	}
-	
-	public BitmapFont[] importFont(File file) throws IOException {
-		return importFont(new DfontFile(file));
-	}
-	
-	public BitmapFont[] importFont(InputStream is) throws IOException {
-		return importFont(new DfontFile(is));
-	}
-	
-	public BitmapFont[] importFont(DfontFile rsrc) throws IOException {
-		List<BitmapFont> fonts = new ArrayList<BitmapFont>();
-		MoverFile mf = new MoverFile(rsrc);
-		for (int i = 0, n = mf.size(); i < n; i++) {
-			for (BitmapFont font : importFont(mf.get(i))) {
-				fonts.add(font);
-			}
+	public static final class ResourceFile extends NFNTBitmapFontImporter {
+		public ResourceFile() { super(); }
+		public ResourceFile(GlyphList encoding) { super(encoding); }
+		
+		public BitmapFont[] importFont(byte[] data) throws IOException {
+			return importFont(new DfontFile(data));
 		}
-		return fonts.toArray(new BitmapFont[fonts.size()]);
-	}
-	
-	public BitmapFont[] importFont(ResourceBundle rb) throws IOException {
-		List<BitmapFont> fonts = new ArrayList<BitmapFont>();
-		if (rb.fond != null) {
-			Map<Integer,byte[]> resData = new HashMap<Integer,byte[]>();
-			for (DfontResource res : rb.resources) {
-				if (
-					res.getTypeString().equals("NFNT") ||
-					(res.getTypeString().equals("FONT") && !resData.containsKey(res.getId()))
-				) {
-					resData.put(res.getId(), res.getData());
+		
+		public BitmapFont[] importFont(File file) throws IOException {
+			return importFont(new DfontFile(file));
+		}
+		
+		public BitmapFont[] importFont(InputStream is) throws IOException {
+			return importFont(new DfontFile(is));
+		}
+		
+		public BitmapFont[] importFont(DfontFile rsrc) throws IOException {
+			List<BitmapFont> fonts = new ArrayList<BitmapFont>();
+			MoverFile mf = new MoverFile(rsrc);
+			for (int i = 0, n = mf.size(); i < n; i++) {
+				for (BitmapFont font : importFont(mf.get(i))) {
+					fonts.add(font);
 				}
 			}
-			for (FONDEntry e : rb.fond.entries) {
-				if (e.size != 0) {
-					fonts.add(importFont(
-						resData.get(e.id), rb.fond.id,
-						e.size, e.style, rb.fond.name
-					));
+			return fonts.toArray(new BitmapFont[fonts.size()]);
+		}
+		
+		public BitmapFont[] importFont(ResourceBundle rb) throws IOException {
+			List<BitmapFont> fonts = new ArrayList<BitmapFont>();
+			if (rb.fond != null) {
+				Map<Integer,byte[]> resData = new HashMap<Integer,byte[]>();
+				for (DfontResource res : rb.resources) {
+					if (
+						res.getTypeString().equals("NFNT") ||
+						(res.getTypeString().equals("FONT") && !resData.containsKey(res.getId()))
+					) {
+						resData.put(res.getId(), res.getData());
+					}
+				}
+				for (FONDEntry e : rb.fond.entries) {
+					if (e.size != 0) {
+						fonts.add(importFont(
+							resData.get(e.id), rb.fond.id,
+							e.size, e.style, rb.fond.name
+						));
+					}
 				}
 			}
+			return fonts.toArray(new BitmapFont[fonts.size()]);
 		}
-		return fonts.toArray(new BitmapFont[fonts.size()]);
 	}
 	
-	private BitmapFont importFont(byte[] data, int fontId, int fontSize, int fontStyle, String fontName) throws IOException {
+	private static final Pattern COMPONENT_PATTERN = Pattern.compile(
+		"\\s+(#([0-9]+)|([0-9]+)|Bold|Italic|Underline|Outline|Shadow|Condensed|Extended)",
+		Pattern.CASE_INSENSITIVE
+	);
+	
+	public static final class FlatFile extends NFNTBitmapFontImporter {
+		public FlatFile() { super(); }
+		public FlatFile(GlyphList encoding) { super(encoding); }
+		
+		public BitmapFont[] importFont(File file) throws IOException {
+			int fontId = 12;
+			int fontSize = 12;
+			int fontStyle = 0;
+			StringBuffer sb = new StringBuffer();
+			Matcher m = COMPONENT_PATTERN.matcher(file.getName());
+			while (m.find()) {
+				if (m.group(2) != null) fontId = Integer.parseInt(m.group(2));
+				else if (m.group(3) != null) fontSize = Integer.parseInt(m.group(3));
+				else if (m.group(1).equalsIgnoreCase("Bold")) fontStyle |= 1;
+				else if (m.group(1).equalsIgnoreCase("Italic")) fontStyle |= 2;
+				else if (m.group(1).equalsIgnoreCase("Underline")) fontStyle |= 4;
+				else if (m.group(1).equalsIgnoreCase("Outline")) fontStyle |= 8;
+				else if (m.group(1).equalsIgnoreCase("Shadow")) fontStyle |= 16;
+				else if (m.group(1).equalsIgnoreCase("Condensed")) fontStyle |= 32;
+				else if (m.group(1).equalsIgnoreCase("Extended")) fontStyle |= 64;
+				m.appendReplacement(sb, "");
+			}
+			m.appendTail(sb);
+			String fontName = sb.toString().trim();
+			if (fontName.length() == 0) fontName = "Untitled";
+			BitmapFont f = importFont(file, fontId, fontSize, fontStyle, fontName);
+			return new BitmapFont[]{f};
+		}
+		
+		public BitmapFont[] importFont(InputStream is) throws IOException {
+			BitmapFont f = importFont(is, 12, 12, 0, "Untitled");
+			return new BitmapFont[]{f};
+		}
+		
+		public BitmapFont[] importFont(byte[] data) throws IOException {
+			BitmapFont f = importFont(data, 12, 12, 0, "Untitled");
+			return new BitmapFont[]{f};
+		}
+	}
+	
+	protected BitmapFont importFont(File file, int fontId, int fontSize, int fontStyle, String fontName) throws IOException {
+		FileInputStream is = new FileInputStream(file);
+		BitmapFont f = importFont(is, fontId, fontSize, fontStyle, fontName);
+		is.close();
+		return f;
+	}
+	
+	protected BitmapFont importFont(InputStream is, int fontId, int fontSize, int fontStyle, String fontName) throws IOException {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		byte[] buf = new byte[65536]; int count;
+		while ((count = is.read(buf)) > 0) os.write(buf, 0, count);
+		os.flush(); os.close(); buf = os.toByteArray();
+		return importFont(buf, fontId, fontSize, fontStyle, fontName);
+	}
+	
+	protected BitmapFont importFont(byte[] data, int fontId, int fontSize, int fontStyle, String fontName) throws IOException {
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		DataInputStream nfntIn = new DataInputStream(in);
 		/* int type = */ nfntIn.readShort();
@@ -139,6 +200,22 @@ public class NFNTBitmapFontImporter implements BitmapFontImporter {
 				BitmapFontGlyph g = new BitmapFontGlyph(glyph, offset, advance, ascent);
 				int cp = (encoding != null) ? encoding.get(ch) : MACROMAN[ch];
 				if (cp >= 0) font.putCharacter(cp, g);
+			}
+		}
+		if (widths[lastChar - firstChar + 1] != -1) {
+			int xcoord = xcoords[lastChar - firstChar + 1] & 0xFFFF;
+			int width = (xcoords[lastChar - firstChar + 2] & 0xFFFF) - xcoord;
+			if (!(width < 0 || (xcoord + width) > (rowWidth * 16))) {
+				byte[][] glyph = new byte[height][width];
+				for (int y = 0; y < height; y++) {
+					for (int gx = 0, bx = xcoord; gx < width; gx++, bx++) {
+						glyph[y][gx] = bitmap[y][bx];
+					}
+				}
+				int offset = offsets[lastChar - firstChar + 1] + kerning;
+				int advance = widths[lastChar - firstChar + 1] & 0xFF;
+				BitmapFontGlyph g = new BitmapFontGlyph(glyph, offset, advance, ascent);
+				font.putNamedGlyph(".notdef", g);
 			}
 		}
 		font.setName(Font.NAME_FAMILY, fontName);

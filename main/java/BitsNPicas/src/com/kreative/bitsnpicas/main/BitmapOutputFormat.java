@@ -69,23 +69,28 @@ public enum BitmapOutputFormat {
 			);
 		}
 	},
-	SUIT(".suit", "nfnt", "suit", true) {
+	SUIT(".suit", "suit", true) {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			o.idgen.setRange(128, 32768);
 			o.sizegen.setRange(4, 127);
 			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 72);
-			return new NFNTBitmapFontExporter(o.idgen, o.sizegen, o.getEncoding());
+			return new NFNTBitmapFontExporter.ResourceFile(o.idgen, o.sizegen, o.getEncoding());
 		}
 		public void postProcess(File file) throws IOException {
 			MacUtility.setTypeAndCreator(file, "FFIL", "DMOV");
 		}
 	},
-	DFONT(".dfont", "dfont") {
+	DFONT(".dfont", "dfont", false) {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			o.idgen.setRange(128, 32768);
 			o.sizegen.setRange(4, 127);
 			o.sizegen.setPointSizes(9, 10, 12, 14, 18, 24, 36, 48, 72);
-			return new NFNTBitmapFontExporter(o.idgen, o.sizegen, o.getEncoding());
+			return new NFNTBitmapFontExporter.ResourceFile(o.idgen, o.sizegen, o.getEncoding());
+		}
+	},
+	NFNT(".nfnt", "nfnt") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new NFNTBitmapFontExporter.FlatFile(o.getEncoding());
 		}
 	},
 	SFONT(".png", "png", "sfont") {
@@ -211,8 +216,8 @@ public enum BitmapOutputFormat {
 		this.macResFork = false;
 	}
 	
-	private BitmapOutputFormat(String suffix, String id1, String id2, boolean macResFork) {
-		this.ids = new String[]{id1, id2};
+	private BitmapOutputFormat(String suffix, String id, boolean macResFork) {
+		this.ids = new String[]{id};
 		this.suffix = suffix;
 		this.macResFork = macResFork;
 	}

@@ -55,13 +55,19 @@ public enum BitmapInputFormat {
 	SUIT(BitmapFont.NAME_FAMILY_AND_STYLE, true) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".suit"); }
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new NFNTBitmapFontImporter(o.getEncoding());
+			return new NFNTBitmapFontImporter.ResourceFile(o.getEncoding());
 		}
 	},
 	DFONT(BitmapFont.NAME_FAMILY_AND_STYLE, false) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".dfont"); }
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new NFNTBitmapFontImporter(o.getEncoding());
+			return new NFNTBitmapFontImporter.ResourceFile(o.getEncoding());
+		}
+	},
+	NFNT(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) { return fp.hasExtension(".nfnt"); }
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new NFNTBitmapFontImporter.FlatFile(o.getEncoding());
 		}
 	},
 	SRFONT(BitmapFont.NAME_FAMILY_AND_STYLE) {
@@ -201,7 +207,15 @@ public enum BitmapInputFormat {
 			);
 		}
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
-			return new NFNTBitmapFontImporter(o.getEncoding());
+			return new NFNTBitmapFontImporter.ResourceFile(o.getEncoding());
+		}
+	},
+	NFNT_NOEXT(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) {
+			return fp.startsWith(0x90, 0x00);
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new NFNTBitmapFontImporter.FlatFile(o.getEncoding());
 		}
 	},
 	MGTK_NOEXT(BitmapFont.NAME_FAMILY) {

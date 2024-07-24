@@ -13,28 +13,79 @@ import com.kreative.unicode.data.GlyphList;
 import com.kreative.unicode.ttflib.DfontFile;
 import com.kreative.unicode.ttflib.DfontResource;
 
-public class NFNTBitmapFontExporter implements BitmapFontExporter {
-	private IDGenerator idgen;
-	private PointSizeGenerator sizegen;
-	private GlyphList encoding;
+public abstract class NFNTBitmapFontExporter implements BitmapFontExporter {
+	protected GlyphList encoding;
+	protected NFNTBitmapFontExporter() { this.encoding = null; }
+	protected NFNTBitmapFontExporter(GlyphList encoding) { this.encoding = encoding; }
 	
-	public NFNTBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen) {
-		this.idgen = idgen;
-		this.sizegen = sizegen;
-		this.encoding = null;
+	public static final class ResourceFile extends NFNTBitmapFontExporter {
+		private IDGenerator idgen;
+		private PointSizeGenerator sizegen;
+		
+		public ResourceFile(IDGenerator idgen, PointSizeGenerator sizegen) {
+			super();
+			this.idgen = idgen;
+			this.sizegen = sizegen;
+		}
+		
+		public ResourceFile(IDGenerator idgen, PointSizeGenerator sizegen, GlyphList enc) {
+			super(enc);
+			this.idgen = idgen;
+			this.sizegen = sizegen;
+		}
+		
+		public byte[] exportFontToBytes(BitmapFont font) throws IOException {
+			// make meta
+			font.autoFillNames();
+			String name = font.getName(Font.NAME_FAMILY);
+			int id = idgen.generateID(font);
+			int size = sizegen.generatePointSize(font);
+			
+			// make FOND
+			FONDResource fond = new FONDResource(name, id);
+			fond.entries.add(new FONDEntry(size, font.getMacStyle(), id));
+			byte[] fondData = fond.toByteArray();
+			byte[] nfntData = exportNFNT(font);
+			
+			// make resource fork
+			DfontFile rsrc = new DfontFile();
+			rsrc.addResource(new DfontResource("FOND", id, 0x60, name, fondData, 0, fondData.length));
+			rsrc.addResource(new DfontResource("NFNT", id, 0x60, name, nfntData, 0, nfntData.length));
+			return rsrc.write();
+		}
+		
+		public void exportFontToFile(BitmapFont font, File file) throws IOException {
+			OutputStream os = new FileOutputStream(file);
+			os.write(exportFontToBytes(font));
+			os.close();
+		}
+		
+		public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
+			os.write(exportFontToBytes(font));
+		}
 	}
 	
-	public NFNTBitmapFontExporter(IDGenerator idgen, PointSizeGenerator sizegen, GlyphList enc) {
-		this.idgen = idgen;
-		this.sizegen = sizegen;
-		this.encoding = enc;
+	public static final class FlatFile extends NFNTBitmapFontExporter {
+		public FlatFile() { super(); }
+		public FlatFile(GlyphList encoding) { super(encoding); }
+		
+		public byte[] exportFontToBytes(BitmapFont font) throws IOException {
+			return exportNFNT(font);
+		}
+		
+		public void exportFontToFile(BitmapFont font, File file) throws IOException {
+			OutputStream os = new FileOutputStream(file);
+			os.write(exportFontToBytes(font));
+			os.close();
+		}
+		
+		public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
+			os.write(exportFontToBytes(font));
+		}
 	}
 	
-	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
-		String name;
-		int id;
-		int size;
-		int type = 0;
+	protected byte[] exportNFNT(BitmapFont font) throws IOException {
+		int type = 0x9000;
 		int firstChar = Integer.MAX_VALUE;
 		int lastChar = Integer.MIN_VALUE;
 		int maxWidth = 0;
@@ -99,28 +150,26 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 		}
 		
 		// make catchall bitmap
-		{
-			BitmapFontGlyph c = font.getCharacter(-1);
-			if (c != null) {
-				byte[][] g = c.getGlyph();
-				for (int gy = 0, by = font.getLineAscent() - c.getGlyphAscent(); gy < g.length && by < bitmap.length; gy++, by++) {
-					if (by >= 0) {
-						for (int gx = 0, bx = xcoord; gx < g[gy].length && bx < bitmap[by].length; gx++, bx++) {
-							bitmap[by][bx] = g[gy][gx];
-						}
+		BitmapFontGlyph c = font.getNamedGlyph(".notdef");
+		if (c != null) {
+			byte[][] g = c.getGlyph();
+			for (int gy = 0, by = font.getLineAscent() - c.getGlyphAscent(); gy < g.length && by < bitmap.length; gy++, by++) {
+				if (by >= 0) {
+					for (int gx = 0, bx = xcoord; gx < g[gy].length && bx < bitmap[by].length; gx++, bx++) {
+						bitmap[by][bx] = g[gy][gx];
 					}
 				}
-				xcoords[lastChar-firstChar+1] = (short)xcoord;
-				offsets[lastChar-firstChar+1] = (byte)(c.getGlyphOffset()-kerning);
-				widths[lastChar-firstChar+1] = (byte)c.getCharacterWidth();
-				xcoord += c.getGlyphWidth();
-			} else {
-				xcoords[lastChar-firstChar+1] = (short)xcoord;
-				offsets[lastChar-firstChar+1] = -1;
-				widths[lastChar-firstChar+1] = -1;
 			}
-			xcoords[lastChar-firstChar+2] = (short)xcoord;
+			xcoords[lastChar-firstChar+1] = (short)xcoord;
+			offsets[lastChar-firstChar+1] = (byte)(c.getGlyphOffset()-kerning);
+			widths[lastChar-firstChar+1] = (byte)c.getCharacterWidth();
+			xcoord += c.getGlyphWidth();
+		} else {
+			xcoords[lastChar-firstChar+1] = (short)xcoord;
+			offsets[lastChar-firstChar+1] = -1;
+			widths[lastChar-firstChar+1] = -1;
 		}
+		xcoords[lastChar-firstChar+2] = (short)xcoord;
 		
 		// make real bitmap
 		byte[][] realBitmap = new byte[height][rowWidth*2];
@@ -132,12 +181,6 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 				}
 			}
 		}
-		
-		// make meta
-		font.autoFillNames();
-		name = font.getName(Font.NAME_FAMILY);
-		id = idgen.generateID(font);
-		size = sizegen.generatePointSize(font);
 		
 		// make NFNT
 		ByteArrayOutputStream nfntOut = new ByteArrayOutputStream();
@@ -161,28 +204,7 @@ public class NFNTBitmapFontExporter implements BitmapFontExporter {
 			nfntIn.writeByte(offsets[i]);
 			nfntIn.writeByte(widths[i]);
 		}
-		byte[] nfntData = nfntOut.toByteArray();
-		
-		// make FOND
-		FONDResource fond = new FONDResource(name, id);
-		fond.entries.add(new FONDEntry(size, font.getMacStyle(), id));
-		byte[] fondData = fond.toByteArray();
-		
-		// make resource fork
-		DfontFile rsrc = new DfontFile();
-		rsrc.addResource(new DfontResource("FOND", id, 0x60, name, fondData, 0, fondData.length));
-		rsrc.addResource(new DfontResource("NFNT", id, 0x60, name, nfntData, 0, nfntData.length));
-		return rsrc.write();
-	}
-	
-	public void exportFontToFile(BitmapFont font, File file) throws IOException {
-		OutputStream os = new FileOutputStream(file);
-		os.write(exportFontToBytes(font));
-		os.close();
-	}
-	
-	public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
-		os.write(exportFontToBytes(font));
+		return nfntOut.toByteArray();
 	}
 	
 	private static final int[] MACROMAN = new int[] {

@@ -183,7 +183,7 @@ public class MoverTable extends JTable {
 		for (ResourceBundle rb : list) {
 			if (rb.moverType.equals("ffil")) {
 				try {
-					BitmapFont[] fonts = new NFNTBitmapFontImporter(
+					BitmapFont[] fonts = new NFNTBitmapFontImporter.ResourceFile(
 						ip.getSelectedEncoding()).importFont(rb);
 					Main.openFonts(null, null, fonts);
 				} catch (IOException ioe) {

@@ -53,7 +53,7 @@ public enum BitmapExportFormat {
 	},
 	SUIT("Mac OS Classic Font Suitcase (Resource Fork)", ".suit", "mac", "MacRoman", true) {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return new NFNTBitmapFontExporter(
+			return new NFNTBitmapFontExporter.ResourceFile(
 				o.getIDGenerator(),
 				o.getPointSizeGenerator(),
 				o.getSelectedEncoding()
@@ -65,11 +65,16 @@ public enum BitmapExportFormat {
 	},
 	DFONT("Mac OS Classic Font Suitcase (Data Fork)", ".dfont", "mac", "MacRoman", false) {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return new NFNTBitmapFontExporter(
+			return new NFNTBitmapFontExporter.ResourceFile(
 				o.getIDGenerator(),
 				o.getPointSizeGenerator(),
 				o.getSelectedEncoding()
 			);
+		}
+	},
+	NFNT("Mac OS Classic Font Resource in Data Fork", ".nfnt", "encoding", "MacRoman") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new NFNTBitmapFontExporter.FlatFile(o.getSelectedEncoding());
 		}
 	},
 	SFONT("PNG (SDL SFont)", ".png", "color") {
