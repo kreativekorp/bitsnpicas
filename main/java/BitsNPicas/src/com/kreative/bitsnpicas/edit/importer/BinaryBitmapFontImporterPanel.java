@@ -101,6 +101,7 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 			cellCountPanel
 		);
 		final JPanel settingsPanel = borderLayout(8, 8, labelPanel, BorderLayout.LINE_START, ctrlPanel, BorderLayout.CENTER);
+		final JPanel leftPanel = borderLayout(0, 0, settingsPanel, BorderLayout.PAGE_START);
 		
 		eTable.setDefaultRenderer(BufferedImage.class, new GlyphCellRenderer());
 		setColumnWidth(eTable.getColumnModel().getColumn(1), 80);
@@ -113,7 +114,7 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 		final JPanel buttonPanel = flowLayout(openButton);
 		
 		final JPanel mainPanel = new JPanel(new BorderLayout(12, 12));
-		mainPanel.add(settingsPanel, BorderLayout.LINE_START);
+		mainPanel.add(leftPanel, BorderLayout.LINE_START);
 		mainPanel.add(eTablePanel, BorderLayout.CENTER);
 		mainPanel.add(buttonPanel, BorderLayout.PAGE_END);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
