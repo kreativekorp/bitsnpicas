@@ -117,6 +117,13 @@ public abstract class NFNTBitmapFontExporter implements BitmapFontExporter {
 				width += c.getGlyphWidth();
 			}
 		}
+		BitmapFontGlyph notdef = font.getNamedGlyph(".notdef");
+		if (notdef != null) {
+			if (notdef.getCharacterWidth() > maxWidth) maxWidth = notdef.getCharacterWidth();
+			if (notdef.getGlyphOffset() < kerning) kerning = notdef.getGlyphOffset();
+			if (notdef.getGlyphOffset() + notdef.getGlyphWidth() - kerning > rectWidth) rectWidth = notdef.getGlyphOffset() + notdef.getGlyphWidth() - kerning;
+			width += notdef.getGlyphWidth();
+		}
 		rowWidth = (width + 15) / 16;
 		wots = 5 + (rowWidth*height) + (lastChar-firstChar+3);
 		bitmap = new byte[height][rowWidth * 16];
@@ -148,12 +155,9 @@ public abstract class NFNTBitmapFontExporter implements BitmapFontExporter {
 				widths[o] = -1;
 			}
 		}
-		
-		// make catchall bitmap
-		BitmapFontGlyph c = font.getNamedGlyph(".notdef");
-		if (c != null) {
-			byte[][] g = c.getGlyph();
-			for (int gy = 0, by = font.getLineAscent() - c.getGlyphAscent(); gy < g.length && by < bitmap.length; gy++, by++) {
+		if (notdef != null) {
+			byte[][] g = notdef.getGlyph();
+			for (int gy = 0, by = font.getLineAscent() - notdef.getGlyphAscent(); gy < g.length && by < bitmap.length; gy++, by++) {
 				if (by >= 0) {
 					for (int gx = 0, bx = xcoord; gx < g[gy].length && bx < bitmap[by].length; gx++, bx++) {
 						bitmap[by][bx] = g[gy][gx];
@@ -161,9 +165,9 @@ public abstract class NFNTBitmapFontExporter implements BitmapFontExporter {
 				}
 			}
 			xcoords[lastChar-firstChar+1] = (short)xcoord;
-			offsets[lastChar-firstChar+1] = (byte)(c.getGlyphOffset()-kerning);
-			widths[lastChar-firstChar+1] = (byte)c.getCharacterWidth();
-			xcoord += c.getGlyphWidth();
+			offsets[lastChar-firstChar+1] = (byte)(notdef.getGlyphOffset()-kerning);
+			widths[lastChar-firstChar+1] = (byte)notdef.getCharacterWidth();
+			xcoord += notdef.getGlyphWidth();
 		} else {
 			xcoords[lastChar-firstChar+1] = (short)xcoord;
 			offsets[lastChar-firstChar+1] = -1;
