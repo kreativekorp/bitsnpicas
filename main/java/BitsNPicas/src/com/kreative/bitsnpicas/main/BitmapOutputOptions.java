@@ -12,6 +12,7 @@ public class BitmapOutputOptions {
 	public PointSizeGenerator sizegen = new PointSizeGenerator.Automatic(4, 127);
 	public String encodingName = null;
 	public Integer u8mLoadAddress = null;
+	public Boolean amigaProportional = null;
 	public boolean geosMega = false;
 	public boolean geosKerning = false;
 	public boolean geosUTF8 = false;

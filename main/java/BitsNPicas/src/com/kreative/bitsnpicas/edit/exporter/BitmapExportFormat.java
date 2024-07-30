@@ -110,6 +110,11 @@ public enum BitmapExportFormat {
 			return new U8MBitmapFontExporter(o.getLoadAddress(), o.getSelectedEncoding());
 		}
 	},
+	AMIGA("Amiga Font File and Directory", ".font", "amiga", "ISO-8859-1") {
+		public BitmapFontExporter createExporter(BitmapExportOptions o) {
+			return new AmigaBitmapFontExporter.ContentsFile(o.getAmigaProportional(), o.getSelectedEncoding());
+		}
+	},
 	FNT3("FNT (Windows 3.x)", ".fnt", "encoding", "CP1252") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			return new FNTBitmapFontExporter(3, o.getSelectedEncoding());

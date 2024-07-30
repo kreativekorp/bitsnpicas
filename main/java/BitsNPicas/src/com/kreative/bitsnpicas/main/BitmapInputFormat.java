@@ -105,6 +105,17 @@ public enum BitmapInputFormat {
 			return new U8MBitmapFontImporter();
 		}
 	},
+	AMIGA(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) {
+			return (
+				fp.hasExtension(".font") &&
+				(fp.startsWith(0x0F, 0x00) || fp.startsWith(0x0F, 0x02))
+			);
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new AmigaBitmapFontImporter.ContentsFile(o.getEncoding());
+		}
+	},
 	FNT(BitmapFont.NAME_FAMILY_AND_STYLE) {
 		public boolean recognize(FileProxy fp) {
 			if (!fp.hasExtension(".fnt")) return false;
@@ -216,6 +227,14 @@ public enum BitmapInputFormat {
 		}
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {
 			return new NFNTBitmapFontImporter.FlatFile(o.getEncoding());
+		}
+	},
+	AMIGA_NOEXT(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) {
+			return fp.startsWith(0x00, 0x00, 0x03, 0xF3);
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new AmigaBitmapFontImporter.DescriptorFile(o.getEncoding());
 		}
 	},
 	MGTK_NOEXT(BitmapFont.NAME_FAMILY) {

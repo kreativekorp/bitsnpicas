@@ -167,6 +167,12 @@ public class ConvertBitmap {
 						o.io.psfPuaBase = parseInt16(args[argi++]);
 					} else if (arg.equals("-a") && argi < args.length) {
 						o.oo.u8mLoadAddress = parseInt16(args[argi++]);
+					} else if (arg.equals("-P")) {
+						o.oo.amigaProportional = true;
+					} else if (arg.equals("-X")) {
+						o.oo.amigaProportional = false;
+					} else if (arg.equals("-A")) {
+						o.oo.amigaProportional = null;
 					} else if (arg.equals("-m")) {
 						o.oo.geosMega = true;
 					} else if (arg.equals("-M")) {
@@ -277,7 +283,10 @@ public class ConvertBitmap {
 		System.out.println("  -k / -K       Generate / don't generate kerning tables (for geos).");
 		System.out.println("  -u / -U       Generate / don't generate UTF-8 tables (for geos).");
 		System.out.println("  -a <addr>     Add a loading address to the file (for u8m).");
-		System.out.println("  -e <enc>      Use the specified encoding (for nfnt, fzx, sbf). One of:");
+		System.out.println("  -P            Always generate proportional font (for Amiga).");
+		System.out.println("  -X            Always generate monospaced font (for Amiga).");
+		System.out.println("  -A            Automatically detect proportional/mono (for Amiga).");
+		System.out.println("  -e <enc>      Use the specified encoding (for nfnt, fzx, etc.). One of:");
 		System.out.println("  -ie <enc>     Use the specified encoding for reading only. One of:");
 		System.out.println("  -oe <enc>     Use the specified encoding for writing only. One of:");
 		List<String> encs = new ArrayList<String>();

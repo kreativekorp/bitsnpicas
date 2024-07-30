@@ -129,6 +129,11 @@ public enum BitmapOutputFormat {
 			return new U8MBitmapFontExporter(o.u8mLoadAddress, o.getEncoding());
 		}
 	},
+	AMIGA(".font", "font", "amiga") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new AmigaBitmapFontExporter.ContentsFile(o.amigaProportional, o.getEncoding());
+		}
+	},
 	FNT3(".fnt", "fnt", "fnt3") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new FNTBitmapFontExporter(3, o.getEncoding());

@@ -118,6 +118,21 @@ public enum ImportFormat {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".u8m"); }
 		public FontImporter<?> createImporter() { return new U8MBitmapFontImporter(); }
 	},
+	AMIGA {
+		public boolean recognize(FileProxy fp) {
+			return (
+				fp.hasExtension(".font") &&
+				(fp.startsWith(0x0F, 0x00) || fp.startsWith(0x0F, 0x02))
+			);
+		}
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("ISO-8859-1", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(GlyphList encoding) {
+					return new AmigaBitmapFontImporter.ContentsFile(encoding);
+				}
+			});
+		}
+	},
 	FNT {
 		public boolean recognize(FileProxy fp) {
 			if (!fp.hasExtension(".fnt")) return false;
@@ -252,6 +267,18 @@ public enum ImportFormat {
 			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
 					return new NFNTBitmapFontImporter.FlatFile(encoding);
+				}
+			});
+		}
+	},
+	AMIGA_NOEXT {
+		public boolean recognize(FileProxy fp) {
+			return fp.startsWith(0x00, 0x00, 0x03, 0xF3);
+		}
+		public JFrame createOptionFrame(File file) throws IOException {
+			return new EncodingSelectionFrame("ISO-8859-1", file, new EncodingSelectionImporter() {
+				public FontImporter<?> createImporter(GlyphList encoding) {
+					return new AmigaBitmapFontImporter.DescriptorFile(encoding);
 				}
 			});
 		}

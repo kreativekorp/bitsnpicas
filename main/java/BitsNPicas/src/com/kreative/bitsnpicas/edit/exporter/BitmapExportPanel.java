@@ -33,6 +33,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final BitmapExportOTBPanel otbPanel;
 	private final BitmapExportGEOSPanel geosPanel;
 	private final BitmapExportMacPanel macPanel;
+	private final BitmapExportAmigaPanel amigaPanel;
 	private final BitmapExportEncodingPanel encodingPanel;
 	private final BitmapExportFONTXPanel fontxPanel;
 	private final BitmapExportU8MPanel u8mPanel;
@@ -48,6 +49,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.otbPanel = new BitmapExportOTBPanel();
 		this.geosPanel = new BitmapExportGEOSPanel();
 		this.macPanel = new BitmapExportMacPanel();
+		this.amigaPanel = new BitmapExportAmigaPanel();
 		this.encodingPanel = new BitmapExportEncodingPanel();
 		this.fontxPanel = new BitmapExportFONTXPanel();
 		this.u8mPanel = new BitmapExportU8MPanel();
@@ -69,6 +71,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		formatOptionsPanel.add(otbPanel, "otb");
 		formatOptionsPanel.add(geosPanel, "geos");
 		formatOptionsPanel.add(macPanel, "mac");
+		formatOptionsPanel.add(amigaPanel, "amiga");
 		formatOptionsPanel.add(encodingPanel, "encoding");
 		formatOptionsPanel.add(fontxPanel, "fontx");
 		formatOptionsPanel.add(u8mPanel, "u8m");
@@ -101,6 +104,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 					EncodingList.instance().getGlyphList(f.defaultEncodingName)
 				);
 				macPanel.setSelectedEncoding(enc);
+				amigaPanel.setSelectedEncoding(enc);
 				encodingPanel.setSelectedEncoding(enc);
 				u8mPanel.setSelectedEncoding(enc);
 				Window c = getMyContainingWindow();
@@ -171,6 +175,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	public GlyphList getSelectedEncoding() {
 		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 		if (f.cardName.equals("mac")) return macPanel.getSelectedEncoding();
+		if (f.cardName.equals("amiga")) return amigaPanel.getSelectedEncoding();
 		if (f.cardName.equals("u8m")) return u8mPanel.getSelectedEncoding();
 		if (f.cardName.equals("fontx")) return fontxPanel.getSelectedSingleByteEncoding();
 		return encodingPanel.getSelectedEncoding();
@@ -188,6 +193,11 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		BitmapExportFormat f = (BitmapExportFormat)format.getSelectedItem();
 		if (f.cardName.equals("geos")) return geosPanel.getPointSizeGenerator();
 		return macPanel.getPointSizeGenerator();
+	}
+	
+	@Override
+	public Boolean getAmigaProportional() {
+		return amigaPanel.getAmigaProportional();
 	}
 	
 	@Override

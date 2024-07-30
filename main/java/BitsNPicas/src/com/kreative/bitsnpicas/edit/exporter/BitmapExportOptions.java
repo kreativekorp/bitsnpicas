@@ -13,6 +13,7 @@ public interface BitmapExportOptions {
 	public GlyphList getSelectedEncoding();
 	public IDGenerator getIDGenerator();
 	public PointSizeGenerator getPointSizeGenerator();
+	public Boolean getAmigaProportional();
 	public boolean getGEOSMega();
 	public boolean getGEOSKerning();
 	public boolean getGEOSUTF8();
