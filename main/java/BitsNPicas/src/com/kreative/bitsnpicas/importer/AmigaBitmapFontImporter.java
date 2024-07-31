@@ -207,12 +207,6 @@ public abstract class AmigaBitmapFontImporter implements BitmapFontImporter {
 		fontIn.close();
 		in.close();
 		
-		System.out.println("charData: " + Integer.toHexString(charData));
-		System.out.println("modulo: " + modulo);
-		System.out.println("charLoc: " + Integer.toHexString(charLoc));
-		System.out.println("charSpace: " + Integer.toHexString(charSpace));
-		System.out.println("charKern: " + Integer.toHexString(charKern));
-		
 		byte[][] bitmap = new byte[ySize][modulo * 8];
 		if (charData > 0) {
 			for (int j = base + charData, y = 0; y < ySize; y++, j += modulo) {
@@ -254,15 +248,6 @@ public abstract class AmigaBitmapFontImporter implements BitmapFontImporter {
 			for (int i = 0; i < n; i++) kerning[i] = fontIn.readShort();
 			fontIn.close();
 			in.close();
-		}
-		
-		System.out.println("char\toffs\tsize\tspace\tkern");
-		for (int i = 0; i < n; i++) {
-			System.out.println(
-				Integer.toHexString(loChar + i) +
-				"\t" + bitOffset[i] + "\t" + bitSize[i] +
-				"\t" + spacing[i] + "\t" + kerning[i]
-			);
 		}
 		
 		/*
