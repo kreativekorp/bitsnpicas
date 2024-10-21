@@ -34,7 +34,7 @@ public abstract class BitmapGlyphTransform {
 		private final BoldBitmapFontGlyphTransformer tx;
 		public Bold(String name, int keyCode, int modifiers) {
 			super(name, keyCode, modifiers);
-			this.tx = new BoldBitmapFontGlyphTransformer();
+			this.tx = new BoldBitmapFontGlyphTransformer(true);
 		}
 		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
 			new BitmapGlyphState(tx.transformGlyph(glyph)).apply(glyph);

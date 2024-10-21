@@ -4,6 +4,12 @@ import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
 
 public class BoldBitmapFontGlyphTransformer implements BitmapFontGlyphTransformer {
+	private final boolean extraWidth;
+	
+	public BoldBitmapFontGlyphTransformer(boolean extraWidth) {
+		this.extraWidth = extraWidth;
+	}
+	
 	public BitmapFontGlyph transformGlyph(BitmapFontGlyph glyph) {
 		int x = glyph.getGlyphOffset();
 		int w = glyph.getCharacterWidth();
@@ -17,12 +23,14 @@ public class BoldBitmapFontGlyphTransformer implements BitmapFontGlyphTransforme
 				newg[j][i+1] = (byte)((newg[j][i+1] & 0xFF) + (255 - (newg[j][i+1] & 0xFF)) * (oldg[j][i] & 0xFF) / 255);
 			}
 		}
-		if (w == 0) {
-			if (x < 0) {
-				x--;
+		if (extraWidth) {
+			if (w == 0) {
+				if (x < 0) {
+					x--;
+				}
+			} else {
+				w++;
 			}
-		} else {
-			w++;
 		}
 		return new BitmapFontGlyph(newg, x, w, a);
 	}

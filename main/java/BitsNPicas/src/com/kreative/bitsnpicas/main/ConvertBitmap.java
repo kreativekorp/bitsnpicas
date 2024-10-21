@@ -22,7 +22,7 @@ import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.edit.TimestampGlyphGenerator;
-import com.kreative.bitsnpicas.transformer.BoldBitmapFontGlyphTransformer;
+import com.kreative.bitsnpicas.transformer.*;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -100,7 +100,18 @@ public class ConvertBitmap {
 					} else if (arg.equals("-n")) {
 						o.transform.clear();
 					} else if (arg.equals("-b")) {
-						o.transform.add(new BoldBitmapFontGlyphTransformer());
+						o.transform.add(new BoldBitmapFontGlyphTransformer(true));
+					} else if (arg.equals("-B")) {
+						o.transform.add(new BoldBitmapFontGlyphTransformer(false));
+					} else if (arg.equals("-tx") && argi < args.length) {
+						int tx = parseInt(args[argi++], 0);
+						o.transform.add(new TranslateBitmapFontGlyphTransformer(tx, 0, 0));
+					} else if (arg.equals("-tw") && argi < args.length) {
+						int tw = parseInt(args[argi++], 0);
+						o.transform.add(new TranslateBitmapFontGlyphTransformer(0, tw, 0));
+					} else if ((arg.equals("-ta") || arg.equals("-ty")) && argi < args.length) {
+						int ta = parseInt(args[argi++], 0);
+						o.transform.add(new TranslateBitmapFontGlyphTransformer(0, 0, ta));
 					} else if (arg.equals("-o") && argi < args.length) {
 						o.dest = new File(args[argi++]);
 					} else if (arg.equals("-f") && argi < args.length) {
@@ -248,6 +259,10 @@ public class ConvertBitmap {
 		System.out.println("  -C            Loose monospace or proportional; the opposite of -c.");
 		System.out.println("  -n            Do not transform the font (the default).");
 		System.out.println("  -b            Transform the font using faux bold.");
+		System.out.println("  -B            Transform the font using faux bold without changing widths.");
+		System.out.println("  -tx <number>  Nudge glyphs left or right.");
+		System.out.println("  -tw <number>  Increase or decrease advance widths.");
+		System.out.println("  -ta <number>  Nudge glyphs up or down.");
 		System.out.println("  -o <path>     Write output to the specified file or directory.");
 		System.out.println("  -f <format>   Set the output format. One of:");
 		List<String> ids = new ArrayList<String>();
