@@ -50,7 +50,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 		Charset cs = null;
 		while (scan.hasNextLine()) {
 			String[] kv = scan.nextLine().trim().split("\\s+", 2);
-			if (kv[0].equals("STARTCHAR")) readChar(scan, bm, cs);
+			if (kv[0].equals("STARTCHAR")) readChar(scan, bm, cs, kv[1]);
 			else if (kv[0].equals("ENDFONT")) break;
 			else if (kv.length < 2) continue;
 			else if (kv[0].equals("FAMILY_NAME")) bm.setName(Font.NAME_FAMILY, dequote(kv[1]));
@@ -109,7 +109,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 		return bm;
 	}
 	
-	private void readChar(Scanner scan, BitmapFont bm, Charset cs) throws IOException {
+	private void readChar(Scanner scan, BitmapFont bm, Charset cs, String gn) throws IOException {
 		BitmapFontGlyph g = new BitmapFontGlyph();
 		int encoding = -1;
 		while (scan.hasNextLine()) {
@@ -154,6 +154,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		if (encoding >= 0) bm.putCharacter(encoding, g);
+    else bm.putNamedGlyph(gn, g);
 	}
 	
 	private boolean readBitmap(Scanner scan, BitmapFontGlyph g) {
