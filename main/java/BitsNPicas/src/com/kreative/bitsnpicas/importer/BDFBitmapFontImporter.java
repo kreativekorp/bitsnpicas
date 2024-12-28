@@ -154,7 +154,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		if (encoding >= 0) bm.putCharacter(encoding, g);
-    else bm.putNamedGlyph(gn, g);
+		else bm.putNamedGlyph(gn, g);
 	}
 	
 	private boolean readBitmap(Scanner scan, BitmapFontGlyph g) {
