@@ -92,33 +92,40 @@ public class BDFBitmapFontExporter implements BitmapFontExporter {
 				BitmapFontGlyph g = font.getCharacter(i);
 				String h = Integer.toHexString(i).toUpperCase();
 				while (h.length() < 4) h = "0" + h;
-				pw.println("STARTCHAR U+" + h);
-				pw.println("ENCODING " + i);
-				pw.println("SWIDTH " + (1000 * g.getCharacterWidth() / (bbr-bbl)) + " 0");
-				pw.println("DWIDTH " + g.getCharacterWidth() + " 0");
-				pw.println("BBX " + g.getGlyphWidth() + " " + g.getGlyphHeight() + " " + g.getGlyphOffset() + " " + (-g.getGlyphDescent()));
-				pw.println("BITMAP");
-				for (byte[] row : g.getGlyph()) {
-					StringBuffer s = new StringBuffer();
-					for (int col = 0; col < row.length; col += 8) {
-						int b = 0;
-						for (int c = 0; c < 8; c++) {
-							b <<= 1;
-							if (col+c < row.length && row[col+c] < 0) {
-								b |= 1;
-							}
-						}
-						String bh = "00" + Integer.toHexString(b).toUpperCase();
-						bh = bh.substring(bh.length() - 2);
-						s.append(bh);
-					}
-					if (s.length() == 0) s.append("00");
-					pw.println(s.toString());
-				}
-				pw.println("ENDCHAR");
+				writeChar(pw, g, "U+" + h, i, bbl, bbr);
 			}
 		}
+		for (String name : font.namedGlyphs(false).keySet()) {
+			writeChar(pw, font.getNamedGlyph(name), name, -1, bbl, bbr);
+		}
 		pw.println("ENDFONT");
+	}
+	
+	private void writeChar(PrintWriter pw, BitmapFontGlyph g, String name, int i, int bbl, int bbr) {
+		pw.println("STARTCHAR " + name);
+		pw.println("ENCODING " + i);
+		pw.println("SWIDTH " + (1000 * g.getCharacterWidth() / (bbr-bbl)) + " 0");
+		pw.println("DWIDTH " + g.getCharacterWidth() + " 0");
+		pw.println("BBX " + g.getGlyphWidth() + " " + g.getGlyphHeight() + " " + g.getGlyphOffset() + " " + (-g.getGlyphDescent()));
+		pw.println("BITMAP");
+		for (byte[] row : g.getGlyph()) {
+			StringBuffer s = new StringBuffer();
+			for (int col = 0; col < row.length; col += 8) {
+				int b = 0;
+				for (int c = 0; c < 8; c++) {
+					b <<= 1;
+					if (col+c < row.length && row[col+c] < 0) {
+						b |= 1;
+					}
+				}
+				String bh = "00" + Integer.toHexString(b).toUpperCase();
+				bh = bh.substring(bh.length() - 2);
+				s.append(bh);
+			}
+			if (s.length() == 0) s.append("00");
+			pw.println(s.toString());
+		}
+		pw.println("ENDCHAR");
 	}
 	
 	private static String enquote(String s) {
