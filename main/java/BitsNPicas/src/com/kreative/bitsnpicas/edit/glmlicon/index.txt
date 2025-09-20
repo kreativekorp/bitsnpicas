@@ -361,6 +361,7 @@ u02ebf0.png     unicode     CJK Unified Ideographs Extension I
 u02f800.png     unicode     CJK Compatibility Ideographs Supplement
 u030000.png     unicode     CJK Unified Ideographs Extension G
 u031350.png     unicode     CJK Unified Ideographs Extension H
+u0323b0.png     unicode     CJK Unified Ideographs Extension J
 u0e0000.png     unicode     Tags
 u0e0100.png     unicode     Variation Selectors Supplement
 u0f0000.png     unicode     Supplementary Private Use Area-A
@@ -436,6 +437,7 @@ csurf8d0.png    pua         Klingon
 csurf000.png    pua         Kinya Syllables
 csurf0e7.png    pua         Pikto
 csurf16b.png    pua         Derani
+csurf16e.png    pua         Braille Supplement
 csurf170.png    pua         Semtog
 csurf190.png    pua         Sitelen Pona
 csurf1b0.png    pua         Shidinn
@@ -444,6 +446,9 @@ csurf1c8.png    pua         Sitelen Pona Radicals
 csurf200.png    pua         Sadalian
 csurf268.png    pua         Quikscript
 csurf270.png    pua         Hacm
+csurf280.png    pua         Liparxe
+csurf283.png    pua         Shaleian
+csurf28a.png    pua         Zbalermorna
 pua6ants.png    pua         Block Sextants
 pua6ants.png    pua         Block Sextants (Compatible with Unscii)
 pua6ants.png    pua         Block Sextants (Compatible with ZVBI)
@@ -458,6 +463,7 @@ puaarpfa.png    pua         Arabic Presentation Forms Appendix
 puaath.png      pua         Ath
 puabetty.png    pua         Betty Boop
 puabiblo.png    pua         Biblos Compatibility
+puabitsa.png    pua         Sylabitsa
 puablock.png    pua         Block Elements Appendix
 puablock.png    pua         Block Elements Extended
 puablock.png    pua         Block Elements Supplement
@@ -503,6 +509,8 @@ puagstsa.png    pua         Geometric Shapes and Technical Symbols Appendix
 puahanaf.png    pua         Hanafuda
 puahex.png      pua         Hex Byte Pictures
 puahex.png      pua         Octets
+puahwfwa.png    pua         Halfwidth and Fullwidth Forms Appendix-A
+puaihate.png    pua         Ihatemysalf
 puajgnsm.png    pua         Jurgenschmidt
 puakabuf.png    pua         Kabufuda
 puakakto.png    pua         Kaktovik Numerals
