@@ -92,34 +92,33 @@ public class Main {
 	}
 	
 	public static JFrame openFonts(File file) {
+		ImportFormat format = ImportFormat.forFile(file);
+		if (format != null) return openFonts(file, format);
+		JFrame f = new FormatListFrame(file);
+		f.setVisible(true);
+		return f;
+	}
+	
+	public static JFrame openFonts(File file, ImportFormat format) {
 		try {
-			ImportFormat format = ImportFormat.forFile(file);
-			if (format != null) {
-				if (format.macResFork) file = MacUtility.getResourceFork(file);
-				FontImporter<?> importer = format.createImporter();
-				if (importer != null) {
-					Font<?>[] fonts = importer.importFont(file);
-					if (fonts != null && fonts.length > 0) {
-						return openFonts(file, format.createExporter(), fonts);
-					}
+			if (format.macResFork) file = MacUtility.getResourceFork(file);
+			FontImporter<?> importer = format.createImporter();
+			if (importer != null) {
+				Font<?>[] fonts = importer.importFont(file);
+				if (fonts != null && fonts.length > 0) {
+					return openFonts(file, format.createExporter(), fonts);
 				}
-				JFrame f = format.createOptionFrame(file);
-				if (f != null) {
-					f.setVisible(true);
-					return f;
-				}
-				JOptionPane.showMessageDialog(
-					null, "The selected file did not contain any fonts.",
-					"Open", JOptionPane.ERROR_MESSAGE
-				);
-				return null;
-			} else {
-				JOptionPane.showMessageDialog(
-					null, "The selected file was not recognized as a font file readable by Bits'n'Picas.",
-					"Open", JOptionPane.ERROR_MESSAGE
-				);
-				return null;
 			}
+			JFrame f = format.createOptionFrame(file);
+			if (f != null) {
+				f.setVisible(true);
+				return f;
+			}
+			JOptionPane.showMessageDialog(
+				null, "The selected file did not contain any fonts.",
+				"Open", JOptionPane.ERROR_MESSAGE
+			);
+			return null;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(
 				null, "An error occurred while reading the selected file.",

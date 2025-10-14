@@ -15,33 +15,33 @@ import com.kreative.bitsnpicas.mover.MoverFrame;
 import com.kreative.unicode.data.GlyphList;
 
 public enum ImportFormat {
-	KBITX {
+	KBITX("Kbitx (Kreative Bits'n'Picas 2.x Bitmap Format)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbitx"); }
 		public FontImporter<?> createImporter() { return new KbitxBitmapFontImporter(); }
 		public FontExporter<?> createExporter() { return new KbitxBitmapFontExporter(); }
 	},
-	KPCAX {
+	KPCAX("Kpcax (Kreative Bits'n'Picas 2.x Vector Format)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kpcax"); }
 		public FontImporter<?> createImporter() { return new KpcaxVectorFontImporter(); }
 		public FontExporter<?> createExporter() { return new KpcaxVectorFontExporter(); }
 	},
-	KBITS {
+	KBITS("Kbits (Kreative Bits'n'Picas 1.x Bitmap Format)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kbits"); }
 		public FontImporter<?> createImporter() { return new KbitsBitmapFontImporter(); }
 	},
-	KPCAS {
+	KPCAS("Kpcas (Kreative Bits'n'Picas 1.x Vector Format)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".kpcas"); }
 		public FontImporter<?> createImporter() { return new KpcasVectorFontImporter(); }
 	},
-	SFD {
+	SFD("SFD (FontForge Spline Font Database)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".sfd"); }
 		public FontImporter<?> createImporter() { return new SFDBitmapFontImporter(); }
 	},
-	BDF {
+	BDF("BDF (Bitmap Distribution Format)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".bdf"); }
 		public FontImporter<?> createImporter() { return new BDFBitmapFontImporter(); }
 	},
-	PSF {
+	PSF("PSF (PC Screen Font) (Uncompressed)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".psf", ".psfu"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
@@ -51,7 +51,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	PSFGZ {
+	PSFGZ("PSF (PC Screen Font) (Gzip Compressed)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".psf.gz", ".psfu.gz"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new PSFEncodingSelectionFrame(file, new PSFEncodingSelectionImporter() {
@@ -61,19 +61,19 @@ public enum ImportFormat {
 			});
 		}
 	},
-	SUIT(true) {
+	SUIT("Mac OS Classic Font Suitcase (Resource Fork)", true, true) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".suit"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return MoverFrame.forFile(file);
 		}
 	},
-	DFONT(false) {
+	DFONT("Mac OS Classic Font Suitcase (Data Fork)", true, false) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".dfont"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return MoverFrame.forFile(file);
 		}
 	},
-	NFNT {
+	NFNT("Mac OS Classic Font Resource in Data Fork") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".nfnt"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("MacRoman", file, new EncodingSelectionImporter() {
@@ -83,7 +83,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	SRFONT {
+	SRFONT("PNG (SDL SFont or Kreative RFont)") {
 		public boolean recognize(FileProxy fp) {
 			return (
 				fp.hasExtension(".png") && fp.isImage() &&
@@ -94,17 +94,17 @@ public enum ImportFormat {
 			return new SRFontBitmapFontImporter();
 		}
 	},
-	HEX {
+	HEX("Hex (GNU Unifont)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".hex"); }
 		public FontImporter<?> createImporter() { return new HexBitmapFontImporter(); }
 	},
-	CVT {
+	CVT("GEOS Font in Convert Wrapper") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".cvt"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return GEOSMoverFrame.forFile(file);
 		}
 	},
-	FZX {
+	FZX("FZX (ZX Spectrum)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".fzx"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("FZX PUA", file, new EncodingSelectionImporter() {
@@ -114,11 +114,11 @@ public enum ImportFormat {
 			});
 		}
 	},
-	U8M {
+	U8M("U8/M (UTF-8 for Microcomputers)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".u8m"); }
 		public FontImporter<?> createImporter() { return new U8MBitmapFontImporter(); }
 	},
-	AMIGA {
+	AMIGA("Amiga Font File and Directory") {
 		public boolean recognize(FileProxy fp) {
 			return (
 				fp.hasExtension(".font") &&
@@ -133,7 +133,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	FNT {
+	FNT("FNT (Windows 2.x or 3.x)") {
 		public boolean recognize(FileProxy fp) {
 			if (!fp.hasExtension(".fnt")) return false;
 			byte[] b = fp.getStartBytes(2);
@@ -147,7 +147,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	FONTX {
+	FONTX("FONTX (DOS/V)") {
 		public boolean recognize(FileProxy fp) {
 			return fp.hasExtension(".ftx", ".fnt") && fp.startsWith('F');
 		}
@@ -160,7 +160,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	MGTK {
+	MGTK("MGTK (Apple II MouseGraphics ToolKit)") {
 		public boolean recognize(FileProxy fp) {
 			return (
 				fp.hasExtension(".mgf", ".mpf", ".fnt") &&
@@ -175,7 +175,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	ROCKBOX {
+	ROCKBOX("RB11 or RB12 (Rockbox or iPodLinux)") {
 		public boolean recognize(FileProxy fp) {
 			return fp.hasExtension(".rbf", ".rb11", ".rb12", ".fnt") && fp.startsWith('R');
 		}
@@ -183,7 +183,7 @@ public enum ImportFormat {
 			return new RockboxBitmapFontImporter();
 		}
 	},
-	CYBIKO {
+	CYBIKO("Cybiko") {
 		public boolean recognize(FileProxy fp) {
 			return fp.hasExtension(".cyf", ".fntz", ".fnty", ".fnt") && fp.startsWith(1);
 		}
@@ -195,7 +195,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	PLAYDATE {
+	PLAYDATE("Playdate") {
 		public boolean recognize(FileProxy fp) {
 			return PlaydateBitmapFontImporter.canImportFont(fp);
 		}
@@ -203,22 +203,22 @@ public enum ImportFormat {
 			return new PlaydateBitmapFontImporter();
 		}
 	},
-	HRCG {
+	HRCG("HRCG (Apple II Hi-Res Character Generator)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".set"); }
 		public FontImporter<?> createImporter() { return new HRCGBitmapFontImporter(); }
 	},
-	HMZK {
+	HMZK("HMZK (Mi Band 2)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".hmzk"); }
 		public FontImporter<?> createImporter() { return new HMZKBitmapFontImporter(); }
 	},
 	
 	// **** Add new formats above this line. ****
 	
-	DSF {
+	DSF("DSF (DOSStart! Font)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".dsf"); }
 		public FontImporter<?> createImporter() { return new DSFBitmapFontImporter(); }
 	},
-	SBF {
+	SBF("SBF (Sabriel Font)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".sbf"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new EncodingSelectionFrame("Kreative SuperLatin", file, new EncodingSelectionImporter() {
@@ -228,11 +228,11 @@ public enum ImportFormat {
 			});
 		}
 	},
-	S10 {
+	S10("S10 (SabineOS Character Set)") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".s10"); }
 		public FontImporter<?> createImporter() { return new S10BitmapFontImporter(); }
 	},
-	DMOV(true) {
+	DMOV("Mac OS Classic Font Suitcase (Resource Fork)", false, true) {
 		public boolean recognize(FileProxy fp) {
 			return (
 				fp.hasMacCreator("DMOV") ||
@@ -247,19 +247,19 @@ public enum ImportFormat {
 			return MoverFrame.forFile(file);
 		}
 	},
-	BINARY {
+	BINARY("Binary or ROM File") {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".bin", ".rom"); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new BinaryBitmapFontImporterFrame(file);
 		}
 	},
-	IMAGE {
+	IMAGE("Image File") {
 		public boolean recognize(FileProxy fp) { return fp.isImage(); }
 		public JFrame createOptionFrame(File file) throws IOException {
 			return new ImageBitmapFontImporterFrame(file);
 		}
 	},
-	NFNT_NOEXT {
+	NFNT_NOEXT("Mac OS Classic Font Resource in Data Fork", false, false) {
 		public boolean recognize(FileProxy fp) {
 			return fp.startsWith(0x90, 0x00);
 		}
@@ -271,7 +271,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	AMIGA_NOEXT {
+	AMIGA_NOEXT("Amiga Font File and Directory", false, false) {
 		public boolean recognize(FileProxy fp) {
 			return fp.startsWith(0x00, 0x00, 0x03, 0xF3);
 		}
@@ -283,7 +283,7 @@ public enum ImportFormat {
 			});
 		}
 	},
-	MGTK_NOEXT {
+	MGTK_NOEXT("MGTK (Apple II MouseGraphics ToolKit)", false, false) {
 		public boolean recognize(FileProxy fp) {
 			return fp.startsWith(0) || fp.startsWith(0x80);
 		}
@@ -296,13 +296,19 @@ public enum ImportFormat {
 		}
 	};
 	
+	public final String name;
+	public final boolean listed;
 	public final boolean macResFork;
 	
-	private ImportFormat() {
+	private ImportFormat(String name) {
+		this.name = name;
+		this.listed = true;
 		this.macResFork = false;
 	}
 	
-	private ImportFormat(boolean macResFork) {
+	private ImportFormat(String name, boolean listed, boolean macResFork) {
+		this.name = name;
+		this.listed = listed;
 		this.macResFork = macResFork;
 	}
 	
@@ -321,5 +327,18 @@ public enum ImportFormat {
 			}
 		}
 		return null;
+	}
+	
+	public static ImportFormat[] listedValues() {
+		int i = 0;
+		ImportFormat[] a = ImportFormat.values();
+		for (ImportFormat f : a) if (f.listed) a[i++] = f;
+		ImportFormat[] b = new ImportFormat[i];
+		while (i > 0) { i--; b[i] = a[i]; }
+		return b;
+	}
+	
+	public String toString() {
+		return this.name;
 	}
 }
