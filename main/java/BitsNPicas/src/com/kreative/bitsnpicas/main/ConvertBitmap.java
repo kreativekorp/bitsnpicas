@@ -21,6 +21,7 @@ import com.kreative.bitsnpicas.GlyphPair;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.PointSizeGenerator;
+import com.kreative.bitsnpicas.edit.SitelenPonaCartoucheGlyphGenerator;
 import com.kreative.bitsnpicas.edit.TimestampGlyphGenerator;
 import com.kreative.bitsnpicas.transformer.*;
 import com.kreative.unicode.data.EncodingList;
@@ -93,6 +94,24 @@ public class ConvertBitmap {
 						else if (rs != null) o.codePointsToRemove.clear(rs);
 						else if (re != null) o.codePointsToRemove.clear(re);
 						else if (s.length() > 0) o.glyphNamesToRemove.remove(s);
+					} else if (arg.equals("-spc") && argi < args.length) {
+						String s = args[argi++];
+						String[] a = s.split("-", 2);
+						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
+						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
+						if (rs != null && re != null) o.codePointsToCartouche.set(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.codePointsToCartouche.set(rs);
+						else if (re != null) o.codePointsToCartouche.set(re);
+						else if (s.length() > 0) o.glyphNamesToCartouche.add(s);
+					} else if (arg.equals("-SPC") && argi < args.length) {
+						String s = args[argi++];
+						String[] a = s.split("-", 2);
+						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
+						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
+						if (rs != null && re != null) o.codePointsToCartouche.clear(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.codePointsToCartouche.clear(rs);
+						else if (re != null) o.codePointsToCartouche.clear(re);
+						else if (s.length() > 0) o.glyphNamesToCartouche.remove(s);
 					} else if (arg.equals("-c")) {
 						o.strictMonospace = true;
 					} else if (arg.equals("-C")) {
@@ -352,6 +371,8 @@ public class ConvertBitmap {
 		public Set<GlyphPair> subsetRemap = new HashSet<GlyphPair>();
 		public BitSet codePointsToRemove = new BitSet();
 		public Set<String> glyphNamesToRemove = new HashSet<String>();
+		public BitSet codePointsToCartouche = new BitSet();
+		public Set<String> glyphNamesToCartouche = new HashSet<String>();
 		public boolean strictMonospace = false;
 		public List<BitmapFontGlyphTransformer> transform = new ArrayList<BitmapFontGlyphTransformer>();
 		public File dest = null;
@@ -577,6 +598,20 @@ public class ConvertBitmap {
 		if (!o.glyphNamesToRemove.isEmpty()) {
 			for (String name : o.glyphNamesToRemove) {
 				font.removeNamedGlyph(name);
+			}
+		}
+		if (!o.codePointsToCartouche.isEmpty()) {
+			for (
+				int i = o.codePointsToCartouche.nextSetBit(0);
+				i >= 0;
+				i = o.codePointsToCartouche.nextSetBit(i + 1)
+			) {
+				SitelenPonaCartoucheGlyphGenerator.addCartouchedGlyph(font, font.getCharacter(i), null, i);
+			}
+		}
+		if (!o.glyphNamesToCartouche.isEmpty()) {
+			for (String name : o.glyphNamesToCartouche) {
+				SitelenPonaCartoucheGlyphGenerator.addCartouchedGlyph(font, font.getNamedGlyph(name), name, -1);
 			}
 		}
 		if (o.strictMonospace) {
