@@ -46,7 +46,15 @@ public class CBMDirectoryBlock implements CBMConstants {
 		infoSector = 0;
 		fileStructure = 0;
 		geosFileType = 0;
+		
 		GregorianCalendar now = new GregorianCalendar();
+		// Support reproducible builds by using SOURCE_DATE_EPOCH as the current UNIX time.
+		String sourceDateEpochEnv = System.getenv("SOURCE_DATE_EPOCH");
+		if (sourceDateEpochEnv != null) {
+			long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
+			now.setTimeInMillis(sourceDateEpoch * 1000L);
+		}
+		
 		year = now.get(Calendar.YEAR);
 		month = now.get(Calendar.MONTH) + 1;
 		day = now.get(Calendar.DAY_OF_MONTH);

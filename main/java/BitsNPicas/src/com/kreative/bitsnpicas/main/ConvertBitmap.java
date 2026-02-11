@@ -577,6 +577,13 @@ public class ConvertBitmap {
 		}
 		if (o.timestampCodepoint != null) {
 			GregorianCalendar now = new GregorianCalendar();
+			// Support reproducible builds by using SOURCE_DATE_EPOCH as the current UNIX time.
+			String sourceDateEpochEnv = System.getenv("SOURCE_DATE_EPOCH");
+			if (sourceDateEpochEnv != null) {
+				long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
+				now.setTimeInMillis(sourceDateEpoch * 1000L);
+			}
+			
 			BitmapFontGlyph[] glyphs = TimestampGlyphGenerator.getTimestampGlyphs(font, now);
 			if (glyphs != null) {
 				BitmapFontGlyph glyph = BitmapFontGlyph.compose(glyphs);

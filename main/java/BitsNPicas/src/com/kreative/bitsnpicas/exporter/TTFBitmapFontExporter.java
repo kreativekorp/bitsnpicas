@@ -235,7 +235,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 			long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
 			now.setTimeInMillis(sourceDateEpoch * 1000L);
 		}
-
+		
 		double fontVersion;
 		try {
 			String s = bf.getName(Font.NAME_VERSION);

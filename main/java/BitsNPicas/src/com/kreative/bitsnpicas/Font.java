@@ -440,7 +440,14 @@ public abstract class Font<T extends FontGlyph> {
 			names.put(NAME_STYLE, "Regular");
 		}
 		if (!names.containsKey(NAME_UNIQUE_ID)) {
-			names.put(NAME_UNIQUE_ID, "BitsNPicas: "+pname+": "+(new GregorianCalendar().get(Calendar.YEAR)));
+			Calendar now = new GregorianCalendar();
+			// Support reproducible builds by using SOURCE_DATE_EPOCH as the current UNIX time.
+			String sourceDateEpochEnv = System.getenv("SOURCE_DATE_EPOCH");
+			if (sourceDateEpochEnv != null) {
+				long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
+				now.setTimeInMillis(sourceDateEpoch * 1000L);
+			}
+			names.put(NAME_UNIQUE_ID, "BitsNPicas: " + pname + ": " + now.get(Calendar.YEAR));
 		}
 		if (!names.containsKey(NAME_FAMILY_AND_STYLE)) {
 			names.put(NAME_FAMILY_AND_STYLE, fname);

@@ -10,7 +10,16 @@ public class TimestampGlyphGenerator extends GlyphGenerator<BitmapFontGlyph> {
 	public Class<BitmapFontGlyph> getGlyphClass() { return BitmapFontGlyph.class; }
 	public Result generate(Font<BitmapFontGlyph> font, List<GlyphLocator<BitmapFontGlyph>> locators) {
 		if (locators.isEmpty()) return Result.NO_CHANGE;
-		BitmapFontGlyph[] glyphs = getTimestampGlyphs(font, new GregorianCalendar());
+		
+		GregorianCalendar now = new GregorianCalendar();
+		// Support reproducible builds by using SOURCE_DATE_EPOCH as the current UNIX time.
+		String sourceDateEpochEnv = System.getenv("SOURCE_DATE_EPOCH");
+		if (sourceDateEpochEnv != null) {
+			long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
+			now.setTimeInMillis(sourceDateEpoch * 1000L);
+		}
+		
+		BitmapFontGlyph[] glyphs = getTimestampGlyphs(font, now);
 		if (glyphs == null) return Result.NO_CHANGE;
 		for (GlyphLocator<BitmapFontGlyph> loc : locators) {
 			loc.setGlyph(BitmapFontGlyph.compose(glyphs));
