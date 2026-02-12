@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -13,12 +12,12 @@ public class BitmapToolPanel extends JPanel {
 	
 	private final BitmapToolList toolList;
 	private final JLabel opacityLabel;
-	private final JSlider opacitySlider;
+	private final OpacitySlider opacitySlider;
 	
 	public BitmapToolPanel() {
 		this.toolList = new BitmapToolList();
 		this.opacityLabel = new JLabel("255");
-		this.opacitySlider = new JSlider(JSlider.VERTICAL, 0, 255, 255);
+		this.opacitySlider = new OpacitySlider();
 		
 		opacityLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		opacityLabel.setHorizontalAlignment(JLabel.CENTER);
