@@ -38,7 +38,8 @@ public class HexBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	private static BitmapFont importFont(Scanner in) {
-		BitmapFont f = new BitmapFont(10, 2, 14, 2, 8, 10, 0);
+		int maxh = 1;
+		BitmapFont f = new BitmapFont();
 		lines: while (in.hasNextLine()) {
 			String[] fields = in.nextLine().split(":");
 			if (fields.length != 2) continue lines;
@@ -46,10 +47,13 @@ public class HexBitmapFontImporter implements BitmapFontImporter {
 			try { cp = Integer.parseInt(fields[0].trim(), 16); }
 			catch (NumberFormatException nfe) { continue lines; }
 			char[] hex = fields[1].trim().toCharArray();
-			int width = hex.length / 16;
+			int h = ((int)Math.floor(Math.sqrt(hex.length + 4)) + 2) / 4;
+			if (h > maxh) maxh = h;
+			int height = h * 8;
+			int width = hex.length / height;
 			if (width < 1) continue lines;
-			byte[][] glyph = new byte[16][width * 4];
-			for (int i = 0, y = 0; y < 16; y++) {
+			byte[][] glyph = new byte[height][width * 4];
+			for (int i = 0, y = 0; y < height; y++) {
 				for (int x = 0, j = 0; j < width; j++) {
 					int b = Character.getNumericValue(hex[i++]);
 					if (b < 0 || b > 15) continue lines;
@@ -59,9 +63,16 @@ public class HexBitmapFontImporter implements BitmapFontImporter {
 					glyph[y][x++] = ((b & 1) != 0) ? (byte)0xFF : 0;
 				}
 			}
-			BitmapFontGlyph g = new BitmapFontGlyph(glyph, 0, width * 4, 14);
+			BitmapFontGlyph g = new BitmapFontGlyph(glyph, 0, width * 4, h * 7);
 			f.putCharacter(cp, g);
 		}
+		f.setEmAscent((maxh > 1) ? (maxh * 5) : 8);
+		f.setEmDescent(maxh);
+		f.setLineAscent(maxh * 7);
+		f.setLineDescent(maxh);
+		f.setXHeight((maxh > 1) ? (maxh * 4) : 5);
+		f.setCapHeight((maxh > 1) ? (maxh * 5) : 7);
+		f.setLineGap(0);
 		return f;
 	}
 }
