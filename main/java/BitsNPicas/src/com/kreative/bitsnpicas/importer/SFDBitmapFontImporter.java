@@ -55,7 +55,7 @@ public class SFDBitmapFontImporter implements BitmapFontImporter {
 					String[] nums = l.split("\\s");
 					int a = Integer.parseInt(nums[2]);
 					int d = Integer.parseInt(nums[3]);
-					bm = new BitmapFont(a, d, a, d, 0, 0, 0);
+					bm = new BitmapFont(a, d, a, d, 0, 0, 0, a + d);
 					for (Map.Entry<Integer,String> e : names.entrySet()) {
 						bm.setName(e.getKey(), e.getValue());
 					}

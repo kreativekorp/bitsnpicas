@@ -17,12 +17,12 @@ public class S10BitmapFontImporter implements BitmapFontImporter {
 
 	public BitmapFont[] importFont(InputStream is) throws IOException {
 		BitmapFont[] fonts = new BitmapFont[] {
-			new BitmapFont(7,1,7,1,5,7,0),
-			new BitmapFont(7,1,7,1,5,7,0),
-			new BitmapFont(7,1,7,1,5,7,0),
-			new BitmapFont(7,1,7,1,5,7,0),
-			new BitmapFont(7,1,7,1,5,7,0),
-			new BitmapFont(7,1,7,1,5,7,0)
+			new BitmapFont(7,1,7,1,5,7,0,8),
+			new BitmapFont(7,1,7,1,5,7,0,8),
+			new BitmapFont(7,1,7,1,5,7,0,8),
+			new BitmapFont(7,1,7,1,5,7,0,8),
+			new BitmapFont(7,1,7,1,5,7,0,8),
+			new BitmapFont(7,1,7,1,5,7,0,8)
 		};
 		for (BitmapFont font : fonts) font.setName(Font.NAME_COPYRIGHT, "From SabineOS 1.0 (*shudder*), (c) 2000 Kreative Software");
 		fonts[0].setName(Font.NAME_FAMILY, "Sabine Doscbthm");

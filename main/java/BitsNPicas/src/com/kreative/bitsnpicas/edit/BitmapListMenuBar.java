@@ -357,7 +357,9 @@ public class BitmapListMenuBar extends JMenuBar {
 					new CreateGlyphsDialog<BitmapFontGlyph>(frame, gl) {
 						private static final long serialVersionUID = 1L;
 						public BitmapFontGlyph createGlyph() {
-							return new BitmapFontGlyph();
+							BitmapFontGlyph g = new BitmapFontGlyph();
+							g.setCharacterWidth(gl.getGlyphFont().getNewGlyphWidth());
+							return g;
 						}
 					}.setVisible(true);
 				}

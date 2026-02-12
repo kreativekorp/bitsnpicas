@@ -61,10 +61,10 @@ public class CybikoBitmapFontImporter implements BitmapFontImporter {
 	private BitmapFont importFontImpl(DataInputStream in) throws IOException {
 		if (in.readUnsignedByte() != 1) throw new IOException("bad magic number");
 		int cc = in.readUnsignedByte();
-		/* mw */ in.readUnsignedByte();
+		int mw = in.readUnsignedByte();
 		int mh = in.readUnsignedByte();
 		int ascent = mh;
-		BitmapFont f = new BitmapFont(mh, 0, mh, 0, 0, 0, 0);
+		BitmapFont f = new BitmapFont(mh, 0, mh, 0, 0, 0, 0, mw);
 		
 		for (int c = 0; c < cc; c++) {
 			int l = in.readUnsignedByte();

@@ -66,7 +66,7 @@ public class FONTXBitmapFontImporter implements BitmapFontImporter {
 		int h = in.readUnsignedByte();
 		int flag = in.readByte();
 		
-		BitmapFont f = new BitmapFont(h, 0, h, 0, h, h, 0);
+		BitmapFont f = new BitmapFont(h, 0, h, 0, h, h, 0, w);
 		f.setName(BitmapFont.NAME_FAMILY, name);
 		
 		if (flag == 0) {

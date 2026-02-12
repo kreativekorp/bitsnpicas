@@ -63,6 +63,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 					int i = Integer.parseInt(dequote(kv[1]));
 					bm.setLineAscent(i);
 					bm.setEmAscent(i);
+					bm.setNewGlyphWidth(i + bm.getEmDescent());
 				} catch (NumberFormatException nfe) {}
 			}
 			else if (kv[0].equals("FONT_DESCENT")) {
@@ -70,6 +71,7 @@ public class BDFBitmapFontImporter implements BitmapFontImporter {
 					int i = Integer.parseInt(dequote(kv[1]));
 					bm.setLineDescent(i);
 					bm.setEmDescent(i);
+					bm.setNewGlyphWidth(i + bm.getEmAscent());
 				} catch (NumberFormatException nfe) {}
 			}
 			else if (kv[0].equals("X_HEIGHT")) {

@@ -47,7 +47,7 @@ public class KbitsBitmapFontImporter implements BitmapFontImporter {
 		int ld = in.readInt();
 		int lg = in.readInt();
 		int xh = in.readInt();
-		BitmapFont font = new BitmapFont(ma, md, la, ld, xh, xh, lg);
+		BitmapFont font = new BitmapFont(ma, md, la, ld, xh, xh, lg, ma + md);
 		while (true) {
 			int blockType = in.readInt();
 			switch (blockType) {

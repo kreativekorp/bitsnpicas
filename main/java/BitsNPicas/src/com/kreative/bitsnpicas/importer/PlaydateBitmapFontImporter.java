@@ -211,7 +211,7 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 		}
 		
 		// Create the font.
-		BitmapFont f = new BitmapFont(ascent, ch - ascent, ascent, ch - ascent, 0, 0, 0);
+		BitmapFont f = new BitmapFont(ascent, ch - ascent, ascent, ch - ascent, 0, 0, 0, cw);
 		f.setName(BitmapFont.NAME_FAMILY, name);
 		f.setName(BitmapFont.NAME_FAMILY_AND_STYLE, name);
 		for (int i = 0, n = codePoints.size(); i < n; i++) {

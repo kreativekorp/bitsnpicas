@@ -20,6 +20,7 @@ public class FontInfoMetricsPanel extends JPanel {
 	private final SpinnerNumberModel lineGap;
 	private final SpinnerNumberModel xHeight;
 	private final SpinnerNumberModel capHeight;
+	private final SpinnerNumberModel newGlyphWidth;
 	
 	public FontInfoMetricsPanel() {
 		JPanel labelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
@@ -30,6 +31,7 @@ public class FontInfoMetricsPanel extends JPanel {
 		labelPanel.add(new JLabel("Line Gap"));
 		labelPanel.add(new JLabel("X Height"));
 		labelPanel.add(new JLabel("Cap Height"));
+		labelPanel.add(new JLabel("New Glyph Width"));
 		
 		JPanel spinnerPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		spinnerPanel.add(new JSpinner(emAscent = new SpinnerNumberModel()));
@@ -39,6 +41,7 @@ public class FontInfoMetricsPanel extends JPanel {
 		spinnerPanel.add(new JSpinner(lineGap = new SpinnerNumberModel()));
 		spinnerPanel.add(new JSpinner(xHeight = new SpinnerNumberModel()));
 		spinnerPanel.add(new JSpinner(capHeight = new SpinnerNumberModel()));
+		spinnerPanel.add(new JSpinner(newGlyphWidth = new SpinnerNumberModel()));
 		Dimension d = new Dimension(80, spinnerPanel.getPreferredSize().height);
 		spinnerPanel.setMinimumSize(d);
 		spinnerPanel.setPreferredSize(d);
@@ -61,6 +64,7 @@ public class FontInfoMetricsPanel extends JPanel {
 		lineGap.setValue(font.getLineGap());
 		xHeight.setValue(font.getXHeight());
 		capHeight.setValue(font.getCapHeight());
+		newGlyphWidth.setValue(font.getNewGlyphWidth());
 	}
 	
 	public void writeTo(Font<?> font) {
@@ -71,5 +75,6 @@ public class FontInfoMetricsPanel extends JPanel {
 		font.setLineGap(lineGap.getNumber().intValue());
 		font.setXHeight(xHeight.getNumber().intValue());
 		font.setCapHeight(capHeight.getNumber().intValue());
+		font.setNewGlyphWidth(newGlyphWidth.getNumber().intValue());
 	}
 }

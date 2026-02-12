@@ -15,7 +15,7 @@ import com.kreative.bitsnpicas.BitmapFontImporter;
  */
 public class HMZKBitmapFontImporter implements BitmapFontImporter {
     public BitmapFont[] importFont(byte[] b) {
-        BitmapFont bm = new BitmapFont(16, 0, 16, 0, 16, 16, 0);
+        BitmapFont bm = new BitmapFont(16, 0, 16, 0, 16, 16, 0, 16);
         // skip magic and padding
         // FIXME: check magic number/charsLen and throw exceptions
         int offset = 14;

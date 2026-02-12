@@ -86,7 +86,7 @@ public class DSFBitmapFontImporter implements BitmapFontImporter {
 					if (bbox[2] > maxx) maxx = bbox[2];
 					if (bbox[3] < miny) miny = bbox[3];
 				}
-				BitmapFont bf = new BitmapFont(ascent, descent, ascent, descent, 0, 0, 0);
+				BitmapFont bf = new BitmapFont(ascent, descent, ascent, descent, 0, 0, 0, ascent + descent);
 				bf.setName(Font.NAME_FAMILY, fontName);
 				for (int i=0; i<widths.length; i++) {
 					boolean[][] boolmp = bitmaps[i];

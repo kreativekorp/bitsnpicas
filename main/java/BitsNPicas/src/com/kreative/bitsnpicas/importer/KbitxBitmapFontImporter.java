@@ -95,6 +95,7 @@ public class KbitxBitmapFontImporter implements BitmapFontImporter {
 				if ("lineGap".equalsIgnoreCase(id) && iv != null) f.setLineGap(iv);
 				if ("xHeight".equalsIgnoreCase(id) && iv != null) f.setXHeight(iv);
 				if ("capHeight".equalsIgnoreCase(id) && iv != null) f.setCapHeight(iv);
+				if ("newGlyphWidth".equalsIgnoreCase(id) && iv != null) f.setNewGlyphWidth(iv);
 			} else if (ctype.equalsIgnoreCase("name")) {
 				Integer id = XMLUtility.parseInt(cattr, "id");
 				String name = XMLUtility.parseString(cattr, "value");

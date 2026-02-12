@@ -78,6 +78,7 @@ public class KpcaxVectorFontExporter implements VectorFontExporter {
 		props.put("lineGap", Double.toString(font.getLineGap2D()));
 		props.put("xHeight", Double.toString(font.getXHeight2D()));
 		props.put("capHeight", Double.toString(font.getCapHeight2D()));
+		props.put("newGlyphWidth", Double.toString(font.getNewGlyphWidth2D()));
 		return props;
 	}
 	

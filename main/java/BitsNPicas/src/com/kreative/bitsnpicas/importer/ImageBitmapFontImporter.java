@@ -80,7 +80,7 @@ public class ImageBitmapFontImporter implements BitmapFontImporter {
 	}
 	
 	public BitmapFont importFont(BufferedImage in) {
-		BitmapFont bm = new BitmapFont(ascent, cellHeight - ascent, ascent, cellHeight - ascent, 0, 0, 0);
+		BitmapFont bm = new BitmapFont(ascent, cellHeight - ascent, ascent, cellHeight - ascent, 0, 0, 0, cellWidth);
 		int w = in.getWidth(), h = in.getHeight();
 		int rows = 0; for (int y = startY; (y + cellHeight <= h) && (rowCount <= 0 || rows < rowCount); y += cellHeight + deltaY, rows++);
 		int columns = 0; for (int x = startX; (x + cellWidth <= w) && (columnCount <= 0 || columns < columnCount); x += cellWidth + deltaX, columns++);

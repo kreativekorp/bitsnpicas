@@ -43,7 +43,7 @@ public class HRCGBitmapFontImporter implements BitmapFontImporter {
 	
 	private BitmapFont importFontImpl(DataInputStream in) throws IOException {
 		byte[] data = new byte[768]; in.readFully(data);
-		BitmapFont f = new BitmapFont(14, 2, 14, 2, 10, 14, 0);
+		BitmapFont f = new BitmapFont(14, 2, 14, 2, 10, 14, 0, 14);
 		for (int i = 0; i < 96; i++) {
 			byte[][] glyph = new byte[16][16];
 			for (int y = 0; y < 8; y++) {

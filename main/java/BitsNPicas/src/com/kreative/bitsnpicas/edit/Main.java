@@ -66,13 +66,13 @@ public class Main {
 	}
 	
 	public static JFrame newBitmapFont() {
-		BitmapFont bfont = new BitmapFont(14, 2, 14, 2, 0, 0, 0);
+		BitmapFont bfont = new BitmapFont(14, 2, 14, 2, 8, 10, 0, 16);
 		bfont.autoFillNames();
 		return openFont(null, new KbitxBitmapFontExporter(), bfont);
 	}
 	
 	public static JFrame newVectorFont() {
-		VectorFont vfont = new VectorFont(800, 200, 800, 200, 0, 0, 0);
+		VectorFont vfont = new VectorFont(800, 200, 800, 200, 0, 0, 0, 1000);
 		vfont.autoFillNames();
 		return openFont(null, new KpcaxVectorFontExporter(), vfont);
 	}
@@ -194,7 +194,9 @@ public class Main {
 			@SuppressWarnings("unchecked")
 			GlyphList<BitmapFontGlyph> bgl = (GlyphList<BitmapFontGlyph>)gl;
 			if (bloc.getGlyph() == null) {
-				bloc.setGlyph(new BitmapFontGlyph());
+				BitmapFontGlyph g = new BitmapFontGlyph();
+				g.setCharacterWidth(bfont.getNewGlyphWidth());
+				bloc.setGlyph(g);
 				bgl.glyphRepertoireChanged();
 			}
 			JFrame f = new BitmapEditFrame(bfont, bloc, bgl, sm);
@@ -207,7 +209,9 @@ public class Main {
 			@SuppressWarnings("unchecked")
 			GlyphList<VectorFontGlyph> vgl = (GlyphList<VectorFontGlyph>)gl;
 			if (vloc.getGlyph() == null) {
-				vloc.setGlyph(new VectorFontGlyph());
+				VectorFontGlyph g = new VectorFontGlyph();
+				g.setCharacterWidth2D(vfont.getNewGlyphWidth2D());
+				vloc.setGlyph(g);
 				vgl.glyphRepertoireChanged();
 			}
 			JFrame f = new GlyphEditFrame<VectorFontGlyph>(VectorFontGlyph.class, vfont, vloc, vgl, sm);

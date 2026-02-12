@@ -266,7 +266,7 @@ public abstract class AmigaBitmapFontImporter implements BitmapFontImporter {
 		// Add glyphs for characters
 		int ascent = baseline + 1;
 		int descent = ySize - ascent;
-		BitmapFont font = new BitmapFont(ascent, descent, ascent, descent, 0, 0, 0);
+		BitmapFont font = new BitmapFont(ascent, descent, ascent, descent, 0, 0, 0, xSize);
 		for (int i = 0, ch = loChar; ch <= hiChar; i++, ch++) {
 			byte[][] glyph = new byte[ySize][bitSize[i]];
 			for (int y = 0; y < ySize; y++) {

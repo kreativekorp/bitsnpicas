@@ -79,7 +79,7 @@ public class MGTKBitmapFontImporter implements BitmapFontImporter {
 				}
 			}
 		}
-		BitmapFont f = new BitmapFont(height, 0, height, 0, 0, 0, 0);
+		BitmapFont f = new BitmapFont(height, 0, height, 0, 0, 0, 0, height);
 		for (int i = 0; i <= lastChar; i++) {
 			Integer cp = (encoding == null) ? i : encoding.get(i);
 			if (cp == null || cp < 0) continue;

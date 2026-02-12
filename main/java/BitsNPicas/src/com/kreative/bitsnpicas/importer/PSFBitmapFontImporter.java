@@ -123,7 +123,7 @@ public class PSFBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		
-		BitmapFont f = new BitmapFont(height, 0, height, 0, height, height, 0);
+		BitmapFont f = new BitmapFont(height, 0, height, 0, height, height, 0, width);
 		
 		if (lowEncoding != null) {
 			for (int i = 0; i < 256 && i < numGlyphs; i++) {

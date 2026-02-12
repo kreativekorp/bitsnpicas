@@ -66,6 +66,7 @@ public class U8MBitmapFontImporter implements BitmapFontImporter {
 		double m = u.pointSize / (double)(u.lineAscent + u.lineDescent);
 		b.setEmAscent2D(u.lineAscent * m);
 		b.setEmDescent2D(u.lineDescent * m);
+		b.setNewGlyphWidth(b.getEmAscent() + b.getEmDescent());
 		
 		for (int i = 0; i < 0x110000; i++) {
 			int index = u.getUnicodeGlyphIndex(i);

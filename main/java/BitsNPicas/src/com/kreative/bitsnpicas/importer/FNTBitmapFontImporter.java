@@ -74,7 +74,7 @@ public class FNTBitmapFontImporter implements BitmapFontImporter {
 		int strikeOut = in.readUnsignedByte();
 		int weight = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		in.readByte(); // int charSet = in.readUnsignedByte();
-		in.readShort(); // int pixWidth = Short.reverseBytes(in.readShort()) & 0xFFFF;
+		int pixWidth = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		int pixHeight = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		in.readByte(); // int pitchAndFamily = in.readUnsignedByte();
 		in.readShort(); // int avgWidth = Short.reverseBytes(in.readShort()) & 0xFFFF;
@@ -140,7 +140,7 @@ public class FNTBitmapFontImporter implements BitmapFontImporter {
 		int emAscent = points * ascent / pixHeight;
 		int emDescent = points - emAscent;
 		String styleName = styleName(italic, underline, strikeOut, weight);
-		BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0, externalLeading);
+		BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0, externalLeading, pixWidth);
 		f.setName(BitmapFont.NAME_COPYRIGHT, copyright);
 		f.setName(BitmapFont.NAME_FAMILY, faceName);
 		f.setName(BitmapFont.NAME_STYLE, styleName);

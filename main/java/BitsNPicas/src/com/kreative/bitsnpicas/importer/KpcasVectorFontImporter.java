@@ -51,7 +51,7 @@ public class KpcasVectorFontImporter implements VectorFontImporter {
 		double ld = in.readDouble();
 		double lg = in.readDouble();
 		double xh = in.readDouble();
-		VectorFont font = new VectorFont(ma, md, la, ld, xh, xh, lg);
+		VectorFont font = new VectorFont(ma, md, la, ld, xh, xh, lg, ma + md);
 		while (true) {
 			int blockType = in.readInt();
 			switch (blockType) {

@@ -4,6 +4,7 @@ public class VectorFont extends Font<VectorFontGlyph> {
 	protected double emAscent, emDescent;
 	protected double lineAscent, lineDescent;
 	protected double xHeight, capHeight, lineGap;
+	protected double newGlyphWidth;
 	
 	public VectorFont() {
 		this.emAscent = 0;
@@ -13,12 +14,14 @@ public class VectorFont extends Font<VectorFontGlyph> {
 		this.xHeight = 0;
 		this.capHeight = 0;
 		this.lineGap = 0;
+		this.newGlyphWidth = 0;
 	}
 	
 	public VectorFont(
 		double emAscent, double emDescent,
 		double lineAscent, double lineDescent,
-		double xHeight, double capHeight, double lineGap
+		double xHeight, double capHeight, double lineGap,
+		double newGlyphWidth
 	) {
 		this.emAscent = emAscent;
 		this.emDescent = emDescent;
@@ -27,6 +30,7 @@ public class VectorFont extends Font<VectorFontGlyph> {
 		this.xHeight = xHeight;
 		this.capHeight = capHeight;
 		this.lineGap = lineGap;
+		this.newGlyphWidth = newGlyphWidth;
 	}
 	
 	public int getEmAscent() { return (int)Math.ceil(emAscent); }
@@ -43,6 +47,8 @@ public class VectorFont extends Font<VectorFontGlyph> {
 	public double getCapHeight2D() { return capHeight; }
 	public int getLineGap() { return (int)Math.ceil(lineGap); }
 	public double getLineGap2D() { return lineGap; }
+	public int getNewGlyphWidth() { return (int)Math.ceil(newGlyphWidth); }
+	public double getNewGlyphWidth2D() { return newGlyphWidth; }
 	
 	public void setEmAscent(int v) { emAscent = v; }
 	public void setEmAscent2D(double v) { emAscent = v; }
@@ -58,6 +64,8 @@ public class VectorFont extends Font<VectorFontGlyph> {
 	public void setCapHeight2D(double v) { capHeight = v; }
 	public void setLineGap(int v) { lineGap = v; }
 	public void setLineGap2D(double v) { lineGap = v; }
+	public void setNewGlyphWidth(int v) { newGlyphWidth = v; }
+	public void setNewGlyphWidth2D(double v) { newGlyphWidth = v; }
 	
 	public void setXHeight2D() {
 		double xh = guessXHeight2D();

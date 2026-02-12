@@ -183,7 +183,7 @@ public abstract class NFNTBitmapFontImporter implements BitmapFontImporter {
 			if (emAscent + emDescent > fontSize) emDescent--;
 		}
 		
-		BitmapFont font = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0, leading);
+		BitmapFont font = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0, leading, emAscent + emDescent);
 		for (int i = 0, ch = firstChar; ch <= lastChar; i++, ch++) {
 			if (widths[i] != -1) {
 				int xcoord = xcoords[i] & 0xFFFF;

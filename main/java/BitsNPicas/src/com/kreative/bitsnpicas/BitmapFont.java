@@ -7,6 +7,7 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 	protected int emAscent, emDescent;
 	protected int lineAscent, lineDescent;
 	protected int xHeight, capHeight, lineGap;
+	protected int newGlyphWidth;
 	
 	public BitmapFont() {
 		this.emAscent = 0;
@@ -16,12 +17,14 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 		this.xHeight = 0;
 		this.capHeight = 0;
 		this.lineGap = 0;
+		this.newGlyphWidth = 0;
 	}
 	
 	public BitmapFont(
 		int emAscent, int emDescent,
 		int lineAscent, int lineDescent,
-		int xHeight, int capHeight, int lineGap
+		int xHeight, int capHeight, int lineGap,
+		int newGlyphWidth
 	) {
 		this.emAscent = emAscent;
 		this.emDescent = emDescent;
@@ -30,6 +33,7 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 		this.xHeight = xHeight;
 		this.capHeight = capHeight;
 		this.lineGap = lineGap;
+		this.newGlyphWidth = newGlyphWidth;
 	}
 	
 	public int getEmAscent() { return emAscent; }
@@ -46,6 +50,8 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 	public double getCapHeight2D() { return capHeight; }
 	public int getLineGap() { return lineGap; }
 	public double getLineGap2D() { return lineGap; }
+	public int getNewGlyphWidth() { return newGlyphWidth; }
+	public double getNewGlyphWidth2D() { return newGlyphWidth; }
 	
 	public void setEmAscent(int v) { emAscent = v; }
 	public void setEmAscent2D(double v) { emAscent = (int)Math.ceil(v); }
@@ -61,6 +67,8 @@ public class BitmapFont extends Font<BitmapFontGlyph> {
 	public void setCapHeight2D(double v) { capHeight = (int)Math.ceil(v); }
 	public void setLineGap(int v) { lineGap = v; }
 	public void setLineGap2D(double v) { lineGap = (int)Math.ceil(v); }
+	public void setNewGlyphWidth(int v) { newGlyphWidth = v; }
+	public void setNewGlyphWidth2D(double v) { newGlyphWidth = (int)Math.ceil(v); }
 	
 	public void contractGlyphs() {
 		for (BitmapFontGlyph g : characters.values()) g.contract();

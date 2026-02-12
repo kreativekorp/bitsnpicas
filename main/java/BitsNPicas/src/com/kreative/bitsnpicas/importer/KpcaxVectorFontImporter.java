@@ -101,6 +101,7 @@ public class KpcaxVectorFontImporter implements VectorFontImporter {
 				if ("lineGap".equalsIgnoreCase(id) && dv != null) f.setLineGap2D(dv);
 				if ("xHeight".equalsIgnoreCase(id) && dv != null) f.setXHeight2D(dv);
 				if ("capHeight".equalsIgnoreCase(id) && dv != null) f.setCapHeight2D(dv);
+				if ("newGlyphWidth".equalsIgnoreCase(id) && dv != null) f.setNewGlyphWidth2D(dv);
 			} else if (ctype.equalsIgnoreCase("name")) {
 				Integer id = XMLUtility.parseInt(cattr, "id");
 				String name = XMLUtility.parseString(cattr, "value");

@@ -64,7 +64,7 @@ public class FZXBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		
-		BitmapFont f = new BitmapFont(height, 0, height, 0, height, height, 0);
+		BitmapFont f = new BitmapFont(height, 0, height, 0, height, height, 0, height);
 		for (int i = 0, ch = 32; ch <= lastchar; ch++, i++) {
 			int cp = zxcp(ch);
 			if (cp >= 0) {

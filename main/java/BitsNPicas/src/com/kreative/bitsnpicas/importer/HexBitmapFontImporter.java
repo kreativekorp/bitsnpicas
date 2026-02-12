@@ -73,6 +73,7 @@ public class HexBitmapFontImporter implements BitmapFontImporter {
 		f.setXHeight((maxh > 1) ? (maxh * 4) : 5);
 		f.setCapHeight((maxh > 1) ? (maxh * 5) : 7);
 		f.setLineGap(0);
+		f.setNewGlyphWidth(maxh * 8);
 		return f;
 	}
 }
