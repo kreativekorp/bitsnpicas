@@ -66,7 +66,7 @@ public class HexBitmapFontImporter implements BitmapFontImporter {
 			BitmapFontGlyph g = new BitmapFontGlyph(glyph, 0, width * 4, h * 7);
 			f.putCharacter(cp, g);
 		}
-		f.setEmAscent((maxh > 1) ? (maxh * 5) : 8);
+		f.setEmAscent(maxh * 7);
 		f.setEmDescent(maxh);
 		f.setLineAscent(maxh * 7);
 		f.setLineDescent(maxh);

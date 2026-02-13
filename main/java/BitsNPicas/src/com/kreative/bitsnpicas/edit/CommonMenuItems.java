@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.Font;
@@ -15,7 +16,9 @@ import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.mover.MoverFrame;
 import com.kreative.unicode.fontmap.FontMapController;
 
-public class CommonMenuItems {
+public class CommonMenuItems extends JMenuBar {
+	private static final long serialVersionUID = 1L;
+	
 	public static final int SHORTCUT_KEY = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	
 	public static final boolean IS_MAC_OS;
@@ -24,6 +27,23 @@ public class CommonMenuItems {
 		try { isMacOS = System.getProperty("os.name").toUpperCase().contains("MAC OS"); }
 		catch (Exception e) { isMacOS = false; }
 		IS_MAC_OS = isMacOS;
+	}
+	
+	public CommonMenuItems(final Window window) {
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.add(new NewMenu());
+		fileMenu.add(new OpenMenuItem());
+		if (window != null) {
+			fileMenu.add(new CloseMenuItem(window));
+		}
+		if (!IS_MAC_OS) {
+			fileMenu.addSeparator();
+			fileMenu.add(new ExitMenuItem());
+		}
+		JMenu editMenu = new JMenu("Edit");
+		editMenu.add(new FontMapMenuItem());
+		add(fileMenu);
+		add(editMenu);
 	}
 	
 	public static class NewMenu extends JMenu {
@@ -40,7 +60,7 @@ public class CommonMenuItems {
 	public static class NewBitmapFontMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
 		public NewBitmapFontMenuItem() {
-			super("New Bitmap Font");
+			super("New Bitmap Font...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -53,7 +73,7 @@ public class CommonMenuItems {
 	public static class NewVectorFontMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
 		public NewVectorFontMenuItem() {
-			super("New Vector Font");
+			super("New Vector Font...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

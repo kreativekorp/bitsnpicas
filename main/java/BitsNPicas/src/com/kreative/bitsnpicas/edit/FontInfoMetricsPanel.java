@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeListener;
 import com.kreative.bitsnpicas.Font;
 
 public class FontInfoMetricsPanel extends JPanel {
@@ -76,5 +77,27 @@ public class FontInfoMetricsPanel extends JPanel {
 		font.setXHeight(xHeight.getNumber().intValue());
 		font.setCapHeight(capHeight.getNumber().intValue());
 		font.setNewGlyphWidth(newGlyphWidth.getNumber().intValue());
+	}
+	
+	public void addChangeListener(ChangeListener l) {
+		emAscent.addChangeListener(l);
+		emDescent.addChangeListener(l);
+		lineAscent.addChangeListener(l);
+		lineDescent.addChangeListener(l);
+		lineGap.addChangeListener(l);
+		xHeight.addChangeListener(l);
+		capHeight.addChangeListener(l);
+		newGlyphWidth.addChangeListener(l);
+	}
+	
+	public void removeChangeListener(ChangeListener l) {
+		emAscent.removeChangeListener(l);
+		emDescent.removeChangeListener(l);
+		lineAscent.removeChangeListener(l);
+		lineDescent.removeChangeListener(l);
+		lineGap.removeChangeListener(l);
+		xHeight.removeChangeListener(l);
+		capHeight.removeChangeListener(l);
+		newGlyphWidth.removeChangeListener(l);
 	}
 }

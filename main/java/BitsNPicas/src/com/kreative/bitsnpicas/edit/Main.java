@@ -66,15 +66,15 @@ public class Main {
 	}
 	
 	public static JFrame newBitmapFont() {
-		BitmapFont bfont = new BitmapFont(14, 2, 14, 2, 8, 10, 0, 16);
-		bfont.autoFillNames();
-		return openFont(null, new KbitxBitmapFontExporter(), bfont);
+		JFrame f = new NewBitmapFontFrame();
+		f.setVisible(true);
+		return f;
 	}
 	
 	public static JFrame newVectorFont() {
-		VectorFont vfont = new VectorFont(800, 200, 800, 200, 0, 0, 0, 1000);
-		vfont.autoFillNames();
-		return openFont(null, new KpcaxVectorFontExporter(), vfont);
+		JFrame f = new NewVectorFontFrame();
+		f.setVisible(true);
+		return f;
 	}
 	
 	private static String lastOpenDirectory = null;
