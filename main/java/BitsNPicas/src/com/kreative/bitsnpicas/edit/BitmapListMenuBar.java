@@ -40,7 +40,7 @@ public class BitmapListMenuBar extends JMenuBar {
 		add(new FileMenu(frame, sm, font, gl));
 		add(new EditMenu(frame, gl));
 		add(new GlyphListMenuBar.ViewMenu(frame, gl));
-		add(new TransformMenu(gl));
+		add(new TransformMenu(frame, gl));
 	}
 	
 	public static final class FileMenu extends JMenu {
@@ -425,8 +425,12 @@ public class BitmapListMenuBar extends JMenuBar {
 	
 	public static final class TransformMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public TransformMenu(final GlyphList<BitmapFontGlyph> gl) {
+		public TransformMenu(final Frame frame, final GlyphList<BitmapFontGlyph> gl) {
 			super("Transform");
+			add(new SetWidthMenuItem(frame, gl));
+			add(new SetLeftBearingMenuItem(frame, gl));
+			add(new SetRightBearingMenuItem(frame, gl));
+			addSeparator();
 			for (BitmapGlyphTransform tx : BitmapGlyphTransform.TRANSFORMS) {
 				if (tx == null) addSeparator();
 				else add(new TransformMenuItem(tx, gl));
@@ -454,6 +458,129 @@ public class BitmapListMenuBar extends JMenuBar {
 						if (glyph != null && !processed.containsKey(glyph)) {
 							tx.transform(font, glyph);
 							processed.put(glyph, glyph);
+						}
+					}
+					gl.glyphContentChanged();
+				}
+			});
+		}
+	}
+	
+	public static final class SetWidthMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetWidthMenuItem(final Frame frame, final GlyphList<BitmapFontGlyph> gl) {
+			super("Set Width...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
+					if (locators.isEmpty()) {
+						Toolkit.getDefaultToolkit().beep();
+						return;
+					}
+					Number[] values = new Number[locators.size()];
+					for (int i = 0; i < values.length; i++) {
+						GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph == null) {
+							values[i] = gl.getGlyphFont().getNewGlyphWidth();
+						} else {
+							values[i] = glyph.getCharacterWidth();
+						}
+					}
+					values = new SetWidthDialog(frame, "Set Width").showDialog(values);
+					if (values == null) return;
+					for (int i = 0; i < values.length; i++) {
+						GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph == null) {
+							glyph = new BitmapFontGlyph();
+							glyph.setCharacterWidth2D(values[i].doubleValue());
+							loc.setGlyph(glyph);
+						} else {
+							glyph.setCharacterWidth2D(values[i].doubleValue());
+						}
+					}
+					gl.glyphContentChanged();
+				}
+			});
+		}
+	}
+	
+	public static final class SetLeftBearingMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetLeftBearingMenuItem(final Frame frame, final GlyphList<BitmapFontGlyph> gl) {
+			super("Set Left Bearing...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, CommonMenuItems.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
+					if (locators.isEmpty()) {
+						Toolkit.getDefaultToolkit().beep();
+						return;
+					}
+					Number[] values = new Number[locators.size()];
+					for (int i = 0; i < values.length; i++) {
+						GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph == null) {
+							values[i] = gl.getGlyphFont().getNewGlyphWidth();
+						} else {
+							values[i] = glyph.getGlyphOffset();
+						}
+					}
+					values = new SetWidthDialog(frame, "Set Left Bearing").showDialog(values);
+					if (values == null) return;
+					for (int i = 0; i < values.length; i++) {
+						GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph == null) {
+							glyph = new BitmapFontGlyph();
+							glyph.setCharacterWidth2D(values[i].doubleValue());
+							loc.setGlyph(glyph);
+						} else {
+							glyph.setXY(values[i].intValue(), glyph.getY());
+						}
+					}
+					gl.glyphContentChanged();
+				}
+			});
+		}
+	}
+	
+	public static final class SetRightBearingMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetRightBearingMenuItem(final Frame frame, final GlyphList<BitmapFontGlyph> gl) {
+			super("Set Right Bearing...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, CommonMenuItems.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
+					if (locators.isEmpty()) {
+						Toolkit.getDefaultToolkit().beep();
+						return;
+					}
+					Number[] values = new Number[locators.size()];
+					for (int i = 0; i < values.length; i++) {
+						GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph == null) {
+							values[i] = gl.getGlyphFont().getNewGlyphWidth();
+						} else {
+							values[i] = glyph.getCharacterWidth() - glyph.getGlyphOffset() - glyph.getGlyphWidth();
+						}
+					}
+					values = new SetWidthDialog(frame, "Set Right Bearing").showDialog(values);
+					if (values == null) return;
+					for (int i = 0; i < values.length; i++) {
+						GlyphLocator<BitmapFontGlyph> loc = locators.get(i);
+						BitmapFontGlyph glyph = loc.getGlyph();
+						if (glyph == null) {
+							glyph = new BitmapFontGlyph();
+							glyph.setCharacterWidth2D(values[i].doubleValue());
+							loc.setGlyph(glyph);
+						} else {
+							glyph.setCharacterWidth2D(glyph.getGlyphOffset2D() + glyph.getGlyphWidth2D() + values[i].doubleValue());
 						}
 					}
 					gl.glyphContentChanged();

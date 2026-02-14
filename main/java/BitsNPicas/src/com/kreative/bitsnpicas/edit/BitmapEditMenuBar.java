@@ -31,7 +31,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 		add(new FileMenu(frame, sm, font, panel));
 		add(new EditMenu(panel));
 		add(new GlyphEditMenuBar.ViewMenu<BitmapFontGlyph>(frame, panel, BitmapFontGlyph.class));
-		add(new TransformMenu(panel.getGlyphComponent()));
+		add(new TransformMenu(frame, panel.getGlyphComponent()));
 	}
 	
 	public static final class FileMenu extends JMenu {
@@ -244,8 +244,12 @@ public class BitmapEditMenuBar extends JMenuBar {
 	
 	public static final class TransformMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
-		public TransformMenu(final GlyphComponent<BitmapFontGlyph> gc) {
+		public TransformMenu(final Frame frame, final GlyphComponent<BitmapFontGlyph> gc) {
 			super("Transform");
+			add(new SetWidthMenuItem(frame, gc));
+			add(new SetLeftBearingMenuItem(frame, gc));
+			add(new SetRightBearingMenuItem(frame, gc));
+			addSeparator();
 			for (BitmapGlyphTransform tx : BitmapGlyphTransform.TRANSFORMS) {
 				if (tx == null) addSeparator();
 				else add(new TransformMenuItem(tx, gc));
@@ -255,13 +259,67 @@ public class BitmapEditMenuBar extends JMenuBar {
 	
 	public static final class TransformMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public TransformMenuItem(final BitmapGlyphTransform tx,final GlyphComponent<BitmapFontGlyph> gc) {
+		public TransformMenuItem(final BitmapGlyphTransform tx, final GlyphComponent<BitmapFontGlyph> gc) {
 			super(tx.name);
 			setAccelerator(tx.keystroke);
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					tx.transform(gc.getGlyphFont(), gc.getGlyph());
 					gc.glyphChanged();
+				}
+			});
+		}
+	}
+	
+	public static final class SetWidthMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetWidthMenuItem(final Frame frame, final GlyphComponent<BitmapFontGlyph> gc) {
+			super("Set Width...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					BitmapFontGlyph g = gc.getGlyph();
+					Number width = g.getCharacterWidth();
+					width = new SetWidthDialog(frame, "Set Width").showDialog(width);
+					if (width == null) return;
+					g.setCharacterWidth2D(width.doubleValue());
+					gc.metricsChanged();
+				}
+			});
+		}
+	}
+	
+	public static final class SetLeftBearingMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetLeftBearingMenuItem(final Frame frame, final GlyphComponent<BitmapFontGlyph> gc) {
+			super("Set Left Bearing...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, CommonMenuItems.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					BitmapFontGlyph g = gc.getGlyph();
+					Number lb = g.getGlyphOffset();
+					lb = new SetWidthDialog(frame, "Set Left Bearing").showDialog(lb);
+					if (lb == null) return;
+					g.setXY(lb.intValue(), g.getY());
+					gc.metricsChanged();
+				}
+			});
+		}
+	}
+	
+	public static final class SetRightBearingMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetRightBearingMenuItem(final Frame frame, final GlyphComponent<BitmapFontGlyph> gc) {
+			super("Set Right Bearing...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, CommonMenuItems.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					BitmapFontGlyph g = gc.getGlyph();
+					Number rb = g.getCharacterWidth() - g.getGlyphOffset() - g.getGlyphWidth();
+					rb = new SetWidthDialog(frame, "Set Right Bearing").showDialog(rb);
+					if (rb == null) return;
+					g.setCharacterWidth2D(g.getGlyphOffset2D() + g.getGlyphWidth2D() + rb.doubleValue());
+					gc.metricsChanged();
 				}
 			});
 		}
