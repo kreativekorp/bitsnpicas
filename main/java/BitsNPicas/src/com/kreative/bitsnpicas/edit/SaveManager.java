@@ -81,16 +81,19 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 		}
 	}
 	
-	private void updateWindow() {
+	public String getWindowTitle() {
 		String title = font.toString();
 		if (file != null) title += " from " + file.getName();
+		return title;
+	}
+	
+	private void updateWindow() {
 		if (CommonMenuItems.IS_MAC_OS) {
 			frame.getRootPane().putClientProperty("Window.documentFile", file);
 			frame.getRootPane().putClientProperty("Window.documentModified", changed);
-			frame.setTitle(title);
+			frame.setTitle(getWindowTitle());
 		} else {
-			if (changed) title += " \u2022";
-			frame.setTitle(title);
+			frame.setTitle(changed ? (getWindowTitle() + " \u2022") : getWindowTitle());
 		}
 	}
 }

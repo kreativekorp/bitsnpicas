@@ -18,7 +18,7 @@ public class FontInfoFrame extends JFrame {
 	private final SaveManager sm;
 	
 	public FontInfoFrame(Font<?> font, SaveManager sm) {
-		super("Font Info");
+		super("Font Info for " + sm.getWindowTitle());
 		this.font = font;
 		this.panel = new FontInfoPanel();
 		this.panel.readFrom(this.font);
@@ -51,6 +51,7 @@ public class FontInfoFrame extends JFrame {
 			}
 		});
 		
+		setJMenuBar(new CommonMenuItems(this));
 		setSize(700, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

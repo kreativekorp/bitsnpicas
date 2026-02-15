@@ -75,13 +75,19 @@ public class SaveManager extends WindowAdapter implements SaveInterface {
 		}
 	}
 	
+	public String getWindowTitle() {
+		String title = gff.getFontName();
+		if (title == null || title.length() == 0) title = "Untitled";
+		return title;
+	}
+	
 	private void updateWindow() {
 		if (CommonMenuItems.IS_MAC_OS) {
 			frame.getRootPane().putClientProperty("Window.documentFile", file);
 			frame.getRootPane().putClientProperty("Window.documentModified", changed);
-			frame.setTitle(gff.getFontName());
+			frame.setTitle(getWindowTitle());
 		} else {
-			frame.setTitle(changed ? (gff.getFontName() + " \u2022") : gff.getFontName());
+			frame.setTitle(changed ? (getWindowTitle() + " \u2022") : getWindowTitle());
 		}
 	}
 }
