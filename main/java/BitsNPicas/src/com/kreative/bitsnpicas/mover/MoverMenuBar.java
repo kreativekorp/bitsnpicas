@@ -13,6 +13,7 @@ import com.kreative.bitsnpicas.datatransfer.CopyMenuItem;
 import com.kreative.bitsnpicas.datatransfer.CutMenuItem;
 import com.kreative.bitsnpicas.datatransfer.PasteMenuItem;
 import com.kreative.bitsnpicas.edit.CommonMenuItems;
+import com.kreative.bitsnpicas.edit.WindowMenu;
 
 public class MoverMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,7 @@ public class MoverMenuBar extends JMenuBar {
 	public MoverMenuBar(final Window window, final SaveManager sm, final MoverTable table) {
 		add(new FileMenu(window, sm));
 		add(new EditMenu(table));
+		add(new WindowMenu(window));
 	}
 	
 	public static class FileMenu extends JMenu {

@@ -32,6 +32,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 		add(new EditMenu(panel));
 		add(new GlyphEditMenuBar.ViewMenu<BitmapFontGlyph>(frame, panel, BitmapFontGlyph.class));
 		add(new TransformMenu(frame, panel.getGlyphComponent()));
+		add(new WindowMenu(frame));
 	}
 	
 	public static final class FileMenu extends JMenu {

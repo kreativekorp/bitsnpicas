@@ -22,6 +22,7 @@ public class GlyphEditMenuBar<G extends FontGlyph> extends JMenuBar {
 	) {
 		add(new FileMenu(frame, sm, font));
 		add(new ViewMenu<G>(frame, panel, glyphClass));
+		add(new WindowMenu(frame));
 	}
 	
 	public static final class FileMenu extends JMenu {

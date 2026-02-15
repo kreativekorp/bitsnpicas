@@ -4,12 +4,14 @@ import java.awt.Window;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import com.kreative.bitsnpicas.edit.CommonMenuItems;
+import com.kreative.bitsnpicas.edit.WindowMenu;
 
 public class KeyboardMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
 	public KeyboardMenuBar(final Window window) {
 		add(new FileMenu(window));
+		add(new WindowMenu(window));
 	}
 	
 	public static class FileMenu extends JMenu {

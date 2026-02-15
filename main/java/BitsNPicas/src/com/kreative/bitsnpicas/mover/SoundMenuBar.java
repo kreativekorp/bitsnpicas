@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.edit.CommonMenuItems;
 import com.kreative.bitsnpicas.edit.Main;
+import com.kreative.bitsnpicas.edit.WindowMenu;
 import com.kreative.unicode.ttflib.DfontResource;
 
 public class SoundMenuBar extends JMenuBar {
@@ -21,6 +22,7 @@ public class SoundMenuBar extends JMenuBar {
 	
 	public SoundMenuBar(final Window window, final DfontResource snd) {
 		add(new FileMenu(window, snd));
+		add(new WindowMenu(window));
 	}
 	
 	public static class FileMenu extends JMenu {

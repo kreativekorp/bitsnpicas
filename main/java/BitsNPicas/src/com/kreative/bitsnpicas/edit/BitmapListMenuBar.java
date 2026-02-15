@@ -41,6 +41,7 @@ public class BitmapListMenuBar extends JMenuBar {
 		add(new EditMenu(frame, gl));
 		add(new GlyphListMenuBar.ViewMenu(frame, gl));
 		add(new TransformMenu(frame, gl));
+		add(new WindowMenu(frame));
 	}
 	
 	public static final class FileMenu extends JMenu {

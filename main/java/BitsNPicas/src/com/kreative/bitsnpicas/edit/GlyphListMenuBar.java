@@ -22,6 +22,7 @@ public class GlyphListMenuBar extends JMenuBar {
 		add(new FileMenu(frame, sm, font));
 		add(new EditMenu(frame, gl));
 		add(new ViewMenu(frame, gl));
+		add(new WindowMenu(frame));
 	}
 	
 	public static final class FileMenu extends JMenu {

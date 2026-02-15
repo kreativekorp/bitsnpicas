@@ -14,12 +14,14 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import com.kreative.bitsnpicas.edit.CommonMenuItems;
 import com.kreative.bitsnpicas.edit.Main;
+import com.kreative.bitsnpicas.edit.WindowMenu;
 
 public class TrueTypeMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
 	public TrueTypeMenuBar(final Window window, final byte[] fontData) {
 		add(new FileMenu(window, fontData));
+		add(new WindowMenu(window));
 	}
 	
 	public static class FileMenu extends JMenu {

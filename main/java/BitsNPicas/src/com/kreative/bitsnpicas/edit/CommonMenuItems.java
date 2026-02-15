@@ -44,6 +44,9 @@ public class CommonMenuItems extends JMenuBar {
 		editMenu.add(new FontMapMenuItem());
 		add(fileMenu);
 		add(editMenu);
+		if (window != null) {
+			add(new WindowMenu(window));
+		}
 	}
 	
 	public static class NewMenu extends JMenu {
