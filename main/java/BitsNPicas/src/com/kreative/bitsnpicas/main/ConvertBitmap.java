@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import com.kreative.bitsnpicas.BitmapFont;
@@ -582,6 +583,7 @@ public class ConvertBitmap {
 			if (sourceDateEpochEnv != null) {
 				long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
 				now.setTimeInMillis(sourceDateEpoch * 1000L);
+				now.setTimeZone(TimeZone.getTimeZone("UTC"));
 			}
 			
 			BitmapFontGlyph[] glyphs = TimestampGlyphGenerator.getTimestampGlyphs(font, now);

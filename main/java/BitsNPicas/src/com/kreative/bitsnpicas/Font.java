@@ -450,6 +450,7 @@ public abstract class Font<T extends FontGlyph> {
 			if (sourceDateEpochEnv != null) {
 				long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
 				now.setTimeInMillis(sourceDateEpoch * 1000L);
+				now.setTimeZone(TimeZone.getTimeZone("UTC"));
 			}
 			names.put(NAME_UNIQUE_ID, "BitsNPicas: " + pname + ": " + now.get(Calendar.YEAR));
 		}
