@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class CBMDirectoryBlock implements CBMConstants {
 	public static final String COMMENT_PRG = "PRG formatted GEOS file";
@@ -53,6 +54,7 @@ public class CBMDirectoryBlock implements CBMConstants {
 		if (sourceDateEpochEnv != null) {
 			long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
 			now.setTimeInMillis(sourceDateEpoch * 1000L);
+			now.setTimeZone(TimeZone.getTimeZone("UTC"));
 		}
 		
 		year = now.get(Calendar.YEAR);

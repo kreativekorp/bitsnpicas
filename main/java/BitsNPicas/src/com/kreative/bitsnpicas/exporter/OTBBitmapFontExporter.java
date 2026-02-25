@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
@@ -256,6 +257,7 @@ public class OTBBitmapFontExporter implements BitmapFontExporter {
 		if (sourceDateEpochEnv != null) {
 			long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
 			now.setTimeInMillis(sourceDateEpoch * 1000L);
+			now.setTimeZone(TimeZone.getTimeZone("UTC"));
 		}
 		
 		double fontVersion;
