@@ -190,14 +190,26 @@ public class PlaydateBitmapFontImporter implements BitmapFontImporter {
 		
 		// Create the glyphs.
 		ArrayList<BitmapFontGlyph> glyphs = new ArrayList<BitmapFontGlyph>();
-		BufferedImage tmpImg = new BufferedImage(cw, ch, BufferedImage.TYPE_INT_ARGB);
-		int[] tmpRgb = new int[cw * ch];
+		int[] glyphRGB = new int[cw * ch];
 		for (int row = 0, col = 0, i = 0, n = codePoints.size(); i < n; i++) {
-			img.getRGB(col * cw, row * ch, cw, ch, tmpRgb, 0, cw);
-			tmpImg.setRGB(0, 0, cw, ch, tmpRgb, 0, cw);
+			img.getRGB(col * cw, row * ch, cw, ch, glyphRGB, 0, cw);
+			byte[][] glyphData = new byte[ch][cw];
+			for (int j = 0, y = 0; y < ch; y++) {
+				for (int x = 0; x < cw; x++, j++) {
+					if (glyphRGB[j] < 0) {
+						int pr = (glyphRGB[j] >> 16) & 0xFF;
+						int pg = (glyphRGB[j] >>  8) & 0xFF;
+						int pb = (glyphRGB[j] >>  0) & 0xFF;
+						int px = 30 * pr + 59 * pg + 11 * pb;
+						if (px < 12750) glyphData[y][x] = -1;
+						else glyphData[y][x] = 51;
+					}
+				}
+			}
 			BitmapFontGlyph g = new BitmapFontGlyph();
 			g.setCharacterWidth(charWidths.get(i) + tracking);
-			g.setToImage(0, -ascent, tmpImg);
+			g.setXY(0, ascent);
+			g.setGlyph(glyphData);
 			g.contract();
 			glyphs.add(g);
 			col++;

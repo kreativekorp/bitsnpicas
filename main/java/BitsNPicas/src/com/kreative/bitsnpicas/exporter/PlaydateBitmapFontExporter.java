@@ -1,7 +1,5 @@
 package com.kreative.bitsnpicas.exporter;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -101,17 +99,19 @@ public class PlaydateBitmapFontExporter implements BitmapFontExporter {
 		
 		// Create the sprite sheet.
 		BufferedImage img = new BufferedImage(cols * cw, rows * ch, BufferedImage.TYPE_INT_ARGB);
-		int[] tmpRgb = new int[cw * ch];
+		int[] glyphRGB = new int[cw * ch];
 		for (int row = 0, col = 0, cp = MIN_CODE_POINT; cp <= MAX_CODE_POINT; cp++) {
 			BitmapFontGlyph g = font.getCharacter(cp);
 			if (g != null) {
-				BufferedImage tmpImg = new BufferedImage(cw, ch, BufferedImage.TYPE_INT_ARGB);
-				Graphics2D gg = tmpImg.createGraphics();
-				gg.setColor(Color.black);
-				g.paint(gg, 0, font.getLineAscent(), 1);
-				gg.dispose();
-				tmpImg.getRGB(0, 0, cw, ch, tmpRgb, 0, cw);
-				img.setRGB(col * cw, row * ch, cw, ch, tmpRgb, 0, cw);
+				for (int y = -font.getLineAscent(), j = 0; j < glyphRGB.length; y++) {
+					for (int x = 0; x < cw; x++, j++) {
+						byte p = g.getPixel(x, y);
+						if (p < 0) glyphRGB[j] = 0xFF000000;
+						else if (p < 16) glyphRGB[j] = 0;
+						else glyphRGB[j] = -1;
+					}
+				}
+				img.setRGB(col * cw, row * ch, cw, ch, glyphRGB, 0, cw);
 				charWidths.put(cp, g.getCharacterWidth() - tracking);
 				col++;
 				if (col >= cols) {
