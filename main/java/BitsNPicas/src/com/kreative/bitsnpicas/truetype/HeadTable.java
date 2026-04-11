@@ -24,7 +24,7 @@ public class HeadTable extends TrueTypeTable {
 	public static final int FLAGS_DEFINED_BY_ADOBE_2                    = 0x1000;
 	public static final int FLAGS_DEFINED_BY_ADOBE_3                    = 0x2000;
 	public static final int FLAGS_GENERIC_SYMBOLS_FOR_CODE_POINT_RANGES = 0x4000;
-	public static final long DATE_EPOCH = new GregorianCalendar(1904, Calendar.JANUARY, 1, 0, 0, 0).getTimeInMillis();
+	public static final long DATE_EPOCH_1904 = 2082844800L * 1000L; // Milliseconds between 1904-01-01 00:00:00 UTC and Unix epoch
 	public static final int MAC_STYLE_PLAIN       = 0x00;
 	public static final int MAC_STYLE_BOLD        = 0x01;
 	public static final int MAC_STYLE_ITALIC      = 0x02;
@@ -81,23 +81,23 @@ public class HeadTable extends TrueTypeTable {
 	}
 	
 	public GregorianCalendar getDateCreatedCalendar() {
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTimeInMillis(DATE_EPOCH + (dateCreated * 1000L));
+		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+		cal.setTimeInMillis((dateCreated * 1000L) - DATE_EPOCH_1904);
 		return cal;
 	}
 	
 	public void setDateCreatedCalendar(Calendar cal) {
-		dateCreated = (cal.getTimeInMillis() - DATE_EPOCH) / 1000L;
+		dateCreated = (cal.getTimeInMillis() + DATE_EPOCH_1904) / 1000L;
 	}
 	
 	public GregorianCalendar getDateModifiedCalendar() {
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTimeInMillis(DATE_EPOCH + (dateModified * 1000L));
+		GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+		cal.setTimeInMillis((dateModified * 1000L) - DATE_EPOCH_1904);
 		return cal;
 	}
 	
 	public void setDateModifiedCalendar(Calendar cal) {
-		dateModified = (cal.getTimeInMillis() - DATE_EPOCH) / 1000L;
+		dateModified = (cal.getTimeInMillis() + DATE_EPOCH_1904) / 1000L;
 	}
 	
 	@Override

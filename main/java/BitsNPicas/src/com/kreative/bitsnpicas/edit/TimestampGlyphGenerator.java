@@ -2,6 +2,7 @@ package com.kreative.bitsnpicas.edit;
 
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
 
@@ -17,6 +18,7 @@ public class TimestampGlyphGenerator extends GlyphGenerator<BitmapFontGlyph> {
 		if (sourceDateEpochEnv != null) {
 			long sourceDateEpoch = Long.parseLong(sourceDateEpochEnv);
 			now.setTimeInMillis(sourceDateEpoch * 1000L);
+			now.setTimeZone(TimeZone.getTimeZone("UTC"));
 		}
 		
 		BitmapFontGlyph[] glyphs = getTimestampGlyphs(font, now);
