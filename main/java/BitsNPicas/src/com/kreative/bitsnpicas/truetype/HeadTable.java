@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class HeadTable extends TrueTypeTable {
 	public static final int VERSION_DEFAULT = 0x00010000;
@@ -24,7 +25,7 @@ public class HeadTable extends TrueTypeTable {
 	public static final int FLAGS_DEFINED_BY_ADOBE_2                    = 0x1000;
 	public static final int FLAGS_DEFINED_BY_ADOBE_3                    = 0x2000;
 	public static final int FLAGS_GENERIC_SYMBOLS_FOR_CODE_POINT_RANGES = 0x4000;
-	public static final long DATE_EPOCH_1904 = 2082844800L * 1000L; // Milliseconds between 1904-01-01 00:00:00 UTC and Unix epoch
+	public static final long DATE_EPOCH_1904 = 2082844800000L; // 1904-01-01 00:00:00 UTC
 	public static final int MAC_STYLE_PLAIN       = 0x00;
 	public static final int MAC_STYLE_BOLD        = 0x01;
 	public static final int MAC_STYLE_ITALIC      = 0x02;
