@@ -10,7 +10,7 @@ import com.kreative.unicode.ttflib.PuaaTable;
 public class SitelenPonaCartoucheGlyphGenerator extends GlyphGenerator<BitmapFontGlyph> {
 	private static final PuaaTable extras = PuaaCache.getPuaaTable("extras.ucd");
 	private static final Map<Integer,String> psNames = extras.getPropertyMap("PostScript_Name");
-	private static final String getGlyphName(String name, int cp) {
+	public static String getGlyphName(String name, int cp) {
 		if (name != null) return name;
 		name = psNames.get(cp);
 		if (name != null) return name;

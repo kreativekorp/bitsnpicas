@@ -112,6 +112,24 @@ public class ConvertBitmap {
 						else if (rs != null) o.codePointsToCartouche.clear(rs);
 						else if (re != null) o.codePointsToCartouche.clear(re);
 						else if (s.length() > 0) o.glyphNamesToCartouche.remove(s);
+					} else if (arg.equals("-spe") && argi < args.length) {
+						String s = args[argi++];
+						String[] a = s.split("-", 2);
+						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
+						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
+						if (rs != null && re != null) o.codePointsToEscape.set(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.codePointsToEscape.set(rs);
+						else if (re != null) o.codePointsToEscape.set(re);
+						else if (s.length() > 0) o.glyphNamesToEscape.add(s);
+					} else if (arg.equals("-SPE") && argi < args.length) {
+						String s = args[argi++];
+						String[] a = s.split("-", 2);
+						Integer rs = (a.length > 0) ? parseInt16(a[0]) : null;
+						Integer re = (a.length > 1) ? parseInt16(a[1]) : null;
+						if (rs != null && re != null) o.codePointsToEscape.clear(Math.min(rs,re), Math.max(rs,re)+1);
+						else if (rs != null) o.codePointsToEscape.clear(rs);
+						else if (re != null) o.codePointsToEscape.clear(re);
+						else if (s.length() > 0) o.glyphNamesToEscape.remove(s);
 					} else if (arg.equals("-c")) {
 						o.strictMonospace = true;
 					} else if (arg.equals("-C")) {
@@ -373,6 +391,8 @@ public class ConvertBitmap {
 		public Set<String> glyphNamesToRemove = new HashSet<String>();
 		public BitSet codePointsToCartouche = new BitSet();
 		public Set<String> glyphNamesToCartouche = new HashSet<String>();
+		public BitSet codePointsToEscape = new BitSet();
+		public Set<String> glyphNamesToEscape = new HashSet<String>();
 		public boolean strictMonospace = false;
 		public List<BitmapFontGlyphTransformer> transform = new ArrayList<BitmapFontGlyphTransformer>();
 		public File dest = null;
@@ -605,6 +625,23 @@ public class ConvertBitmap {
 		if (!o.glyphNamesToRemove.isEmpty()) {
 			for (String name : o.glyphNamesToRemove) {
 				font.removeNamedGlyph(name);
+			}
+		}
+		if (!o.codePointsToEscape.isEmpty()) {
+			for (
+				int i = o.codePointsToEscape.nextSetBit(0);
+				i >= 0;
+				i = o.codePointsToEscape.nextSetBit(i + 1)
+			) {
+				String name = SitelenPonaCartoucheGlyphGenerator.getGlyphName(null, i);
+				BitmapFontGlyph g = BitmapFontGlyph.compose(font.getCharacter(i));
+				font.putNamedGlyph(name + ".esc", g);
+			}
+		}
+		if (!o.glyphNamesToEscape.isEmpty()) {
+			for (String name : o.glyphNamesToEscape) {
+				BitmapFontGlyph g = BitmapFontGlyph.compose(font.getNamedGlyph(name));
+				font.putNamedGlyph(name + ".esc", g);
 			}
 		}
 		if (!o.codePointsToCartouche.isEmpty()) {
