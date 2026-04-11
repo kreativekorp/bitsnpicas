@@ -120,7 +120,10 @@ public class EncodingList {
 		Map<String,GlyphList> glyphListMap,
 		boolean ignoreDupes
 	) {
-		for (File f : d.listFiles()) {
+		if (d == null) return;
+		File[] files = d.listFiles();
+		if (files == null) return;
+		for (File f : files) {
 			if (f.getName().startsWith(".") || f.getName().endsWith("\r")) {
 				continue;
 			} else if (f.isDirectory()) {

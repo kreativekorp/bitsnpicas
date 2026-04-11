@@ -44,7 +44,10 @@ public class BlockList extends AbstractList<Block> {
 	}
 	
 	private static void readDirectory(File d, Collection<Block> blocks) {
-		for (File f : d.listFiles()) {
+		if (d == null) return;
+		File[] files = d.listFiles();
+		if (files == null) return;
+		for (File f : files) {
 			if (f.getName().startsWith(".") || f.getName().endsWith("\r")) {
 				continue;
 			} else if (f.isDirectory()) {
