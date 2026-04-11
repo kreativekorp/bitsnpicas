@@ -149,6 +149,10 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		return null;
 	}
 	
+	public JButton getExportButton() {
+		return exportButton;
+	}
+	
 	@Override
 	public Dimension getPixelDimension() {
 		return ttfPanel.getPixelDimension();

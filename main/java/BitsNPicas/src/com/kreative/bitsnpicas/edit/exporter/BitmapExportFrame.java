@@ -12,6 +12,7 @@ public class BitmapExportFrame extends JFrame {
 		this.panel = new BitmapExportPanel(font);
 		setTitle("Export");
 		setContentPane(panel);
+		getRootPane().setDefaultButton(panel.getExportButton());
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
