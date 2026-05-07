@@ -18,6 +18,8 @@ public class Resources {
 	
 	public static final Font HEX_FONT = getFont("Hex.ttf", 10f);
 	public static final Font PSNAME_FONT = getFont("PsName.ttf", 10f);
+	
+	// GNU Unifont (https://unifoundry.com/unifont/) under SIL Open Font License 1.1 (OFL-1.1.txt)
 	public static final Font GNU_UNIFONT = getFont("GNU_Unifont.otf", 16f);
 	
 	private static Image getImage(String name) {
