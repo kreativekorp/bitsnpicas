@@ -49,7 +49,7 @@ public class BitmapListMenuBar extends JMenuBar {
 		public FileMenu(final Frame frame, final SaveManager sm, final BitmapFont font, final GlyphList<BitmapFontGlyph> gl) {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
-			add(new CommonMenuItems.OpenMenuItem());
+			add(new CommonMenuItems.OpenMenuItem(frame));
 			add(new CommonMenuItems.CloseMenuItem(frame));
 			addSeparator();
 			add(new CommonMenuItems.SaveMenuItem(sm));

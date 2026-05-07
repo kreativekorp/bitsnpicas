@@ -13,15 +13,17 @@ public class Resources {
 	public static final Image LINE_TOOL = getImage("LineTool.png");
 	public static final Image MOVE_TOOL = getImage("MoveTool.png");
 	public static final Image PENCIL_TOOL = getImage("PencilTool.png");
+	public static final Image BRUSH_TOOL = getImage("BrushTool.png");
 	public static final Image RECTANGLE_TOOL = getImage("RectangleTool.png");
 	
 	public static final Font HEX_FONT = getFont("Hex.ttf", 10f);
 	public static final Font PSNAME_FONT = getFont("PsName.ttf", 10f);
+	public static final Font GNU_UNIFONT = getFont("GNU_Unifont.otf", 16f);
 	
 	private static Image getImage(String name) {
 		return Toolkit.getDefaultToolkit().createImage(Resources.class.getResource(name));
 	}
-	
+	 
 	private static Font getFont(String name, float size) {
 		try {
 			return Font.createFont(

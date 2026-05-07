@@ -55,7 +55,8 @@ public class BitmapEditPanel extends GlyphEditPanel<BitmapFontGlyph> {
 					case KeyEvent.VK_RIGHT: translateGlyph(first, +1, 0); break;
 					case KeyEvent.VK_OPEN_BRACKET: translateGlyphWidth(-1); break;
 					case KeyEvent.VK_CLOSE_BRACKET: translateGlyphWidth(+1); break;
-					case KeyEvent.VK_B: toolPanel.setSelectedTool(BitmapTool.PENCIL); break;
+					
+					case KeyEvent.VK_B: toolPanel.setSelectedTool(BitmapTool.BRUSH); break;
 					case KeyEvent.VK_P: toolPanel.setSelectedTool(BitmapTool.PENCIL); break;
 					case KeyEvent.VK_E: toolPanel.setSelectedTool(BitmapTool.ERASER); break;
 					case KeyEvent.VK_I: toolPanel.setSelectedTool(BitmapTool.EYEDROPPER); break;
@@ -67,6 +68,7 @@ public class BitmapEditPanel extends GlyphEditPanel<BitmapFontGlyph> {
 					case KeyEvent.VK_V: toolPanel.setSelectedTool(BitmapTool.MOVE); break;
 					case KeyEvent.VK_H: toolPanel.setSelectedTool(BitmapTool.GRABBER); break;
 					case KeyEvent.VK_SPACE: toolPanel.setSelectedTool(BitmapTool.GRABBER); break;
+					
 					case KeyEvent.VK_D: toolPanel.setOpacity(255); break;
 					case KeyEvent.VK_X: toolPanel.setOpacity(255 - toolPanel.getOpacity()); break;
 					case KeyEvent.VK_BACK_QUOTE: toolPanel.setOpacity(0); break;
@@ -82,6 +84,19 @@ public class BitmapEditPanel extends GlyphEditPanel<BitmapFontGlyph> {
 					case KeyEvent.VK_0: toolPanel.setOpacity(255); break;
 					case KeyEvent.VK_MINUS: translateOpacity(-1); break;
 					case KeyEvent.VK_EQUALS: translateOpacity(+1); break;
+				}
+			} else {
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_1: toolPanel.setSelectedTool(BitmapTool.BRUSH); break;
+					case KeyEvent.VK_2: toolPanel.setSelectedTool(BitmapTool.PENCIL); break;
+					case KeyEvent.VK_3: toolPanel.setSelectedTool(BitmapTool.ERASER); break;
+					case KeyEvent.VK_4: toolPanel.setSelectedTool(BitmapTool.EYEDROPPER); break;
+					case KeyEvent.VK_5: toolPanel.setSelectedTool(BitmapTool.LINE); break;
+					case KeyEvent.VK_6: toolPanel.setSelectedTool(BitmapTool.RECTANGLE); break;
+					case KeyEvent.VK_7: toolPanel.setSelectedTool(BitmapTool.FILLED_RECT); break;
+					case KeyEvent.VK_8: toolPanel.setSelectedTool(BitmapTool.INVERT); break;
+					case KeyEvent.VK_9: toolPanel.setSelectedTool(BitmapTool.MOVE); break;
+					case KeyEvent.VK_0: toolPanel.setSelectedTool(BitmapTool.GRABBER); break;
 				}
 			}
 			first = false;

@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
+import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.edit.Main;
@@ -118,7 +119,10 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 				if (f == null) return;
 				BitmapFontExporter exporter = f.createExporter(BitmapExportPanel.this);
 				if (exporter == null) return;
-				File file = Main.getSaveFile(f.suffix);
+				File file = Main.getSaveFile(
+					f.suffix,
+					BitmapExportPanel.this.font.getName(Font.NAME_FAMILY_AND_STYLE) + f.suffix
+				);
 				if (file == null) return;
 				if (f.macResFork) {
 					try { file.createNewFile(); }
