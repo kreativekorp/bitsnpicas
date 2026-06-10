@@ -293,10 +293,11 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 						FontMapEntry e = fontMap.entryForCodePoint(cp);
 						labelFont = (e != null) ? e.getFont() : null;
 						if(labelFont == null || !labelFont.canDisplay(cp)) {
-							labelFont = g.getFont();
-							if (labelFont == null || !labelFont.canDisplay(cp)) {
-								labelFont = Resources.GNU_UNIFONT;
-							}
+//							labelFont = g.getFont();
+//							if (labelFont == null || !labelFont.canDisplay(cp)) {
+//								labelFont = Resources.GNU_UNIFONT;
+//							}
+							labelFont = Resources.getFontForCodepoint(g.getFont(), cp);
 						}
 						labelAntiAlias = antiAlias;
 					} else {

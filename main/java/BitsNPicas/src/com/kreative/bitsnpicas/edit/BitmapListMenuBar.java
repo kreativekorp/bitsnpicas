@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -12,6 +13,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -22,14 +25,24 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.edit.BitmapEditMenuBar.CursiveTransformMenuItem;
+import com.kreative.bitsnpicas.edit.BitmapEditMenuBar.TransformMenuItem;
+import com.kreative.bitsnpicas.edit.BitmapGlyphTransform.Cursive;
 import com.kreative.bitsnpicas.edit.exporter.BitmapExportFrame;
 import com.kreative.bitsnpicas.main.ViewFont;
 
@@ -433,10 +446,77 @@ public class BitmapListMenuBar extends JMenuBar {
 			add(new SetRightBearingMenuItem(frame, gl));
 			addSeparator();
 			for (BitmapGlyphTransform tx : BitmapGlyphTransform.TRANSFORMS) {
-				if (tx == null) addSeparator();
-				else add(new TransformMenuItem(tx, gl));
+				if (tx == null) {
+					addSeparator();
+					continue;
+				}
+				else if (tx instanceof Cursive) {
+					add(new CursiveTransformMenuItem((Cursive)tx, gl));
+				}
+				else {
+					add(new TransformMenuItem(tx, gl));
+				}
 			}
 		}
+	}
+	
+	public static final class CursiveTransformMenuItem extends JMenu {
+		private static final long serialVersionUID = 1L;
+	    private final JPopupMenu popup;
+	    
+		public CursiveTransformMenuItem(final Cursive tx, final GlyphList<BitmapFontGlyph> gl) {
+	        super(tx.name);
+	        popup = new JPopupMenu();
+	        JPanel grid = new JPanel(new GridLayout(7, 6, 2, 2));
+	        for (int step = 1; step <= 7; step++) {
+	            for (int shift = 0; shift <= 6; shift++) {
+	                if (shift < step) {
+	                    JButton btn = new JButton(step + "+" + shift + "/" + step);
+	                    final int _step = step;
+	                    final int _shift = shift;
+	                    btn.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+				                popup.setVisible(false);
+								List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
+								if (locators.isEmpty()) {
+									Toolkit.getDefaultToolkit().beep();
+									return;
+								}
+								IdentityHashMap<BitmapFontGlyph,BitmapFontGlyph> processed;
+								processed = new IdentityHashMap<BitmapFontGlyph,BitmapFontGlyph>();
+								for (GlyphLocator<BitmapFontGlyph> loc : locators) {
+									Font<BitmapFontGlyph> font = loc.getGlyphFont();
+									BitmapFontGlyph glyph = loc.getGlyph();
+									if (glyph != null && !processed.containsKey(glyph)) {
+										tx.transform(font, glyph, _step, _shift);
+										processed.put(glyph, glyph);
+									}
+								}
+								gl.glyphContentChanged();
+							}
+						});
+	                    grid.add(btn);
+	                } else {
+	                    grid.add(new JLabel());
+	                }
+	            }
+	        }
+	        popup.add(grid);
+	        addMenuListener(new MenuListener() {
+	            @Override
+	            public void menuSelected(MenuEvent e) {
+	                popup.show(CursiveTransformMenuItem.this, getWidth(), 0);
+	            }
+	            @Override
+	            public void menuDeselected(MenuEvent e) {
+	                popup.setVisible(false);
+	            }
+	            @Override
+	            public void menuCanceled(MenuEvent e) {
+	                popup.setVisible(false);
+	            }
+	        });
+	    }
 	}
 	
 	public static final class TransformMenuItem extends JMenuItem {
