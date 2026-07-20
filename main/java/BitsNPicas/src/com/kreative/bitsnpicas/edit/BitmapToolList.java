@@ -14,10 +14,12 @@ import javax.swing.border.Border;
 public class BitmapToolList extends JList {
 	private static final long serialVersionUID = 1L;
 	
+	private static BitmapTool currentTool = BitmapTool.BRUSH;
+	
 	public BitmapToolList() {
 		super(BitmapTool.values());
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.setSelectedIndex(0);
+		//this.setSelectedIndex(0);
 		this.setFocusable(false);
 		this.setCellRenderer(new ListCellRenderer() {
 			public Component getListCellRendererComponent(JList list, Object value, int index, boolean sel, boolean focus) {
@@ -32,5 +34,26 @@ public class BitmapToolList extends JList {
 				return label;
 			}
 		});
+		super.setSelectedValue(currentTool, true);
+		addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                BitmapTool selected = (BitmapTool)this.getSelectedValue();
+                if (selected != null) {
+                    currentTool = selected;
+                }
+            }
+        });
+	}
+
+	@Override
+    public void setSelectedValue(Object tool, boolean scroll) {
+		if (tool instanceof BitmapTool) {
+	    	currentTool = (BitmapTool) tool;
+		}
+		super.setSelectedValue(tool, scroll);
+	}
+    public void setSelectedValue(BitmapTool tool, boolean scroll) {
+    	currentTool = (BitmapTool) tool;
+		super.setSelectedValue((Object) tool, scroll);
 	}
 }

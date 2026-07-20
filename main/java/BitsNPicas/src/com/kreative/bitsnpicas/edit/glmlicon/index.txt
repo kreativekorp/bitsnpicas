@@ -4,7 +4,7 @@ allnamed.png    font        All Named Glyphs in Font
 unicode.png     unicode     Unicode (Full)
 uplane00.png    unicode     Unicode (BMP)
 uplane01.png    unicode     Unicode (SMP)
-uplane02.png    unicode     Unicode (SIP)
+uplane02.png    unicode     Unicode (SIP) 
 uplane03.png    unicode     Unicode (TIP)
 uplane04.png    unicode     Unicode (Plane 4)
 uplane05.png    unicode     Unicode (Plane 5)
@@ -894,6 +894,8 @@ sharpmz.png     encoding    x-sharpscii-video
 sinql.png       encoding    x-sinclairql
 sinql.png       encoding    x-sinclairql-video
 jis.png         encoding    x-SJIS_0213
+joyo.png        encoding    Joyo
+joyo.png        encoding    Joyo Unsorted
 ti994a.png      encoding    x-ti994a
 unicode.png     encoding    x-UTF-16BE-BOM
 unicode.png     encoding    x-UTF-16LE-BOM

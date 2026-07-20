@@ -11,8 +11,14 @@ public abstract class BitmapGlyphTransform {
 	public static final BitmapGlyphTransform[] TRANSFORMS = new BitmapGlyphTransform[] {
 		new Bold          ("Bold",            CTRL_SHIFT, KeyEvent.VK_B),
 		new Invert        ("Invert",          CTRL_SHIFT, KeyEvent.VK_N),
+		new Cursive("Cursive",  CTRL_SHIFT, KeyEvent.VK_K),
+		null
 		new FlipHorizontal("Flip Horizontal", CTRL_SHIFT, KeyEvent.VK_H),
 		new FlipVertical  ("Flip Vertical",   CTRL_SHIFT, KeyEvent.VK_J),
+		new FlipDiagonal  ("Flip Diagonal",   CTRL_SHIFT, KeyEvent.VK_G),
+		null,
+		new RotateLeft    ("Rotate counterclockwise",     CTRL_SHIFT, KeyEvent.VK_T),
+		new RotateRight   ("Rotate clockwise",    CTRL_SHIFT, KeyEvent.VK_R),
 		null,
 		new Nudge(-1, 0, "Nudge Left",  CTRL_SHIFT, KeyEvent.VK_LEFT ),
 		new Nudge(+1, 0, "Nudge Right", CTRL_SHIFT, KeyEvent.VK_RIGHT),
@@ -75,7 +81,7 @@ public abstract class BitmapGlyphTransform {
 			}
 		}
 	}
-	
+
 	public static final class FlipVertical extends BitmapGlyphTransform {
 		public FlipVertical(String name, int keyCode, int modifiers) {
 			super(name, keyCode, modifiers);
@@ -92,6 +98,99 @@ public abstract class BitmapGlyphTransform {
 				rows[i] = rows[j];
 				rows[j] = tmp;
 			}
+		}
+	}
+	public static final class FlipDiagonal extends BitmapGlyphTransform {
+		public FlipDiagonal(String name, int keyCode, int modifiers) {
+			super(name, keyCode, modifiers);
+		}
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
+	        byte[][] old = glyph.getGlyph();
+	        int h = old.length;
+	        int w = (h == 0) ? 0 : old[0].length;
+	        
+	        byte[][] transposed = new byte[w][h];
+	        for (int i = 0; i < h; i++) {
+	            for (int j = 0; j < w; j++) {
+	                transposed[w-1-j][h-1-i] = old[i][j];
+	            }
+	        }
+	        
+	        glyph.setGlyph(transposed);
+	        
+	        glyph.setXY(glyph.getGlyphHeight() - glyph.getGlyphAscent(), glyph.getGlyphWidth());
+		}
+	}
+	public static final class RotateRight extends BitmapGlyphTransform {
+		public RotateRight(String name, int keyCode, int modifiers) {
+			super(name, keyCode, modifiers);
+		}
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
+	        byte[][] old = glyph.getGlyph();
+	        int h = old.length;
+	        int w = (h == 0) ? 0 : old[0].length;
+	        
+	        byte[][] transposed = new byte[w][h];
+	        for (int i = 0; i < h; i++) {
+	            for (int j = 0; j < w; j++) {
+	            	transposed[j][h-1-i] = old[i][j];
+	            }
+	        }
+	        
+	        glyph.setGlyph(transposed);
+	        
+	        glyph.setXY(glyph.getX() + (w - h) / 2, glyph.getY() + (w - h) / 2);
+		}
+	}
+
+	public static final class RotateLeft extends BitmapGlyphTransform {
+		public RotateLeft(String name, int keyCode, int modifiers) {
+			super(name, keyCode, modifiers);
+		}
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
+	        byte[][] old = glyph.getGlyph();
+	        int h = old.length;
+	        int w = (h == 0) ? 0 : old[0].length;
+	        
+	        byte[][] transposed = new byte[w][h];
+	        for (int i = 0; i < h; i++) {
+	            for (int j = 0; j < w; j++) {
+	            	transposed[w - 1 - j][i] = old[i][j];
+	            }
+	        }
+	        
+	        glyph.setGlyph(transposed);
+	        
+	        glyph.setXY(glyph.getX() + (w - h) / 2, glyph.getY() + (w - h) / 2);
+		}
+	}
+
+	public static final class Cursive extends BitmapGlyphTransform {
+		public Cursive(String name, int keyCode, int modifiers) {
+			super(name, keyCode, modifiers);
+		}
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph, int step, int shift) {
+	        byte[][] old = glyph.getGlyph();
+	        int h = old.length;
+	        int w = (h == 0) ? 0 : old[0].length;
+	        
+	        int line = font.getLineAscent() + font.getLineDescent();
+	        int sy = font.getLineAscent() - glyph.getY();
+	        
+	        byte[][] t = new byte[h][w + line / step + shift / step];
+	        for (int y = 0; y < h; y++) {
+	        	int s = ((y + sy + shift) / step);
+	            for (int x = 0; x < w; x++) {
+	            	t[y][x - s + line/step] = old[y][x];
+	            }
+	        }
+	        
+	        glyph.setGlyph(t);
+	        
+	        glyph.setXY(glyph.getX() - font.getLineDescent()/step, glyph.getY());
+		}
+		public void transform(Font<BitmapFontGlyph> font, BitmapFontGlyph glyph) {
+			transform(font, glyph, 2, 0);
 		}
 	}
 	
