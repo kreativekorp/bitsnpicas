@@ -273,6 +273,7 @@ u011c70.png     unicode     Marchen
 u011d00.png     unicode     Masaram Gondi
 u011d60.png     unicode     Gunjala Gondi
 u011db0.png     unicode     Tolong Siki
+u011df0.png     unicode     Bengali Supplement
 u011ee0.png     unicode     Makasar
 u011f00.png     unicode     Kawi
 u011fb0.png     unicode     Lisu Supplement
@@ -280,6 +281,7 @@ u011fc0.png     unicode     Tamil Supplement
 u012000.png     unicode     Cuneiform
 u012400.png     unicode     Cuneiform Numbers and Punctuation
 u012480.png     unicode     Early Dynastic Cuneiform
+u012550.png     unicode     Archaic Cuneiform Numerals
 u012f90.png     unicode     Cypro-Minoan
 u013000.png     unicode     Egyptian Hieroglyphs
 u013430.png     unicode     Egyptian Hieroglyph Format Controls
@@ -302,6 +304,8 @@ u018800.png     unicode     Tangut Components
 u018b00.png     unicode     Khitan Small Script
 u018d00.png     unicode     Tangut Supplement
 u018d80.png     unicode     Tangut Components Supplement
+u018e00.png     unicode     Jurchen
+u0191a0.png     unicode     Jurchen Radicals
 u01aff0.png     unicode     Kana Extended-B
 u01b000.png     unicode     Kana Supplement
 u01b100.png     unicode     Kana Extended-A
@@ -315,12 +319,14 @@ u01cf00.png     unicode     Znamenny Musical Notation
 u01d000.png     unicode     Byzantine Musical Symbols
 u01d100.png     unicode     Musical Symbols
 u01d200.png     unicode     Ancient Greek Musical Notation
+u01d250.png     unicode     Musical Symbols Supplement
 u01d2c0.png     unicode     Kaktovik Numerals
 u01d2e0.png     unicode     Mayan Numerals
 u01d300.png     unicode     Tai Xuan Jing Symbols
 u01d360.png     unicode     Counting Rod Numerals
 u01d400.png     unicode     Mathematical Alphanumeric Symbols
 u01d800.png     unicode     Sutton SignWriting
+u01db00.png     unicode     Miscellaneous Symbols and Arrows Extended
 u01df00.png     unicode     Latin Extended-G
 u01e000.png     unicode     Glagolitic Supplement
 u01e030.png     unicode     Cyrillic Extended-D
@@ -362,6 +368,7 @@ u02f800.png     unicode     CJK Compatibility Ideographs Supplement
 u030000.png     unicode     CJK Unified Ideographs Extension G
 u031350.png     unicode     CJK Unified Ideographs Extension H
 u0323b0.png     unicode     CJK Unified Ideographs Extension J
+u03d000.png     unicode     Seal
 u0e0000.png     unicode     Tags
 u0e0100.png     unicode     Variation Selectors Supplement
 u0f0000.png     unicode     Supplementary Private Use Area-A
@@ -443,6 +450,7 @@ c0f1900.png     pua         Sitelen Pona
 c0f1b00.png     pua         Shidinn
 c0f1c40.png     pua         Titi Pula
 c0f1c80.png     pua         Sitelen Pona Radicals
+c0f1ca0.png     pua         Yapiri
 c0f2000.png     pua         Sadalian
 c0f2680.png     pua         Quikscript
 c0f2700.png     pua         Hacm
