@@ -8,6 +8,7 @@ import com.kreative.unicode.data.GlyphList;
 public class BitmapOutputOptions {
 	public int xSize = 100, ySize = 100;
 	public boolean extendWinMetrics = false;
+	public boolean lineHeightEm = false;
 	public IDGenerator idgen = new IDGenerator.HashCode(128, 32768);
 	public PointSizeGenerator sizegen = new PointSizeGenerator.Automatic(4, 127);
 	public String encodingName = null;

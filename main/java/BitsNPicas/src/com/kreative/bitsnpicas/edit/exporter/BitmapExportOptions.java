@@ -8,6 +8,7 @@ import com.kreative.unicode.data.GlyphList;
 public interface BitmapExportOptions {
 	public Dimension getPixelDimension();
 	public boolean getExtendWinMetrics();
+	public boolean getLineHeightEm();
 	public int getSelectedColor();
 	public Integer getLoadAddress();
 	public GlyphList getSelectedEncoding();

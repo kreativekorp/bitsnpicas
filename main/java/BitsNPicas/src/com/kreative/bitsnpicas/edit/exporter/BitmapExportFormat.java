@@ -19,7 +19,7 @@ public enum BitmapExportFormat {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
 			Dimension d = o.getPixelDimension();
 			boolean exWinMtx = o.getExtendWinMetrics();
-			return new TTFBitmapFontExporter(d.width, d.height, exWinMtx);
+			return new TTFBitmapFontExporter(d.width, d.height, exWinMtx, o.getLineHeightEm());
 		}
 	},
 	OTB("OTB (OpenType Bitmap)", ".otb", "otb") {

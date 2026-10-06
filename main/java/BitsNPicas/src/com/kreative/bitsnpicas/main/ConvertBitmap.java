@@ -162,6 +162,10 @@ public class ConvertBitmap {
 						o.oo.extendWinMetrics = false;
 					} else if (arg.equals("-Y")) {
 						o.oo.extendWinMetrics = true;
+					} else if (arg.equals("-l")) {
+						o.oo.lineHeightEm = true;
+					} else if (arg.equals("-L")) {
+						o.oo.lineHeightEm = false;
 					} else if (arg.equals("-p") && argi < args.length) {
 						String s = args[argi++];
 						boolean done = loadPreset(o, s);
@@ -314,6 +318,9 @@ public class ConvertBitmap {
 		System.out.println("                (Force line height; more compatible. The default.)");
 		System.out.println("  -Y            Use yMin/yMax for winAscent/winDescent (for ttf).");
 		System.out.println("                (Prevent clipping; more conformant to the TT/OT spec.)");
+		System.out.println("  -l            Use the line height as the em size (for ttf).");
+		System.out.println("                (Exact pixels at font sizes that are multiples of it.)");
+		System.out.println("  -L            Use the em size of the font (for ttf). (The default.)");
 		System.out.println("  -p <preset>   Use a preset for -s, -r, -w, and -h. One of:");
 		System.out.println("                    none, apple2, apple2-40col, apple2-80col,");
 		System.out.println("                    apple2-hgr, apple2-dhr, lisa, lisa-raw, lisa-2x3y,");

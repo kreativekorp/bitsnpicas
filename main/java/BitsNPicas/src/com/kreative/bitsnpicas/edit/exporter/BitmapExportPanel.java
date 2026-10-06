@@ -166,6 +166,11 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	}
 	
 	@Override
+	public boolean getLineHeightEm() {
+		return ttfPanel.getLineHeightEm();
+	}
+	
+	@Override
 	public int getSelectedColor() {
 		return colorPanel.getSelectedColor();
 	}

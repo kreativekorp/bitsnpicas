@@ -122,6 +122,7 @@ Additional options include:
   *  `-s` *regex* `-r` *replacement* - Perform a search-and-replace on the font name.
   *  `-b` - Apply a faux-bold effect.
   *  `-w` *units* `-h` *units* - Specify the width and height of pixels in em units (for `ttf` format).
+  *  `-l` - Use the line height as the em size, so that pixels are exact at font sizes that are multiples of it (for `ttf` format).
   *  `-i` *fontid* `-z` *size* - Specify the font ID and font size (for `nfnt` or `geos` format).
 
 You can see a list of all options using the `--help` option.
