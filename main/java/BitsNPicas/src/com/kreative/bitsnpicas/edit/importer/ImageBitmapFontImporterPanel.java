@@ -35,6 +35,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.SwingUtilities;
 import com.kreative.bitsnpicas.WindingOrder;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.importer.ImageBitmapFontImporter;
@@ -216,7 +217,7 @@ public class ImageBitmapFontImporterPanel extends JPanel {
 		
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.openFont(file, null, importer.importFont(image));
+				if (Main.openFont(file, null, importer.importFont(image)) != null) SwingUtilities.getWindowAncestor(ImageBitmapFontImporterPanel.this).dispose();
 			}
 		});
 	}

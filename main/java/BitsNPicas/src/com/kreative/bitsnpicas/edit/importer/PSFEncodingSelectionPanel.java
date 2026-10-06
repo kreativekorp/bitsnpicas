@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
@@ -87,7 +88,7 @@ public class PSFEncodingSelectionPanel extends JPanel {
 					int puaBase = (se.getSelectedIndex() > 0) ? ((PuaBaseOption)se.getSelectedItem()).value : -1;
 					Font<?>[] fonts = importer.createImporter(lenc, henc, puaBase).importFont(file);
 					if (fonts != null && fonts.length > 0) {
-						Main.openFonts(file, null, fonts);
+						if (Main.openFonts(file, null, fonts) != null) SwingUtilities.getWindowAncestor(PSFEncodingSelectionPanel.this).dispose();
 					} else {
 						JOptionPane.showMessageDialog(
 							null, "The selected file did not contain any fonts.",
@@ -96,7 +97,7 @@ public class PSFEncodingSelectionPanel extends JPanel {
 					}
 				} catch (IOException ioe) {
 					JOptionPane.showMessageDialog(
-						null, "An error occurred while reading the selected file.",
+						null, "An error occurred while reading the selected file.\n" + ioe,
 						"Open", JOptionPane.ERROR_MESSAGE
 					);
 				}

@@ -90,7 +90,10 @@ public class BitmapListMenuBar extends JMenuBar {
 				public void actionPerformed(ActionEvent e) {
 					List<GlyphLocator<BitmapFontGlyph>> locators = gl.getSelection();
 					if (locators.isEmpty()) {
-						Toolkit.getDefaultToolkit().beep();
+						JOptionPane.showMessageDialog(
+							null, "Select the glyphs to import the image into.",
+							"Import Image", JOptionPane.INFORMATION_MESSAGE
+						);
 						return;
 					}
 					FileDialog fd = new FileDialog(frame, "Import Image", FileDialog.LOAD);
