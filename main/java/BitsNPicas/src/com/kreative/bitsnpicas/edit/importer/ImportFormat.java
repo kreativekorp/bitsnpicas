@@ -12,6 +12,7 @@ import com.kreative.bitsnpicas.exporter.KpcaxVectorFontExporter;
 import com.kreative.bitsnpicas.geos.mover.GEOSMoverFrame;
 import com.kreative.bitsnpicas.importer.*;
 import com.kreative.bitsnpicas.mover.MoverFrame;
+import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
 public enum ImportFormat {
@@ -140,7 +141,9 @@ public enum ImportFormat {
 			return b != null && b[0] == 0 && b[1] >= 1 && b[1] <= 3;
 		}
 		public JFrame createOptionFrame(File file) throws IOException {
-			return new EncodingSelectionFrame("CP1252", file, new EncodingSelectionImporter() {
+			String encodingName = FNTBitmapFontImporter.getEncodingName(file);
+			if (encodingName == null || !EncodingList.instance().containsGlyphList(encodingName)) encodingName = "CP1252";
+			return new EncodingSelectionFrame(encodingName, file, new EncodingSelectionImporter() {
 				public FontImporter<?> createImporter(GlyphList encoding) {
 					return new FNTBitmapFontImporter(encoding);
 				}
