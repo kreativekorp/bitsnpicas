@@ -103,6 +103,11 @@ public enum BitmapOutputFormat {
 			return new RFontBitmapFontExporter();
 		}
 	},
+	PXFONT(".png", "pxfont") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new PxfontBitmapFontExporter(o.getEncoding());
+		}
+	},
 	HEX(".hex", "hex") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			return new HexBitmapFontExporter();

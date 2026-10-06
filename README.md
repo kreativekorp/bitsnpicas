@@ -24,6 +24,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.nfnt` - Mac OS Classic font resource (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
+  *  `.png` - font sheet of [pxfont](https://github.com/mike-shevchenko/retro-tools)
   *  `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp` - Create from image (GUI only)
   *  `.bin`, `.rom` - Create from binary file (GUI only)
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
@@ -72,6 +73,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.dfont` - Mac OS Classic font suitcase (in the data fork)
   *  `.nfnt` - Mac OS Classic font resource (in the data fork)
   *  `.png` - SFont or RFont, Kreative Software's extension of SFont
+  *  `.png` - font sheet of [pxfont](https://github.com/mike-shevchenko/retro-tools)
   *  `.hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `.cvt` - GEOS font in Convert format (including MEGA fonts)
   *  `.fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
@@ -100,6 +102,7 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `nfnt` - Mac OS Classic font resource (in the data fork)
   *  `png` or `sfont` - SDL SFont
   *  `rfont` - RFont, Kreative Software's extension of SFont
+  *  `pxfont` - font sheet of [pxfont](https://github.com/mike-shevchenko/retro-tools)
   *  `hex` - [GNU Unifont](http://unifoundry.com/unifont/index.html) hex format
   *  `cvt` or `geos` - GEOS font in Convert format (with MEGA option)
   *  `fzx` - [FZX by Andrew Owen (for ZX Spectrum)](https://faqwiki.zxnet.co.uk/wiki/FZX_format)
