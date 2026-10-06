@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -23,6 +26,7 @@ import com.kreative.bitsnpicas.VectorFontGlyph;
 import com.kreative.bitsnpicas.edit.importer.ImportFormat;
 import com.kreative.bitsnpicas.exporter.KbitxBitmapFontExporter;
 import com.kreative.bitsnpicas.exporter.KpcaxVectorFontExporter;
+import com.kreative.bitsnpicas.fon.FONDirectory;
 
 public class Main {
 	public static void main(String[] args) {
@@ -89,6 +93,75 @@ public class Main {
 		if (ds == null || fs == null) return null;
 		File file = new File((lastOpenDirectory = ds), fs);
 		return openFonts(file);
+	}
+	
+	// A FON file is split into FNT files in a folder beside it, named after it.
+	public static void splitFON() {
+		String title = "Split Windows FON";
+		Frame frame = new Frame();
+		FileDialog fd = new FileDialog(frame, title, FileDialog.LOAD);
+		if (lastOpenDirectory != null) fd.setDirectory(lastOpenDirectory);
+		fd.setVisible(true);
+		String ds = fd.getDirectory(), fs = fd.getFile();
+		fd.dispose();
+		frame.dispose();
+		if (ds == null || fs == null) return;
+		File file = new File((lastOpenDirectory = ds), fs);
+		File dir = FONDirectory.directoryFor(file, null);
+		boolean replace = dir.exists();
+		if (replace) {
+			int answer = JOptionPane.showConfirmDialog(
+				null, "The folder " + dir.getName() + " already exists.\nDelete every file in it and split " + file.getName() + " into it?",
+				title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE
+			);
+			if (answer != JOptionPane.OK_OPTION) return;
+		}
+		try {
+			int count = FONDirectory.split(file, dir, replace);
+			JOptionPane.showMessageDialog(
+				null, "Split " + file.getName() + " into FNT files.\nFonts: " + count + "\nFolder: " + dir.getPath(),
+				title, JOptionPane.INFORMATION_MESSAGE
+			);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+				null, "Could not split " + file.getName() + ".\n" + e.getMessage(),
+				title, JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+	
+	// The FNT files of a folder are merged into a FON file beside it, named after it.
+	public static void mergeFON() {
+		String title = "Merge FNT Files into Windows FON";
+		JFileChooser fc = new JFileChooser(lastOpenDirectory);
+		fc.setDialogTitle(title);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
+		File dir = fc.getSelectedFile();
+		File file = FONDirectory.fileFor(dir);
+		if (file.exists()) {
+			int answer = JOptionPane.showConfirmDialog(
+				null, "The file " + file.getName() + " already exists. Replace it?",
+				title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE
+			);
+			if (answer != JOptionPane.OK_OPTION) return;
+		}
+		try {
+			List<String> warnings = new ArrayList<String>();
+			int count = FONDirectory.merge(dir, file, warnings);
+			StringBuffer sb = new StringBuffer();
+			sb.append("Merged the FNT files of " + dir.getName() + ".\nFonts: " + count + "\nFile: " + file.getPath());
+			for (String warning : warnings) sb.append("\nWarning: " + warning);
+			JOptionPane.showMessageDialog(
+				null, sb.toString(), title,
+				warnings.isEmpty() ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE
+			);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+				null, "Could not merge the FNT files of " + dir.getName() + ".\n" + e.getMessage(),
+				title, JOptionPane.ERROR_MESSAGE
+			);
+		}
 	}
 	
 	public static JFrame openFonts(File file) {

@@ -41,6 +41,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
 			add(new CommonMenuItems.OpenMenuItem());
+			add(new CommonMenuItems.WindowsFONMenu());
 			add(new CommonMenuItems.CloseMenuItem(frame));
 			addSeparator();
 			add(new CommonMenuItems.SaveMenuItem(sm));

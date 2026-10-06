@@ -43,6 +43,10 @@ public class Main {
 				SplitGEOS.main(args);
 			} else if (arg0.equals("mergegeos")) {
 				MergeGEOS.main(args);
+			} else if (arg0.equals("splitfon")) {
+				SplitFON.main(args);
+			} else if (arg0.equals("mergefon")) {
+				MergeFON.main(args);
 			} else if (arg0.equals("injectpuaa")) {
 				PuaaCompiler.main(args);
 			} else if (arg0.equals("extractpuaa")) {
@@ -74,6 +78,8 @@ public class Main {
 		System.out.println("  java -jar BitsNPicas.jar mergesuit <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar splitgeos <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar mergegeos <options> <files>");
+		System.out.println("  java -jar BitsNPicas.jar splitfon <options> <files>");
+		System.out.println("  java -jar BitsNPicas.jar mergefon <options> <directories>");
 		System.out.println("  java -jar BitsNPicas.jar extractpuaa <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar injectpuaa <options> <files>");
 		System.out.println("  java -jar BitsNPicas.jar lookuppuaa <options> <files>");

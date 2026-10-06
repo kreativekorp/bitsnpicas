@@ -79,6 +79,9 @@ public class KbitxBitmapFontExporter implements BitmapFontExporter {
 		props.put("xHeight", Integer.toString(font.getXHeight()));
 		props.put("capHeight", Integer.toString(font.getCapHeight()));
 		props.put("newGlyphWidth", Integer.toString(font.getNewGlyphWidth()));
+		for (Map.Entry<String,String> e : font.properties(false).entrySet()) {
+			if (!props.containsKey(e.getKey())) props.put(e.getKey(), e.getValue());
+		}
 		return props;
 	}
 	

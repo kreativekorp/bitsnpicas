@@ -26,6 +26,10 @@ public class EncodingSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public EncodingSelectionPanel(final String encodingName, final File file, final EncodingSelectionImporter importer) {
+		this(encodingName, file, importer, null);
+	}
+	
+	public EncodingSelectionPanel(final String encodingName, final File file, final EncodingSelectionImporter importer, final String note) {
 		final JComboBox encoding = new JComboBox(EncodingList.instance().glyphLists().toArray());
 		encoding.setEditable(false);
 		new GLMLListCellRenderer("encoding").apply(encoding);
@@ -40,6 +44,7 @@ public class EncodingSelectionPanel extends JPanel {
 		buttonPanel.add(openButton);
 		
 		final JPanel mainPanel = new JPanel(new BorderLayout(12, 12));
+		if (note != null) mainPanel.add(new JLabel(note), BorderLayout.PAGE_START);
 		mainPanel.add(encodingPanel, BorderLayout.CENTER);
 		mainPanel.add(buttonPanel, BorderLayout.PAGE_END);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));

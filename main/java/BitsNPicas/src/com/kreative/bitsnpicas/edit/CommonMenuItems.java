@@ -33,6 +33,7 @@ public class CommonMenuItems extends JMenuBar {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.add(new NewMenu());
 		fileMenu.add(new OpenMenuItem());
+		fileMenu.add(new WindowsFONMenu());
 		if (window != null) {
 			fileMenu.add(new CloseMenuItem(window));
 		}
@@ -119,6 +120,39 @@ public class CommonMenuItems extends JMenuBar {
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Main.openFonts();
+				}
+			});
+		}
+	}
+	
+	public static class WindowsFONMenu extends JMenu {
+		private static final long serialVersionUID = 1L;
+		public WindowsFONMenu() {
+			super("Windows FON");
+			add(new SplitFONMenuItem());
+			add(new MergeFONMenuItem());
+		}
+	}
+	
+	public static class SplitFONMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SplitFONMenuItem() {
+			super("Split into FNT Files...");
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Main.splitFON();
+				}
+			});
+		}
+	}
+	
+	public static class MergeFONMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public MergeFONMenuItem() {
+			super("Merge FNT Files...");
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Main.mergeFON();
 				}
 			});
 		}

@@ -32,6 +32,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.font` - Amiga bitmap font (black and white only; color not supported)
   *  `.fnt` - Windows `.fnt` format (not the same as `.fon`; vector fonts not supported)
+  *  `.fon` - Windows `.fon` format (every `.fnt` font of the file; vector fonts not supported)
   *  `.fnt`, `.ftx` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
   *  `.fnt`, `.mgf`, `.mpf` - MousePaint/MouseGraphics ToolKit font
   *  `.fnt`, `.rbf`, `.rb11`, `.rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat)
@@ -78,6 +79,7 @@ The input format is determined by the file extension of the input file. Supporte
   *  `.u8m` - [U8/M (UTF-8 for Microcomputers)](https://github.com/kreativekorp/u8m)
   *  `.font` - Amiga bitmap font (black and white only; color not supported)
   *  `.fnt` - Windows `.fnt` format (not the same as `.fon`; vector fonts not supported)
+  *  `.fon` - Windows `.fon` format (every `.fnt` font of the file; vector fonts not supported)
   *  `.fnt`, `.ftx` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
   *  `.fnt`, `.mgf`, `.mpf` - MousePaint/MouseGraphics ToolKit font
   *  `.fnt`, `.rbf`, `.rb11`, `.rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat)
@@ -107,6 +109,7 @@ The output format is determined by the `-f` option. Supported output formats inc
   *  `font` or `amiga` - Amiga bitmap font (black and white only; color not supported)
   *  `fnt` or `fnt3` - Windows 3.x `.fnt` format (not the same as `.fon`)
   *  `fnt2` - Windows 2.x `.fnt` format (also not the same as `.fon`)
+  *  `fon` - Windows `.fon` format, a file of one font
   *  `fontx2`, `fontx`, or `dosv` - [IBM DOS/V FONTX2 format](http://elm-chan.org/docs/dosv/fontx_e.html)
   *  `mgtk`, `mgf`, `mpf`, or `mousepaint` - MousePaint/MouseGraphics ToolKit font
   *  `rb12` - [Rockbox Font Format](https://www.rockbox.org/wiki/FontFormat) for Rockbox 2.3 or above
@@ -125,6 +128,18 @@ Additional options include:
   *  `-i` *fontid* `-z` *size* - Specify the font ID and font size (for `nfnt` or `geos` format).
 
 You can see a list of all options using the `--help` option.
+
+## Splitting and Merging Windows FON Files
+
+A Windows `.fon` file holds one or more `.fnt` fonts. To change such a file, split it into its fonts, change those, and merge them again:
+
+`java -jar BitsNPicas.jar splitfon myfonts.fon`
+
+`java -jar BitsNPicas.jar mergefon myfonts.fon.files`
+
+The first command makes the directory `myfonts.fon.files` with each font as a `.fnt` file, a copy of its bytes, and with a text file, `fon.txt`, of what else the `.fon` file tells: its version strings, module name and description, one to a line as `name=value`, in UTF-8. The second command makes `myfonts.fon` of every `.fnt` file of the directory, sorted by height, weight and slant, and of `fon.txt` if it is there. Both are also in the File menu of the editor, under Windows FON.
+
+`splitfon` does not write into a directory that exists; with `-f` it replaces the directory, deleting every file in it.
 
 ## Extracting Images from Emoji/Color Fonts
 
