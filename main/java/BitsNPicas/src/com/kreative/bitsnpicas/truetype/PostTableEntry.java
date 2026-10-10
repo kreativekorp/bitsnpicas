@@ -595,6 +595,21 @@ public class PostTableEntry {
 		}
 	}
 	
+	public static String normalizedName(String name) {
+	    StringBuilder out = new StringBuilder();
+	    for (int i = 0; i < name.length(); ) {
+	        int cp = name.codePointAt(i);
+	        i += Character.charCount(cp);
+	        
+	        if ((cp >= 'A' && cp <= 'Z') || (cp >= 'a' && cp <= 'z') || (cp >= '0' && cp <= '9') || cp == '.' || cp == '_') {
+	            out.appendCodePoint(cp);
+	        } else {
+	            out.append(PostTableEntry.forCharacter(cp).toString());
+	        }
+	    }
+	    return out.toString();
+	}
+	
 	public static PostTableEntry forCharacterName(String name) {
 		if (name == null) return new PostTableEntry(0);
 		else if (name.equals(".notdef")) return new PostTableEntry(0);

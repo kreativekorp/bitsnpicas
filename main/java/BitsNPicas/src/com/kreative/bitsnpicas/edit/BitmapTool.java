@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.awt.Image;
 
 public enum BitmapTool {
+	BRUSH(Resources.BRUSH_TOOL, SwingUtils.CURSOR_CROSSHAIR),
 	PENCIL(Resources.PENCIL_TOOL, SwingUtils.CURSOR_CROSSHAIR),
 	ERASER(Resources.ERASER_TOOL, SwingUtils.CURSOR_CROSSHAIR),
 	EYEDROPPER(Resources.EYEDROPPER_TOOL, SwingUtils.CURSOR_CROSSHAIR),

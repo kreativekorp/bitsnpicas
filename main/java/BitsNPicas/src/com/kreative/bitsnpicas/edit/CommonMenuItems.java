@@ -1,5 +1,7 @@
 package com.kreative.bitsnpicas.edit;
 
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -32,7 +34,7 @@ public class CommonMenuItems extends JMenuBar {
 	public CommonMenuItems(final Window window) {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.add(new NewMenu());
-		fileMenu.add(new OpenMenuItem());
+		fileMenu.add(new OpenMenuItem(window));
 		if (window != null) {
 			fileMenu.add(new CloseMenuItem(window));
 		}
@@ -113,11 +115,23 @@ public class CommonMenuItems extends JMenuBar {
 	
 	public static class OpenMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
-		public OpenMenuItem() {
+		public OpenMenuItem(final Window window) {
 			super("Open...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, SHORTCUT_KEY));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+//					if (window instanceof Frame) {
+//						if (((Frame)window).getTitle() == "New Bitmap Font") {
+//							window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+//						}
+//				    } else if (window instanceof Dialog) {
+//						if (((Dialog)window).getTitle() == "New Bitmap Font") {
+//							window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+//						}
+//				    }
+					if (window instanceof NewBitmapFontFrame) {
+						window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+					}
 					Main.openFonts();
 				}
 			});
