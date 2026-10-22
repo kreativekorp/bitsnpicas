@@ -106,6 +106,7 @@ public class EncodingList {
 		
 		// Create glyph list from encoding.
 		GlyphList gl = enc.toGlyphList();
+		if (gl == null) return;
 		
 		// Add glyph list.
 		glyphLists.add(gl);
