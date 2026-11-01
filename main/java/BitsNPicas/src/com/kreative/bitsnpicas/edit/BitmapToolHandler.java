@@ -110,6 +110,19 @@ public class BitmapToolHandler implements GlyphComponentListener<BitmapFontGlyph
 		int rw = Math.max(startX, x) - rx;
 		int rh = Math.max(startY, y) - ry;
 		switch (inProgressTool) {
+			case BRUSH:
+				if (pressed) {
+					pushUndoState(inProgressState);
+					if (e.getButton() == MouseEvent.BUTTON3) inProgressOpacity = 0;
+					byte existing = glyph.getPixel(x, y);
+					if (e.getButton() == MouseEvent.BUTTON2 && inProgressOpacity == existing) inProgressOpacity = 0;
+				}
+				glyph.expand(rx, ry, rw + 1, rh + 1);
+				glyph.drawLine(startX, startY, x, y, inProgressOpacity);
+				startX = x;
+				startY = y;
+				if (released) glyph.contract();
+				return true;
 			case PENCIL:
 				if (pressed) {
 					pushUndoState(inProgressState);

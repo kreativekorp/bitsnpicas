@@ -106,17 +106,26 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		postTable.underlinePosition = -ysize;
 		postTable.underlineThickness = ysize;
 		
-		makeCharacterGlyph(bf, bf.getNamedGlyph(".notdef"), ".notdef", a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
-		makeCharacterGlyph(bf, bf.getCharacter(0x00), 0x00, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
-		makeCharacterGlyph(bf, bf.getCharacter(0x0D), 0x0D, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
-		makeCharacterGlyph(bf, bf.getCharacter(0x20), 0x20, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+		Map<Object, Integer> glyphToId = new HashMap<Object, Integer>();
+		
+		Map<Object, String> glyphToInit = new HashMap<Object, String>();
+		
+		glyphToId.put(".notdef", makeCharacterGlyph(bf, bf.getNamedGlyph(".notdef"), ".notdef", a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable));
+		glyphToId.put(0x00, makeCharacterGlyph(bf, bf.getCharacter(0x00), 0x00, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable));
+		glyphToId.put(0x0D, makeCharacterGlyph(bf, bf.getCharacter(0x0D), 0x0D, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable));
+		glyphToId.put(0x20, makeCharacterGlyph(bf, bf.getCharacter(0x20), 0x20, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable));
 		for (Map.Entry<Integer,BitmapFontGlyph> e : bf.characters(false).entrySet()) {
 			int cp = e.getKey(); if (cp == 0x00 || cp == 0x0D || cp == 0x20) continue;
-			makeCharacterGlyph(bf, e.getValue(), e.getKey(), a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+			glyphToId.put(cp, makeCharacterGlyph(bf, e.getValue(), e.getKey(), a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable));
 		}
 		for (Map.Entry<String,BitmapFontGlyph> e : bf.namedGlyphs(false).entrySet()) {
-			if (e.getKey().toString().equals(".notdef")) continue;
-			makeCharacterGlyph(bf, e.getValue(), e.getKey(), a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable);
+			String name = PostTableEntry.normalizedName(e.getKey().toString());
+			if (name.equals(".notdef")) continue;
+			glyphToId.put(e.getKey(), makeCharacterGlyph(bf, e.getValue(), name, a, xsize, ysize, glyfTable, locaTable, hmtxTable, postTable));
+			
+//			if (name.length() == 6 && name.endsWith(".init")) {
+//				glyphToInit.put(name.codePointAt(0), name);
+//			}
 		}
 		locaTable.add(a.currentLocation);
 		
@@ -131,10 +140,21 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		ttf.add(glyfTable);
 		ttf.add(makeNameTable(bf));
 		ttf.add(postTable);
+		
+		GsubTable gsubTable = new GsubTable(glyphToId);
+		// Intended for scripts like arabic
+		// Does not actually work:
+		// OTF specification makes .init .medi .fina and .isol substitutions optional
+		// For actual initial medial final and isolated forms, contextual substitutions are required
+//		if (glyphToInit.size() > 0) {
+//			gsubTable.addSingleSub("init", glyphToInit);	
+//		}
+		ttf.add(gsubTable);
+		
 		return ttf;
 	}
 	
-	private static final void makeCharacterGlyph(
+	private static final int makeCharacterGlyph(
 		BitmapFont bf, BitmapFontGlyph g, Object id,
 		ThingsToKeepTrackOf a, int xsize, int ysize,
 		GlyfTable glyfTable, LocaTable locaTable, HmtxTable hmtxTable, PostTable postTable
@@ -180,7 +200,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		}
 		if (id instanceof Integer) postTable.add(PostTableEntry.forCharacter((Integer)id));
 		if (id instanceof String) postTable.add(PostTableEntry.forCharacterName(id.toString()));
-		a.numGlyphs++;
+		return a.numGlyphs++;
 	}
 	
 	private static final CmapTable makeCmapTable(BitmapFont bf, ThingsToKeepTrackOf a) {
@@ -323,6 +343,10 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		os2Table.setCodePages(chars);
 		os2Table.xHeight = a.xHeight;
 		os2Table.capHeight = a.HHeight;
+		
+		os2Table.version = Os2Table.VERSION_OPENTYPE_1_5;
+		os2Table.length = Os2Table.LENGTH_96;
+		
 		return os2Table;
 	}
 	

@@ -233,10 +233,13 @@ public class Main {
 	}
 	
 	private static String lastSaveDirectory = null;
-	public static File getSaveFile(String suffix) {
+	public static File getSaveFile(String suffix, String name) {
 		Frame frame = new Frame();
 		FileDialog fd = new FileDialog(frame, "Save", FileDialog.SAVE);
 		if (lastSaveDirectory != null) fd.setDirectory(lastSaveDirectory);
+		if (name != null && !name.isEmpty()) {
+			fd.setFile(name);
+		}
 		fd.setVisible(true);
 		String ds = fd.getDirectory(), fs = fd.getFile();
 		fd.dispose();

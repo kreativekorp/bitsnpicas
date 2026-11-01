@@ -2,6 +2,7 @@ package com.kreative.bitsnpicas.edit;
 
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -10,19 +11,33 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.IdentityHashMap;
+import java.util.List;
+
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.edit.BitmapGlyphTransform.Cursive;
+import com.kreative.bitsnpicas.edit.BitmapListMenuBar.CursiveTransformMenuItem;
 
 public class BitmapEditMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
@@ -40,7 +55,7 @@ public class BitmapEditMenuBar extends JMenuBar {
 		public FileMenu(final Frame frame, final SaveManager sm, final BitmapFont font, final BitmapEditPanel panel) {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
-			add(new CommonMenuItems.OpenMenuItem());
+			add(new CommonMenuItems.OpenMenuItem(frame));
 			add(new CommonMenuItems.CloseMenuItem(frame));
 			addSeparator();
 			add(new CommonMenuItems.SaveMenuItem(sm));
@@ -252,11 +267,62 @@ public class BitmapEditMenuBar extends JMenuBar {
 			add(new SetRightBearingMenuItem(frame, gc));
 			addSeparator();
 			for (BitmapGlyphTransform tx : BitmapGlyphTransform.TRANSFORMS) {
-				if (tx == null) addSeparator();
-				else add(new TransformMenuItem(tx, gc));
+				if (tx == null) {
+					addSeparator();
+					continue;
+				}
+				else if (tx instanceof Cursive) {
+					add(new CursiveTransformMenuItem((Cursive)tx, gc));
+				}
+				else {
+					add(new TransformMenuItem(tx, gc));
+				}
 			}
 		}
 	}
+	
+	public static final class CursiveTransformMenuItem extends JMenu {
+		private static final long serialVersionUID = 1L;
+	    private final JPopupMenu popup;
+	    
+		public CursiveTransformMenuItem(final Cursive tx, final GlyphComponent<BitmapFontGlyph> gc) {
+	        super(tx.name);
+	        popup = new JPopupMenu();
+	        JPanel grid = new JPanel(new GridLayout(7, 6, 2, 2));
+	        for (int step = 1; step <= 7; step++) {
+	            for (int shift = 0; shift <= 6; shift++) {
+	                if (shift < step) {
+                    	final int _step = step; final int _shift = shift;
+	                    JButton btn = new JButton(step + "+" + shift + "/" + step);
+	                    btn.addActionListener(e -> {
+	                        ((Cursive) tx).transform(gc.getGlyphFont(), gc.getGlyph(), _step, _shift);
+	                        gc.glyphChanged();
+	                        popup.setVisible(false);
+	                    });
+	                    grid.add(btn);
+	                } else {
+	                    grid.add(new JLabel());
+	                }
+	            }
+	        }
+	        popup.add(grid);
+	        addMenuListener(new MenuListener() {
+	            @Override
+	            public void menuSelected(MenuEvent e) {
+	                popup.show(CursiveTransformMenuItem.this, getWidth(), 0);
+	            }
+	            @Override
+	            public void menuDeselected(MenuEvent e) {
+	                popup.setVisible(false);
+	            }
+	            @Override
+	            public void menuCanceled(MenuEvent e) {
+	                popup.setVisible(false);
+	            }
+	        });
+	    }
+	}
+
 	
 	public static final class TransformMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;

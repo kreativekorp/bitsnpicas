@@ -79,7 +79,11 @@ public class GlyphLocator<G extends FontGlyph> {
 			String h = Integer.toHexString(codePoint).toUpperCase();
 			while (h.length() < 4) h = "0" + h;
 			String n = NameResolver.instance(codePoint).getName(codePoint);
-			return "U+" + h + " " + n + " from " + font.toString();
+			String glyph = Character.toString(codePoint);
+			if (codePoint == 0) {
+				glyph = "NULL";
+			}
+			return "U+" + h + " (" + glyph + ") " + n + " from " + font.toString();
 		}
 		if (glyphName != null) {
 			return glyphName + " from " + font.toString();
