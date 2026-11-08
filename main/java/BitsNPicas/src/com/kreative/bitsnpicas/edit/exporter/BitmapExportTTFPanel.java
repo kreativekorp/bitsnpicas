@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -17,12 +18,14 @@ public class BitmapExportTTFPanel extends JPanel {
 	private final SpinnerNumberModel pixelHeight;
 	private final JRadioButton winMetricsLineHeight;
 	private final JRadioButton winMetricsYminYmax;
+	private final JCheckBox lineHeightEm;
 	
 	public BitmapExportTTFPanel() {
 		this.pixelWidth = new SpinnerNumberModel(100, 1, 1000, 1);
 		this.pixelHeight = new SpinnerNumberModel(100, 1, 1000, 1);
 		this.winMetricsLineHeight = new JRadioButton("<html>typoAscent/typoDescent<br>(Force line height. More compatible.)</html>");
 		this.winMetricsYminYmax = new JRadioButton("<html>yMin/yMax<br>(Prevent clipping. More conformant.)</html>");
+		this.lineHeightEm = new JCheckBox("<html>Use line height as em size<br>(Exact pixels at font sizes that are multiples of it.)</html>");
 		
 		JPanel pixelLabelPanel = new JPanel(new GridLayout(0, 1, 4, 4));
 		pixelLabelPanel.add(new JLabel("Pixel Width"));
@@ -55,6 +58,7 @@ public class BitmapExportTTFPanel extends JPanel {
 		JPanel outerPanel = new JPanel(new BorderLayout(8, 8));
 		outerPanel.add(pixelOuterPanel, BorderLayout.PAGE_START);
 		outerPanel.add(winMetricsPanel, BorderLayout.CENTER);
+		outerPanel.add(lineHeightEm, BorderLayout.PAGE_END);
 		
 		this.setLayout(new BorderLayout());
 		this.add(outerPanel, BorderLayout.PAGE_START);
@@ -69,5 +73,9 @@ public class BitmapExportTTFPanel extends JPanel {
 	
 	public boolean getExtendWinMetrics() {
 		return winMetricsYminYmax.isSelected();
+	}
+	
+	public boolean getLineHeightEm() {
+		return lineHeightEm.isSelected();
 	}
 }

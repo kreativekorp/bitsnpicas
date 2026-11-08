@@ -21,6 +21,7 @@ import com.kreative.bitsnpicas.truetype.*;
 public class TTFBitmapFontExporter implements BitmapFontExporter {
 	private int xsize, ysize;
 	private boolean extendWinMetrics;
+	private boolean lineHeightEm;
 	
 	public TTFBitmapFontExporter() {
 		this.xsize = 100;
@@ -58,18 +59,27 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		this.extendWinMetrics = extendWinMetrics;
 	}
 	
+	// With lineHeightEm the em is the line height and not the em of the font,
+	// so that pixels are exact at font sizes that are multiples of the line height.
+	public TTFBitmapFontExporter(int xsize, int ysize, boolean extendWinMetrics, boolean lineHeightEm) {
+		this.xsize = xsize;
+		this.ysize = ysize;
+		this.extendWinMetrics = extendWinMetrics;
+		this.lineHeightEm = lineHeightEm;
+	}
+	
 	public byte[] exportFontToBytes(BitmapFont font) throws IOException {
-		return createTrueTypeTables(font, xsize, ysize, extendWinMetrics).compile();
+		return createTrueTypeTables(font, xsize, ysize, extendWinMetrics, lineHeightEm).compile();
 	}
 	
 	public void exportFontToFile(BitmapFont font, File file) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
-		fos.write(createTrueTypeTables(font, xsize, ysize, extendWinMetrics).compile());
+		fos.write(createTrueTypeTables(font, xsize, ysize, extendWinMetrics, lineHeightEm).compile());
 		fos.close();
 	}
 	
 	public void exportFontToStream(BitmapFont font, OutputStream os) throws IOException {
-		os.write(createTrueTypeTables(font, xsize, ysize, extendWinMetrics).compile());
+		os.write(createTrueTypeTables(font, xsize, ysize, extendWinMetrics, lineHeightEm).compile());
 	}
 	
 	private static final class ThingsToKeepTrackOf {
@@ -94,9 +104,12 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		private int currentLocation = 0;
 	}
 	
-	private static final TrueTypeFile createTrueTypeTables(BitmapFont bf, int xsize, int ysize, boolean extendWinMetrics) throws IOException {
+	private static final TrueTypeFile createTrueTypeTables(BitmapFont bf, int xsize, int ysize, boolean extendWinMetrics, boolean lineHeightEm) throws IOException {
 		ThingsToKeepTrackOf a = new ThingsToKeepTrackOf();
 		bf.autoFillNames();
+		int em = bf.getEmAscent() + bf.getEmDescent();
+		int lineHeight = bf.getLineAscent() + bf.getLineDescent();
+		if (lineHeightEm && lineHeight > 0) em = lineHeight;
 		
 		GlyfTable glyfTable = new GlyfTable();
 		LocaTable locaTable = new LocaTable();
@@ -121,10 +134,10 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		locaTable.add(a.currentLocation);
 		
 		TrueTypeFile ttf = new TrueTypeFile();
-		ttf.add(makeHeadTable(bf, a, ysize));
+		ttf.add(makeHeadTable(bf, a, ysize, em));
 		ttf.add(makeHheaTable(bf, a, ysize));
 		ttf.add(makeMaxpTable(a));
-		ttf.add(makeOs2Table(bf, a, xsize, ysize, extendWinMetrics));
+		ttf.add(makeOs2Table(bf, a, xsize, ysize, extendWinMetrics, em));
 		ttf.add(hmtxTable);
 		ttf.add(makeCmapTable(bf, a));
 		ttf.add(locaTable);
@@ -228,7 +241,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		return cmapTable;
 	}
 	
-	private static final HeadTable makeHeadTable(BitmapFont bf, ThingsToKeepTrackOf a, int ysize) {
+	private static final HeadTable makeHeadTable(BitmapFont bf, ThingsToKeepTrackOf a, int ysize, int em) {
 		Calendar now = new GregorianCalendar();
 		// Support reproducible builds by using SOURCE_DATE_EPOCH as the current UNIX time.
 		String sourceDateEpochEnv = System.getenv("SOURCE_DATE_EPOCH");
@@ -250,7 +263,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		HeadTable headTable = new HeadTable();
 		headTable.setFontRevisionDouble(fontVersion);
 		headTable.flags = HeadTable.FLAGS_Y_VALUE_OF_ZERO_SPECIFIES_BASELINE | HeadTable.FLAGS_MINIMUM_X_VALUE_IS_LEFT_SIDE_BEARING;
-		headTable.unitsPerEm = (bf.getEmAscent() + bf.getEmDescent()) * ysize;
+		headTable.unitsPerEm = em * ysize;
 		headTable.setDateCreatedCalendar(now);
 		headTable.setDateModifiedCalendar(now);
 		headTable.xMin = a.bbx1;
@@ -258,7 +271,7 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		headTable.xMax = a.bbx2;
 		headTable.yMax = a.bby2;
 		headTable.macStyle = bf.getMacStyle();
-		headTable.lowestRecPPEM = bf.getEmAscent() + bf.getEmDescent();
+		headTable.lowestRecPPEM = em;
 		headTable.fontDirectionHint = HeadTable.FONT_DIRECTION_HINT_MIXED;
 		headTable.indexToLocFormat = HeadTable.INDEX_TO_LOC_FORMAT_LONG;
 		return headTable;
@@ -289,20 +302,20 @@ public class TTFBitmapFontExporter implements BitmapFontExporter {
 		return maxpTable;
 	}
 	
-	private static final Os2Table makeOs2Table(BitmapFont bf, ThingsToKeepTrackOf a, int xsize, int ysize, boolean extendWinMetrics) {
+	private static final Os2Table makeOs2Table(BitmapFont bf, ThingsToKeepTrackOf a, int xsize, int ysize, boolean extendWinMetrics, int em) {
 		Collection<Integer> chars = bf.characters(false).keySet();
 		Os2Table os2Table = new Os2Table();
 		if (a.numAverages > 0) os2Table.averageCharWidth = a.averageWidth / a.numAverages;
 		os2Table.weightClass = bf.isBoldStyle() ? Os2Table.WEIGHT_CLASS_BOLD : Os2Table.WEIGHT_CLASS_MEDIUM;
 		os2Table.widthClass = bf.isCondensedStyle() ? Os2Table.WIDTH_CLASS_CONDENSED : bf.isExtendedStyle() ? Os2Table.WIDTH_CLASS_EXPANDED : Os2Table.WIDTH_CLASS_MEDIUM;
-		os2Table.subscriptXSize = (bf.getEmAscent() + bf.getEmDescent()) * xsize;
-		os2Table.subscriptYSize = (bf.getEmAscent() + bf.getEmDescent()) * ysize;
+		os2Table.subscriptXSize = em * xsize;
+		os2Table.subscriptYSize = em * ysize;
 		os2Table.subscriptXOffset = 0;
-		os2Table.subscriptYOffset = (bf.getEmAscent() + bf.getEmDescent()) * ysize / 2;
-		os2Table.superscriptXSize = (bf.getEmAscent() + bf.getEmDescent()) * xsize;
-		os2Table.superscriptYSize = (bf.getEmAscent() + bf.getEmDescent()) * ysize;
+		os2Table.subscriptYOffset = em * ysize / 2;
+		os2Table.superscriptXSize = em * xsize;
+		os2Table.superscriptYSize = em * ysize;
 		os2Table.superscriptXOffset = 0;
-		os2Table.superscriptYOffset = (bf.getEmAscent() + bf.getEmDescent()) * ysize / 2;
+		os2Table.superscriptYOffset = em * ysize / 2;
 		os2Table.strikeoutWidth = ysize;
 		os2Table.strikeoutPosition = bf.getEmAscent() * ysize / 2;
 		os2Table.panoseFamilyType = Os2Table.PANOSE_FAMILY_TYPE_TEXT_AND_DISPLAY;

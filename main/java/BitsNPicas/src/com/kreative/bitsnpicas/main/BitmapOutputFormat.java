@@ -20,7 +20,7 @@ public enum BitmapOutputFormat {
 	},
 	TTF(".ttf", "ttf", "truetype") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
-			return new TTFBitmapFontExporter(o.xSize, o.ySize, o.extendWinMetrics);
+			return new TTFBitmapFontExporter(o.xSize, o.ySize, o.extendWinMetrics, o.lineHeightEm);
 		}
 	},
 	OTB(".otb", "otb") {
