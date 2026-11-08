@@ -21,6 +21,7 @@ import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.edit.Main;
+import com.kreative.bitsnpicas.importer.FNTBitmapFontImporter;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -40,9 +41,30 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	private final BitmapExportColorPanel colorPanel;
 	private final BitmapExportPSFPanel psfPanel;
 	private final BitmapExportPlaydatePanel playdatePanel;
+	private final BitmapExportFNTPanel fntPanel;
 	private final JButton exportButton;
 	
 	public BitmapExportPanel(BitmapFont font) {
+		this(font, null);
+	}
+	
+	public BitmapExportPanel(BitmapFont font, String encodingName) {
+		// The encoding that the font is viewed in, if it is viewed in one,
+		// or else the one that a font imported from FNT came in.
+		if (encodingName == null || !EncodingList.instance().containsGlyphList(encodingName)) {
+			encodingName = null;
+			try {
+				String cs = font.getProperty(FNTBitmapFontImporter.PROP_CHARSET);
+				if (cs != null) encodingName = FNTBitmapFontImporter.getEncodingName(Integer.parseInt(cs.trim()));
+			} catch (NumberFormatException e) {
+				// No character set told.
+			}
+		}
+		final GlyphList viewedEncoding = (
+			(encodingName == null) ? null :
+			EncodingList.instance().getGlyphList(encodingName)
+		);
+		
 		this.font = font;
 		this.format = new JComboBox(BitmapExportFormat.values());
 		this.ttfPanel = new BitmapExportTTFPanel();
@@ -56,6 +78,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		this.colorPanel = new BitmapExportColorPanel();
 		this.psfPanel = new BitmapExportPSFPanel();
 		this.playdatePanel = new BitmapExportPlaydatePanel();
+		this.fntPanel = new BitmapExportFNTPanel();
 		this.exportButton = new JButton("Export");
 		
 		JPanel nonePanel = new BitmapExportLabelPanel("This format has no options.");
@@ -78,6 +101,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		formatOptionsPanel.add(colorPanel, "color");
 		formatOptionsPanel.add(psfPanel, "psf");
 		formatOptionsPanel.add(playdatePanel, "playdate");
+		formatOptionsPanel.add(fntPanel, "fnt");
 		formatOptionsPanel.add(v1Panel, "v1");
 		formatOptionsPanel.add(nonePanel, "none");
 		
@@ -107,6 +131,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 				amigaPanel.setSelectedEncoding(enc);
 				encodingPanel.setSelectedEncoding(enc);
 				u8mPanel.setSelectedEncoding(enc);
+				fntPanel.setSelectedEncoding((viewedEncoding != null) ? viewedEncoding : enc);
 				Window c = getMyContainingWindow();
 				if (c != null) c.pack();
 			}
@@ -182,6 +207,7 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 		if (f.cardName.equals("amiga")) return amigaPanel.getSelectedEncoding();
 		if (f.cardName.equals("u8m")) return u8mPanel.getSelectedEncoding();
 		if (f.cardName.equals("fontx")) return fontxPanel.getSelectedSingleByteEncoding();
+		if (f.cardName.equals("fnt")) return fntPanel.getSelectedEncoding();
 		return encodingPanel.getSelectedEncoding();
 	}
 	
@@ -267,5 +293,10 @@ public class BitmapExportPanel extends JPanel implements BitmapExportOptions {
 	@Override
 	public boolean getPlaydateSeparate() {
 		return playdatePanel.getSeparate();
+	}
+	
+	@Override
+	public int getFNTAverageWidth() {
+		return fntPanel.getAverageWidth();
 	}
 }

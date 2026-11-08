@@ -9,9 +9,21 @@ import java.io.InputStream;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontImporter;
+import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
 public class FNTBitmapFontImporter implements BitmapFontImporter {
+	// Header fields that a font has no place for are kept as its properties.
+	// The default and break characters are kept as their codes in the font.
+	public static final String PROP_CHARSET = "fnt.charSet";
+	public static final String PROP_VERT_RES = "fnt.vertRes";
+	public static final String PROP_HORIZ_RES = "fnt.horizRes";
+	public static final String PROP_FAMILY = "fnt.family";
+	public static final String PROP_AVG_WIDTH = "fnt.avgWidth";
+	public static final String PROP_DEFAULT_CHAR = "fnt.defaultChar";
+	public static final String PROP_BREAK_CHAR = "fnt.breakChar";
+	public static final String[] FAMILIES = { "DontCare", "Roman", "Swiss", "Modern", "Script", "Decorative" };
+	
 	private GlyphList encoding;
 	
 	public FNTBitmapFontImporter() {
@@ -63,26 +75,26 @@ public class FNTBitmapFontImporter implements BitmapFontImporter {
 		int type = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		if ((type & 1) != 0) throw new IOException("vector fonts are not supported");
 		
-		int points = Short.reverseBytes(in.readShort()) & 0xFFFF;
-		in.readShort(); // int vertRes = Short.reverseBytes(in.readShort()) & 0xFFFF;
-		in.readShort(); // int horizRes = Short.reverseBytes(in.readShort()) & 0xFFFF;
+		in.readShort(); // int points = Short.reverseBytes(in.readShort()) & 0xFFFF;
+		int vertRes = Short.reverseBytes(in.readShort()) & 0xFFFF;
+		int horizRes = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		int ascent = Short.reverseBytes(in.readShort()) & 0xFFFF;
-		in.readShort(); // int internalLeading = Short.reverseBytes(in.readShort()) & 0xFFFF;
+		int internalLeading = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		int externalLeading = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		int italic = in.readUnsignedByte();
 		int underline = in.readUnsignedByte();
 		int strikeOut = in.readUnsignedByte();
 		int weight = Short.reverseBytes(in.readShort()) & 0xFFFF;
-		in.readByte(); // int charSet = in.readUnsignedByte();
+		int charSet = in.readUnsignedByte();
 		int pixWidth = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		int pixHeight = Short.reverseBytes(in.readShort()) & 0xFFFF;
-		in.readByte(); // int pitchAndFamily = in.readUnsignedByte();
-		in.readShort(); // int avgWidth = Short.reverseBytes(in.readShort()) & 0xFFFF;
+		int pitchAndFamily = in.readUnsignedByte();
+		int avgWidth = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		in.readShort(); // int maxWidth = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		int firstChar = in.readUnsignedByte();
 		int lastChar = in.readUnsignedByte();
-		in.readByte(); // int defaultChar = in.readUnsignedByte();
-		in.readByte(); // int breakChar = in.readUnsignedByte();
+		int defaultChar = in.readUnsignedByte();
+		int breakChar = in.readUnsignedByte();
 		in.readShort(); // int widthBytes = Short.reverseBytes(in.readShort()) & 0xFFFF;
 		in.readInt(); // int device = Integer.reverseBytes(in.readInt());
 		int face = Integer.reverseBytes(in.readInt());
@@ -136,15 +148,32 @@ public class FNTBitmapFontImporter implements BitmapFontImporter {
 			}
 		}
 		
+		// The em is the character cell without the internal leading.
+		// (The point size is in points, not in pixels.)
+		GlyphList encoding = this.encoding;
+		if (encoding == null && charSet != 0) {
+			String encodingName = getEncodingName(charSet);
+			if (encodingName != null) encoding = EncodingList.instance().getGlyphList(encodingName);
+		}
+		
 		int descent = pixHeight - ascent;
-		int emAscent = points * ascent / pixHeight;
-		int emDescent = points - emAscent;
+		int emAscent = Math.max(ascent - internalLeading, 0);
+		int emDescent = descent;
 		String styleName = styleName(italic, underline, strikeOut, weight);
 		BitmapFont f = new BitmapFont(emAscent, emDescent, ascent, descent, 0, 0, externalLeading, pixWidth);
 		f.setName(BitmapFont.NAME_COPYRIGHT, copyright);
 		f.setName(BitmapFont.NAME_FAMILY, faceName);
 		f.setName(BitmapFont.NAME_STYLE, styleName);
 		f.setName(BitmapFont.NAME_FAMILY_AND_STYLE, faceName + " " + styleName);
+		
+		int family = pitchAndFamily >> 4;
+		f.setProperty(PROP_CHARSET, Integer.toString(charSet));
+		f.setProperty(PROP_VERT_RES, Integer.toString(vertRes));
+		f.setProperty(PROP_HORIZ_RES, Integer.toString(horizRes));
+		f.setProperty(PROP_FAMILY, (family < FAMILIES.length) ? FAMILIES[family] : Integer.toString(family));
+		f.setProperty(PROP_AVG_WIDTH, Integer.toString(avgWidth));
+		f.setProperty(PROP_DEFAULT_CHAR, Integer.toString(firstChar + defaultChar));
+		f.setProperty(PROP_BREAK_CHAR, Integer.toString(firstChar + breakChar));
 		
 		for (int i = 0; i < n-1; i++) {
 			byte[][] bitmap = new byte[geHeight[i]][geWidth[i]];
@@ -161,11 +190,46 @@ public class FNTBitmapFontImporter implements BitmapFontImporter {
 			int ch = (encoding != null) ? encoding.get(firstChar + i) : fromCP1252(firstChar + i);
 			if (ch < 0) ch = 0xF000 + firstChar + i;
 			f.putCharacter(ch, g);
+			// The default character is also the glyph of characters that the font lacks.
+			if (i == defaultChar) {
+				byte[][] copy = new byte[bitmap.length][];
+				for (int by = 0; by < bitmap.length; by++) copy[by] = bitmap[by].clone();
+				f.putNamedGlyph(".notdef", new BitmapFontGlyph(copy, 0, geWidth[i], ascent));
+			}
 		}
 		
 		f.setXHeight();
 		f.setCapHeight();
 		return f;
+	}
+	
+	public static String getEncodingName(int charSet) {
+		switch (charSet) {
+			case 0: return "windows-1252";
+			case 77: return "x-MacRoman";
+			case 161: return "windows-1253";
+			case 162: return "windows-1254";
+			case 163: return "windows-1258";
+			case 177: return "windows-1255";
+			case 178: return "windows-1256";
+			case 186: return "windows-1257";
+			case 204: return "windows-1251";
+			case 222: return "x-windows-874";
+			case 238: return "windows-1250";
+			case 255: return "IBM437";
+			default: return null;
+		}
+	}
+	
+	public static String getEncodingName(File file) throws IOException {
+		FileInputStream in = new FileInputStream(file);
+		try {
+			byte[] header = new byte[86];
+			if (in.read(header) < header.length) return null;
+			return getEncodingName(header[85] & 0xFF);
+		} finally {
+			in.close();
+		}
 	}
 	
 	private static String styleName(int italic, int underline, int strikeOut, int weight) {

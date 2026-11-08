@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,6 +24,12 @@ import com.kreative.bitsnpicas.WIBInputStream;
 import com.kreative.bitsnpicas.XMLUtility;
 
 public class KbitxBitmapFontImporter implements BitmapFontImporter {
+	// The ids of the properties that are metrics of a font; any other is kept as it is.
+	private static final List<String> METRICS = Arrays.asList(
+		"emascent", "emdescent", "lineascent", "linedescent",
+		"linegap", "xheight", "capheight", "newglyphwidth"
+	);
+	
 	@Override
 	public BitmapFont[] importFont(byte[] data) throws IOException {
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
@@ -96,6 +104,10 @@ public class KbitxBitmapFontImporter implements BitmapFontImporter {
 				if ("xHeight".equalsIgnoreCase(id) && iv != null) f.setXHeight(iv);
 				if ("capHeight".equalsIgnoreCase(id) && iv != null) f.setCapHeight(iv);
 				if ("newGlyphWidth".equalsIgnoreCase(id) && iv != null) f.setNewGlyphWidth(iv);
+				if (id != null && !METRICS.contains(id.toLowerCase())) {
+					String sv = XMLUtility.parseString(cattr, "value");
+					if (sv != null) f.setProperty(id, sv);
+				}
 			} else if (ctype.equalsIgnoreCase("name")) {
 				Integer id = XMLUtility.parseInt(cattr, "id");
 				String name = XMLUtility.parseString(cattr, "value");

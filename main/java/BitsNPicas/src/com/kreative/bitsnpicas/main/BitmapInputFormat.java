@@ -81,6 +81,17 @@ public enum BitmapInputFormat {
 			return new SRFontBitmapFontImporter();
 		}
 	},
+	PXFONT(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) {
+			return (
+				fp.hasExtension(".png") && fp.isImage() &&
+				PxfontBitmapFontImporter.canImportFont(fp.getImage(), fp.getFile().getName())
+			);
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new PxfontBitmapFontImporter(o.getEncoding());
+		}
+	},
 	HEX(BitmapFont.NAME_FAMILY) {
 		public boolean recognize(FileProxy fp) { return fp.hasExtension(".hex"); }
 		public BitmapFontImporter createImporter(BitmapInputOptions o) {

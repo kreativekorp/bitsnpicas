@@ -18,12 +18,14 @@ import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.bitsnpicas.BitmapFontGlyphTransformer;
+import com.kreative.bitsnpicas.BitmapFontImporter;
 import com.kreative.bitsnpicas.GlyphPair;
 import com.kreative.bitsnpicas.IDGenerator;
 import com.kreative.bitsnpicas.MacUtility;
 import com.kreative.bitsnpicas.PointSizeGenerator;
 import com.kreative.bitsnpicas.edit.SitelenPonaCartoucheGlyphGenerator;
 import com.kreative.bitsnpicas.edit.TimestampGlyphGenerator;
+import com.kreative.bitsnpicas.importer.ImportWarnings;
 import com.kreative.bitsnpicas.transformer.*;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
@@ -256,7 +258,8 @@ public class ConvertBitmap {
 							System.out.println(" FAILED: Unknown input format.");
 						} else {
 							if (format.macResFork) file = MacUtility.getResourceFork(file);
-							BitmapFont[] fonts = format.createImporter(o.io).importFont(file);
+							BitmapFontImporter importer = format.createImporter(o.io);
+							BitmapFont[] fonts = importer.importFont(file);
 							if (fonts == null || fonts.length == 0) {
 								System.out.println(" FAILED: No fonts found.");
 							} else {
@@ -271,6 +274,11 @@ public class ConvertBitmap {
 								}
 								if (anyDone) System.out.println(" DONE");
 								else System.out.println(" FAILED: Unknown output format.");
+								if (importer instanceof ImportWarnings) {
+									for (String warning : ((ImportWarnings)importer).getImportWarnings()) {
+										System.out.println("  WARNING: " + warning);
+									}
+								}
 							}
 						}
 					} catch (IOException e) {

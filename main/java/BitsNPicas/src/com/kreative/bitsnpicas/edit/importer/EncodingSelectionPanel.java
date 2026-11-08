@@ -15,10 +15,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.kreative.bitsnpicas.Font;
+import com.kreative.bitsnpicas.FontImporter;
 import com.kreative.bitsnpicas.edit.BitmapListFrame;
 import com.kreative.bitsnpicas.edit.GlyphListFrame;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
+import com.kreative.bitsnpicas.importer.ImportWarnings;
 import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
@@ -50,13 +52,19 @@ public class EncodingSelectionPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					GlyphList enc = (GlyphList)(encoding.getSelectedItem());
-					Font<?>[] fonts = importer.createImporter(enc).importFont(file);
+					FontImporter<?> fi = importer.createImporter(enc);
+					Font<?>[] fonts = fi.importFont(file);
 					if (fonts != null && fonts.length > 0) {
 						JFrame frame = Main.openFonts(file, null, fonts);
 						if (frame instanceof GlyphListFrame) {
 							((GlyphListFrame<?>)frame).getPanel().getModelList().setSelectedModelName(enc.getName(), true);
 						} else if (frame instanceof BitmapListFrame) {
 							((BitmapListFrame)frame).getPanel().getModelList().setSelectedModelName(enc.getName(), true);
+						}
+						if (fi instanceof ImportWarnings && !((ImportWarnings)fi).getImportWarnings().isEmpty()) {
+							StringBuffer sb = new StringBuffer("The font was opened, with these notes:");
+							for (String warning : ((ImportWarnings)fi).getImportWarnings()) sb.append("\n" + warning);
+							JOptionPane.showMessageDialog(null, sb.toString(), "Open", JOptionPane.WARNING_MESSAGE);
 						}
 					} else {
 						JOptionPane.showMessageDialog(

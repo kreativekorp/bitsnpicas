@@ -27,4 +27,5 @@ public interface BitmapExportOptions {
 	public boolean getPSFUseAllGlyphs();
 	public boolean getPSFUnicodeTable();
 	public boolean getPlaydateSeparate();
+	public int getFNTAverageWidth();
 }
