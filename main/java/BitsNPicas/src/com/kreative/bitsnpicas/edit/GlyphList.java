@@ -268,8 +268,8 @@ public class GlyphList<G extends FontGlyph> extends JComponent implements Scroll
 		int bufw = (w / columnCount) + 1;
 		BufferedImage lbuf = bufferedLabels ? new BufferedImage(bufw, LABEL_HEIGHT, BufferedImage.TYPE_INT_ARGB) : null;
 		BufferedImage gbuf = bufferedGlyphs ? new BufferedImage(bufw, cellSize, BufferedImage.TYPE_INT_ARGB) : null;
-		double fa = font.getEmAscent2D();
-		double fh = fa + font.getEmDescent2D();
+		double fa = Math.max(font.getEmAscent2D(), font.getLineAscent2D());
+		double fh = fa + Math.max(font.getEmDescent2D(), font.getLineDescent2D());
 		double scale = (fh <= 0) ? ((cellSize - 3) / 10.0) : ((cellSize - 3) / fh);
 		if (scale <= 0) scale = 1;
 		if (scale >= 1) scale = Math.floor(scale);

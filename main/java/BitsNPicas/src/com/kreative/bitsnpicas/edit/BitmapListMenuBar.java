@@ -54,7 +54,7 @@ public class BitmapListMenuBar extends JMenuBar {
 			addSeparator();
 			add(new CommonMenuItems.SaveMenuItem(sm));
 			add(new CommonMenuItems.SaveAsMenuItem(sm));
-			add(new ExportMenuItem(font));
+			add(new ExportMenuItem(frame, font));
 			addSeparator();
 			add(new ImportMenuItem(frame, gl));
 			addSeparator();
@@ -70,11 +70,18 @@ public class BitmapListMenuBar extends JMenuBar {
 	public static final class ExportMenuItem extends JMenuItem {
 		private static final long serialVersionUID = 1L;
 		public ExportMenuItem(final BitmapFont font) {
+			this(null, font);
+		}
+		public ExportMenuItem(final Frame frame, final BitmapFont font) {
 			super("Export...");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, CommonMenuItems.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new BitmapExportFrame(font).setVisible(true);
+					String encodingName = null;
+					if (frame instanceof BitmapListFrame) {
+						encodingName = ((BitmapListFrame)frame).getPanel().getModelList().getSelectedModelName();
+					}
+					new BitmapExportFrame(font, encodingName).setVisible(true);
 				}
 			});
 		}

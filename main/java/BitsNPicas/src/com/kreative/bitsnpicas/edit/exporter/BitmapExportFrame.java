@@ -9,7 +9,11 @@ public class BitmapExportFrame extends JFrame {
 	private final BitmapExportPanel panel;
 	
 	public BitmapExportFrame(BitmapFont font) {
-		this.panel = new BitmapExportPanel(font);
+		this(font, null);
+	}
+	
+	public BitmapExportFrame(BitmapFont font, String encodingName) {
+		this.panel = new BitmapExportPanel(font, encodingName);
 		setTitle("Export");
 		setContentPane(panel);
 		getRootPane().setDefaultButton(panel.getExportButton());

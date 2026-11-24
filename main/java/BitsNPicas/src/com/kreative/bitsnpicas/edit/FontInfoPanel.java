@@ -12,6 +12,7 @@ public class FontInfoPanel extends JPanel {
 	
 	private final FontInfoNamesPanel namesPanel;
 	private final FontInfoMetricsPanel metricsPanel;
+	private final FontInfoPropertiesPanel propertiesPanel;
 	
 	public FontInfoPanel() {
 		JScrollPane namesPane = new JScrollPane(
@@ -28,6 +29,8 @@ public class FontInfoPanel extends JPanel {
 		tabPane.addTab("Names", namesPanel2);
 		tabPane.addTab("Metrics", metricsPanel = new FontInfoMetricsPanel());
 		SwingUtils.setOpaque(metricsPanel, false);
+		tabPane.addTab("Properties", propertiesPanel = new FontInfoPropertiesPanel());
+		SwingUtils.setOpaque(propertiesPanel, false);
 		
 		setLayout(new BorderLayout());
 		add(tabPane, BorderLayout.CENTER);
@@ -36,10 +39,12 @@ public class FontInfoPanel extends JPanel {
 	public void readFrom(Font<?> font) {
 		namesPanel.readFrom(font);
 		metricsPanel.readFrom(font);
+		propertiesPanel.readFrom(font);
 	}
 	
 	public void writeTo(Font<?> font) {
 		namesPanel.writeTo(font);
 		metricsPanel.writeTo(font);
+		propertiesPanel.writeTo(font);
 	}
 }

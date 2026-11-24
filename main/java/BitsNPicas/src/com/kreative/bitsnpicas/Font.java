@@ -47,6 +47,7 @@ public abstract class Font<T extends FontGlyph> {
 	protected SortedMap<Integer,T> characters = new TreeMap<Integer,T>();
 	protected SortedMap<String,T> namedGlyphs = new TreeMap<String,T>();
 	protected SortedMap<GlyphPair,Integer> kernPairs = new TreeMap<GlyphPair,Integer>();
+	protected SortedMap<String,String> properties = new TreeMap<String,String>();
 	
 	public abstract int getEmAscent();
 	public abstract int getEmDescent();
@@ -156,6 +157,31 @@ public abstract class Font<T extends FontGlyph> {
 	public SortedMap<Integer,String> names(boolean copy) {
 		if (copy) return new TreeMap<Integer,String>(names);
 		return Collections.unmodifiableSortedMap(names);
+	}
+	
+	// Properties are free-form values that the font itself makes nothing of.
+	// A format keeps in them what it has and the font has no place for.
+	
+	public boolean containsProperty(String key) {
+		return properties.containsKey(key);
+	}
+	
+	public String getProperty(String key) {
+		return properties.get(key);
+	}
+	
+	public String setProperty(String key, String value) {
+		if (value == null) return properties.remove(key);
+		return properties.put(key, value);
+	}
+	
+	public String removeProperty(String key) {
+		return properties.remove(key);
+	}
+	
+	public SortedMap<String,String> properties(boolean copy) {
+		if (copy) return new TreeMap<String,String>(properties);
+		return Collections.unmodifiableSortedMap(properties);
 	}
 	
 	public boolean containsKernPair(GlyphPair gp) {

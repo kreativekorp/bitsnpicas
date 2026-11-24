@@ -115,14 +115,14 @@ public enum BitmapExportFormat {
 			return new AmigaBitmapFontExporter.ContentsFile(o.getAmigaProportional(), o.getSelectedEncoding());
 		}
 	},
-	FNT3("FNT (Windows 3.x)", ".fnt", "encoding", "CP1252") {
+	FNT3("FNT (Windows 3.x)", ".fnt", "fnt", "CP1252") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return new FNTBitmapFontExporter(3, o.getSelectedEncoding());
+			return new FNTBitmapFontExporter(3, o.getSelectedEncoding(), o.getFNTAverageWidth());
 		}
 	},
-	FNT2("FNT (Windows 2.x)", ".fnt", "encoding", "CP1252") {
+	FNT2("FNT (Windows 2.x)", ".fnt", "fnt", "CP1252") {
 		public BitmapFontExporter createExporter(BitmapExportOptions o) {
-			return new FNTBitmapFontExporter(2, o.getSelectedEncoding());
+			return new FNTBitmapFontExporter(2, o.getSelectedEncoding(), o.getFNTAverageWidth());
 		}
 	},
 	FONTX("FONTX (DOS/V)", ".fnt", "fontx") {
