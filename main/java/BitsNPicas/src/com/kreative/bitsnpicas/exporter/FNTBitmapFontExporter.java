@@ -13,6 +13,8 @@ import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.unicode.data.GlyphList;
 
 public class FNTBitmapFontExporter implements BitmapFontExporter {
+	private static final int RESOLUTION = 96;
+	
 	private int magic;
 	private GlyphList encoding;
 	
@@ -62,7 +64,9 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		// Vertical metrics.
 		int ascent = font.getLineAscent();
 		int height = ascent + font.getLineDescent();
-		int points = font.getEmAscent() + font.getEmDescent();
+		int emHeight = font.getEmAscent() + font.getEmDescent();
+		int internalLeading = (emHeight > 0 && emHeight < height) ? (height - emHeight) : 0;
+		int points = Math.max(Math.round((height - internalLeading) * 72f / RESOLUTION), 1);
 		int leading = font.getLineGap();
 		
 		// Font style.
@@ -156,6 +160,8 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			bitmaps.put(idx, data);
 		}
 		
+		if (numChars == 0) throw new IOException("no characters in the selected encoding");
+		
 		// Create notdef bitmap.
 		avgWidth /= numChars;
 		if (avgWidth < 1) avgWidth = 1;
@@ -189,9 +195,11 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			}
 		}
 		
+		// The default and break characters must be among those of the font.
+		if (breakChar < 0) breakChar = firstChar;
+		if (defaultChar < 0) defaultChar = breakChar;
+		
 		// Add absolute space bitmap.
-		if (breakChar < 0) breakChar = lastChar + 1;
-		if (defaultChar < 0) defaultChar = lastChar + 1;
 		widthBytes += rowBytes;
 		numChars++;
 		widths.put(lastChar + 1, avgWidth);
@@ -217,10 +225,10 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		for (int i = copyrightBytes.length; i < 60; i++) out.write(0);
 		out.writeShort(0); // type
 		out.writeShort(Short.reverseBytes((short)points));
-		out.writeShort(Short.reverseBytes((short)96)); // vertRes
-		out.writeShort(Short.reverseBytes((short)96)); // horizRes
+		out.writeShort(Short.reverseBytes((short)RESOLUTION)); // vertRes
+		out.writeShort(Short.reverseBytes((short)RESOLUTION)); // horizRes
 		out.writeShort(Short.reverseBytes((short)ascent));
-		out.writeShort(0); // internalLeading
+		out.writeShort(Short.reverseBytes((short)internalLeading));
 		out.writeShort(Short.reverseBytes((short)leading)); // externalLeading
 		out.writeByte(italic);
 		out.writeByte(underline);
