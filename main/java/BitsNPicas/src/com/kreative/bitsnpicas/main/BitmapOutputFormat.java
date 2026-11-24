@@ -144,6 +144,11 @@ public enum BitmapOutputFormat {
 			return new FNTBitmapFontExporter(2, o.getEncoding());
 		}
 	},
+	FON(".fon", "fon") {
+		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
+			return new FONBitmapFontExporter(o.getEncoding());
+		}
+	},
 	FONTX(".fnt", "dosv", "fontx", "fontx2") {
 		public BitmapFontExporter createExporter(BitmapOutputOptions o) {
 			if (o.fontxDoubleByte) {

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,6 +29,12 @@ import com.kreative.bitsnpicas.VectorPath;
 import com.kreative.bitsnpicas.XMLUtility;
 
 public class KpcaxVectorFontImporter implements VectorFontImporter {
+	// The ids of the properties that are metrics of a font; any other is kept as it is.
+	private static final List<String> METRICS = Arrays.asList(
+		"emascent", "emdescent", "lineascent", "linedescent",
+		"linegap", "xheight", "capheight", "newglyphwidth"
+	);
+	
 	@Override
 	public VectorFont[] importFont(byte[] data) throws IOException {
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
@@ -102,6 +109,10 @@ public class KpcaxVectorFontImporter implements VectorFontImporter {
 				if ("xHeight".equalsIgnoreCase(id) && dv != null) f.setXHeight2D(dv);
 				if ("capHeight".equalsIgnoreCase(id) && dv != null) f.setCapHeight2D(dv);
 				if ("newGlyphWidth".equalsIgnoreCase(id) && dv != null) f.setNewGlyphWidth2D(dv);
+				if (id != null && !METRICS.contains(id.toLowerCase())) {
+					String sv = XMLUtility.parseString(cattr, "value");
+					if (sv != null) f.setProperty(id, sv);
+				}
 			} else if (ctype.equalsIgnoreCase("name")) {
 				Integer id = XMLUtility.parseInt(cattr, "id");
 				String name = XMLUtility.parseString(cattr, "value");

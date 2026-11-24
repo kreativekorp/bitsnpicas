@@ -10,11 +10,16 @@ import java.util.HashMap;
 import com.kreative.bitsnpicas.BitmapFont;
 import com.kreative.bitsnpicas.BitmapFontExporter;
 import com.kreative.bitsnpicas.BitmapFontGlyph;
+import com.kreative.bitsnpicas.importer.FNTBitmapFontImporter;
+import com.kreative.unicode.data.EncodingList;
 import com.kreative.unicode.data.GlyphList;
 
 public class FNTBitmapFontExporter implements BitmapFontExporter {
+	private static final int RESOLUTION = 96;
+	
 	private int magic;
 	private GlyphList encoding;
+	private int averageWidth;
 	
 	public FNTBitmapFontExporter() {
 		this.magic = 3;
@@ -36,6 +41,11 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		if (magic < 1 || magic > 3) throw new IllegalArgumentException("bad magic number");
 		this.magic = magic;
 		this.encoding = encoding;
+	}
+	
+	public FNTBitmapFontExporter(int magic, GlyphList encoding, int averageWidth) {
+		this(magic, encoding);
+		this.averageWidth = averageWidth;
 	}
 	
 	@Override
@@ -62,7 +72,11 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		// Vertical metrics.
 		int ascent = font.getLineAscent();
 		int height = ascent + font.getLineDescent();
-		int points = font.getEmAscent() + font.getEmDescent();
+		int emHeight = font.getEmAscent() + font.getEmDescent();
+		int internalLeading = (emHeight > 0 && emHeight < height) ? (height - emHeight) : 0;
+		int vertRes = intProperty(font, FNTBitmapFontImporter.PROP_VERT_RES, 1, 0xFFFF, RESOLUTION);
+		int horizRes = intProperty(font, FNTBitmapFontImporter.PROP_HORIZ_RES, 1, 0xFFFF, RESOLUTION);
+		int points = Math.max(Math.round((height - internalLeading) * 72f / vertRes), 1);
 		int leading = font.getLineGap();
 		
 		// Font style.
@@ -77,7 +91,13 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			400
 		);
 		
-		// Character set.
+		// Character set. A font imported from FNT tells its own when no encoding is given.
+		GlyphList encoding = this.encoding;
+		if (encoding == null) {
+			int cs = intProperty(font, FNTBitmapFontImporter.PROP_CHARSET, 1, 255, 0);
+			String name = (cs != 0) ? FNTBitmapFontImporter.getEncodingName(cs) : null;
+			if (name != null) encoding = EncodingList.instance().getGlyphList(name);
+		}
 		String encName = (encoding != null) ? encoding.getName().toUpperCase() : "WINDOWS-1252";
 		int charSet = (
 			encName.equals("WINDOWS-1252") ? 0 :
@@ -135,6 +155,7 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			avgWidth += width;
 			numChars++;
 			if (ch == 32) breakChar = idx;
+			if (idx == 0x7F) defaultChar = idx; // by convention of Windows fonts
 			if (firstChar < 0) firstChar = idx;
 			lastChar = idx;
 			int rowBytes = (width + 7) / 8;
@@ -155,6 +176,8 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			widths.put(idx, width);
 			bitmaps.put(idx, data);
 		}
+		
+		if (numChars == 0) throw new IOException("no characters in the selected encoding");
 		
 		// Create notdef bitmap.
 		avgWidth /= numChars;
@@ -189,9 +212,17 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			}
 		}
 		
+		// The default and break characters must be among those of the font.
+		if (breakChar < 0) breakChar = firstChar;
+		if (defaultChar < 0) defaultChar = breakChar;
+		
+		// A font imported from FNT tells its own, and its family and average width.
+		breakChar = intProperty(font, FNTBitmapFontImporter.PROP_BREAK_CHAR, firstChar, lastChar, breakChar);
+		defaultChar = intProperty(font, FNTBitmapFontImporter.PROP_DEFAULT_CHAR, firstChar, lastChar, defaultChar);
+		int family = familyProperty(font, isMono ? 3 : 0);
+		int headerAvgWidth = (averageWidth > 0) ? averageWidth : intProperty(font, FNTBitmapFontImporter.PROP_AVG_WIDTH, 1, 0xFFFF, avgWidth);
+		
 		// Add absolute space bitmap.
-		if (breakChar < 0) breakChar = lastChar + 1;
-		if (defaultChar < 0) defaultChar = lastChar + 1;
 		widthBytes += rowBytes;
 		numChars++;
 		widths.put(lastChar + 1, avgWidth);
@@ -217,10 +248,10 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		for (int i = copyrightBytes.length; i < 60; i++) out.write(0);
 		out.writeShort(0); // type
 		out.writeShort(Short.reverseBytes((short)points));
-		out.writeShort(Short.reverseBytes((short)96)); // vertRes
-		out.writeShort(Short.reverseBytes((short)96)); // horizRes
+		out.writeShort(Short.reverseBytes((short)vertRes));
+		out.writeShort(Short.reverseBytes((short)horizRes));
 		out.writeShort(Short.reverseBytes((short)ascent));
-		out.writeShort(0); // internalLeading
+		out.writeShort(Short.reverseBytes((short)internalLeading));
 		out.writeShort(Short.reverseBytes((short)leading)); // externalLeading
 		out.writeByte(italic);
 		out.writeByte(underline);
@@ -229,8 +260,8 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		out.writeByte(charSet);
 		out.writeShort(Short.reverseBytes((short)(isMono ? avgWidth : 0))); // pixWidth
 		out.writeShort(Short.reverseBytes((short)height)); // pixHeight
-		out.writeByte(isMono ? 0 : 1); // pitchAndFamily
-		out.writeShort(Short.reverseBytes((short)avgWidth));
+		out.writeByte((family << 4) | (isMono ? 0 : 1)); // pitchAndFamily (fixed pitch goes with FF_MODERN)
+		out.writeShort(Short.reverseBytes((short)headerAvgWidth));
 		out.writeShort(Short.reverseBytes((short)maxWidth));
 		out.writeByte(firstChar);
 		out.writeByte(lastChar);
@@ -265,6 +296,26 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		// faceName
 		out.write(faceBytes);
 		out.write(0);
+	}
+	
+	private static int intProperty(BitmapFont font, String key, int min, int max, int def) {
+		String value = font.getProperty(key);
+		if (value == null) return def;
+		try {
+			int v = Integer.parseInt(value.trim());
+			return (v >= min && v <= max) ? v : def;
+		} catch (NumberFormatException e) {
+			return def;
+		}
+	}
+	
+	private static int familyProperty(BitmapFont font, int def) {
+		String value = font.getProperty(FNTBitmapFontImporter.PROP_FAMILY);
+		if (value == null) return def;
+		for (int i = 0; i < FNTBitmapFontImporter.FAMILIES.length; i++) {
+			if (FNTBitmapFontImporter.FAMILIES[i].equalsIgnoreCase(value.trim())) return i;
+		}
+		return intProperty(font, FNTBitmapFontImporter.PROP_FAMILY, 0, 15, def);
 	}
 	
 	private static int fromCP1252(int ch) {

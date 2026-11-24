@@ -126,6 +126,14 @@ public enum BitmapInputFormat {
 			return new FNTBitmapFontImporter(o.getEncoding());
 		}
 	},
+	FON(BitmapFont.NAME_FAMILY_AND_STYLE) {
+		public boolean recognize(FileProxy fp) {
+			return fp.hasExtension(".fon") && fp.startsWith('M', 'Z');
+		}
+		public BitmapFontImporter createImporter(BitmapInputOptions o) {
+			return new FONBitmapFontImporter(o.getEncoding());
+		}
+	},
 	FONTX(BitmapFont.NAME_FAMILY) {
 		public boolean recognize(FileProxy fp) {
 			return fp.hasExtension(".ftx", ".fnt") && fp.startsWith('F');

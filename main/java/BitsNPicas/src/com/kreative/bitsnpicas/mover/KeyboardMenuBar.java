@@ -20,6 +20,7 @@ public class KeyboardMenuBar extends JMenuBar {
 			super("File");
 			add(new CommonMenuItems.NewMenu());
 			add(new CommonMenuItems.OpenMenuItem());
+			add(new CommonMenuItems.WindowsFONMenu());
 			add(new CommonMenuItems.CloseMenuItem(window));
 			if (!CommonMenuItems.IS_MAC_OS) {
 				addSeparator();
