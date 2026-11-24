@@ -13,8 +13,11 @@ import com.kreative.bitsnpicas.BitmapFontGlyph;
 import com.kreative.unicode.data.GlyphList;
 
 public class FNTBitmapFontExporter implements BitmapFontExporter {
+	private static final int RESOLUTION = 96;
+	
 	private int magic;
 	private GlyphList encoding;
+	private int averageWidth;
 	
 	public FNTBitmapFontExporter() {
 		this.magic = 3;
@@ -36,6 +39,11 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		if (magic < 1 || magic > 3) throw new IllegalArgumentException("bad magic number");
 		this.magic = magic;
 		this.encoding = encoding;
+	}
+	
+	public FNTBitmapFontExporter(int magic, GlyphList encoding, int averageWidth) {
+		this(magic, encoding);
+		this.averageWidth = averageWidth;
 	}
 	
 	@Override
@@ -62,7 +70,9 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		// Vertical metrics.
 		int ascent = font.getLineAscent();
 		int height = ascent + font.getLineDescent();
-		int points = font.getEmAscent() + font.getEmDescent();
+		int emHeight = font.getEmAscent() + font.getEmDescent();
+		int internalLeading = (emHeight > 0 && emHeight < height) ? (height - emHeight) : 0;
+		int points = Math.max(Math.round((height - internalLeading) * 72f / RESOLUTION), 1);
 		int leading = font.getLineGap();
 		
 		// Font style.
@@ -135,6 +145,7 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			avgWidth += width;
 			numChars++;
 			if (ch == 32) breakChar = idx;
+			if (idx == 0x7F) defaultChar = idx; // by convention of Windows fonts
 			if (firstChar < 0) firstChar = idx;
 			lastChar = idx;
 			int rowBytes = (width + 7) / 8;
@@ -155,6 +166,8 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			widths.put(idx, width);
 			bitmaps.put(idx, data);
 		}
+		
+		if (numChars == 0) throw new IOException("no characters in the selected encoding");
 		
 		// Create notdef bitmap.
 		avgWidth /= numChars;
@@ -189,9 +202,11 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 			}
 		}
 		
+		// The default and break characters must be among those of the font.
+		if (breakChar < 0) breakChar = firstChar;
+		if (defaultChar < 0) defaultChar = breakChar;
+		
 		// Add absolute space bitmap.
-		if (breakChar < 0) breakChar = lastChar + 1;
-		if (defaultChar < 0) defaultChar = lastChar + 1;
 		widthBytes += rowBytes;
 		numChars++;
 		widths.put(lastChar + 1, avgWidth);
@@ -217,10 +232,10 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		for (int i = copyrightBytes.length; i < 60; i++) out.write(0);
 		out.writeShort(0); // type
 		out.writeShort(Short.reverseBytes((short)points));
-		out.writeShort(Short.reverseBytes((short)96)); // vertRes
-		out.writeShort(Short.reverseBytes((short)96)); // horizRes
+		out.writeShort(Short.reverseBytes((short)RESOLUTION)); // vertRes
+		out.writeShort(Short.reverseBytes((short)RESOLUTION)); // horizRes
 		out.writeShort(Short.reverseBytes((short)ascent));
-		out.writeShort(0); // internalLeading
+		out.writeShort(Short.reverseBytes((short)internalLeading));
 		out.writeShort(Short.reverseBytes((short)leading)); // externalLeading
 		out.writeByte(italic);
 		out.writeByte(underline);
@@ -229,8 +244,8 @@ public class FNTBitmapFontExporter implements BitmapFontExporter {
 		out.writeByte(charSet);
 		out.writeShort(Short.reverseBytes((short)(isMono ? avgWidth : 0))); // pixWidth
 		out.writeShort(Short.reverseBytes((short)height)); // pixHeight
-		out.writeByte(isMono ? 0 : 1); // pitchAndFamily
-		out.writeShort(Short.reverseBytes((short)avgWidth));
+		out.writeByte(isMono ? 0x30 : 0x01); // pitchAndFamily (fixed pitch goes with FF_MODERN)
+		out.writeShort(Short.reverseBytes((short)((averageWidth > 0) ? averageWidth : avgWidth)));
 		out.writeShort(Short.reverseBytes((short)maxWidth));
 		out.writeByte(firstChar);
 		out.writeByte(lastChar);
