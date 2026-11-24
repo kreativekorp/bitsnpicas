@@ -31,6 +31,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.SwingUtilities;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.importer.BinaryBitmapFontImporter;
 import com.kreative.unicode.data.NameDatabase;
@@ -203,7 +204,7 @@ public class BinaryBitmapFontImporterPanel extends JPanel {
 		
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.openFonts(file, null, importer.importFont(data));
+				if (Main.openFonts(file, null, importer.importFont(data)) != null) SwingUtilities.getWindowAncestor(BinaryBitmapFontImporterPanel.this).dispose();
 			}
 		});
 	}

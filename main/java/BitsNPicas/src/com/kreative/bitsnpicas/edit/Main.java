@@ -121,7 +121,7 @@ public class Main {
 			return null;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(
-				null, "An error occurred while reading the selected file.",
+				null, "An error occurred while reading the selected file.\n" + e,
 				"Open", JOptionPane.ERROR_MESSAGE
 			);
 			return null;

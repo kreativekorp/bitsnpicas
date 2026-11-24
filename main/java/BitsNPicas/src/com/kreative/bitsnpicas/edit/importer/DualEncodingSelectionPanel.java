@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import com.kreative.bitsnpicas.Font;
 import com.kreative.bitsnpicas.edit.Main;
 import com.kreative.bitsnpicas.edit.glmlicon.GLMLListCellRenderer;
@@ -68,7 +69,7 @@ public class DualEncodingSelectionPanel extends JPanel {
 					String dbenc = (String)(dbe.getSelectedItem());
 					Font<?>[] fonts = importer.createImporter(sbenc, dbenc).importFont(file);
 					if (fonts != null && fonts.length > 0) {
-						Main.openFonts(file, null, fonts);
+						if (Main.openFonts(file, null, fonts) != null) SwingUtilities.getWindowAncestor(DualEncodingSelectionPanel.this).dispose();
 					} else {
 						JOptionPane.showMessageDialog(
 							null, "The selected file did not contain any fonts.",
@@ -77,7 +78,7 @@ public class DualEncodingSelectionPanel extends JPanel {
 					}
 				} catch (IOException ioe) {
 					JOptionPane.showMessageDialog(
-						null, "An error occurred while reading the selected file.",
+						null, "An error occurred while reading the selected file.\n" + ioe,
 						"Open", JOptionPane.ERROR_MESSAGE
 					);
 				}
