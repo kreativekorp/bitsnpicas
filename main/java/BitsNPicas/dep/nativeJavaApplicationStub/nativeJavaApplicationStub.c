@@ -177,10 +177,8 @@ static int push_arg(const char *s) {
 	return 0;
 }
 
-static void free_args(void) {
-	for (int i = 0; i < gArgcOwned; i++) free(gArgvOwned[i]);
-	gArgcOwned = 0;
-}
+/* gArgvOwned is intentionally not freed: JLI may re-enter main() and still
+ * reads those strings for the process lifetime. */
 
 static char *plist_string(CFDictionaryRef dict, CFStringRef key) {
 	CFTypeRef v = CFDictionaryGetValue(dict, key);
