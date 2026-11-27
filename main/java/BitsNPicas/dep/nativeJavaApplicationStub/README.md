@@ -49,6 +49,7 @@ Requires **Clang + macOS SDK** (needed for `.app` targets / `make all` on Mac). 
 ## Notes
 
 - Still requires a locally installed JDK (not a bundled JRE).
+- **JDK discovery (Finder launches):** does **not** require `JAVA_HOME`. Order: `JAVA_HOME` → `/usr/libexec/java_home -a <native> -F` → `java_home -F` → exact `-v` only when plist asks for an exact version → Homebrew / `/Library/Java` scan. Avoids `java_home -F -v '1.8+'`, which fails on recent macOS with “supports (null)” even when JDKs are installed.
 - `JLI_Launch` is a JDK-internal symbol; probed at `lib/libjli.dylib`, `lib/jli/libjli.dylib`, `jre/lib/jli/libjli.dylib`, and `../MacOS/libjli.dylib`.
 - Pre-Catalina apps keep `universalJavaApplicationStub-Pre10.15` (bash).
 

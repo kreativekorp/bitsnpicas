@@ -53,6 +53,8 @@ static char gUserHome[PATH_MAX];
 
 static char *gArgvOwned[MAX_ARGS];
 static int gArgcOwned = 0;
+/* Set after first successful argv build; macOS JLI may re-enter main() in-process. */
+static int gArgsReady = 0;
 
 static void die_alert(const char *title, const char *message, int code) {
 	CFStringRef t = CFStringCreateWithCString(NULL, title ? title : "Error", kCFStringEncodingUTF8);
@@ -275,63 +277,125 @@ static int native_arch_name(char *buf, size_t buflen) {
 	return 0;
 }
 
-/* Map plist JVMVersion like "1.5+" to a java_home -v filter. */
-static void jvm_version_filter(const char *jvmVersion, char *out, size_t outsz) {
-	out[0] = '\0';
-	if (!jvmVersion || !*jvmVersion) {
-		snprintf(out, outsz, "1.8+");
-		return;
+/*
+ * On recent macOS, `java_home -F -v '1.8+'` (and many `N+` filters) fails with
+ * "supports (null)" even when JDKs are installed. Prefer discovery *without*
+ * -v, then optional exact -v, then filesystem scan.
+ */
+static int accept_java_home(const char *home, char *javaHome, size_t homeSz, char *javaBin, size_t binSz) {
+	if (!home || !home[0]) return -1;
+	char resolved[PATH_MAX];
+	if (realpath(home, resolved)) home = resolved;
+	snprintf(javaBin, binSz, "%s/bin/java", home);
+	if (!path_is_exec(javaBin)) return -1;
+	strncpy(javaHome, home, homeSz - 1);
+	javaHome[homeSz - 1] = '\0';
+	return 0;
+}
+
+/* Exact version request (e.g. "17") — not a floor like "1.5+" / "17+". */
+static int is_exact_jvm_version(const char *jvmVersion) {
+	if (!jvmVersion || !jvmVersion[0]) return 0;
+	if (strchr(jvmVersion, '+') || strchr(jvmVersion, '*')) return 0;
+	return 1;
+}
+
+static int scan_jvm_homes(char *javaHome, size_t homeSz, char *javaBin, size_t binSz) {
+	const char *globs[] = {
+		"/Library/Java/JavaVirtualMachines/*/Contents/Home",
+		"/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home",
+		"/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home",
+		"/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home",
+		"/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home",
+		"/usr/local/opt/openjdk/libexec/openjdk.jdk/Contents/Home",
+		NULL
+	};
+	/* Prefer native-arch homes from java_home -X when possible is already tried.
+	 * Here: check fixed Homebrew opt links, then JVMs directory via /bin/ls. */
+	for (int i = 0; globs[i]; i++) {
+		if (strchr(globs[i], '*')) continue;
+		if (accept_java_home(globs[i], javaHome, homeSz, javaBin, binSz) == 0) return 0;
 	}
-	/* Pass through simple forms; treat 1.5+ as 1.8+ for modern macOS. */
-	if (strcmp(jvmVersion, "1.5+") == 0 || strcmp(jvmVersion, "1.6+") == 0 ||
-	    strcmp(jvmVersion, "1.7+") == 0) {
-		snprintf(out, outsz, "1.8+");
-		return;
+
+	FILE *fp = popen("/bin/ls -1 /Library/Java/JavaVirtualMachines 2>/dev/null", "r");
+	if (!fp) return -1;
+	char name[256];
+	char best[PATH_MAX];
+	best[0] = '\0';
+	while (fgets(name, sizeof(name), fp)) {
+		size_t n = strlen(name);
+		while (n > 0 && (name[n - 1] == '\n' || name[n - 1] == '\r')) name[--n] = '\0';
+		if (!n) continue;
+		char home[PATH_MAX];
+		snprintf(home, sizeof(home), "/Library/Java/JavaVirtualMachines/%s/Contents/Home", name);
+		char bin[PATH_MAX];
+		snprintf(bin, sizeof(bin), "%s/bin/java", home);
+		if (path_is_exec(bin)) {
+			/* Keep last listing entry as a candidate; prefer later (often newer). */
+			strncpy(best, home, sizeof(best) - 1);
+			best[sizeof(best) - 1] = '\0';
+		}
 	}
-	strncpy(out, jvmVersion, outsz - 1);
-	out[outsz - 1] = '\0';
+	pclose(fp);
+	if (best[0] && accept_java_home(best, javaHome, homeSz, javaBin, binSz) == 0) return 0;
+	return -1;
 }
 
 static int find_java_home(const char *jvmVersion, char *javaHome, size_t homeSz, char *javaBin, size_t binSz) {
 	const char *envHome = getenv("JAVA_HOME");
-	if (envHome && envHome[0]) {
-		snprintf(javaBin, binSz, "%s/bin/java", envHome);
-		if (path_is_exec(javaBin)) {
-			strncpy(javaHome, envHome, homeSz - 1);
-			javaHome[homeSz - 1] = '\0';
-			return 0;
-		}
+	if (envHome && envHome[0] &&
+	    accept_java_home(envHome, javaHome, homeSz, javaBin, binSz) == 0) {
+		return 0;
 	}
 
-	char ver[64];
-	jvm_version_filter(jvmVersion, ver, sizeof(ver));
 	char arch[32];
 	native_arch_name(arch, sizeof(arch));
-
 	char out[PATH_MAX];
-	char *argvArch[] = {
-		"/usr/libexec/java_home", "-a", arch, "-F", "-v", ver, NULL
-	};
-	if (run_cmd_capture(argvArch, out, sizeof(out)) == 0 && out[0]) {
-		snprintf(javaBin, binSz, "%s/bin/java", out);
-		if (path_is_exec(javaBin)) {
-			strncpy(javaHome, out, homeSz - 1);
-			javaHome[homeSz - 1] = '\0';
+
+	/* 1) Native arch, no -v (Finder-safe on modern macOS). */
+	{
+		char *argvArch[] = {
+			"/usr/libexec/java_home", "-a", arch, "-F", NULL
+		};
+		if (run_cmd_capture(argvArch, out, sizeof(out)) == 0 &&
+		    accept_java_home(out, javaHome, homeSz, javaBin, binSz) == 0) {
 			return 0;
 		}
 	}
 
-	char *argvAny[] = {
-		"/usr/libexec/java_home", "-F", "-v", ver, NULL
-	};
-	if (run_cmd_capture(argvAny, out, sizeof(out)) == 0 && out[0]) {
-		snprintf(javaBin, binSz, "%s/bin/java", out);
-		if (path_is_exec(javaBin)) {
-			strncpy(javaHome, out, homeSz - 1);
-			javaHome[homeSz - 1] = '\0';
+	/* 2) Any arch, no -v. */
+	{
+		char *argvAny[] = {
+			"/usr/libexec/java_home", "-F", NULL
+		};
+		if (run_cmd_capture(argvAny, out, sizeof(out)) == 0 &&
+		    accept_java_home(out, javaHome, homeSz, javaBin, binSz) == 0) {
 			return 0;
 		}
 	}
+
+	/* 3) Exact -v only (avoid broken 'N+' / '1.8+' filters with -F). */
+	if (is_exact_jvm_version(jvmVersion)) {
+		char *argvVerArch[] = {
+			"/usr/libexec/java_home", "-a", arch, "-F", "-v", (char *)jvmVersion, NULL
+		};
+		if (run_cmd_capture(argvVerArch, out, sizeof(out)) == 0 &&
+		    accept_java_home(out, javaHome, homeSz, javaBin, binSz) == 0) {
+			return 0;
+		}
+		char *argvVer[] = {
+			"/usr/libexec/java_home", "-F", "-v", (char *)jvmVersion, NULL
+		};
+		if (run_cmd_capture(argvVer, out, sizeof(out)) == 0 &&
+		    accept_java_home(out, javaHome, homeSz, javaBin, binSz) == 0) {
+			return 0;
+		}
+	}
+
+	/* 4) Filesystem fallbacks (Homebrew opt links + /Library/Java/...). */
+	if (scan_jvm_homes(javaHome, homeSz, javaBin, binSz) == 0) return 0;
+
+	(void)jvmVersion; /* floor requirements like 1.5+ mean "any installed JDK". */
 	return -1;
 }
 
@@ -397,6 +461,30 @@ static void strip_psn_and_collect(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
+	/*
+	 * On macOS, JLI_Launch may re-enter main() via apple_main in the same
+	 * process. Build argv only once — freeing/rebuilding on re-entry races
+	 * with the first JLI_Launch still using those strings (KeyEdit then sees
+	 * garbage argv and prints CLI usage).
+	 */
+	if (gArgsReady) {
+		char javaHome[PATH_MAX];
+		char javaBin[PATH_MAX];
+		if (find_java_home(NULL, javaHome, sizeof(javaHome), javaBin, sizeof(javaBin)) != 0) {
+			die_alert("Error", "No suitable Java Runtime was found.", EXIT_NO_JAVA);
+		}
+		setenv("CFProcessPath", gExePath, 1);
+		setenv("JAVA_HOME", javaHome, 1);
+		int jliRc = 0;
+		if (try_jli_launch(javaHome, NULL, &jliRc) == 0) return jliRc;
+		char *execArgv[MAX_ARGS];
+		execArgv[0] = javaBin;
+		for (int i = 0; i < gArgcOwned; i++) execArgv[i + 1] = gArgvOwned[i];
+		execArgv[gArgcOwned + 1] = NULL;
+		execv(javaBin, execArgv);
+		die_alert("Error", "Failed to start Java on re-entry.", EXIT_NO_JAVA);
+	}
+
 	if (resolve_paths() != 0) {
 		die_alert("Error", "Could not resolve application bundle path.", EXIT_INTERNAL);
 	}
@@ -501,10 +589,13 @@ int main(int argc, char **argv) {
 	setenv("CFProcessPath", gExePath, 1);
 	setenv("JAVA_HOME", javaHome, 1);
 
+	/* Mark argv stable before JLI_Launch — it may re-enter main() in-process. */
+	gArgsReady = 1;
+
 	/* Prefer in-process JLI_Launch for TCC / odoc identity. */
 	int jliRc = 0;
 	if (try_jli_launch(javaHome, bundleName, &jliRc) == 0) {
-		free_args();
+		/* Do not free gArgvOwned: re-entered main() still needs those strings. */
 		free(bundleName); free(iconFile); free(mainClass); free(classPathRaw);
 		free(vmOptions); free(workingDirRaw); free(jvmVersion);
 		free(classPath); free(workingDir);
