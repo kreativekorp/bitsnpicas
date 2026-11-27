@@ -21,6 +21,9 @@ clean:
 	rm -rf KeyEdit*.tgz
 	rm -rf KeyEdit*.app
 	rm -rf KeyEdit*.zip
+	rm -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
 
 eclipseclean:
 	rm -rf BitsNPicas*.jar
@@ -35,6 +38,27 @@ eclipseclean:
 	rm -rf KeyEdit*.tgz
 	rm -rf KeyEdit*.app
 	rm -rf KeyEdit*.zip
+	rm -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
+
+# Built binary lives inside the source dir (cannot share the path name with the directory).
+dep/nativeJavaApplicationStub/nativeJavaApplicationStub: dep/nativeJavaApplicationStub/nativeJavaApplicationStub.c
+	clang -O2 -target x86_64-apple-macos10.15 \
+		-framework CoreFoundation \
+		-o dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub.c
+	clang -O2 -target arm64-apple-macos11.0 \
+		-framework CoreFoundation \
+		-o dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64 \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub.c
+	lipo -create \
+		-output dep/nativeJavaApplicationStub/nativeJavaApplicationStub \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
+	rm -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
+	chmod +x dep/nativeJavaApplicationStub/nativeJavaApplicationStub
 
 bin: src
 	mkdir -p bin
@@ -66,22 +90,22 @@ BitsNPicas-Pre10.15.app: dep BitsNPicas.jar
 	cp -f dep/*.jar BitsNPicas-Pre10.15.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas-Pre10.15.app/Contents/Resources/Java
 
-BitsNPicas-MacOS10.15.app: dep BitsNPicas.jar
+BitsNPicas-MacOS10.15.app: dep dep/nativeJavaApplicationStub/nativeJavaApplicationStub BitsNPicas.jar
 	mkdir -p BitsNPicas-MacOS10.15.app/Contents/MacOS
 	mkdir -p BitsNPicas-MacOS10.15.app/Contents/Resources/Java
 	cp -f dep/PkgInfo BitsNPicas-MacOS10.15.app/Contents
 	cp -f dep/Info.plist BitsNPicas-MacOS10.15.app/Contents
-	cp -f dep/universalJavaApplicationStub-MacOS10.15 BitsNPicas-MacOS10.15.app/Contents/MacOS/BitsNPicas
+	cp -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub BitsNPicas-MacOS10.15.app/Contents/MacOS/BitsNPicas
 	cp -f dep/kbnp*.icns dep/dmov*.icns dep/movr*.icns BitsNPicas-MacOS10.15.app/Contents/Resources
 	cp -f dep/*.jar BitsNPicas-MacOS10.15.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas-MacOS10.15.app/Contents/Resources/Java
 
-BitsNPicas-MacOS11.0.app: dep BitsNPicas.jar
+BitsNPicas-MacOS11.0.app: dep dep/nativeJavaApplicationStub/nativeJavaApplicationStub BitsNPicas.jar
 	mkdir -p BitsNPicas-MacOS11.0.app/Contents/MacOS
 	mkdir -p BitsNPicas-MacOS11.0.app/Contents/Resources/Java
 	cp -f dep/PkgInfo BitsNPicas-MacOS11.0.app/Contents
 	cp -f dep/Info.plist BitsNPicas-MacOS11.0.app/Contents
-	cp -f dep/universalJavaApplicationStub-MacOS11.0 BitsNPicas-MacOS11.0.app/Contents/MacOS/BitsNPicas
+	cp -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub BitsNPicas-MacOS11.0.app/Contents/MacOS/BitsNPicas
 	cp -f dep/kbnp*.icns dep/dmov*.icns dep/movr*.icns BitsNPicas-MacOS11.0.app/Contents/Resources
 	cp -f dep/*.jar BitsNPicas-MacOS11.0.app/Contents/Resources/Java
 	cp -f BitsNPicas.jar BitsNPicas-MacOS11.0.app/Contents/Resources/Java
@@ -121,22 +145,22 @@ MapEdit-Pre10.15.app: dep MapEdit.jar
 	cp -f dep/ual.jar MapEdit-Pre10.15.app/Contents/Resources/Java
 	cp -f MapEdit.jar MapEdit-Pre10.15.app/Contents/Resources/Java
 
-MapEdit-MacOS10.15.app: dep MapEdit.jar
+MapEdit-MacOS10.15.app: dep dep/nativeJavaApplicationStub/nativeJavaApplicationStub MapEdit.jar
 	mkdir -p MapEdit-MacOS10.15.app/Contents/MacOS
 	mkdir -p MapEdit-MacOS10.15.app/Contents/Resources/Java
 	cp -f dep/PkgInfo-ME MapEdit-MacOS10.15.app/Contents/PkgInfo
 	cp -f dep/Info-ME.plist MapEdit-MacOS10.15.app/Contents/Info.plist
-	cp -f dep/universalJavaApplicationStub-MacOS10.15 MapEdit-MacOS10.15.app/Contents/MacOS/MapEdit
+	cp -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub MapEdit-MacOS10.15.app/Contents/MacOS/MapEdit
 	cp -f dep/mapedit*.icns MapEdit-MacOS10.15.app/Contents/Resources
 	cp -f dep/ual.jar MapEdit-MacOS10.15.app/Contents/Resources/Java
 	cp -f MapEdit.jar MapEdit-MacOS10.15.app/Contents/Resources/Java
 
-MapEdit-MacOS11.0.app: dep MapEdit.jar
+MapEdit-MacOS11.0.app: dep dep/nativeJavaApplicationStub/nativeJavaApplicationStub MapEdit.jar
 	mkdir -p MapEdit-MacOS11.0.app/Contents/MacOS
 	mkdir -p MapEdit-MacOS11.0.app/Contents/Resources/Java
 	cp -f dep/PkgInfo-ME MapEdit-MacOS11.0.app/Contents/PkgInfo
 	cp -f dep/Info-ME.plist MapEdit-MacOS11.0.app/Contents/Info.plist
-	cp -f dep/universalJavaApplicationStub-MacOS11.0 MapEdit-MacOS11.0.app/Contents/MacOS/MapEdit
+	cp -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub MapEdit-MacOS11.0.app/Contents/MacOS/MapEdit
 	cp -f dep/mapedit*.icns MapEdit-MacOS11.0.app/Contents/Resources
 	cp -f dep/ual.jar MapEdit-MacOS11.0.app/Contents/Resources/Java
 	cp -f MapEdit.jar MapEdit-MacOS11.0.app/Contents/Resources/Java
@@ -176,22 +200,22 @@ KeyEdit-Pre10.15.app: dep KeyEdit.jar
 	cp -f dep/ual.jar KeyEdit-Pre10.15.app/Contents/Resources/Java
 	cp -f KeyEdit.jar KeyEdit-Pre10.15.app/Contents/Resources/Java
 
-KeyEdit-MacOS10.15.app: dep KeyEdit.jar
+KeyEdit-MacOS10.15.app: dep dep/nativeJavaApplicationStub/nativeJavaApplicationStub KeyEdit.jar
 	mkdir -p KeyEdit-MacOS10.15.app/Contents/MacOS
 	mkdir -p KeyEdit-MacOS10.15.app/Contents/Resources/Java
 	cp -f dep/PkgInfo-KE KeyEdit-MacOS10.15.app/Contents/PkgInfo
 	cp -f dep/Info-KE.plist KeyEdit-MacOS10.15.app/Contents/Info.plist
-	cp -f dep/universalJavaApplicationStub-MacOS10.15 KeyEdit-MacOS10.15.app/Contents/MacOS/KeyEdit
+	cp -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub KeyEdit-MacOS10.15.app/Contents/MacOS/KeyEdit
 	cp -f dep/keyedit*.icns KeyEdit-MacOS10.15.app/Contents/Resources
 	cp -f dep/ual.jar KeyEdit-MacOS10.15.app/Contents/Resources/Java
 	cp -f KeyEdit.jar KeyEdit-MacOS10.15.app/Contents/Resources/Java
 
-KeyEdit-MacOS11.0.app: dep KeyEdit.jar
+KeyEdit-MacOS11.0.app: dep dep/nativeJavaApplicationStub/nativeJavaApplicationStub KeyEdit.jar
 	mkdir -p KeyEdit-MacOS11.0.app/Contents/MacOS
 	mkdir -p KeyEdit-MacOS11.0.app/Contents/Resources/Java
 	cp -f dep/PkgInfo-KE KeyEdit-MacOS11.0.app/Contents/PkgInfo
 	cp -f dep/Info-KE.plist KeyEdit-MacOS11.0.app/Contents/Info.plist
-	cp -f dep/universalJavaApplicationStub-MacOS11.0 KeyEdit-MacOS11.0.app/Contents/MacOS/KeyEdit
+	cp -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub KeyEdit-MacOS11.0.app/Contents/MacOS/KeyEdit
 	cp -f dep/keyedit*.icns KeyEdit-MacOS11.0.app/Contents/Resources
 	cp -f dep/ual.jar KeyEdit-MacOS11.0.app/Contents/Resources/Java
 	cp -f KeyEdit.jar KeyEdit-MacOS11.0.app/Contents/Resources/Java
