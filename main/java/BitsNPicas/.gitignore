@@ -7,3 +7,6 @@
 /*.jar
 /*.tgz
 /*.zip
+/dep/nativeJavaApplicationStub/nativeJavaApplicationStub
+/dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64
+/dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
